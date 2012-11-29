@@ -21,13 +21,13 @@
 
 #include "abstractreply.h"
 #include "abstractreply_p.h"
+#include "helper_p.h"
 
 #include <QtCore/QtGlobal>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
+#include <QtCore/QEvent>
 #include <QtCore/QUrl>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#include <QtCore/QUrlQuery>
-#endif
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -35,40 +35,59 @@
 namespace QFB
 {
 
-/**
- * @brief FB_GRAPH_QUERY_URL
- *
- * Used in QFB::AbstractReply.
- */
-static const char *FB_GRAPH_QUERY_URL = "https://graph.facebook.com/";
-/**
- * @brief FB_GRAPH_QUERY_TOKEN_KEY
- *
- * Used in QFB::AbstractReply.
- */
-static const char *FB_GRAPH_QUERY_TOKEN_KEY = "access_token";
-
 AbstractReplyPrivate::AbstractReplyPrivate(AbstractReply *q):
     q_ptr(q)
 {
     reply = 0;
+    isError = false;
+}
+
+QUrl AbstractReplyPrivate::redirectUrl()
+{
+    QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+    if (redirectUrl != reply->url()) {
+        return redirectUrl;
+    }
+    return QUrl();
 }
 
 void AbstractReplyPrivate::slotFinished()
 {
     Q_Q(AbstractReply);
+    if (isError) {
+        qDebug() << "Received data";
+        qDebug() << reply->readAll();
+        return;
+    }
+
+    QUrl url = redirectUrl();
+    if (!url.isEmpty()) {
+        reply->deleteLater();
+        reply = networkAccessManager->get(QNetworkRequest(url));
+        q->connect(reply, SIGNAL(finished()), q, SLOT(slotFinished()));
+        q->connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                   q, SLOT(slotError(QNetworkReply::NetworkError)));
+        return;
+    }
+    running = false;
+
+
     if (q->processData(reply)) {
         emit q->finished();
+        return;
     } else {
-        emit q->error();
+        emit q->failed();
+        return;
     }
 }
 
 void AbstractReplyPrivate::slotError(QNetworkReply::NetworkError error)
 {
-    Q_UNUSED(error)
     Q_Q(AbstractReply);
-    emit q->error();
+    running = false;
+    isError = true;
+    q->setError(QString("Network error %1").arg(error));
+    emit q->failed();
 }
 
 ////// End of private class //////
@@ -78,6 +97,7 @@ AbstractReply::AbstractReply(QObject *parent):
 {
     Q_D(AbstractReply);
     d->networkAccessManager = 0;
+    d->running = false;
 }
 
 AbstractReply::AbstractReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
@@ -85,6 +105,7 @@ AbstractReply::AbstractReply(QNetworkAccessManager *networkAccessManager, QObjec
 {
     Q_D(AbstractReply);
     d->networkAccessManager = networkAccessManager;
+    d->running = false;
 }
 
 AbstractReply::AbstractReply(AbstractReplyPrivate &dd, QObject *parent):
@@ -92,33 +113,95 @@ AbstractReply::AbstractReply(AbstractReplyPrivate &dd, QObject *parent):
 {
     Q_D(AbstractReply);
     d->networkAccessManager = 0;
+    d->running = false;
 }
 
 AbstractReply::~AbstractReply()
 {
 }
 
-void AbstractReply::request(const QString &graph, const QString &token)
+bool AbstractReply::isRunning() const
+{
+    Q_D(const AbstractReply);
+    return d->running;
+}
+
+QString AbstractReply::error() const
+{
+    Q_D(const AbstractReply);
+    return d->error;
+}
+
+void AbstractReply::request(const QString &graph, const QString &token, const QString &arguments)
 {
     Q_D(AbstractReply);
     if (d->reply) {
         return;
     }
-    QString urlString = QString(FB_GRAPH_QUERY_URL);
-    urlString.append(graph);
-    QUrl url (urlString);
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    url.addQueryItem(FB_GRAPH_QUERY_TOKEN_KEY, token);
-#else
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(FB_GRAPH_QUERY_TOKEN_KEY, token);
-    url.setQuery(urlQuery);
-#endif
 
-    d->reply = d->networkAccessManager->get(QNetworkRequest(url));
+    d->graph = graph;
+
+    QStringList argumentList = arguments.split(",");
+    QList<ArgumentPair> trueArguments;
+    foreach (QString argument, argumentList) {
+        QStringList argumentEntriesList = argument.split("=");
+        if (argumentEntriesList.count() == 2) {
+            ArgumentPair argumentPair;
+            argumentPair.first = argumentEntriesList.at(0).trimmed();
+            argumentPair.second = argumentEntriesList.at(1).trimmed();
+            trueArguments.append(argumentPair);
+        }
+    }
+
+    d->arguments = processArguments(trueArguments);
+    if (preprocesssRequest()) {
+        QEvent *event = new QEvent(QEvent::User);
+        QCoreApplication::instance()->postEvent(this, event);
+        return;
+    }
+
+    d->running = true;
+    d->reply = d->networkAccessManager->get(QNetworkRequest(graphUrl(graph, token, d->arguments)));
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(slotError(QNetworkReply::NetworkError)));
+}
+
+bool AbstractReply::event(QEvent *event)
+{
+    if (event->type() == QEvent::User) {
+        emit finished();
+        return true;
+    }
+    return QObject::event(event);
+}
+
+QList<ArgumentPair> AbstractReply::processArguments(const QList<ArgumentPair> &arguments)
+{
+    return arguments;
+}
+
+bool AbstractReply::preprocesssRequest()
+{
+    return false;
+}
+
+QString AbstractReply::graph() const
+{
+    Q_D(const AbstractReply);
+    return d->graph;
+}
+
+QList<ArgumentPair> AbstractReply::arguments() const
+{
+    Q_D(const AbstractReply);
+    return d->arguments;
+}
+
+void AbstractReply::setError(const QString &error)
+{
+    Q_D(AbstractReply);
+    d->error = error;
 }
 
 }

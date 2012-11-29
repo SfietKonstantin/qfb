@@ -14,27 +14,76 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#include "user.h"
+#include "object_p.h"
 
-#include "bridge.h"
-
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+User::User(QObject *parent) :
+    UserBase(parent)
+{
+}
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+User::User(const PropertiesMap propertiesMap, QObject *parent):
+    UserBase(parent)
+{
+    Q_D(Object);
+    d->propertiesMap = propertiesMap;
+}
 
-    return app.exec();
+QString User::firstName() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(FirstName).toString();
+}
+
+QString User::middleName() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(MiddleName).toString();
+}
+
+QString User::lastName() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(LastName).toString();
+}
+
+QString User::gender() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Gender).toString();
+}
+
+QString User::locale() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Locale).toString();
+}
+
+QString User::link() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Link).toString();
+}
+
+QString User::username() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Username).toString();
+}
+
+QString User::bio() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Bio).toString();
+}
+
+QDate User::birthday() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Birthday).toDate();
+}
+
 }

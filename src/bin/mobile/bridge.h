@@ -14,27 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef BRIDGE_H
+#define BRIDGE_H
 
-#include "bridge.h"
+#include <QtCore/QObject>
 
-int main(int argc, char **argv)
+class Bridge : public QObject
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
+    Q_OBJECT
+    Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
+public:
+    explicit Bridge(QObject *parent = 0);
+    QString token() const;
+public slots:
+    void setToken(const QString &token);
+signals:
+    void tokenChanged();
+private:
+    QString m_token;
+};
 
-    Bridge bridge;
-
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
-}
+#endif // BRIDGE_H

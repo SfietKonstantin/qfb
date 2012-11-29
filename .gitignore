@@ -1,0 +1,16 @@
+# Compilation output
+MakeFile
+*.o
+*.so
+moc_*
+
+# User file
+*.pro.user
+Doxyfile
+
+
+# Folders
+/doc*/
+/build*/
+/install/
+

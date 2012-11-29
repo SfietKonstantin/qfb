@@ -14,27 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#include "helper.h"
+#include "helper_p.h"
 
-#include "bridge.h"
-
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+Helper::Helper(QObject *parent) :
+    QObject(parent)
+{
+}
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+QUrl Helper::pictureUrl(const QString &graph, const QString &token)
+{
+    QString pictureGraph = graph;
+    pictureGraph.append(PICTURE_SUFFIX);
+    return graphUrl(pictureGraph, token);
+}
 
-    return app.exec();
 }

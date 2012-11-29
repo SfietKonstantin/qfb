@@ -25,6 +25,8 @@ namespace QFB
 {
 
 class FriendListReply;
+class PictureReply;
+class UserReply;
 class QueryManagerPrivate;
 
 /**
@@ -56,14 +58,33 @@ public:
      * @return access token.
      */
     QString token() const;
-    Q_INVOKABLE QFB::FriendListReply * queryFriends(const QString &graph);
+    /**
+     * @brief Query a friend list
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a friend list reply.
+     */
+    FriendListReply * queryFriendList(const QString &graph, const QString &arguments = QString());
+    /**
+     * @brief Query a picture
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a picture reply.
+     */
+    PictureReply * queryPicture(const QString &graph, const QString &arguments = QString());
+    /**
+     * @brief Query an user
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a user reply.
+     */
+    UserReply * queryUser(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token
      * @param token access token to set.
      */
     void setToken(const QString &token);
-
 signals:
     /**
      * @brief Access token changed

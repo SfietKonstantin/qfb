@@ -30,7 +30,9 @@
  * @short Definition of QFB::ObjectPrivate
  */
 
-#include <QtCore/QString>
+#include "qfb.h"
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
 
 namespace QFB
 {
@@ -51,9 +53,9 @@ public:
     ObjectPrivate(Object *q);
     /**
      * @internal
-     * @brief Id
+     * @brief Properties
      */
-    QString id;
+    QMap<Property, QVariant> propertiesMap;
 protected:
     /**
      * @internal

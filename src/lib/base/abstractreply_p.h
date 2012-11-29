@@ -53,6 +53,17 @@ public:
     AbstractReplyPrivate(AbstractReply *q);
     /**
      * @internal
+     * @brief Get the redirect URL
+     *
+     * This method is used to get the redirect URL that the current
+     * reply provided. If the redirect URL is different, the reply
+     * will load the given URL.
+     *
+     * @return redirect URL
+     */
+    QUrl redirectUrl();
+    /**
+     * @internal
      * @brief Slot used to react to finish
      */
     void slotFinished();
@@ -72,6 +83,31 @@ public:
      * @brief Reply
      */
     QNetworkReply *reply;
+    /**
+     * @internal
+     * @brief If the reply is running
+     */
+    bool running;
+    /**
+     * @internal
+     * @brief Graph
+     */
+    QString graph;
+    /**
+     * @internal
+     * @brief Arguments
+     */
+    QList<ArgumentPair> arguments;
+    /**
+     * @internal
+     * @brief If the reply is an error
+     */
+    bool isError;
+    /**
+     * @internal
+     * @brief Error message
+     */
+    QString error;
 protected:
     /**
      * @internal

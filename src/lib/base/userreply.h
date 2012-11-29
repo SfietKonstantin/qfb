@@ -14,27 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_USERREPLY_H
+#define QFB_USERREPLY_H
 
-#include "bridge.h"
+#include "abstractreply.h"
 
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+class User;
+class UserReplyPrivate;
+class QFBBASE_EXPORT UserReply : public AbstractReply
+{
+    Q_OBJECT
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit UserReply(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param networkAccessManager network access manager.
+     * @param parent parent object.
+     */
+    explicit UserReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    User * user() const;
+    /**
+     * @brief Implementation of AbstractReply::processData()
+     * @param dataSource data source.
+     * @return if the process is successful.
+     */
+    bool processData(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(UserReply)
+};
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
 }
+
+#endif // QFB_USERREPLY_H

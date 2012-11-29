@@ -14,27 +14,68 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_QFB_H
+#define QFB_QFB_H
 
-#include "bridge.h"
-
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+/**
+ * @brief Enumeration describing the properties that a Facebook entry can have
+ */
+enum Property {
+    /**
+     * @short The entry's Facebook ID
+     */
+    Id,
+    /**
+     * @short The user's full name
+     */
+    Name,
+    /**
+     * @short The user's first name
+     */
+    FirstName,
+    /**
+     * @short The user's middle name
+     */
+    MiddleName,
+    /**
+     * @short The user's last name
+     */
+    LastName,
+    /**
+     * @short The user's gender: female or male
+     * @todo define an enumeration for that.
+     */
+    Gender,
+    /**
+     * @short The user's locale
+     *
+     * The locale is provided as an ISO Language Code and ISO Country Code.
+     */
+    Locale,
+    /**
+     * @short The URL of the profile for the user on Facebook
+     */
+    Link,
+    /**
+     * @short The user's Facebook username
+     */
+    Username,
+    /**
+     * @short The user's biography
+     */
+    Bio,
+    /**
+     * @short The user's birthday
+     *
+     * Requires \e user_birthday  or \e friends_birthday.
+     * This entry is currently not working very well.
+     */
+    Birthday
+};
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
 }
+
+#endif // QFB_QFB_H

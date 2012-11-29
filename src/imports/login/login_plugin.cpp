@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,27 +14,50 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
+/**
+ * @internal
+ * @file login_plugin.cpp
+ * @short Implementation of QFB::LoginPlugin4 or QFB::LoginPlugin5
+ */
+
+#include <QtCore/QtGlobal>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include "login_plugin4.h"
+#include <QtDeclarative/qdeclarative.h>
+#else
+#include "login_plugin5.h"
 #include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#endif
 
-#include "bridge.h"
+#include "loginmanager.h"
 
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+/**
+ * @internal
+ * @brief PLUGIN_VERSION_MAJOR
+ */
+static const int PLUGIN_VERSION_MAJOR = 4;
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+void LoginPlugin4::registerTypes(const char *uri)
+#else
+/**
+ * @internal
+ * @brief PLUGIN_VERSION_MAJOR
+ */
+static const int PLUGIN_VERSION_MAJOR = 5;
 
-    return app.exec();
+void LoginPlugin5::registerTypes(const char *uri)
+#endif
+{
+    // @uri org.SfietKonstantin.qfb
+    qmlRegisterType<QFB::LoginManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLoginManager");
 }
+
+}
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+Q_EXPORT_PLUGIN2(qfbplugin, QFB::LoginPlugin4)
+#endif

@@ -14,65 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FRIENDBASE_H
-#define QFB_FRIENDBASE_H
+#ifndef QFB_PICTUREREPLY_H
+#define QFB_PICTUREREPLY_H
 
-/**
- * @file friendbase.h
- * @brief Definition of QFB::FriendBase
- */
-
-#include "base_global.h"
-#include "object.h"
+#include "abstractreply.h"
 
 namespace QFB
 {
 
-class FriendBasePrivate;
-
-/**
- * @brief Base entries for a friend
- *
- * This class represents the base entries for a friend in Facebook.
- * Extending QFB::Object, it contains the name of a friend, that
- * can be accessed through the name() property.
- */
-class QFBBASE_EXPORT FriendBase : public Object
+class PictureReplyPrivate;
+class QFBBASE_EXPORT PictureReply : public AbstractReply
 {
     Q_OBJECT
-    /**
-     * @short name
-     */
-    Q_PROPERTY(QString name READ name CONSTANT)
 public:
     /**
      * @brief Invalid constructor
      * @param parent parent object.
      */
-    explicit FriendBase(QObject *parent = 0);
+    explicit PictureReply(QObject *parent = 0);
     /**
      * @brief Default constructor
-     * @param id id.
-     * @param name name.
+     * @param networkAccessManager network access manager.
      * @param parent parent object.
      */
-    explicit FriendBase(const QString &id, const QString &name, QObject *parent = 0);
-    /**
-     * @brief Name
-     * @return name.
-     */
-    QString name() const;
+    explicit PictureReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    QString picturePath() const;
 protected:
+    QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
+    bool preprocesssRequest();
     /**
-     * @brief D-pointer constructor
-     * @param dd d-pointer.
-     * @param parent parent object.
+     * @brief Implementation of AbstractReply::processData()
+     * @param dataSource data source.
+     * @return if the process is successful.
      */
-    explicit FriendBase(FriendBasePrivate &dd, QObject *parent = 0);
+    bool processData(QIODevice *dataSource);
 private:
-    Q_DECLARE_PRIVATE(FriendBase)
+    Q_DECLARE_PRIVATE(PictureReply)
 };
 
 }
 
-#endif // QFB_FRIENDBASE_H
+#endif // PICTUREREPLY_H

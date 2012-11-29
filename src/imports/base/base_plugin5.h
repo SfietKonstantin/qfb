@@ -14,25 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_BASE_PLUGIN_H
-#define QFB_BASE_PLUGIN_H
+#ifndef QFB_BASE_PLUGIN5_H
+#define QFB_BASE_PLUGIN5_H
 
 /**
- * @file declarative/base_plugin.h
- * @short Definition of QFB::BasePlugin
+ * @internal
+ * @file base_plugin5.h
+ * @short Definition of QFB::BasePlugin5 (Qt5)
  */
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include <QtQml/QQmlExtensionPlugin>
 
 namespace QFB
 {
 /**
  * @internal
- * @short Base QML plugin for qfb
+ * @short Base QML plugin for qfb (Qt5)
  */
-class BasePlugin: public QDeclarativeExtensionPlugin
+class BasePlugin5: public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface/1.0")
 public:
     /**
      * @internal
@@ -44,5 +46,5 @@ public:
 
 }
 
-#endif // QFB_BASE_PLUGIN_H
+#endif // QFB_BASE_PLUGIN5_H
 

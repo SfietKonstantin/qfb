@@ -37,11 +37,11 @@ Object::Object(QObject *parent):
 {
 }
 
-Object::Object(const QString &id, QObject *parent):
+Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
     QObject(parent), d_ptr(new ObjectPrivate(this))
 {
     Q_D(Object);
-    d->id = id;
+    d->propertiesMap = propertiesMap;
 }
 
 Object::Object(ObjectPrivate &dd, QObject *parent):
@@ -56,7 +56,7 @@ Object::~Object()
 QString Object::id() const
 {
     Q_D(const Object);
-    return d->id;
+    return d->propertiesMap.value(Id).toString();
 }
 
 }

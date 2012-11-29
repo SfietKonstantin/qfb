@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,32 +14,23 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file declarative/base_plugin.cpp
- * @short Implementation of QFB::BasePlugin
- */
+#ifndef QFB_HELPER_H
+#define QFB_HELPER_H
 
-#include "base_plugin.h"
-#include <QtDeclarative/qdeclarative.h>
-
-#include "object.h"
-#include "friendbase.h"
-#include "friendlistreply.h"
-#include "querymanager.h"
-
+#include <QtCore/QObject>
+#include <QtCore/QUrl>
 
 namespace QFB
 {
 
-void BasePlugin::registerTypes(const char *uri)
+class Helper : public QObject
 {
-    // @uri org.SfietKonstantin.qfb
-    qmlRegisterType<QFB::Object>(uri, 4, 0, "QFBObject");
-    qmlRegisterType<QFB::FriendBase>(uri, 4, 0, "QFBFriendBase");
-    qmlRegisterType<QFB::QueryManager>(uri, 4, 0, "QFBQueryManager");
-    qmlRegisterType<QFB::FriendListReply>(uri, 4, 0, "QFBFriendListReply");
-}
+    Q_OBJECT
+public:
+    explicit Helper(QObject *parent = 0);
+    Q_INVOKABLE static QUrl pictureUrl(const QString &graph, const QString &token);
+};
 
 }
 
-Q_EXPORT_PLUGIN2(qfbplugin, QFB::BasePlugin)
+#endif // QFB_HELPER_H

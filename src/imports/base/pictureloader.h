@@ -14,27 +14,53 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_PICTURELOADER_H
+#define QFB_PICTURELOADER_H
 
-#include "bridge.h"
+#include <QtCore/QObject>
 
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
+class QueryManager;
+class PictureLoaderPrivate;
+class PictureLoader : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(Type)
+    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
+               NOTIFY queryManagerChanged)
+    Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(QString picturePath READ picturePath NOTIFY picturePathChanged)
+public:
+    enum Type {
+        Square,
+        Small,
+        Normal,
+        Large
+    };
+    explicit PictureLoader(QObject *parent = 0);
+    virtual ~PictureLoader();
+    QueryManager * queryManager() const;
+    Type type() const;
+    QString picturePath() const;
+public Q_SLOTS:
+    void setQueryManager(QueryManager *queryManager);
+    void setType(Type type);
+    void request(const QString &graph);
+Q_SIGNALS:
+    void queryManagerChanged();
+    void typeChanged();
+    void picturePathChanged();
+protected:
+    QScopedPointer<PictureLoaderPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(PictureLoader)
+    /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(), void slotFinished())
+    Q_PRIVATE_SLOT(d_func(), void slotFailed())
+    /// @endcond
+};
 
-    Bridge bridge;
-
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
 }
+
+#endif // QFB_PICTURELOADER_H

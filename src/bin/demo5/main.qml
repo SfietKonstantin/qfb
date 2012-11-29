@@ -15,6 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 2.0
+//import QtWebKit 1.0
 import org.SfietKonstantin.qfb 5.0
 import org.SfietKonstantin.qfb.login 5.0
 
@@ -22,11 +23,12 @@ Item {
     id: container
     width: 480
     height: 600
+    property QtObject queryManager: queryManager
 
     QFBLoginManager {
         id: qfbLoginManager
         clientId: "390204064393625"
-        permissions: QFBLoginManager.ReadFriendList + QFBLoginManager.ReadInsights
+        permissions: QFBLoginManager.ReadFriendList
         uiType: QFBLoginManager.Mobile
         onUrlRequested: webView.url = url
         Component.onCompleted: {
@@ -34,20 +36,81 @@ Item {
                 qfbLoginManager.login()
             } else {
                 queryManager.token = BRIDGE.token
-                console.debug("Using existing token:" + BRIDGE.token)
-                queryManager.queryFriends("me/friends")
+//                webView.visible = false
+                friendListModel.request("me/friends")
             }
         }
 
         onLoginSucceeded: {
             BRIDGE.token = token
             queryManager.token = token
-            webView.visible = false
+//            webView.visible = false
+            friendListModel.request("me/friends")
         }
     }
 
     QFBQueryManager {
         id: queryManager
+    }
+
+
+    QFBFriendListModel {
+        id: friendListModel
+        queryManager: queryManager
+    }
+
+    ListView {
+        id: view
+        anchors.fill: parent
+        model: friendListModel
+        delegate: Rectangle {
+            width: view.width
+            height: 60
+
+            Image {
+                width: 40
+                height: 40
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left; anchors.leftMargin: 20
+                source: pictureLoader.picturePath
+                asynchronous: true
+
+                QFBPictureLoader {
+                    id: pictureLoader
+                    queryManager: container.queryManager
+                    Component.onCompleted: request(model.data.id + "/picture")
+                }
+            }
+
+            Text {
+                anchors.centerIn: parent
+                font.pixelSize: 20
+                text: model.data.name
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: userLoader.request(model.data.id)
+            }
+        }
+    }
+
+    QFBUserLoader {
+        id: userLoader
+        queryManager: queryManager
+        onUserChanged: {
+            console.debug(user.id)
+            console.debug(user.name)
+            console.debug(user.firstName)
+            console.debug(user.middleName)
+            console.debug(user.lastName)
+            console.debug(user.gender)
+            console.debug(user.locale)
+            console.debug(user.link)
+            console.debug(user.username)
+            console.debug(user.bio)
+            console.debug(user.birthday)
+        }
     }
 
 //    WebView {

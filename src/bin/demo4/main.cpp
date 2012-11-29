@@ -20,7 +20,6 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
 
-#include "loginmanager.h"
 #include "bridge.h"
 
 int main(int argc, char **argv)
@@ -30,8 +29,6 @@ int main(int argc, char **argv)
     app.setApplicationName("qfb-demo");
 
     Bridge bridge;
-
-    qmlRegisterType<QFB::LoginManager>("org.SfietKonstantin.qfb", 4, 0, "QFBLoginManager");
 
     QDeclarativeView view;
     view.engine()->addImportPath(IMPORT_PATH);

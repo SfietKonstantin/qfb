@@ -27,13 +27,17 @@
 namespace QFB
 {
 
-class FriendBase;
+class UserBase;
 class FriendListReplyPrivate;
 /**
  * @brief Reply containing the friend list
  *
  * This class subclasses AbstractReply, making it be able to parse
  * friend lists.
+ *
+ * Note that currently, Facebook API do not allow you to access
+ * friends of friends, so do not use this class to get friends of
+ * friends, it will not work.
  */
 class FriendListReply: public AbstractReply
 {
@@ -45,20 +49,20 @@ public:
      */
     explicit FriendListReply(QObject *parent = 0);
     /**
-     * @brief Destructor
-     */
-    virtual ~FriendListReply();
-    /**
      * @brief Default constructor
      * @param networkAccessManager network access manager.
      * @param parent parent object.
      */
     explicit FriendListReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
     /**
+     * @brief Destructor
+     */
+    virtual ~FriendListReply();
+    /**
      * @brief Friend list
      * @return friend list.
      */
-    Q_INVOKABLE QList<FriendBase *> friendList() const;
+    QList<UserBase *> friendList() const;
 protected:
     /**
      * @brief Implementation of AbstractReply::processData()
@@ -71,7 +75,5 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(QFB::FriendListReply *)
 
 #endif // QFB_FRIENDLISTREPLY_H

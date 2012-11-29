@@ -14,27 +14,52 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_USER_H
+#define QFB_USER_H
 
-#include "bridge.h"
+#include "userbase.h"
+#include <QtCore/QDate>
 
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+class QFBBASE_EXPORT User : public UserBase
+{
+    Q_OBJECT
+    Q_PROPERTY(QString firstName READ firstName CONSTANT)
+    Q_PROPERTY(QString middleName READ middleName CONSTANT)
+    Q_PROPERTY(QString lastName READ lastName CONSTANT)
+    Q_PROPERTY(QString gender READ gender CONSTANT)
+    Q_PROPERTY(QString locale READ locale CONSTANT)
+    /// @todo languages
+    Q_PROPERTY(QString link READ link CONSTANT)
+    Q_PROPERTY(QString username READ username CONSTANT)
+    /// @todo no third_party_id
+    /// @todo no installed
+    /// @todo no timezone
+    /// @todo no updated_time
+    /// @todo no verified
+    Q_PROPERTY(QString bio READ bio CONSTANT)
+    Q_PROPERTY(QDate birthday READ birthday CONSTANT)
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+public:
+    explicit User(QObject *parent = 0);
+    explicit User(const PropertiesMap propertiesMap, QObject *parent = 0);
+    QString firstName() const;
+    QString middleName() const;
+    QString lastName() const;
+    QString gender() const;
+    QString locale() const;
+    QString link() const;
+    QString username() const;
+    QString bio() const;
+    QDate birthday() const;
+private:
+    Q_DECLARE_PRIVATE(Object)
+};
 
-    return app.exec();
 }
+
+Q_DECLARE_METATYPE(QFB::User *)
+
+#endif // QFB_USER_H

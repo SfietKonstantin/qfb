@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FRIENDBASE_P_H
-#define QFB_FRIENDBASE_P_H
+#ifndef QFB_HELPER_P_H
+#define QFB_HELPER_P_H
 
 // Warning
 //
@@ -26,38 +26,67 @@
 
 /**
  * @internal
- * @file friendbase_p.h
- * @short Definition of QFB::FriendBasePrivate
+ * @file helper_p.h
+ * @short Global helper methods functions
  */
 
-#include "object_p.h"
+#include "abstractreply.h"
+#include <QtCore/QPair>
+#include <QtCore/QStringList>
+#include <QtCore/QUrl>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QUrlQuery>
+#endif
 
 namespace QFB
 {
 
-class FriendBase;
 /**
  * @internal
- * @brief Private class for QFB::FriendBase
+ * @brief FB_GRAPH_QUERY_URL
+ *
+ * Used by graphUrl()
  */
-class FriendBasePrivate: public ObjectPrivate
+static const char *FB_GRAPH_QUERY_URL = "https://graph.facebook.com/";
+/**
+ * @internal
+ * @brief FB_GRAPH_QUERY_TOKEN_KEY
+ *
+ * Used by graphUrl()
+ */
+static const char *FB_GRAPH_QUERY_TOKEN_KEY = "access_token";
+
+/**
+ * @internal
+ * @brief Create a Facebook graph URL
+ * @param graph graph.
+ * @param token access token.
+ * @param arguments other arguments.
+ * @return An url pointing to the Facebook graph API.
+ */
+inline QUrl graphUrl(const QString &graph, const QString &token,
+                     const QList<ArgumentPair> &arguments)
 {
-public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    FriendBasePrivate(FriendBase *q);
-    /**
-     * @internal
-     * @brief Name
-     */
-    QString name;
-private:
-    Q_DECLARE_PUBLIC(FriendBase)
-};
+    QString urlString = QString(FB_GRAPH_QUERY_URL);
+    urlString.append(graph);
+    QUrl url (urlString);
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    url.addQueryItem(FB_GRAPH_QUERY_TOKEN_KEY, token);
+    foreach (ArgumentPair argumentPair, arguments) {
+        url.addQueryItem(argumentPair.first, argumentPair.second);
+    }
+
+#else
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem(FB_GRAPH_QUERY_TOKEN_KEY, token);
+    foreach (ArgumentPair argumentPair, arguments) {
+        urlQuery.addQueryItem(argumentPair.first, argumentPair.second);
+    }
+    url.setQuery(urlQuery);
+#endif
+    return url;
+}
 
 }
 
-#endif // QFB_FRIENDBASE_P_H
+#endif // QFB_HELPER_P_H

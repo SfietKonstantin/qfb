@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,27 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_LOGIN_PLUGIN5_H
+#define QFB_LOGIN_PLUGIN5_H
 
-#include "bridge.h"
+/**
+ * @internal
+ * @file login_plugin5.h
+ * @short Definition of QFB::LoginPlugin5 (Qt5)
+ */
 
-int main(int argc, char **argv)
+#include <QtQml/QQmlExtensionPlugin>
+
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
+/**
+ * @internal
+ * @short Login QML plugin for qfb (Qt5)
+ */
+class LoginPlugin5: public QQmlExtensionPlugin
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface/1.0")
+public:
+    /**
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
 
-    Bridge bridge;
-
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
 }
+
+#endif // QFB_LOGIN_PLUGIN5_H
+

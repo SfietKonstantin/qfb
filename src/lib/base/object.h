@@ -23,13 +23,26 @@
  */
 
 #include "base_global.h"
+#include "qfb.h"
+
+#include <QtCore/QMetaType>
 #include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
 
 namespace QFB
 {
 
+/**
+ * @brief Properties map
+ *
+ * This typedef defines a mapping between a proprety name,
+ * defined in the QFB::Property enumeration, and the
+ * value of that property.
+ *
+ */
+typedef QMap<Property, QVariant> PropertiesMap;
 class ObjectPrivate;
-
 /**
  * @brief An object in Facebook
  *
@@ -37,6 +50,11 @@ class ObjectPrivate;
  * a QObject based object. All Facebook entities
  * provides an id, that can be accessed though the id()
  * property.
+ *
+ * All Facebook entities can carry quite a lot of types
+ * of data, and this class is responsible in storing them.
+ * The properties of a Facebook entity is passed as a
+ * mapping between a property and the corresponding value.
  */
 class QFBBASE_EXPORT Object : public QObject
 {
@@ -53,10 +71,10 @@ public:
     explicit Object(QObject *parent = 0);
     /**
      * @brief Default constructor
-     * @param id id.
+     * @param propertiesMap properties map.
      * @param parent parent object.
      */
-    explicit Object(const QString &id, QObject *parent = 0);
+    explicit Object(const PropertiesMap &propertiesMap, QObject *parent = 0);
     /**
      * @brief Destructor
      */
@@ -82,5 +100,7 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(QFB::Object *)
 
 #endif // QFB_OBJECT_H

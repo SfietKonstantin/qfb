@@ -197,7 +197,43 @@ public:
          *
          * Enables your application to RSVP to events on the user's behalf.
          */
-        RsvpEvent = 0x00004000
+        RsvpEvent = 0x00004000,
+        /**
+         * @short Provides \e user_about_me
+         *
+         * Provides access to the "About Me" section of the profile in the about property.
+         */
+        UserAboutMe = 0x10000000,
+        /**
+         * @short Provides \e friends_about_me
+         *
+         * Provides access to the "About Me" section of the profile in the about property.
+         */
+        FriendsAboutMe = 0x20000000,
+        /**
+         * @short Provides \e user_activities
+         *
+         * Provides access to the user's list of activities as the activities connection.
+         */
+        UserActivities = 0x10000001,
+        /**
+         * @short Provides \e friends_activities
+         *
+         * Provides access to the user's list of activities as the activities connection.
+         */
+        FriendsActivities = 0x20000001,
+        /**
+         * @short Provides \e user_birthday
+         *
+         * Provides access to the birthday with year as the birthday property.
+         */
+        UserBirthday = 0x10000002,
+        /**
+         * @short Provides \e friends_birthday
+         *
+         * Provides access to the birthday with year as the birthday property.
+         */
+        FriendsBirthday = 0x20000002
     };
     Q_DECLARE_FLAGS(Permissions, Permission)
     Q_FLAGS(Permissions)

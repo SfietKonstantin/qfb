@@ -16,6 +16,8 @@
 
 #include "querymanager.h"
 #include "friendlistreply.h"
+#include "picturereply.h"
+#include "userreply.h"
 
 #include <QtNetwork/QNetworkAccessManager>
 
@@ -48,7 +50,7 @@ QString QueryManager::token() const
     return d->token;
 }
 
-FriendListReply * QueryManager::queryFriends(const QString &graph)
+FriendListReply * QueryManager::queryFriendList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
     if (d->token.isEmpty()) {
@@ -56,7 +58,31 @@ FriendListReply * QueryManager::queryFriends(const QString &graph)
     }
 
     FriendListReply *reply = new FriendListReply(d->networkAccessManager, this);
-    reply->request(graph, d->token);
+    reply->request(graph, d->token, arguments);
+    return reply;
+}
+
+PictureReply * QueryManager::queryPicture(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    if (d->token.isEmpty()) {
+        return 0;
+    }
+
+    PictureReply *reply = new PictureReply(d->networkAccessManager, this);
+    reply->request(graph, d->token, arguments);
+    return reply;
+}
+
+UserReply * QueryManager::queryUser(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    if (d->token.isEmpty()) {
+        return 0;
+    }
+
+    UserReply *reply = new UserReply(d->networkAccessManager, this);
+    reply->request(graph, d->token, arguments);
     return reply;
 }
 

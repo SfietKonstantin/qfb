@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,27 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_BASE_PLUGIN4_H
+#define QFB_BASE_PLUGIN4_H
 
-#include "bridge.h"
+/**
+ * @internal
+ * @file base_plugin4.h
+ * @short Definition of QFB::BasePlugin4 (Qt4)
+ */
 
-int main(int argc, char **argv)
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
+
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
+/**
+ * @internal
+ * @short Base QML plugin for qfb (Qt4)
+ */
+class BasePlugin4: public QDeclarativeExtensionPlugin
 
-    Bridge bridge;
+{
+    Q_OBJECT
+public:
+    /**
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
 }
+
+#endif // QFB_BASE_PLUGIN4_H
+

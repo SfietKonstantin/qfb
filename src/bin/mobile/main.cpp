@@ -14,46 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file friendbase.cpp
- * @brief Implementation of QFB::FriendBase
- */
+#include <QtGui/QApplication>
+#include <QtDeclarative/qdeclarative.h>
+#include <QtDeclarative/QDeclarativeContext>
+#include <QtDeclarative/QDeclarativeEngine>
+#include <QtDeclarative/QDeclarativeView>
 
-#include "friendbase.h"
-#include "friendbase_p.h"
+#include "bridge.h"
 
-namespace QFB
+int main(int argc, char **argv)
 {
+    QApplication app (argc, argv);
+    app.setOrganizationName("SfietKonstantin");
+    app.setApplicationName("qfb-mobile");
 
-FriendBasePrivate::FriendBasePrivate(FriendBase *q):
-    ObjectPrivate(q)
-{
-}
+    Bridge bridge;
 
-////// End of private class //////
+    QDeclarativeView view;
+    view.engine()->addImportPath(IMPORT_PATH);
+    view.rootContext()->setContextProperty("BRIDGE", &bridge);
+    view.setSource(QUrl(MAIN_QML_FILE));
+    view.showFullScreen();
 
-FriendBase::FriendBase(QObject *parent) :
-    Object(*(new FriendBasePrivate(this)), parent)
-{
-}
-
-FriendBase::FriendBase(const QString &id, const QString &name, QObject *parent):
-    Object(*(new FriendBasePrivate(this)), parent)
-{
-    Q_D(FriendBase);
-    d->id = id;
-    d->name = name;
-}
-
-FriendBase::FriendBase(FriendBasePrivate &dd, QObject *parent):
-    Object(dd, parent)
-{
-}
-
-QString FriendBase::name() const
-{
-    Q_D(const FriendBase);
-    return d->name;
-}
-
+    return app.exec();
 }

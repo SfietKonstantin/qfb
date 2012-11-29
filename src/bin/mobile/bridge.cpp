@@ -14,27 +14,29 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
-
 #include "bridge.h"
+#include <QtCore/QSettings>
 
-int main(int argc, char **argv)
+static const char *TOKEN_KEY = "login/token";
+
+Bridge::Bridge(QObject *parent) :
+    QObject(parent)
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
+    QSettings settings;
+    setToken(settings.value(TOKEN_KEY, QString()).toString());
+}
 
-    Bridge bridge;
+QString Bridge::token() const
+{
+    return m_token;
+}
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
-
-    return app.exec();
+void Bridge::setToken(const QString &token)
+{
+    if (m_token != token) {
+        m_token = token;
+        emit tokenChanged();
+        QSettings settings;
+        settings.setValue(TOKEN_KEY, token);
+    }
 }

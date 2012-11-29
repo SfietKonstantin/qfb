@@ -24,7 +24,7 @@
 
 #include "base_global.h"
 #include <QtCore/QObject>
-#include <QtCore/QMetaType>
+#include <QtCore/QPair>
 
 class QIODevice;
 class QNetworkAccessManager;
@@ -32,6 +32,10 @@ class QUrl;
 namespace QFB
 {
 
+/**
+ * @brief Arguments as a key-value pair
+ */
+typedef QPair<QString, QString> ArgumentPair;
 class AbstractReplyPrivate;
 /**
  * @brief Base for a reply from Facebook
@@ -74,13 +78,29 @@ public:
      * @brief Destructor
      */
     virtual ~AbstractReply();
+    /**
+     * @brief If the reply process is running
+     * @return if the reply process is running.
+     */
+    bool isRunning() const;
+    /**
+     * @brief Error
+     * @return error.
+     */
+    QString error() const;
 public Q_SLOTS:
     /**
      * @brief Perform a request
+     *
+     * The request should be perform by sending a graph, like "me/friends",
+     * the access token, and a list of arguments, formatted with the following
+     * format: "key1=value1,key2=value2"
+     *
      * @param graph graph entry of the Facebook graph API.
      * @param token access token.
+     * @param arguments arguments.
      */
-    void request(const QString &graph, const QString &token);
+    void request(const QString &graph, const QString &token, const QString &arguments = QString());
 Q_SIGNALS:
     /**
      * @brief Error
@@ -88,7 +108,7 @@ Q_SIGNALS:
      * This signal is emitted when the loading failed, or when
      * the returned data is not correct.
      */
-    void error();
+    void failed();
     /**
      * @brief Finished
      *
@@ -103,6 +123,38 @@ protected:
      */
     explicit AbstractReply(AbstractReplyPrivate &dd, QObject *parent = 0);
     /**
+     * @internal
+     * @brief Event management
+     * @param event event.
+     * @return if the event is managed.
+     */
+    bool event(QEvent *event);
+    /**
+     * @brief Process arguments
+     *
+     * This method can be used to process arguments before sending them
+     * to the request. It makes them cleaner and can be used if arguments
+     * needs to be precise, or if arguments are used for storage.
+     *
+     * @param arguments arguments to process.
+     * @return processed arguments.
+     */
+    virtual QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
+    /**
+     * @brief Preprocess request
+     *
+     * This method is used to do a preprocessing step before perfomring
+     * the request. It can be used, for example, to check a cache, before
+     * downloading resources.
+     *
+     * It should return false if the request should be performed, or true
+     * if the request should not. If it returns true, a finished() signal
+     * will be emitted.
+     *
+     * @return if the process should be performed.
+     */
+    virtual bool preprocesssRequest();
+    /**
      * @brief Process data
      *
      * This method should be implemented in order to process the
@@ -112,6 +164,21 @@ protected:
      * @return if the process is successful.
      */
     virtual bool processData(QIODevice *dataSource) = 0;
+    /**
+     * @brief Graph
+     * @return graph.
+     */
+    QString graph() const;
+    /**
+     * @brief Arguments
+     * @return arguments.
+     */
+    QList<ArgumentPair> arguments() const;
+    /**
+     * @brief Set error
+     * @param error error to set.
+     */
+    void setError(const QString &error);
     /**
      * @brief D-pointer
      */
@@ -125,7 +192,5 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(QFB::AbstractReply *)
 
 #endif // QFB_ABSTRACTREPLY_H

@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,36 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_BASE_PLUGIN_H
-#define QFB_BASE_PLUGIN_H
+#ifndef QFB_USERLOADER_H
+#define QFB_USERLOADER_H
 
-/**
- * @file qml/base_plugin.h
- * @short Definition of QFB::BasePlugin (Qt5 version)
- */
-
-#include <QtQml/QQmlExtensionPlugin>
+#include <QtCore/QObject>
 
 namespace QFB
 {
-/**
- * @internal
- * @short Base QML plugin for qfb (Qt5 header)
- */
-class BasePlugin : public QQmlExtensionPlugin
+
+class User;
+class QueryManager;
+class UserLoaderPrivate;
+class UserLoader : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface/1.0")
+    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
+               NOTIFY queryManagerChanged)
+    Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
 public:
-    /**
-     * @internal
-     * @short Register types
-     * @param uri uri used in the import.
-     */
-    virtual void registerTypes(const char *uri);
+    explicit UserLoader(QObject *parent = 0);
+    virtual ~UserLoader();
+    QueryManager * queryManager() const;
+    User * user() const;
+public Q_SLOTS:
+    void setQueryManager(QueryManager *queryManager);
+    void request(const QString &graph);
+Q_SIGNALS:
+    void queryManagerChanged();
+    void userChanged();
+protected:
+    QScopedPointer<UserLoaderPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(UserLoader)
+    /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(), void slotFinished())
+    Q_PRIVATE_SLOT(d_func(), void slotFailed())
+    /// @endcond
+
 };
 
 }
 
-#endif // QFB_BASE_PLUGIN_H
-
+#endif // QFB_USERLOADER_H

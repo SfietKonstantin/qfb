@@ -105,6 +105,24 @@ QString LoginManagerPrivate::translatePermissions(LoginManager::Permissions perm
     if (permissions.testFlag(LoginManager::RsvpEvent)) {
         permissionsStringList.append("rsvp_event");
     }
+    if (permissions.testFlag(LoginManager::UserAboutMe)) {
+        permissionsStringList.append("user_about_me");
+    }
+    if (permissions.testFlag(LoginManager::FriendsAboutMe)) {
+        permissionsStringList.append("friends_about_me");
+    }
+    if (permissions.testFlag(LoginManager::UserActivities)) {
+        permissionsStringList.append("user_activities");
+    }
+    if (permissions.testFlag(LoginManager::FriendsActivities)) {
+        permissionsStringList.append("friends_activities");
+    }
+    if (permissions.testFlag(LoginManager::UserBirthday)) {
+        permissionsStringList.append("user_birthday");
+    }
+    if (permissions.testFlag(LoginManager::FriendsBirthday)) {
+        permissionsStringList.append("friends_birthday");
+    }
     return permissionsStringList.join(",");
 }
 

@@ -34,24 +34,27 @@
 #include <QtCore/QJsonArray>
 #endif
 
-#include "friendbase.h"
+#include "userbase.h"
 
 namespace QFB
 {
 
 /**
+ * @internal
  * @brief DATA_KEY
  *
  * Used in QFB::FriendListReply.
  */
 static const char *DATA_KEY = "data";
 /**
+ * @internal
  * @brief NAME_KEY
  *
  * Used in QFB::FriendListReply.
  */
 static const char *NAME_KEY = "name";
 /**
+ * @internal
  * @brief ID_KEY
  *
  * Used in QFB::FriendListReply.
@@ -75,7 +78,7 @@ public:
      * @internal
      * @brief Friend list
      */
-    QList<FriendBase *> friendList;
+    QList<UserBase *> friendList;
 private:
     Q_DECLARE_PUBLIC(FriendListReply)
 };
@@ -92,12 +95,6 @@ FriendListReply::FriendListReply(QObject *parent):
 {
 }
 
-FriendListReply::~FriendListReply()
-{
-    Q_D(FriendListReply);
-    qDeleteAll(d->friendList);
-}
-
 FriendListReply::FriendListReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
     AbstractReply(*(new FriendListReplyPrivate(this)), parent)
 {
@@ -105,7 +102,13 @@ FriendListReply::FriendListReply(QNetworkAccessManager *networkAccessManager, QO
     d->networkAccessManager = networkAccessManager;
 }
 
-QList<FriendBase *> FriendListReply::friendList() const
+FriendListReply::~FriendListReply()
+{
+    Q_D(FriendListReply);
+    qDeleteAll(d->friendList);
+}
+
+QList<UserBase *> FriendListReply::friendList() const
 {
     Q_D(const FriendListReply);
     return d->friendList;
@@ -120,11 +123,13 @@ bool FriendListReply::processData(QIODevice *dataSource)
     QVariant parsedValue = parser.parse(dataSource);
 
     if (!parsedValue.isValid()) {
+        setError("Received data is not a JSON document");
         return false;
     }
 
     QVariantMap valueMap = parsedValue.toMap();
     if (!valueMap.contains(DATA_KEY)) {
+        setError("Received data do not contains correct data.");
         return false;
     }
 
@@ -137,18 +142,23 @@ bool FriendListReply::processData(QIODevice *dataSource)
         if (dataListEntryMap.contains(ID_KEY) && dataListEntryMap.contains(NAME_KEY)) {
             QString id = dataListEntryMap.value(ID_KEY).toString();
             QString name = dataListEntryMap.value(NAME_KEY).toString();
-            FriendBase *friendBase = new FriendBase(id, name, this);
-            d->friendList.append(friendBase);
+            PropertiesMap propertiesMap;
+            propertiesMap.insert(Id, id);
+            propertiesMap.insert(Name, name);
+            UserBase *userBase = new UserBase(propertiesMap, this);
+            d->friendList.append(userBase);
         }
     }
 #else
     QJsonDocument jsonDocument = QJsonDocument::fromJson(dataSource->readAll());
     if (jsonDocument.isNull()) {
+        setError("Received data is not a JSON document");
         return false;
     }
 
     QJsonObject rootObject = jsonDocument.object();
     if (!rootObject.contains(DATA_KEY)) {
+        setError("Received data do not contains correct data.");
         return false;
     }
 
@@ -162,9 +172,11 @@ bool FriendListReply::processData(QIODevice *dataSource)
             if (object.contains(ID_KEY) && object.contains(NAME_KEY)) {
                 QString id = object.value(ID_KEY).toString();
                 QString name = object.value(NAME_KEY).toString();
-                qDebug() << id << name;
-                FriendBase *friendBase = new FriendBase(id, name, this);
-                d->friendList.append(friendBase);
+                PropertiesMap propertiesMap;
+                propertiesMap.insert(Id, id);
+                propertiesMap.insert(Name, name);
+                UserBase *userBase = new UserBase(propertiesMap, this);
+                d->friendList.append(userBase);
             }
         }
     }

@@ -14,27 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+/**
+ * @file userbase.cpp
+ * @brief Implementation of QFB::UserBase
+ */
 
-#include "bridge.h"
+#include "userbase.h"
+#include "object_p.h"
 
-int main(int argc, char **argv)
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+UserBase::UserBase(QObject *parent) :
+    Object(parent)
+{
+}
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+UserBase::UserBase(const PropertiesMap propertiesMap, QObject *parent):
+    Object(parent)
+{
+    Q_D(Object);
+    d->propertiesMap = propertiesMap;
+}
 
-    return app.exec();
+QString UserBase::name() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Name).toString();
+}
+
 }

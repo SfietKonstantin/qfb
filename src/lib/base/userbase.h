@@ -14,27 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QGuiApplication>
-#include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
+#ifndef QFB_USERBASE_H
+#define QFB_USERBASE_H
 
-#include "bridge.h"
+/**
+ * @file userbase.h
+ * @brief Definition of QFB::UserBase
+ */
 
-int main(int argc, char **argv)
+#include "base_global.h"
+#include "object.h"
+
+namespace QFB
 {
-    QGuiApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-demo");
 
-    Bridge bridge;
+class UserBasePrivate;
 
-    QQuickView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.show();
+/**
+ * @brief Base entries for a friend
+ *
+ * This class represents the base entries for a friend in Facebook.
+ * Extending QFB::Object, it contains the name of a friend, that
+ * can be accessed through the name() property.
+ */
+class QFBBASE_EXPORT UserBase : public Object
+{
+    Q_OBJECT
+    /**
+     * @short name
+     */
+    Q_PROPERTY(QString name READ name CONSTANT)
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit UserBase(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param id id.
+     * @param name name.
+     * @param parent parent object.
+     */
+    explicit UserBase(const PropertiesMap propertiesMap, QObject *parent = 0);
+    /**
+     * @brief Name
+     * @return name.
+     */
+    QString name() const;
+private:
+    Q_DECLARE_PRIVATE(Object)
+};
 
-    return app.exec();
 }
+
+Q_DECLARE_METATYPE(QFB::UserBase *)
+
+#endif // QFB_USERBASE_H
