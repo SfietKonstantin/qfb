@@ -105,7 +105,7 @@ void UserLoader::setQueryManager(QueryManager *queryManager)
 }
 
 
-void UserLoader::request(const QString &graph)
+void UserLoader::request(const QString &graph, const QString &arguments)
 {
     Q_D(UserLoader);
 
@@ -117,7 +117,7 @@ void UserLoader::request(const QString &graph)
         return;
     }
 
-    d->newReply = d->queryManager->queryUser(graph);
+    d->newReply = d->queryManager->queryUser(graph, arguments);
     connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
 }

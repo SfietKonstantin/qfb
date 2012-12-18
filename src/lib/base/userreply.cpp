@@ -18,14 +18,10 @@
 #include "abstractreply_p.h"
 
 #include "user.h"
+#include "language.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include "parser.h"
-#else
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#endif
+#include <QtCore/QDebug>
+#include "jsonhelper_p.h"
 
 namespace QFB
 {
@@ -81,6 +77,13 @@ static const char *GENDER_KEY = "gender";
 static const char *LOCALE_KEY = "locale";
 /**
  * @internal
+ * @brief LANGUAGES_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *LANGUAGES_KEY = "languages";
+/**
+ * @internal
  * @brief LINK_KEY
  *
  * Used in QFB::UserReply.
@@ -107,6 +110,55 @@ static const char *BIO_KEY = "bio";
  * Used in QFB::UserReply.
  */
 static const char *BIRTHDAY_KEY = "birthday";
+/**
+ * @internal
+ * @brief EMAIL_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *EMAIL_KEY = "email";
+/**
+ * @internal
+ * @brief POLITICAL_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *POLITICAL_KEY = "political";
+/**
+ * @internal
+ * @brief QUOTES_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *QUOTES_KEY = "quotes";
+/**
+ * @internal
+ * @brief RELATIONSHIP_STATUS_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *RELATIONSHIP_STATUS_KEY = "relationship_status";
+/**
+ * @internal
+ * @brief RELIGION_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *RELIGION_KEY = "religion";
+/**
+ * @internal
+ * @brief SIGNIFICANT_OTHER_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *SIGNIFICANT_OTHER_KEY = "significant_other";
+/**
+ * @internal
+ * @brief WEBSITE_KEY
+ *
+ * Used in QFB::UserReply.
+ */
+static const char *WEBSITE_KEY = "website";
 
 class UserReplyPrivate: public AbstractReplyPrivate
 {
@@ -117,6 +169,10 @@ public:
      * @param q Q-pointer
      */
     UserReplyPrivate(UserReply *q);
+    /**
+     * @internal
+     * @brief User
+     */
     User *user;
 };
 
@@ -149,46 +205,16 @@ User * UserReply::user() const
 bool UserReply::processData(QIODevice *dataSource)
 {
     Q_D(UserReply);
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    QJson::Parser parser;
-    QVariant parsedValue = parser.parse(dataSource);
 
-    if (!parsedValue.isValid()) {
+    QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
+    if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
         return false;
     }
-
-    QVariantMap valueMap = parsedValue.toMap();
+    QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);
     if (d->user) {
         d->user->deleteLater();
     }
-
-    PropertiesMap propertiesMap;
-    propertiesMap.insert(Id, valueMap.value(ID_KEY).toString());
-    propertiesMap.insert(Name, valueMap.value(NAME_KEY).toString());
-    propertiesMap.insert(FirstName, valueMap.value(FIRST_NAME_KEY).toString());
-    propertiesMap.insert(MiddleName, valueMap.value(MIDDLE_NAME_KEY).toString());
-    propertiesMap.insert(LastName, valueMap.value(LAST_NAME_KEY).toString());
-    propertiesMap.insert(Gender, valueMap.value(GENDER_KEY).toString());
-    propertiesMap.insert(Locale, valueMap.value(LOCALE_KEY).toString());
-    propertiesMap.insert(Link, valueMap.value(LINK_KEY).toString());
-    propertiesMap.insert(Username, valueMap.value(USERNAME_KEY).toString());
-    propertiesMap.insert(Bio, valueMap.value(BIO_KEY).toString());
-    QDate birthday = QDate::fromString(valueMap.value(BIRTHDAY_KEY).toString(), "MM/dd");
-    propertiesMap.insert(Birthday, birthday);
-    d->user = new User(propertiesMap, this);
-#else
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(dataSource->readAll());
-    if (jsonDocument.isNull()) {
-        setError("Received data is not a JSON document");
-        return false;
-    }
-
-    QJsonObject rootObject = jsonDocument.object();
-    if (d->user) {
-        d->user->deleteLater();
-    }
-
 
     PropertiesMap propertiesMap;
     propertiesMap.insert(Id, rootObject.value(ID_KEY).toString());
@@ -198,13 +224,50 @@ bool UserReply::processData(QIODevice *dataSource)
     propertiesMap.insert(LastName, rootObject.value(LAST_NAME_KEY).toString());
     propertiesMap.insert(Gender, rootObject.value(GENDER_KEY).toString());
     propertiesMap.insert(Locale, rootObject.value(LOCALE_KEY).toString());
+
+    JsonArray languages = QFB_JSON_GET_ARRAY(rootObject.value(LANGUAGES_KEY));
+    QVariantList languagesVariant;
+    foreach (JsonValue language, languages) {
+        if (QFB_JSON_IS_OBJECT(language)) {
+            JsonObject languageObject = QFB_JSON_GET_OBJECT(language);
+            if (languageObject.contains(ID_KEY) && languageObject.contains(NAME_KEY)) {
+                PropertiesMap languagePropertiesMap;
+                languagePropertiesMap.insert(Id, languageObject.value(ID_KEY).toString());
+                languagePropertiesMap.insert(Name, languageObject.value(NAME_KEY).toString());
+                Language *language = new Language(languagePropertiesMap, this);
+                languagesVariant.append(QVariant::fromValue(language));
+            }
+        }
+    }
+    propertiesMap.insert(Languages, languagesVariant);
     propertiesMap.insert(Link, rootObject.value(LINK_KEY).toString());
     propertiesMap.insert(Username, rootObject.value(USERNAME_KEY).toString());
     propertiesMap.insert(Bio, rootObject.value(BIO_KEY).toString());
-    QDate birthday = QDate::fromString(rootObject.value(BIRTHDAY_KEY).toString(), "MM/dd");
-    propertiesMap.insert(Birthday, birthday);
+
+    QString birthdayString = rootObject.value(BIRTHDAY_KEY).toString();
+    QDate birthday1 = QDate::fromString(birthdayString, "MM/dd");
+    QDate birthday2 = QDate::fromString(birthdayString, "MM/dd/yyyy");
+    if (birthday1.isValid()) {
+        propertiesMap.insert(Birthday, birthday1);
+    } else if (birthday2.isValid()) {
+        propertiesMap.insert(Birthday, birthday2);
+    }
+
+    propertiesMap.insert(Email, rootObject.value(EMAIL_KEY).toString());
+    propertiesMap.insert(Political, rootObject.value(POLITICAL_KEY).toString());
+    propertiesMap.insert(Quotes, rootObject.value(QUOTES_KEY).toString());
+    propertiesMap.insert(RelationshipStatus, rootObject.value(RELATIONSHIP_STATUS_KEY).toString());
+    propertiesMap.insert(Religion, rootObject.value(RELIGION_KEY).toString());
+
+    JsonObject significantOther = QFB_JSON_GET_OBJECT(rootObject.value(SIGNIFICANT_OTHER_KEY));
+    PropertiesMap significantOtherPropertiesMap;
+    significantOtherPropertiesMap.insert(Id, significantOther.value(ID_KEY).toString());
+    significantOtherPropertiesMap.insert(Name, significantOther.value(NAME_KEY).toString());
+    UserBase *significantOtherUser = new UserBase(significantOtherPropertiesMap, this);
+    propertiesMap.insert(SignificantOther, QVariant::fromValue(significantOtherUser));
+    propertiesMap.insert(Website, rootObject.value(WEBSITE_KEY).toString());
+
     d->user = new User(propertiesMap, this);
-#endif
     return true;
 
 }

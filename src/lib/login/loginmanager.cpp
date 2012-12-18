@@ -38,11 +38,27 @@ class LoginManagerPrivate
 public:
     /**
      * @internal
-     * @brief Translate permissions
-     * @param permissions permissions.
-     * @return a string used in the token query.
+     * @brief Translate extended permissions
+     * @param extendedPermissions extended permissions.
+     * @return a string list providing the list of permissions.
      */
-    static QString translatePermissions(LoginManager::Permissions permissions);
+    static QStringList translateExtendedPermissions(
+            LoginManager::ExtendedPermissions extendedPermissions);
+    /**
+     * @internal
+     * @brief Translate user permissions
+     * @param userPermissions user permissions.
+     * @return a string list providing the list of permissions.
+     */
+    static QStringList translateUserPermissions(LoginManager::UserPermissions userPermissions);
+    /**
+     * @internal
+     * @brief Translate friends permissions
+     * @param friendsPermissions friends permissions.
+     * @return a string list providing the list of permissions.
+     */
+    static QStringList translateFriendsPermissions(
+            LoginManager::FriendsPermissions friendsPermissions);
     /**
      * @internal
      * @brief Client ID
@@ -50,9 +66,19 @@ public:
     QString clientId;
     /**
      * @internal
-     * @brief Permissions
+     * @brief Extended permissions
      */
-    LoginManager::Permissions permissions;
+    LoginManager::ExtendedPermissions extendedPermissions;
+    /**
+     * @internal
+     * @brief User permissions
+     */
+    LoginManager::UserPermissions userPermissions;
+    /**
+     * @internal
+     * @brief Friends permissions
+     */
+    LoginManager::FriendsPermissions friendsPermissions;
     /**
      * @internal
      * @brief UI type
@@ -60,70 +86,198 @@ public:
     LoginManager::UiType uiType;
 };
 
-QString LoginManagerPrivate::translatePermissions(LoginManager::Permissions permissions)
+QStringList LoginManagerPrivate::translateExtendedPermissions(
+        LoginManager::ExtendedPermissions extendedPermissions)
 {
-    QStringList permissionsStringList;
-    if (permissions.testFlag(LoginManager::ReadFriendList)) {
-        permissionsStringList.append("read_friendlists");
+    QStringList permissionsList;
+    if (extendedPermissions.testFlag(LoginManager::ReadFriendList)) {
+        permissionsList.append("read_friendlists");
     }
-    if (permissions.testFlag(LoginManager::ReadInsights)) {
-        permissionsStringList.append("read_insights");
+    if (extendedPermissions.testFlag(LoginManager::ReadInsights)) {
+        permissionsList.append("read_insights");
     }
-    if (permissions.testFlag(LoginManager::ReadMailbox)) {
-        permissionsStringList.append("read_mailbox");
+    if (extendedPermissions.testFlag(LoginManager::ReadMailbox)) {
+        permissionsList.append("read_mailbox");
     }
-    if (permissions.testFlag(LoginManager::ReadRequests)) {
-        permissionsStringList.append("read_requests");
+    if (extendedPermissions.testFlag(LoginManager::ReadRequests)) {
+        permissionsList.append("read_requests");
     }
-    if (permissions.testFlag(LoginManager::ReadStream)) {
-        permissionsStringList.append("read_stream");
+    if (extendedPermissions.testFlag(LoginManager::ReadStream)) {
+        permissionsList.append("read_stream");
     }
-    if (permissions.testFlag(LoginManager::XmppLogin)) {
-        permissionsStringList.append("xmpp_login");
+    if (extendedPermissions.testFlag(LoginManager::XmppLogin)) {
+        permissionsList.append("xmpp_login");
     }
-    if (permissions.testFlag(LoginManager::CreateEvent)) {
-        permissionsStringList.append("create_event");
+    if (extendedPermissions.testFlag(LoginManager::CreateEvent)) {
+        permissionsList.append("create_event");
     }
-    if (permissions.testFlag(LoginManager::ManageFriendList)) {
-        permissionsStringList.append("manage_friendlists");
+    if (extendedPermissions.testFlag(LoginManager::ManageFriendList)) {
+        permissionsList.append("manage_friendlists");
     }
-    if (permissions.testFlag(LoginManager::ManageNotifications)) {
-        permissionsStringList.append("manage_notifications");
+    if (extendedPermissions.testFlag(LoginManager::ManageNotifications)) {
+        permissionsList.append("manage_notifications");
     }
-    if (permissions.testFlag(LoginManager::UserOnlinePresence)) {
-        permissionsStringList.append("user_online_presence");
+    if (extendedPermissions.testFlag(LoginManager::UserOnlinePresence)) {
+        permissionsList.append("user_online_presence");
     }
-    if (permissions.testFlag(LoginManager::FriendsOnlinePresence)) {
-        permissionsStringList.append("friends_online_presence");
+    if (extendedPermissions.testFlag(LoginManager::FriendsOnlinePresence)) {
+        permissionsList.append("friends_online_presence");
     }
-    if (permissions.testFlag(LoginManager::PublishCheckins)) {
-        permissionsStringList.append("publish_checkins");
+    if (extendedPermissions.testFlag(LoginManager::PublishCheckins)) {
+        permissionsList.append("publish_checkins");
     }
-    if (permissions.testFlag(LoginManager::PublishStream)) {
-        permissionsStringList.append("publish_stream");
+    if (extendedPermissions.testFlag(LoginManager::PublishStream)) {
+        permissionsList.append("publish_stream");
     }
-    if (permissions.testFlag(LoginManager::RsvpEvent)) {
-        permissionsStringList.append("rsvp_event");
+    if (extendedPermissions.testFlag(LoginManager::RsvpEvent)) {
+        permissionsList.append("rsvp_event");
     }
-    if (permissions.testFlag(LoginManager::UserAboutMe)) {
-        permissionsStringList.append("user_about_me");
+
+    return permissionsList;
+}
+
+QStringList LoginManagerPrivate::translateUserPermissions(
+        LoginManager::UserPermissions userPermissions)
+{
+    QStringList permissionsList;
+    if (userPermissions.testFlag(LoginManager::UserAboutMe)) {
+        permissionsList.append("user_about_me");
     }
-    if (permissions.testFlag(LoginManager::FriendsAboutMe)) {
-        permissionsStringList.append("friends_about_me");
+    if (userPermissions.testFlag(LoginManager::UserActivities)) {
+        permissionsList.append("user_activities");
     }
-    if (permissions.testFlag(LoginManager::UserActivities)) {
-        permissionsStringList.append("user_activities");
+    if (userPermissions.testFlag(LoginManager::UserBirthday)) {
+        permissionsList.append("user_birthday");
     }
-    if (permissions.testFlag(LoginManager::FriendsActivities)) {
-        permissionsStringList.append("friends_activities");
+    if (userPermissions.testFlag(LoginManager::UserEducationHistory)) {
+        permissionsList.append("user_education_history");
     }
-    if (permissions.testFlag(LoginManager::UserBirthday)) {
-        permissionsStringList.append("user_birthday");
+    if (userPermissions.testFlag(LoginManager::UserEvents)) {
+        permissionsList.append("user_events");
     }
-    if (permissions.testFlag(LoginManager::FriendsBirthday)) {
-        permissionsStringList.append("friends_birthday");
+    if (userPermissions.testFlag(LoginManager::UserGroups)) {
+        permissionsList.append("user_groups");
     }
-    return permissionsStringList.join(",");
+    if (userPermissions.testFlag(LoginManager::UserHometown)) {
+        permissionsList.append("user_hometown");
+    }
+    if (userPermissions.testFlag(LoginManager::UserInterests)) {
+        permissionsList.append("user_interests");
+    }
+    if (userPermissions.testFlag(LoginManager::UserLikes)) {
+        permissionsList.append("user_likes");
+    }
+    if (userPermissions.testFlag(LoginManager::UserLocation)) {
+        permissionsList.append("user_location");
+    }
+    if (userPermissions.testFlag(LoginManager::UserNotes)) {
+        permissionsList.append("user_notes");
+    }
+    if (userPermissions.testFlag(LoginManager::UserPhotos)) {
+        permissionsList.append("user_photos");
+    }
+    if (userPermissions.testFlag(LoginManager::UserQuestions)) {
+        permissionsList.append("user_questions");
+    }
+    if (userPermissions.testFlag(LoginManager::UserRelationships)) {
+        permissionsList.append("user_relationships");
+    }
+    if (userPermissions.testFlag(LoginManager::UserRelationshipDetails)) {
+        permissionsList.append("user_relationship_details");
+    }
+    if (userPermissions.testFlag(LoginManager::UserReligionPolitics)) {
+        permissionsList.append("user_religion_politics");
+    }
+    if (userPermissions.testFlag(LoginManager::UserStatus)) {
+        permissionsList.append("user_status");
+    }
+    if (userPermissions.testFlag(LoginManager::UserSubscriptions)) {
+        permissionsList.append("user_subscriptions");
+    }
+    if (userPermissions.testFlag(LoginManager::UserVideos)) {
+        permissionsList.append("user_videos");
+    }
+    if (userPermissions.testFlag(LoginManager::UserWebsite)) {
+        permissionsList.append("user_website");
+    }
+    if (userPermissions.testFlag(LoginManager::UserWorkHistory)) {
+        permissionsList.append("user_work_history");
+    }
+    if (userPermissions.testFlag(LoginManager::Email)) {
+        permissionsList.append("email");
+    }
+
+    return permissionsList;
+}
+
+QStringList LoginManagerPrivate::translateFriendsPermissions(
+        LoginManager::FriendsPermissions friendsPermissions)
+{
+    QStringList permissionsList;
+    if (friendsPermissions.testFlag(LoginManager::FriendsAboutMe)) {
+        permissionsList.append("friends_about_me");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsActivities)) {
+        permissionsList.append("friends_activities");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsBirthday)) {
+        permissionsList.append("friends_birthday");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsEducationHistory)) {
+        permissionsList.append("friends_education_history");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsEvents)) {
+        permissionsList.append("friends_events");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsGroups)) {
+        permissionsList.append("friends_groups");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsHometowm)) {
+        permissionsList.append("friends_hometown");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsInterests)) {
+        permissionsList.append("friends_interests");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsLikes)) {
+        permissionsList.append("friends_likes");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsLocation)) {
+        permissionsList.append("friends_location");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsNotes)) {
+        permissionsList.append("friends_notes");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsPhotos)) {
+        permissionsList.append("friends_photos");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsQuestions)) {
+        permissionsList.append("friends_questions");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsRelationships)) {
+        permissionsList.append("friends_relationships");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsRelationshipDetails)) {
+        permissionsList.append("friends_relationship_details");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsReligionPolitics)) {
+        permissionsList.append("friends_religion_politics");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsStatus)) {
+        permissionsList.append("friends_status");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsSubscriptions)) {
+        permissionsList.append("friends_subscriptions");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsVideos)) {
+        permissionsList.append("friends_videos");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsWebsite)) {
+        permissionsList.append("friends_website");
+    }
+    if (friendsPermissions.testFlag(LoginManager::FriendsWorkHistory)) {
+        permissionsList.append("friends_work_history");
+    }
+    return permissionsList;
 }
 
 ////// End of private class //////
@@ -132,7 +286,8 @@ LoginManager::LoginManager(QObject *parent):
     QObject(parent), d_ptr(new LoginManagerPrivate)
 {
     Q_D(LoginManager);
-    d->permissions = Permissions();
+    d->extendedPermissions = ExtendedPermissions();
+    d->userPermissions = UserPermissions();
     d->uiType = Desktop;
 }
 
@@ -141,16 +296,21 @@ LoginManager::LoginManager(const QString &clientId, QObject *parent):
 {
     Q_D(LoginManager);
     d->clientId = clientId;
-    d->permissions = Permissions();
+    d->extendedPermissions = ExtendedPermissions();
+    d->userPermissions = UserPermissions();
     d->uiType = Desktop;
 }
 
-LoginManager::LoginManager(const QString &clientId, Permissions permissions, QObject *parent):
+LoginManager::LoginManager(const QString &clientId, ExtendedPermissions extendedPermissions,
+                           UserPermissions userPermissions, FriendsPermission friendsPermission,
+                           QObject *parent):
     QObject(parent), d_ptr(new LoginManagerPrivate)
 {
     Q_D(LoginManager);
     d->clientId = clientId;
-    d->permissions = permissions;
+    d->extendedPermissions = extendedPermissions;
+    d->userPermissions = userPermissions;
+    d->friendsPermissions = friendsPermission;
     d->uiType = Desktop;
 }
 
@@ -159,17 +319,21 @@ LoginManager::LoginManager(const QString &clientId, UiType uiType, QObject *pare
 {
     Q_D(LoginManager);
     d->clientId = clientId;
-    d->permissions = Permissions();
+    d->extendedPermissions = ExtendedPermissions();
+    d->userPermissions = UserPermissions();
     d->uiType = uiType;
 }
 
-LoginManager::LoginManager(const QString &clientId, Permissions permissions, UiType uiType,
-                           QObject *parent):
+LoginManager::LoginManager(const QString &clientId, ExtendedPermissions extendedPermissions,
+                           UserPermissions userPermissions, FriendsPermission friendsPermission,
+                           UiType uiType, QObject *parent):
     QObject(parent), d_ptr(new LoginManagerPrivate)
 {
     Q_D(LoginManager);
     d->clientId = clientId;
-    d->permissions = permissions;
+    d->extendedPermissions = extendedPermissions;
+    d->userPermissions = userPermissions;
+    d->friendsPermissions = friendsPermission;
     d->uiType = uiType;
 }
 
@@ -183,10 +347,22 @@ QString LoginManager::clientId() const
     return d->clientId;
 }
 
-LoginManager::Permissions LoginManager::permissions() const
+LoginManager::ExtendedPermissions LoginManager::extendedPermissions() const
 {
     Q_D(const LoginManager);
-    return d->permissions;
+    return d->extendedPermissions;
+}
+
+LoginManager::UserPermissions LoginManager::userPermissions() const
+{
+    Q_D(const LoginManager);
+    return d->userPermissions;
+}
+
+LoginManager::FriendsPermissions LoginManager::friendsPermissions() const
+{
+    Q_D(const LoginManager);
+    return d->friendsPermissions;
 }
 
 LoginManager::UiType LoginManager::uiType() const
@@ -204,12 +380,30 @@ void LoginManager::setClientId(const QString &clientId)
     }
 }
 
-void LoginManager::setPermissions(Permissions permissions)
+void LoginManager::setExtendedPermissions(ExtendedPermissions extendedPermissions)
 {
     Q_D(LoginManager);
-    if (d->permissions != permissions) {
-        d->permissions = permissions;
-        emit permissionsChanged();
+    if (d->extendedPermissions != extendedPermissions) {
+        d->extendedPermissions = extendedPermissions;
+        emit extendedPermissionsChanged();
+    }
+}
+
+void LoginManager::setUserPermissions(UserPermissions userPermissions)
+{
+    Q_D(LoginManager);
+    if (d->userPermissions != userPermissions) {
+        d->userPermissions = userPermissions;
+        emit userPermissionsChanged();
+    }
+}
+
+void LoginManager::setFriendsPermissions(FriendsPermissions friendsPermissions)
+{
+    Q_D(LoginManager);
+    if (d->friendsPermissions != friendsPermissions) {
+        d->friendsPermissions = friendsPermissions;
+        emit friendsPermissionsChanged();
     }
 }
 
@@ -225,7 +419,15 @@ void LoginManager::setUiType(UiType uiType)
 void LoginManager::login()
 {
     Q_D(LoginManager);
-    QString permissions = d->translatePermissions(d->permissions);
+    QStringList extendedPermissions = d->translateExtendedPermissions(d->extendedPermissions);
+    QStringList userPermissions = d->translateUserPermissions(d->userPermissions);
+    QStringList friendsPermissions = d->translateFriendsPermissions(d->friendsPermissions);
+    QStringList permissionsList;
+    permissionsList.append(extendedPermissions);
+    permissionsList.append(userPermissions);
+    permissionsList.append(friendsPermissions);
+    QString permissions = permissionsList.join(",");
+
     qDebug() << "Asked permissions" << permissions;
 
     QString url ("https://%1.facebook.com/dialog/oauth?client_id=%2&\

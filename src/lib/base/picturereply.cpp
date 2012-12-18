@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file picturereply.cpp
+ * @brief Implementation of QFB::PictureReply
+ */
+
 #include "picturereply.h"
 #include "abstractreply_p.h"
 #include "picture_p.h"
@@ -32,6 +37,10 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Private class for QFB::PictureReply
+ */
 class PictureReplyPrivate: public AbstractReplyPrivate
 {
 public:
@@ -41,8 +50,24 @@ public:
      * @param q Q-pointer
      */
     PictureReplyPrivate(PictureReply *q);
+    /**
+     * @internal
+     * @brief Path to the cache folder
+     * @return path to the cache folder.
+     */
     static QString cacheFolderPath();
+    /**
+     * @internal
+     * @brief Picture name
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a picture name based on the graph entry and the arguments.
+     */
     static QString pictureName(const QString &graph, const QList<ArgumentPair> &arguments);
+    /**
+     * @internal
+     * @brief Path to the picture
+     */
     QString picturePath;
 };
 

@@ -32,6 +32,7 @@
 #include "object.h"
 #include "userbase.h"
 #include "user.h"
+#include "language.h"
 #include "friendlistreply.h"
 #include "querymanager.h"
 #include "friendlistmodel.h"
@@ -65,7 +66,9 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterUncreatableType<QFB::UserBase>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserBase",
                                               "QFBUserBase cannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
-                                          "QFBUsercannot be created");
+                                          "QFBUser cannot be created");
+    qmlRegisterUncreatableType<QFB::Language>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLanguage",
+                                              "QFBLanguage cannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");

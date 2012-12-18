@@ -28,12 +28,10 @@
 namespace QFB
 {
 
-class UserBasePrivate;
-
 /**
- * @brief Base entries for a friend
+ * @brief Base entries for a user
  *
- * This class represents the base entries for a friend in Facebook.
+ * This class represents the base entries for an user in Facebook.
  * Extending QFB::Object, it contains the name of a friend, that
  * can be accessed through the name() property.
  */
@@ -41,7 +39,7 @@ class QFBBASE_EXPORT UserBase : public Object
 {
     Q_OBJECT
     /**
-     * @short name
+     * @short The user's full name
      */
     Q_PROPERTY(QString name READ name CONSTANT)
 public:
@@ -52,8 +50,7 @@ public:
     explicit UserBase(QObject *parent = 0);
     /**
      * @brief Default constructor
-     * @param id id.
-     * @param name name.
+     * @param propertiesMap properties.
      * @param parent parent object.
      */
     explicit UserBase(const PropertiesMap propertiesMap, QObject *parent = 0);

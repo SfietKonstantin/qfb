@@ -17,6 +17,11 @@
 #ifndef QFB_QFB_H
 #define QFB_QFB_H
 
+/**
+ * @file qfb.h
+ * @short Global enumerations used in qfb
+ */
+
 namespace QFB
 {
 
@@ -29,7 +34,7 @@ enum Property {
      */
     Id,
     /**
-     * @short The user's full name
+     * @short The entry's name
      */
     Name,
     /**
@@ -56,6 +61,10 @@ enum Property {
      */
     Locale,
     /**
+     * @short The user's languages
+     */
+    Languages,
+    /**
      * @short The URL of the profile for the user on Facebook
      */
     Link,
@@ -64,16 +73,72 @@ enum Property {
      */
     Username,
     /**
+     * @short The user's timezone offset from UTC
+     *
+     * Available only for the current user.
+     */
+    Timezone,
+    /**
+     * @short The last time the user's profile was updated.
+     *
+     * Changes to the languages, link, timezone, verified, interested_in, favorite_athletes,
+     * favorite_teams, and video_upload_limits are not not reflected in this value.
+     */
+    UpdatedTime,
+    /**
      * @short The user's biography
      */
     Bio,
     /**
      * @short The user's birthday
      *
-     * Requires \e user_birthday  or \e friends_birthday.
+     * Requires \e user_birthday or \e friends_birthday.
      * This entry is currently not working very well.
      */
-    Birthday
+    Birthday,
+    /**
+     * @short The user's cover photo
+     *
+     * (must be explicitly requested using fields=cover parameter)
+     */
+    Cover,
+    /**
+     * @short The user's currency settings
+     *
+     * (must be explicitly requested using a fields=currency URL parameter)
+     */
+    Currency,
+    /**
+     * @short A list of the user's devices beyond desktop
+     * @todo comment
+     */
+    Devices,
+    /**
+     * A list of the user's education history
+     */
+    Education,
+    /**
+     * @short The proxied or contact email address granted by the user
+     *
+     * Requires \e email.
+     */
+    Email,
+    Hometown,
+    InterestedIn,
+    Location,
+    Political,
+    PaymentPricepoints,
+    FavoriteAthletes,
+    FavoriteTeams,
+    Picture,
+    Quotes,
+    RelationshipStatus,
+    Religion,
+    SecuritySettings,
+    SignificantOther,
+    VideoUploadLimits,
+    Website,
+    Work
 };
 
 }

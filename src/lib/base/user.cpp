@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file user.cpp
+ * @brief Implementation of QFB::User
+ */
+
 #include "user.h"
 #include "object_p.h"
 
@@ -62,6 +67,23 @@ QString User::locale() const
     return d->propertiesMap.value(Locale).toString();
 }
 
+QList<Language *> User::languages() const
+{
+    Q_D(const Object);
+    QVariantList languagesVariant = d->propertiesMap.value(Languages).toList();
+    QList<Language *> returnedLanguages;
+    foreach (QVariant languageVariant, languagesVariant) {
+        returnedLanguages.append(languageVariant.value<Language *>());
+    }
+    return returnedLanguages;
+}
+
+QVariantList User::languagesVariant() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Languages).toList();
+}
+
 QString User::link() const
 {
     Q_D(const Object);
@@ -85,5 +107,54 @@ QDate User::birthday() const
     Q_D(const Object);
     return d->propertiesMap.value(Birthday).toDate();
 }
+
+QString User::email() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Email).toString();
+}
+
+QString User::political() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Political).toString();
+}
+
+QString User::picture() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Picture).toString();
+}
+
+QString User::quotes() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Quotes).toString();
+}
+
+QString User::relationshipStatus() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(RelationshipStatus).toString();
+}
+
+QString User::religion() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Religion).toString();
+}
+
+UserBase * User::significantOther() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(SignificantOther).value<UserBase *>();
+}
+
+QString User::website() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Website).toString();
+}
+
 
 }

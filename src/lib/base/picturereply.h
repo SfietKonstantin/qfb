@@ -17,12 +17,24 @@
 #ifndef QFB_PICTUREREPLY_H
 #define QFB_PICTUREREPLY_H
 
+/**
+ * @file picturereply.h
+ * @brief Definition of QFB::PictureReply
+ */
+
 #include "abstractreply.h"
 
 namespace QFB
 {
 
 class PictureReplyPrivate;
+/**
+ * @brief Reply containing a picture
+ *
+ * This class subclasses AbstractReply, making it be able to get
+ * and cache pictures. This reply, when finished, returns a
+ * path to the cached version of the picture to download.
+ */
 class QFBBASE_EXPORT PictureReply : public AbstractReply
 {
     Q_OBJECT
@@ -38,9 +50,22 @@ public:
      * @param parent parent object.
      */
     explicit PictureReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    /**
+     * @brief Path to picture
+     * @return path to the picture.
+     */
     QString picturePath() const;
 protected:
+    /**
+     * @brief Reimplementation of AbstractReply::processArguments()
+     * @param arguments arguments to process.
+     * @return processed arguments.
+     */
     QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
+    /**
+     * @brief Reimplementation of AbstractReply::preprocesssRequest()
+     * @return if the process should be performed.
+     */
     bool preprocesssRequest();
     /**
      * @brief Implementation of AbstractReply::processData()

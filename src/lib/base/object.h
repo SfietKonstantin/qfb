@@ -60,7 +60,7 @@ class QFBBASE_EXPORT Object : public QObject
 {
     Q_OBJECT
     /**
-     * @short id
+     * @short The object's Facebook ID
      */
     Q_PROPERTY(QString id READ id CONSTANT)
 public:

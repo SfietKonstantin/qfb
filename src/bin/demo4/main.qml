@@ -28,7 +28,18 @@ Item {
     QFBLoginManager {
         id: qfbLoginManager
         clientId: "390204064393625"
-        permissions: QFBLoginManager.ReadFriendList
+        userPermissions: QFBLoginManager.UserBirthday + QFBLoginManager.Email
+                         + QFBLoginManager.UserAboutMe + QFBLoginManager.UserLikes
+                         + QFBLoginManager.UserEducationHistory
+                         + QFBLoginManager.UserRelationshipDetails
+                         + QFBLoginManager.UserReligionPolitics
+                         + QFBLoginManager.UserRelationships
+        friendsPermissions: QFBLoginManager.FriendsBirthday
+                            + QFBLoginManager.FriendsAboutMe + QFBLoginManager.FriendsLikes
+                            + QFBLoginManager.FriendsEducationHistory
+                            + QFBLoginManager.FriendsRelationshipDetails
+                            + QFBLoginManager.FriendsReligionPolitics
+                            + QFBLoginManager.FriendsRelationships
         uiType: QFBLoginManager.Mobile
         onUrlRequested: webView.url = url
         Component.onCompleted: {
@@ -110,6 +121,13 @@ Item {
             console.debug(user.username)
             console.debug(user.bio)
             console.debug(user.birthday)
+            console.debug(user.email)
+            console.debug(user.political)
+            console.debug(user.quotes)
+            console.debug(user.relationshipStatus)
+            console.debug(user.religion)
+            console.debug(user.significantOther.id)
+            console.debug(user.significantOther.name)
         }
     }
 

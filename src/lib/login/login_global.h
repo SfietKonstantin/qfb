@@ -27,7 +27,19 @@
 /**
  * \page login Login library
  *
- * \todo write this page
+ * The QFB login library is used to perform a login to Facebook service.
+ * It needs a web view to display the login screen and other dialogs that
+ * Facebook uses for the OAuth 2 authentification process. At the end of
+ * the process, a token is retrieved, and should be used in Facebook API
+ * calls.
+ *
+ * In order to perform the operation, and get the token, QFB::LoginManager
+ * should be used. It plugs into a web view (either C++ or QML) and handles
+ * all the operations.Please read the documentation page for
+ * QFB::LoginManager to learn how to use that class.
+ *
+ * @todo continue this page
+ * @todo add disconnect, cookie disabling and other stuff
  */
 
 /**

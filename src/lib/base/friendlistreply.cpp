@@ -26,14 +26,7 @@
 #include <QtCore/QIODevice>
 #include <QtCore/QVariant>
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include "parser.h"
-#else
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#endif
-
+#include "jsonhelper_p.h"
 #include "userbase.h"
 
 namespace QFB
@@ -118,45 +111,13 @@ bool FriendListReply::processData(QIODevice *dataSource)
 {
     Q_D(FriendListReply);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    QJson::Parser parser;
-    QVariant parsedValue = parser.parse(dataSource);
-
-    if (!parsedValue.isValid()) {
+    QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
+    if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
         return false;
     }
+    QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);
 
-    QVariantMap valueMap = parsedValue.toMap();
-    if (!valueMap.contains(DATA_KEY)) {
-        setError("Received data do not contains correct data.");
-        return false;
-    }
-
-    qDeleteAll(d->friendList);
-    d->friendList.clear();
-
-    QVariantList dataList = valueMap.value(DATA_KEY).toList();
-    foreach (QVariant dataListEntry, dataList) {
-        QVariantMap dataListEntryMap = dataListEntry.toMap();
-        if (dataListEntryMap.contains(ID_KEY) && dataListEntryMap.contains(NAME_KEY)) {
-            QString id = dataListEntryMap.value(ID_KEY).toString();
-            QString name = dataListEntryMap.value(NAME_KEY).toString();
-            PropertiesMap propertiesMap;
-            propertiesMap.insert(Id, id);
-            propertiesMap.insert(Name, name);
-            UserBase *userBase = new UserBase(propertiesMap, this);
-            d->friendList.append(userBase);
-        }
-    }
-#else
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(dataSource->readAll());
-    if (jsonDocument.isNull()) {
-        setError("Received data is not a JSON document");
-        return false;
-    }
-
-    QJsonObject rootObject = jsonDocument.object();
     if (!rootObject.contains(DATA_KEY)) {
         setError("Received data do not contains correct data.");
         return false;
@@ -165,10 +126,11 @@ bool FriendListReply::processData(QIODevice *dataSource)
     qDeleteAll(d->friendList);
     d->friendList.clear();
 
-    QJsonArray dataArray = rootObject.value(DATA_KEY).toArray();
-    foreach (QJsonValue value, dataArray) {
-        if (value.isObject()) {
-            QJsonObject object = value.toObject();
+    JsonArray dataArray = QFB_JSON_GET_ARRAY(rootObject.value(DATA_KEY));
+
+    foreach (JsonValue value, dataArray) {
+        if (QFB_JSON_IS_OBJECT(value)) {
+            JsonObject object = QFB_JSON_GET_OBJECT(value);
             if (object.contains(ID_KEY) && object.contains(NAME_KEY)) {
                 QString id = object.value(ID_KEY).toString();
                 QString name = object.value(NAME_KEY).toString();
@@ -180,7 +142,6 @@ bool FriendListReply::processData(QIODevice *dataSource)
             }
         }
     }
-#endif
     return true;
 }
 

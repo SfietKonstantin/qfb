@@ -24,10 +24,22 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Private class for QFB::QueryManager
+ */
 class QueryManagerPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Network access manager
+     */
     QNetworkAccessManager *networkAccessManager;
+    /**
+     * @internal
+     * @brief Token
+     */
     QString token;
 };
 

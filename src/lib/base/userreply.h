@@ -39,6 +39,10 @@ public:
      * @param parent parent object.
      */
     explicit UserReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    /**
+     * @brief User
+     * @return user.
+     */
     User * user() const;
     /**
      * @brief Implementation of AbstractReply::processData()

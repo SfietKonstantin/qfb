@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 2.0
-//import QtWebKit 1.0
+import QtWebKit 3.0
 import org.SfietKonstantin.qfb 5.0
 import org.SfietKonstantin.qfb.login 5.0
 
@@ -28,7 +28,18 @@ Item {
     QFBLoginManager {
         id: qfbLoginManager
         clientId: "390204064393625"
-        permissions: QFBLoginManager.ReadFriendList
+        userPermissions: QFBLoginManager.UserBirthday + QFBLoginManager.Email
+                         + QFBLoginManager.UserAboutMe + QFBLoginManager.UserLikes
+                         + QFBLoginManager.UserEducationHistory
+                         + QFBLoginManager.UserRelationshipDetails
+                         + QFBLoginManager.UserReligionPolitics
+                         + QFBLoginManager.UserRelationships
+        friendsPermissions: QFBLoginManager.FriendsBirthday
+                            + QFBLoginManager.FriendsAboutMe + QFBLoginManager.FriendsLikes
+                            + QFBLoginManager.FriendsEducationHistory
+                            + QFBLoginManager.FriendsRelationshipDetails
+                            + QFBLoginManager.FriendsReligionPolitics
+                            + QFBLoginManager.FriendsRelationships
         uiType: QFBLoginManager.Mobile
         onUrlRequested: webView.url = url
         Component.onCompleted: {
@@ -36,7 +47,7 @@ Item {
                 qfbLoginManager.login()
             } else {
                 queryManager.token = BRIDGE.token
-//                webView.visible = false
+                webView.visible = false
                 friendListModel.request("me/friends")
             }
         }
@@ -44,7 +55,7 @@ Item {
         onLoginSucceeded: {
             BRIDGE.token = token
             queryManager.token = token
-//            webView.visible = false
+            webView.visible = false
             friendListModel.request("me/friends")
         }
     }
@@ -110,13 +121,20 @@ Item {
             console.debug(user.username)
             console.debug(user.bio)
             console.debug(user.birthday)
+            console.debug(user.email)
+            console.debug(user.political)
+            console.debug(user.quotes)
+            console.debug(user.relationshipStatus)
+            console.debug(user.religion)
+            console.debug(user.significantOther.id)
+            console.debug(user.significantOther.name)
         }
     }
 
-//    WebView {
-//        id: webView
+    WebView {
+        id: webView
 //        preferredWidth: container.width
-//        anchors.fill: parent
-//        onUrlChanged: qfbLoginManager.checkUrl(url)
-//    }
+        anchors.fill: parent
+        onUrlChanged: qfbLoginManager.checkUrl(url)
+    }
 }

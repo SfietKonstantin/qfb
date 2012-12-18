@@ -161,7 +161,9 @@ void AbstractReply::request(const QString &graph, const QString &token, const QS
     }
 
     d->running = true;
-    d->reply = d->networkAccessManager->get(QNetworkRequest(graphUrl(graph, token, d->arguments)));
+    QUrl url = graphUrl(graph, token, d->arguments);
+    qDebug() << "Request:" << url;
+    d->reply = d->networkAccessManager->get(QNetworkRequest(url));
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(slotError(QNetworkReply::NetworkError)));

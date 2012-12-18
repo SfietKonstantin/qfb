@@ -14,45 +14,58 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERLOADER_H
-#define QFB_USERLOADER_H
+#ifndef QFB_LANGUAGE_H
+#define QFB_LANGUAGE_H
 
-#include <QtCore/QObject>
+/**
+ * @file language.h
+ * @brief Definition of QFB::Language
+ */
+
+#include "base_global.h"
+#include "object.h"
 
 namespace QFB
 {
 
-class User;
-class QueryManager;
-class UserLoaderPrivate;
-class UserLoader : public QObject
+/**
+ * @brief A language used by a user
+ *
+ * This class represents a language used by a user.
+ * Extending QFB::Object, it contains the name of that
+ * language, that can be accessed through the name()
+ * property.
+ */
+class QFBBASE_EXPORT Language: public Object
 {
     Q_OBJECT
-    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
-               NOTIFY queryManagerChanged)
-    Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
+    /**
+     * @short Name
+     */
+    Q_PROPERTY(QString name READ name CONSTANT)
 public:
-    explicit UserLoader(QObject *parent = 0);
-    virtual ~UserLoader();
-    QueryManager * queryManager() const;
-    User * user() const;
-public Q_SLOTS:
-    void setQueryManager(QueryManager *queryManager);
-    void request(const QString &graph, const QString &arguments = QString());
-Q_SIGNALS:
-    void queryManagerChanged();
-    void userChanged();
-protected:
-    QScopedPointer<UserLoaderPrivate> d_ptr;
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit Language(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param propertiesMap properties.
+     * @param parent parent object.
+     */
+    explicit Language(const PropertiesMap propertiesMap, QObject *parent = 0);
+    /**
+     * @brief Name
+     * @return name.
+     */
+    QString name() const;
 private:
-    Q_DECLARE_PRIVATE(UserLoader)
-    /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotFailed())
-    /// @endcond
-
+    Q_DECLARE_PRIVATE(Object)
 };
 
 }
 
-#endif // QFB_USERLOADER_H
+Q_DECLARE_METATYPE(QFB::Language *)
+
+#endif // QFB_LANGUAGE_H

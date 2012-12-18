@@ -14,45 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERLOADER_H
-#define QFB_USERLOADER_H
+/**
+ * @file language.cpp
+ * @brief Implementation of QFB::Language
+ */
 
-#include <QtCore/QObject>
+#include "language.h"
+#include "object_p.h"
 
 namespace QFB
 {
 
-class User;
-class QueryManager;
-class UserLoaderPrivate;
-class UserLoader : public QObject
+Language::Language(QObject *parent):
+    Object(parent)
 {
-    Q_OBJECT
-    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
-               NOTIFY queryManagerChanged)
-    Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
-public:
-    explicit UserLoader(QObject *parent = 0);
-    virtual ~UserLoader();
-    QueryManager * queryManager() const;
-    User * user() const;
-public Q_SLOTS:
-    void setQueryManager(QueryManager *queryManager);
-    void request(const QString &graph, const QString &arguments = QString());
-Q_SIGNALS:
-    void queryManagerChanged();
-    void userChanged();
-protected:
-    QScopedPointer<UserLoaderPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(UserLoader)
-    /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotFailed())
-    /// @endcond
-
-};
-
 }
 
-#endif // QFB_USERLOADER_H
+Language::Language(const PropertiesMap propertiesMap, QObject *parent):
+    Object(parent)
+{
+    Q_D(Object);
+    d->propertiesMap = propertiesMap;
+}
+
+QString Language::name() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(Name).toString();
+}
+
+}

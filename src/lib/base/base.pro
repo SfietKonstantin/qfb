@@ -24,7 +24,9 @@ HEADERS +=  base_global.h \
             picture_p.h \
             picturereply.h \
     user.h \
-    userreply.h
+    userreply.h \
+    jsonhelper_p.h \
+    language.h
 
 SOURCES +=  object.cpp \
             userbase.cpp \
@@ -33,7 +35,8 @@ SOURCES +=  object.cpp \
             querymanager.cpp \
             picturereply.cpp \
     user.cpp \
-    userreply.cpp
+    userreply.cpp \
+    language.cpp
 
 # Deployment
 target.path = $${LIBDIR}
