@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
-contains(QT_VERSION, ^4\\.\\d+\\.\\d+$): SUBDIRS = demo4
-contains(QT_VERSION, ^5\\.\\d+\\.\\d+$): SUBDIRS = demo5
+isEqual(QT_MAJOR_VERSION, 4): SUBDIRS = demo4
+isEqual(QT_MAJOR_VERSION, 5): SUBDIRS = demo5
 contains(CONFIG, mobile): SUBDIRS = mobile

@@ -14,29 +14,29 @@ INCLUDEPATH += ../../3rdparty/qjson/src/
 HEADERS +=  base_global.h \
             qfb.h \
             helper_p.h \
+            jsonhelper_p.h \
             object.h \
             object_p.h \
             userbase.h \
+            user.h \
+            language.h \
             abstractreply.h \
             abstractreply_p.h \
             friendlistreply.h \
             querymanager.h \
             picture_p.h \
             picturereply.h \
-    user.h \
-    userreply.h \
-    jsonhelper_p.h \
-    language.h
+            userreply.h \
 
 SOURCES +=  object.cpp \
             userbase.cpp \
+            user.cpp \
+            language.cpp \
             abstractreply.cpp \
             friendlistreply.cpp \
             querymanager.cpp \
             picturereply.cpp \
-    user.cpp \
-    userreply.cpp \
-    language.cpp
+            userreply.cpp \
 
 # Deployment
 target.path = $${LIBDIR}

@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file querymanager.cpp
+ * @brief Implementation of QFB::QueryManager
+ */
+
 #include "querymanager.h"
 #include "friendlistreply.h"
 #include "picturereply.h"

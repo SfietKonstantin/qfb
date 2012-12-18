@@ -17,6 +17,11 @@
 #ifndef QFB_USERREPLY_H
 #define QFB_USERREPLY_H
 
+/**
+ * @file userreply.h
+ * @brief Definition of QFB::UserReply
+ */
+
 #include "abstractreply.h"
 
 namespace QFB
@@ -24,6 +29,22 @@ namespace QFB
 
 class User;
 class UserReplyPrivate;
+/**
+ * @brief Reply containing an user
+ *
+ * This class subclasses AbstractReply, making it be able to get
+ * users. This reply, when finished, will create an user that
+ * have this reply as parent.
+ *
+ * You can choose the fields of the user you want using
+ * the fields query parameter:
+ *
+ * @code
+ * fields=id,name
+ * @endcode
+ *
+ * @todo Allow the user not to have this reply as parent.
+ */
 class QFBBASE_EXPORT UserReply : public AbstractReply
 {
     Q_OBJECT

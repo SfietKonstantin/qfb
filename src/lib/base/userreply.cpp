@@ -14,14 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file userreply.cpp
+ * @brief Implementation of QFB::UserReply
+ */
+
 #include "userreply.h"
 #include "abstractreply_p.h"
 
 #include "user.h"
 #include "language.h"
+#include "jsonhelper_p.h"
 
 #include <QtCore/QDebug>
-#include "jsonhelper_p.h"
 
 namespace QFB
 {
@@ -160,6 +165,10 @@ static const char *SIGNIFICANT_OTHER_KEY = "significant_other";
  */
 static const char *WEBSITE_KEY = "website";
 
+/**
+ * @internal
+ * @brief Private class for QFB::UserReply
+ */
 class UserReplyPrivate: public AbstractReplyPrivate
 {
 public:

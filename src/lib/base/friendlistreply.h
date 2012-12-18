@@ -33,11 +33,14 @@ class FriendListReplyPrivate;
  * @brief Reply containing the friend list
  *
  * This class subclasses AbstractReply, making it be able to parse
- * friend lists.
+ * friend lists. This reply, when finished, will create a list of users
+ * that have this reply as parent.
  *
  * Note that currently, Facebook API do not allow you to access
  * friends of friends, so do not use this class to get friends of
  * friends, it will not work.
+ *
+ * @todo Allow the users not to have this reply as parent.
  */
 class FriendListReply: public AbstractReply
 {

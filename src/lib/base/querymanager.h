@@ -17,6 +17,11 @@
 #ifndef QFB_QUERYMANAGER_H
 #define QFB_QUERYMANAGER_H
 
+/**
+ * @file querymanager.h
+ * @brief Definition of QFB::QueryManager
+ */
+
 #include "base_global.h"
 #include <QtCore/QObject>
 

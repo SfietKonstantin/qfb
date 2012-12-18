@@ -60,8 +60,8 @@ namespace QFB
  * users hiding them in their settings, or because of
  * missing permissions.
  *
- * You can choose the fields you want returned using
- * the fields query parameter:
+ * You can choose the fields you want using the fields
+ * query parameter:
  *
  * @code
  * fields=id,name

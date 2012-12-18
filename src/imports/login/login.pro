@@ -4,16 +4,16 @@ TEMPLATE =      lib
 
 TARGET =        $${NAME}loginplugin
 QT =            core gui
-contains(QT_VERSION, ^4\\.\\d+\\.\\d+$): QT += declarative
-contains(QT_VERSION, ^5\\.\\d+\\.\\d+$): QT += qml
+isEqual(QT_MAJOR_VERSION, 4): QT += declarative
+isEqual(QT_MAJOR_VERSION, 5): QT += qml
 
 CONFIG +=       qt plugin
 
 INCLUDEPATH +=  ../../lib/login/
 LIBS +=         -L ../../lib/login/ -l$${NAME}login
 
-contains(QT_VERSION, ^4\\.\\d+\\.\\d+$): HEADERS += login_plugin4.h
-contains(QT_VERSION, ^5\\.\\d+\\.\\d+$): HEADERS += login_plugin5.h
+isEqual(QT_MAJOR_VERSION, 4): HEADERS += login_plugin4.h
+isEqual(QT_MAJOR_VERSION, 5): HEADERS += login_plugin5.h
 
 SOURCES +=      login_plugin.cpp \
 
