@@ -14,11 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file friendlistmodel.cpp
+ * @brief Implementation of QFB::FriendListModel
+ */
+
 #include "friendlistmodel.h"
+#include "abstractloadablemodel_p.h"
+
 #include "querymanager.h"
 #include "userbase.h"
 #include "friendlistreply.h"
-#include <QtCore/QDebug>
 
 namespace QFB
 {
@@ -35,32 +41,48 @@ bool nameSortLesser(const UserBase *friend1, const UserBase *friend2)
     return friend1->name() < friend2->name();
 }
 
-class FriendListModelPrivate
+/**
+ * @internal
+ * @brief Private class for QFB::FriendListModel
+ */
+class FriendListModelPrivate: public AbstractLoadableModelPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
     FriendListModelPrivate(FriendListModel *q);
-    void slotFinished();
-    void slotFailed();
+    /**
+     * @internal
+     * @brief Implementation of AbstractLoadableModelPrivate::processReply()
+     * @param reply reply to be processed.
+     * @return if the process is successful.
+     */
+    bool processReply(const AbstractReply *reply);
+    /**
+     * @internal
+     * @brief Data
+     */
     QList<UserBase *> data;
-    QueryManager *queryManager;
-    FriendListReply *reply;
-    FriendListReply *newReply;
 private:
-    FriendListModel * const q_ptr;
     Q_DECLARE_PUBLIC(FriendListModel)
 };
 
 FriendListModelPrivate::FriendListModelPrivate(FriendListModel *q):
-    q_ptr(q)
+    AbstractLoadableModelPrivate(q)
 {
-    queryManager = 0;
-    reply = 0;
-    newReply = 0;
 }
 
-void FriendListModelPrivate::slotFinished()
+bool FriendListModelPrivate::processReply(const AbstractReply *reply)
 {
     Q_Q(FriendListModel);
+
+    const FriendListReply *friendListReply = qobject_cast<const FriendListReply *>(reply);
+    if (!friendListReply) {
+        return false;
+    }
 
     // Clean old data
     if (!data.isEmpty()) {
@@ -68,40 +90,23 @@ void FriendListModelPrivate::slotFinished()
         data.clear();
         q->endInsertRows();
     }
-    if (reply) {
-        reply->deleteLater();
-    }
-    reply = newReply;
-    newReply = 0;
 
-    data = reply->friendList();
+    data = friendListReply->friendList();
     qSort(data.begin(), data.end(), nameSortLesser);
     q->beginInsertRows(QModelIndex(), 0, data.count() - 1);
     emit q->countChanged();
     q->endInsertRows();
-}
-
-void FriendListModelPrivate::slotFailed()
-{
-    qDebug() << newReply->error();
-    newReply->deleteLater();
-    newReply = 0;
+    return true;
 }
 
 ////// End of private class //////
 
 FriendListModel::FriendListModel(QObject *parent):
-    QAbstractListModel(parent), d_ptr(new FriendListModelPrivate(this))
+    AbstractLoadableModel(*(new FriendListModelPrivate(this)), parent)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    QHash <int, QByteArray> roles;
-    roles.insert(DataRole, "data");
-    setRoleNames(roles);
+    setRoleNames(roleNames());
 #endif
-}
-
-FriendListModel::~FriendListModel()
-{
 }
 
 int FriendListModel::rowCount(const QModelIndex &parent) const
@@ -109,17 +114,6 @@ int FriendListModel::rowCount(const QModelIndex &parent) const
     Q_UNUSED(parent)
     Q_D(const FriendListModel);
     return d->data.count();
-}
-
-int FriendListModel::count() const
-{
-    return rowCount();
-}
-
-QueryManager * FriendListModel::queryManager() const
-{
-    Q_D(const FriendListModel);
-    return d->queryManager;
 }
 
 QVariant FriendListModel::data(const QModelIndex &index, int role) const
@@ -142,38 +136,17 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void FriendListModel::setQueryManager(QueryManager *queryManager)
+AbstractReply * FriendListModel::createReply(const QString &graph, const QString &arguments)
 {
-    Q_D(FriendListModel);
-    if (d->queryManager != queryManager) {
-        d->queryManager = queryManager;
-        emit queryManagerChanged();
-    }
+    return queryManager()->queryFriendList(graph, arguments);
 }
 
-void FriendListModel::request(const QString &graph)
-{
-    Q_D(FriendListModel);
-    if (!d->queryManager) {
-        return;
-    }
-    if (d->newReply) {
-        return;
-    }
-
-    d->newReply = d->queryManager->queryFriendList(graph);
-    connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
-}
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 QHash<int, QByteArray> FriendListModel::roleNames() const
 {
     QHash <int, QByteArray> roles;
     roles.insert(DataRole, "data");
     return roles;
 }
-#endif
 
 }
 

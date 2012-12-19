@@ -12,18 +12,25 @@ CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../lib/base/
 LIBS +=         -L ../../lib/base/ -l$${NAME}
 
-HEADERS +=      friendlistmodel.h \
+HEADERS +=      abstractloadablemodel.h \
+                abstractloadablemodel_p.h \
+                friendlistmodel.h \
+                abstractloader.h \
+                abstractloader_p.h \
                 pictureloader.h \
                 userloader.h
+
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
 
 SOURCES +=      base_plugin.cpp \
+                abstractloadablemodel.cpp \
                 friendlistmodel.cpp \
+                abstractloader.cpp \
                 pictureloader.cpp \
                 userloader.cpp
 
-OTHER_FILES =   qmldir
+OTHER_FILES =   qmldir \
 
 # Path for QML files
 qmlFiles.path = $${QML_PLUGIN_PATH}

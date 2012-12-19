@@ -14,32 +14,77 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERLOADER_H
-#define QFB_USERLOADER_H
-
-#include "abstractloader.h"
+#ifndef QFB_ABSTRACTLOADER_P_H
+#define QFB_ABSTRACTLOADER_P_H
 
 namespace QFB
 {
 
-class User;
+#include <QtCore/QtGlobal>
+
 class QueryManager;
-class UserLoaderPrivate;
-class UserLoader : public AbstractLoader
+class AbstractReply;
+class AbstractLoader;
+class AbstractLoaderPrivate
 {
-    Q_OBJECT
-    Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
 public:
-    explicit UserLoader(QObject *parent = 0);
-    User * user() const;
-Q_SIGNALS:
-    void userChanged();
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
+    AbstractLoaderPrivate(AbstractLoader *q);
+    /**
+     * @internal
+     * @brief Destructor
+     */
+    virtual ~AbstractLoaderPrivate();
+    /**
+     * @internal
+     * @brief Process reply
+     *
+     * This method is used to process a reply from Facebook.
+     * It should be implemented in order to fill the model.
+     *
+     * @param reply reply to be processed.
+     * @return if the process is successful.
+     */
+    virtual bool processReply(const AbstractReply *reply) = 0;
 protected:
-    AbstractReply * createReply(const QString &graph, const QString &arguments = QString());
+    /**
+     * @internal
+     * @brief Q-pointer
+     */
+    AbstractLoader * const q_ptr;
 private:
-    Q_DECLARE_PRIVATE(UserLoader)
+    /**
+     * @internal
+     * @brief Slot when the request is finished
+     */
+    void slotFinished();
+    /**
+     * @internal
+     * @brief Slot when the request failed
+     */
+    void slotFailed();
+    /**
+     * @internal
+     * @brief Query manager
+     */
+    QueryManager *queryManager;
+    /**
+     * @internal
+     * @brief Reply
+     */
+    AbstractReply *reply;
+    /**
+     * @internal
+     * @brief New reply
+     */
+    AbstractReply *newReply;
+    Q_DECLARE_PUBLIC(AbstractLoader)
 };
 
 }
 
-#endif // QFB_USERLOADER_H
+#endif // QFB_ABSTRACTLOADER_P_H

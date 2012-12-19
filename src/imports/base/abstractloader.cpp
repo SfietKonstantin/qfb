@@ -14,72 +14,91 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "userloader.h"
+#include "abstractloader.h"
 #include "abstractloader_p.h"
 
-#include "userreply.h"
-#include "querymanager.h"
-
 #include <QtCore/QDebug>
+
+#include "abstractreply.h"
 
 namespace QFB
 {
 
-class UserLoaderPrivate: public AbstractLoaderPrivate
+AbstractLoaderPrivate::AbstractLoaderPrivate(AbstractLoader *q):
+    q_ptr(q)
 {
-public:
-    UserLoaderPrivate(UserLoader *q);
-    User *user;
-    bool processReply(const AbstractReply *reply);
-private:
-    Q_DECLARE_PUBLIC(UserLoader)
-};
-
-UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
-    AbstractLoaderPrivate(q)
-{
-    user = 0;
+    queryManager = 0;
+    reply = 0;
+    newReply = 0;
 }
 
-bool UserLoaderPrivate::processReply(const AbstractReply *reply)
+AbstractLoaderPrivate::~AbstractLoaderPrivate()
 {
-    Q_Q(UserLoader);
-    const UserReply *userReply = qobject_cast<const UserReply *>(reply);
-    bool ok = true;
-    User *newUser = 0;
-    if (!userReply) {
-        ok = false;
-    } else {
-        newUser = userReply->user();
-    }
-
-    if (user != newUser) {
-        user = newUser;
-        emit q->userChanged();
-    }
-
-    return ok;
 }
 
+void AbstractLoaderPrivate::slotFinished()
+{
+    if (!processReply(newReply)) {
+        newReply->deleteLater();
+        newReply = 0;
+        return;
+    }
+
+    if (reply) {
+        reply->deleteLater();
+    }
+    reply = newReply;
+    newReply = 0;
+}
+
+void AbstractLoaderPrivate::slotFailed()
+{
+    qDebug() << newReply->error();
+    newReply->deleteLater();
+    newReply = 0;
+}
 
 ////// End of private class //////
 
-UserLoader::UserLoader(QObject *parent) :
-    AbstractLoader(*(new UserLoaderPrivate(this)), parent)
+AbstractLoader::AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent):
+    QObject(parent), d_ptr(&dd)
 {
 }
 
-User * UserLoader::user() const
+AbstractLoader::~AbstractLoader()
 {
-    Q_D(const UserLoader);
-    return d->user;
 }
 
-AbstractReply * UserLoader::createReply(const QString &graph, const QString &arguments)
+QueryManager * AbstractLoader::queryManager() const
 {
-    return queryManager()->queryUser(graph, arguments);
+    Q_D(const AbstractLoader);
+    return d->queryManager;
+}
+
+void AbstractLoader::setQueryManager(QueryManager *queryManager)
+{
+    Q_D(AbstractLoader);
+    if (d->queryManager != queryManager) {
+        d->queryManager = queryManager;
+        emit queryManagerChanged();
+    }
+}
+
+void AbstractLoader::request(const QString &graph, const QString &arguments)
+{
+    Q_D(AbstractLoader);
+    if (!d->queryManager) {
+        return;
+    }
+    if (d->newReply) {
+        return;
+    }
+
+    d->newReply = createReply(graph, arguments);
+    connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
+    connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
 }
 
 }
 
-#include "moc_userloader.cpp"
+#include "moc_abstractloader.cpp"

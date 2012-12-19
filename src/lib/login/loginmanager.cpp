@@ -31,7 +31,7 @@ namespace QFB
 
 /**
  * @internal
- * @brief Private class for LoginManager
+ * @brief Private class for QFB::LoginManager
  */
 class LoginManagerPrivate
 {

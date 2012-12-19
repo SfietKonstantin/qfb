@@ -27,6 +27,7 @@
 
 namespace QFB
 {
+
 /**
  * @internal
  * @short Base QML plugin for qfb (Qt4)
