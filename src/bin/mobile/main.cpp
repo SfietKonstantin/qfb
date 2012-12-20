@@ -21,6 +21,7 @@
 #include <QtDeclarative/QDeclarativeView>
 
 #include "bridge.h"
+#include "networkaccessmanagerfactory.h"
 
 int main(int argc, char **argv)
 {
@@ -32,9 +33,11 @@ int main(int argc, char **argv)
 
     QDeclarativeView view;
     view.engine()->addImportPath(IMPORT_PATH);
+    view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
     view.rootContext()->setContextProperty("BRIDGE", &bridge);
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();
+    QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     return app.exec();
 }

@@ -18,7 +18,8 @@ HEADERS +=      abstractloadablemodel.h \
                 abstractloader.h \
                 abstractloader_p.h \
                 pictureloader.h \
-                userloader.h
+                userloader.h \
+    feedmodel.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
@@ -28,7 +29,8 @@ SOURCES +=      base_plugin.cpp \
                 friendlistmodel.cpp \
                 abstractloader.cpp \
                 pictureloader.cpp \
-                userloader.cpp
+                userloader.cpp \
+    feedmodel.cpp
 
 OTHER_FILES =   qmldir \
 

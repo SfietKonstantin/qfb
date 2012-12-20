@@ -14,12 +14,16 @@ INCLUDEPATH += ../../lib/login
 INCLUDEPATH += ../../lib/base
 LIBS += -L../../lib/login -l$${NAME}login
 LIBS += -L../../lib/base -l$${NAME}
-LIBS += -L../../3rdparty/qjson/ -lqjson
+LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
-HEADERS +=  bridge.h
+HEADERS +=  bridge.h \
+    networkaccessmanagerfactory.h \
+    networkcookiejar.h
 
 SOURCES +=  main.cpp \
-            bridge.cpp
+            bridge.cpp \
+    networkaccessmanagerfactory.cpp \
+    networkcookiejar.cpp
 
 
 OTHER_FILES +=  main.qml

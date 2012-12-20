@@ -32,76 +32,82 @@ enum Property {
     /**
      * @short The entry's Facebook ID
      */
-    Id,
+    IdProperty,
+    /**
+     * @short The last time the entry was updated.
+     *
+     * If it is related to an user, changes to the languages, link, timezone, verified,
+     * interested_in, favorite_athletes, favorite_teams, and video_upload_limits are not
+     * reflected in this value.
+     */
+    UpdatedTimeProperty,
     /**
      * @short The entry's name
+     *
+     * It can be the name of an user, or the name of a link in a
+     * post.
      */
-    Name,
+    NameProperty,
     /**
      * @short The user's first name
      */
-    FirstName,
+    FirstNameProperty,
     /**
      * @short The user's middle name
      */
-    MiddleName,
+    MiddleNameProperty,
     /**
      * @short The user's last name
      */
-    LastName,
+    LastNameProperty,
     /**
      * @short The user's gender: female or male
      * @todo define an enumeration for that.
      */
-    Gender,
+    GenderProperty,
     /**
      * @short The user's locale
      *
      * The locale is provided as an ISO Language Code and ISO Country Code.
      */
-    Locale,
+    LocaleProperty,
     /**
      * @short The user's languages
      */
-    Languages,
+    LanguagesProperty,
     /**
-     * @short The URL of the profile for the user on Facebook
+     * @short A link
+     *
+     * For an user it is the URL of the profile for the user on Facebook,
+     * for a post, it is the link attached to this post.
      */
-    Link,
+    LinkProperty,
     /**
      * @short The user's Facebook username
      */
-    Username,
+    UsernameProperty,
     /**
      * @short The user's timezone offset from UTC
      *
      * Available only for the current user.
      */
-    Timezone,
-    /**
-     * @short The last time the user's profile was updated.
-     *
-     * Changes to the languages, link, timezone, verified, interested_in, favorite_athletes,
-     * favorite_teams, and video_upload_limits are not not reflected in this value.
-     */
-    UpdatedTime,
+    TimezoneProperty,
     /**
      * @short The user's biography
      */
-    Bio,
+    BioProperty,
     /**
      * @short The user's birthday
      *
      * Requires \e user_birthday or \e friends_birthday.
-     * This entry is currently not working very well.
      */
-    Birthday,
+    BirthdayProperty,
     /**
      * @short The user's cover photo
      *
      * (must be explicitly requested using fields=cover parameter)
      */
-    Cover,
+    CoverProperty,
     /**
      * @short The user's currency settings
      *
@@ -112,33 +118,161 @@ enum Property {
      * @short A list of the user's devices beyond desktop
      * @todo comment
      */
-    Devices,
+    DevicesProperty,
     /**
      * A list of the user's education history
      */
-    Education,
+    EducationProperty,
     /**
      * @short The proxied or contact email address granted by the user
      *
      * Requires \e email.
      */
-    Email,
-    Hometown,
-    InterestedIn,
-    Location,
-    Political,
-    PaymentPricepoints,
-    FavoriteAthletes,
-    FavoriteTeams,
-    Picture,
-    Quotes,
-    RelationshipStatus,
-    Religion,
-    SecuritySettings,
-    SignificantOther,
-    VideoUploadLimits,
-    Website,
-    Work
+    EmailProperty,
+    /**
+     * @short The user's hometown
+     *
+     * Requires \e user_hometown or \e friends_hometown.
+     */
+    HometownProperty,
+    /**
+     * @short The genders the user is interested in
+     *
+     * Requires \e user_relationship_details or \e friends_relationship_details.
+     */
+    InterestedInProperty,
+    /**
+     * @short The user's current city
+     *
+     * Requires \e user_location or \e friends_location.
+     */
+    LocationProperty,
+    /**
+     * @short The user's political view
+     *
+     * Requires \e user_religion_politics or \e friends_religion_politics
+     */
+    PoliticalProperty,
+    /**
+     * @short The payment price-points available for that user
+     */
+    PaymentPricepointsProperty,
+    /**
+     * @short A picture
+     *
+     * For an user, it is the URL of the user's profile pic, and is only
+     * returned if you explicitly specify a 'fields=picture' param.
+     *
+     * For a post, it is, if available, a link to the picture included
+     * with the post.
+     */
+    PictureProperty,
+    /**
+     * @short The user's favorite quotes
+     *
+     * Requires \e user_about_me or \e friends_about_me.
+     */
+    QuotesProperty,
+    /**
+     * @short The user's relationship status.
+     * It can be Single, In a relationship, Engaged, Married,
+     * It's complicated, In an open relationship, Widowed,
+     * Separated, Divorced, In a civil union,
+     * In a domestic partnership.
+     *
+     * Requires \e user_relationships or \e friends_relationships
+     */
+    RelationshipStatusProperty,
+    /**
+     * @short The user's religion
+     *
+     * Requires \e user_religion_politics or \e friends_religion_politics.
+     */
+    ReligionProperty,
+    /**
+     * @short Information about security settings enabled on the user's account
+     *
+     * It must be explicitly requested using a fields=security_settings URL parameter.
+     */
+    SecuritySettingsProperty,
+    /**
+     * @short The user's significant other
+     *
+     * Requires \e user_relationships or \e friends_relationships.
+     */
+    SignificantOtherProperty,
+    /**
+     * @short The size of the video file and the length of the video that a user can upload.
+     *
+     * It is only returned if specifically requested via the fields URL parameter.
+     */
+    VideoUploadLimitsProperty,
+    /**
+     * @short The URL of the user's personal website
+     *
+     * Requires \e user_website or \e friends_website.
+     */
+    WebsiteProperty,
+    /**
+     * @short A list of the user's work history
+     *
+     * Requires \e user_work_history or \e friends_work_history.
+     */
+    WorkProperty,
+    /**
+     * @short The user who posted the message
+     */
+    FromProperty,
+    /**
+     * @short Profiles mentioned or targeted in this post
+     */
+    ToProperty,
+    /**
+     * @short The message
+     */
+    MessageProperty,
+    /**
+     * @short Objects tagged in the message (Users, Pages, etc)
+     */
+    MessageTagsProperty,
+    /**
+     * @short The caption of the link
+     *
+     * The caption appears beneath the link name.
+     */
+    CaptionProperty,
+    /**
+     * @short A description of the link
+     *
+     * The description appears beneath the link caption.
+     */
+    DescriptionProperty,
+    /**
+     * @short A source
+     *
+     * For a post, it is the URL to a Flash movie or video file to be
+     * embedded within the post. For a cover, it is the URL of the image.
+     */
+    SourceProperty,
+    PropertiesProperty,
+    IconProperty,
+    ActionsProperty,
+    PrivacyProperty,
+    TypeProperty,
+    LikesProperty,
+    PlaceProperty,
+    StoryProperty,
+    StoryTagsProperty,
+    WithTagsProperty,
+    CommentsProperty,
+    ObjectIdProperty,
+    ApplicationProperty,
+    CreatedTimeProperty,
+    IncludeHiddenProperty,
+    /**
+     * @short The vertical offset that is displayed for the cover
+     */
+    OffsetYProperty
 };
 
 }

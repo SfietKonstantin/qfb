@@ -32,6 +32,7 @@ namespace QFB
 class FriendListReply;
 class PictureReply;
 class UserReply;
+class FeedReply;
 class QueryManagerPrivate;
 
 /**
@@ -84,6 +85,7 @@ public:
      * @return a user reply.
      */
     UserReply * queryUser(const QString &graph, const QString &arguments = QString());
+    FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token

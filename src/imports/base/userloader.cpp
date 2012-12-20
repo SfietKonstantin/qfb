@@ -30,7 +30,8 @@ class UserLoaderPrivate: public AbstractLoaderPrivate
 public:
     UserLoaderPrivate(UserLoader *q);
     User *user;
-    bool processReply(const AbstractReply *reply);
+    bool checkReply(const AbstractReply *reply);
+    void processReply(const AbstractReply *reply);
 private:
     Q_DECLARE_PUBLIC(UserLoader)
 };
@@ -41,24 +42,19 @@ UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
     user = 0;
 }
 
-bool UserLoaderPrivate::processReply(const AbstractReply *reply)
+bool UserLoaderPrivate::checkReply(const AbstractReply *reply)
+{
+    return qobject_cast<const UserReply *>(reply);
+}
+
+void UserLoaderPrivate::processReply(const AbstractReply *reply)
 {
     Q_Q(UserLoader);
     const UserReply *userReply = qobject_cast<const UserReply *>(reply);
-    bool ok = true;
-    User *newUser = 0;
-    if (!userReply) {
-        ok = false;
-    } else {
-        newUser = userReply->user();
-    }
+    User *newUser = userReply->user();
 
-    if (user != newUser) {
-        user = newUser;
-        emit q->userChanged();
-    }
-
-    return ok;
+    user = newUser;
+    emit q->userChanged();
 }
 
 

@@ -26,7 +26,9 @@
 #include "userbase.h"
 
 #include <QtCore/QDate>
+#include <QtCore/QUrl>
 
+#include "cover.h"
 #include "language.h"
 
 namespace QFB
@@ -74,12 +76,14 @@ namespace QFB
  *
  * Some fields such as timezone, updated_time, cover,
  * currency, devices, education, hometown, interested_in,
- * location, payment_pricepoints, favorite_athletes,
- * favorite_teams, picture, video_upload_limits and work
+ * location, payment_pricepoints,
+ * picture, video_upload_limits and work
  * are not yet implemented.
  *
  * Other fields, such as third_party_id, installed and
  * verified are not implemented and might not be implemented.
+ *
+ * @see QFB::Property
  */
 class QFBBASE_EXPORT User : public UserBase
 {
@@ -116,7 +120,7 @@ class QFBBASE_EXPORT User : public UserBase
     /**
      * @short The URL of the profile for the user on Facebook
      */
-    Q_PROPERTY(QString link READ link CONSTANT)
+    Q_PROPERTY(QUrl link READ link CONSTANT)
     /**
      * @short The user's Facebook username
      */
@@ -137,7 +141,7 @@ class QFBBASE_EXPORT User : public UserBase
      * appear as 1900.
      */
     Q_PROPERTY(QDate birthday READ birthday CONSTANT)
-    /// @todo cover
+    Q_PROPERTY(QFB::Cover * cover READ cover CONSTANT)
     /// @todo currency
     /// @todo devices
     /// @todo education
@@ -186,7 +190,7 @@ class QFBBASE_EXPORT User : public UserBase
     /**
      * @short The URL of the user's personal website
      */
-    Q_PROPERTY(QString website READ website CONSTANT)
+    Q_PROPERTY(QUrl website READ website CONSTANT)
     /// @todo work
 public:
     /**
@@ -244,7 +248,7 @@ public:
      * @brief Link
      * @return link.
      */
-    QString link() const;
+    QUrl link() const;
     /**
      * @brief Username
      * @return username.
@@ -260,6 +264,7 @@ public:
      * @return birthday.
      */
     QDate birthday() const;
+    Cover * cover() const;
     /**
      * @brief Email
      * @return email.
@@ -299,7 +304,7 @@ public:
      * @brief Website
      * @return website.
      */
-    QString website() const;
+    QUrl website() const;
 
 private:
     Q_DECLARE_PRIVATE(Object)

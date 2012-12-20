@@ -14,53 +14,46 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#ifndef QFB_FEEDREPLY_H
+#define QFB_FEEDREPLY_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include "abstractreply.h"
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+namespace QFB
+{
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
+class Post;
+class FeedReplyPrivate;
+class QFBBASE_EXPORT FeedReply : public AbstractReply
+{
+    Q_OBJECT
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit FeedReply(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param networkAccessManager network access manager.
+     * @param parent parent object.
+     */
+    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    /**
+     * @brief Feed
+     * @return feed.
+     */
+    QList<Post *> feed() const;
+    /**
+     * @brief Implementation of AbstractReply::processData()
+     * @param dataSource data source.
+     * @return if the process is successful.
+     */
+    bool processData(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(FeedReply)
+};
 
 }
+
+#endif // QFB_FEEDREPLY_H

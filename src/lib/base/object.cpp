@@ -56,7 +56,7 @@ Object::~Object()
 QString Object::id() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Id).toString();
+    return d->propertiesMap.value(IdProperty).toString();
 }
 
 }

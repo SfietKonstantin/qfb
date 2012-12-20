@@ -1,0 +1,21 @@
+Source: qfb
+Section: user/other
+Priority: optional
+Maintainer: Lucien XU <sk@localhost.localdomain>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+Homepage: <insert the upstream URL, if relevant>
+
+Package: qfb
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+XSBC-Maemo-Display-Name: qfb
+XB-Maemo-Flags: visible
+XB-MeeGo-Desktop-Entry-Filename: qfb_harmattan
+XB-MeeGo-Desktop-Entry: 
+ [Desktop Entry]
+ Type=Application
+ Name=qfb
+ Icon=/usr/share/icons/hicolor/80x80/apps/qfb80.png

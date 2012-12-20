@@ -14,53 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "cover.h"
+#include "object_p.h"
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+namespace QFB
+{
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+Cover::Cover(QObject *parent) :
+    Object(parent)
+{
+}
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
+Cover::Cover(const PropertiesMap propertiesMap, QObject *parent):
+    Object(parent)
+{
+    Q_D(Object);
+    d->propertiesMap = propertiesMap;
+}
 
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
+QUrl Cover::source() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(SourceProperty).toUrl();
+}
 
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
+double Cover::offsetY() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(OffsetYProperty).toDouble();
+}
 
 }

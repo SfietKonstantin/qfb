@@ -14,13 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FRIENDLISTMODEL_H
-#define QFB_FRIENDLISTMODEL_H
-
-/**
- * @file friendlistmodel.h
- * @brief Definition of QFB::FriendListModel
- */
+#ifndef QFB_FEEDMODEL_H
+#define QFB_FEEDMODEL_H
 
 #include "abstractloadablemodel.h"
 
@@ -28,26 +23,26 @@ namespace QFB
 {
 
 class QueryManager;
-class FriendListModelPrivate;
+class FeedModelPrivate;
 
 /**
- * @brief Model for a list of friends
+ * @brief Model for a feed
  *
- * This model is used to present a list of friends. It uses a
+ * This model is used to present a feed. It uses a
  * QFB::QueryManager to perform operations, and
  * stores the retrived informations in a model.
  *
  * After setting a query manager, calling request()
  * to get a the list of friends.
  */
-class FriendListModel: public AbstractLoadableModel
+class FeedModel: public AbstractLoadableModel
 {
     Q_OBJECT
 public:
     /**
      * @short Model roles
      */
-    enum FriendListModelRole {
+    enum FeedModelRole {
         /**
          * @short Data role
          */
@@ -57,7 +52,7 @@ public:
      * @brief Default constructor
      * @param parent parent object.
      */
-    explicit FriendListModel(QObject *parent = 0);
+    explicit FeedModel(QObject *parent = 0);
     /**
      * @short Reimplementation of rowCount
      *
@@ -81,9 +76,9 @@ protected:
      */
     QHash<int, QByteArray> roleNames() const;
 private:
-    Q_DECLARE_PRIVATE(FriendListModel)
+    Q_DECLARE_PRIVATE(FeedModel)
 };
 
 }
 
-#endif // QFB_FRIENDLISTMODEL_H
+#endif // QFB_FEEDMODEL_H

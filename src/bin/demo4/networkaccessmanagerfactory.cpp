@@ -14,53 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "networkaccessmanagerfactory.h"
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include "networkcookiejar.h"
+#include <QtNetwork/QNetworkAccessManager>
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
-
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
+QNetworkAccessManager * NetworkAccessManagerFactory::create(QObject *parent)
+{
+    QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager(parent);
+    NetworkCookieJar *cookieJar = new NetworkCookieJar(networkAccessManager);
+    networkAccessManager->setCookieJar(cookieJar);
+    return networkAccessManager;
 }

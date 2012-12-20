@@ -14,53 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "networkaccessmanager.h"
+#include <QtNetwork/QNetworkRequest>
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+NetworkAccessManager::NetworkAccessManager(QObject *parent):
+    QNetworkAccessManager(parent)
+{
+}
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
+NetworkAccessManager::NetworkAccessManager(const QString &userAgent, QObject *parent):
+    QNetworkAccessManager(parent)
+{
+    m_userAgent = userAgent;
+}
+
+void NetworkAccessManager::setUserAgent(const QString &userAgent)
+{
+    m_userAgent = userAgent;
+}
+
+QNetworkReply * NetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request,
+                                                    QIODevice *outgoingData)
+{
+    if (m_userAgent.isEmpty()) {
+        return QNetworkAccessManager::createRequest(op, request, outgoingData);
     }
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
+    QNetworkRequest newRequest (request);
+    newRequest.setRawHeader("User-Agent", m_userAgent.toAscii());
+    return QNetworkAccessManager::createRequest(op, newRequest, outgoingData);
 }

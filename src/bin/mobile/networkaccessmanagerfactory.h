@@ -14,53 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#ifndef NETWORKACCESSMANAGERFACTORY_H
+#define NETWORKACCESSMANAGERFACTORY_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include <QtDeclarative/QDeclarativeNetworkAccessManagerFactory>
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+class NetworkAccessManagerFactory: public QDeclarativeNetworkAccessManagerFactory
+{
+public:
+    QNetworkAccessManager * create(QObject *parent);
+};
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
-}
+#endif // NETWORKACCESSMANAGERFACTORY_H

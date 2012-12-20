@@ -14,53 +14,47 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#ifndef QFB_STATUS_H
+#define QFB_STATUS_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include "object.h"
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+#include <QtCore/QDateTime>
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
+namespace QFB
+{
 
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
+class UserBase;
+/// @todo find an usage
+/// @todo might be replaced by post
+class Status: public Object
+{
+    Q_OBJECT
+    Q_PROPERTY(QFB::UserBase * from READ from CONSTANT)
+    Q_PROPERTY(QString message READ message CONSTANT)
+    /// @todo place
+    Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit Status(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param propertiesMap properties.
+     * @param parent parent object.
+     */
+    explicit Status(const PropertiesMap propertiesMap, QObject *parent = 0);
+    UserBase * from() const;
+    QString message() const;
+    QDateTime updatedTime() const;
+private:
+    Q_DECLARE_PRIVATE(Object)
+};
 
 }
+
+Q_DECLARE_METATYPE(QFB::Status *)
+
+#endif // QFB_STATUS_H

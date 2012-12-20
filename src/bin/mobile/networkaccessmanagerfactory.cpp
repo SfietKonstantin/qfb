@@ -14,53 +14,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "networkaccessmanagerfactory.h"
+#include "networkaccessmanager.h"
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+static const char *IPHONE_USER_AGENT = "Mozilla/5.0 \
+(iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) \
+Version/4.0.5 Mobile/8A293 Safari/6531.22.7";
+static const char *N9_USER_AGENT = "    Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 \
+(KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13 ";
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
-
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
+QNetworkAccessManager * NetworkAccessManagerFactory::create(QObject *parent)
+{
+    NetworkAccessManager *networkAccessManager = new NetworkAccessManager(parent);
+    networkAccessManager->setUserAgent(N9_USER_AGENT);
+    return networkAccessManager;
 }

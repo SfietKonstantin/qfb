@@ -87,6 +87,11 @@ inline QUrl graphUrl(const QString &graph, const QString &token,
     return url;
 }
 
+inline QUrl parseUrl(const QString &urlString)
+{
+    return QUrl::fromPercentEncoding(urlString.toAscii());
+}
+
 }
 
 #endif // QFB_HELPER_P_H

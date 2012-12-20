@@ -39,6 +39,7 @@ public:
      * @brief Destructor
      */
     virtual ~AbstractLoaderPrivate();
+    virtual bool checkReply(const AbstractReply *reply) = 0;
     /**
      * @internal
      * @brief Process reply
@@ -49,7 +50,7 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    virtual bool processReply(const AbstractReply *reply) = 0;
+    virtual void processReply(const AbstractReply *reply) = 0;
 protected:
     /**
      * @internal

@@ -14,53 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#ifndef NETWORKACCESSMANAGER_H
+#define NETWORKACCESSMANAGER_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include <QtNetwork/QNetworkAccessManager>
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+class NetworkAccessManager : public QNetworkAccessManager
+{
+public:
+    explicit NetworkAccessManager(QObject *parent = 0);
+    explicit NetworkAccessManager(const QString &userAgent, QObject *parent = 0);
+    void setUserAgent(const QString &userAgent);
+protected:
+    QNetworkReply * createRequest(Operation op, const QNetworkRequest &request,
+                                  QIODevice *outgoingData);
+private:
+    QString m_userAgent;
+};
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
-}
+#endif // NETWORKACCESSMANAGER_H

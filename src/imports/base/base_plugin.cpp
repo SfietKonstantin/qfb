@@ -32,12 +32,15 @@
 #include "object.h"
 #include "userbase.h"
 #include "user.h"
+#include "cover.h"
 #include "language.h"
+#include "post.h"
 #include "friendlistreply.h"
 #include "querymanager.h"
 #include "friendlistmodel.h"
 #include "pictureloader.h"
 #include "userloader.h"
+#include "feedmodel.h"
 
 namespace QFB
 {
@@ -67,12 +70,17 @@ void BasePlugin5::registerTypes(const char *uri)
                                               "QFBUserBase cannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
                                           "QFBUser cannot be created");
+    qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
+                                           "QFBCover cannot be created");
     qmlRegisterUncreatableType<QFB::Language>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLanguage",
                                               "QFBLanguage cannot be created");
+    qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
+                                          "QFBPostcannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
+    qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
 }
 
 }

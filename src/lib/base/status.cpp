@@ -14,53 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "status.h"
+#include "object_p.h"
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include "userbase.h"
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+namespace QFB
+{
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
+Status::Status(QObject *parent) :
+    Object(parent)
+{
+}
 
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
+Status::Status(const PropertiesMap propertiesMap, QObject *parent):
+    Object(parent)
+{
+    Q_D(Object);
+    d->propertiesMap = propertiesMap;
+}
 
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
+UserBase * Status::from() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(FromProperty).value<UserBase *>();
+}
 
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
+QString Status::message() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(MessageProperty).toString();
+}
+
+QDateTime Status::updatedTime() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(UpdatedTimeProperty).toDateTime();
+}
 
 }

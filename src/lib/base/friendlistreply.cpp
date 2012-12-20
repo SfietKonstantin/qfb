@@ -135,8 +135,8 @@ bool FriendListReply::processData(QIODevice *dataSource)
                 QString id = object.value(ID_KEY).toString();
                 QString name = object.value(NAME_KEY).toString();
                 PropertiesMap propertiesMap;
-                propertiesMap.insert(Id, id);
-                propertiesMap.insert(Name, name);
+                propertiesMap.insert(IdProperty, id);
+                propertiesMap.insert(NameProperty, name);
                 UserBase *userBase = new UserBase(propertiesMap, this);
                 d->friendList.append(userBase);
             }

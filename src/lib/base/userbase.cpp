@@ -40,7 +40,7 @@ UserBase::UserBase(const PropertiesMap propertiesMap, QObject *parent):
 QString UserBase::name() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Name).toString();
+    return d->propertiesMap.value(NameProperty).toString();
 }
 
 }

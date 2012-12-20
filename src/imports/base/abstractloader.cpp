@@ -38,7 +38,7 @@ AbstractLoaderPrivate::~AbstractLoaderPrivate()
 
 void AbstractLoaderPrivate::slotFinished()
 {
-    if (!processReply(newReply)) {
+    if (!checkReply(newReply)) {
         newReply->deleteLater();
         newReply = 0;
         return;
@@ -49,6 +49,8 @@ void AbstractLoaderPrivate::slotFinished()
     }
     reply = newReply;
     newReply = 0;
+
+    processReply(reply);
 }
 
 void AbstractLoaderPrivate::slotFailed()

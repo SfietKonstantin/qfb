@@ -40,37 +40,37 @@ User::User(const PropertiesMap propertiesMap, QObject *parent):
 QString User::firstName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(FirstName).toString();
+    return d->propertiesMap.value(FirstNameProperty).toString();
 }
 
 QString User::middleName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(MiddleName).toString();
+    return d->propertiesMap.value(MiddleNameProperty).toString();
 }
 
 QString User::lastName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LastName).toString();
+    return d->propertiesMap.value(LastNameProperty).toString();
 }
 
 QString User::gender() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Gender).toString();
+    return d->propertiesMap.value(GenderProperty).toString();
 }
 
 QString User::locale() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Locale).toString();
+    return d->propertiesMap.value(LocaleProperty).toString();
 }
 
 QList<Language *> User::languages() const
 {
     Q_D(const Object);
-    QVariantList languagesVariant = d->propertiesMap.value(Languages).toList();
+    QVariantList languagesVariant = d->propertiesMap.value(LanguagesProperty).toList();
     QList<Language *> returnedLanguages;
     foreach (QVariant languageVariant, languagesVariant) {
         returnedLanguages.append(languageVariant.value<Language *>());
@@ -81,79 +81,85 @@ QList<Language *> User::languages() const
 QVariantList User::languagesVariant() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Languages).toList();
+    return d->propertiesMap.value(LanguagesProperty).toList();
 }
 
-QString User::link() const
+QUrl User::link() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Link).toString();
+    return d->propertiesMap.value(LinkProperty).toUrl();
 }
 
 QString User::username() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Username).toString();
+    return d->propertiesMap.value(UsernameProperty).toString();
 }
 
 QString User::bio() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Bio).toString();
+    return d->propertiesMap.value(BioProperty).toString();
 }
 
 QDate User::birthday() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Birthday).toDate();
+    return d->propertiesMap.value(BirthdayProperty).toDate();
+}
+
+Cover * User::cover() const
+{
+    Q_D(const Object);
+    return d->propertiesMap.value(CoverProperty).value<Cover *>();
 }
 
 QString User::email() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Email).toString();
+    return d->propertiesMap.value(EmailProperty).toString();
 }
 
 QString User::political() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Political).toString();
+    return d->propertiesMap.value(PoliticalProperty).toString();
 }
 
 QString User::picture() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Picture).toString();
+    return d->propertiesMap.value(PictureProperty).toString();
 }
 
 QString User::quotes() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Quotes).toString();
+    return d->propertiesMap.value(QuotesProperty).toString();
 }
 
 QString User::relationshipStatus() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(RelationshipStatus).toString();
+    return d->propertiesMap.value(RelationshipStatusProperty).toString();
 }
 
 QString User::religion() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Religion).toString();
+    return d->propertiesMap.value(ReligionProperty).toString();
 }
 
 UserBase * User::significantOther() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(SignificantOther).value<UserBase *>();
+    return d->propertiesMap.value(SignificantOtherProperty).value<UserBase *>();
 }
 
-QString User::website() const
+QUrl User::website() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(Website).toString();
+    return d->propertiesMap.value(WebsiteProperty).toUrl();
 }
 
 

@@ -23,6 +23,7 @@
 #include "friendlistreply.h"
 #include "picturereply.h"
 #include "userreply.h"
+#include "feedreply.h"
 
 #include <QtNetwork/QNetworkAccessManager>
 
@@ -99,6 +100,18 @@ UserReply * QueryManager::queryUser(const QString &graph, const QString &argumen
     }
 
     UserReply *reply = new UserReply(d->networkAccessManager, this);
+    reply->request(graph, d->token, arguments);
+    return reply;
+}
+
+FeedReply * QueryManager::queryFeed(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    if (d->token.isEmpty()) {
+        return 0;
+    }
+
+    FeedReply *reply = new FeedReply(d->networkAccessManager, this);
     reply->request(graph, d->token, arguments);
     return reply;
 }

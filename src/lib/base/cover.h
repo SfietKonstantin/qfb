@@ -14,53 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#ifndef QFB_COVER_H
+#define QFB_COVER_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
+#include "base_global.h"
+#include "object.h"
 
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
+#include <QtCore/QUrl>
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
+namespace QFB
+{
 
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
+class QFBBASE_EXPORT Cover: public Object
+{
+    Q_OBJECT
+    Q_PROPERTY(QUrl source READ source CONSTANT)
+    Q_PROPERTY(double offsetY READ offsetY CONSTANT)
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit Cover(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param propertiesMap properties.
+     * @param parent parent object.
+     */
+    explicit Cover(const PropertiesMap propertiesMap, QObject *parent = 0);
+    QUrl source() const;
+    double offsetY() const;
+private:
+    Q_DECLARE_PRIVATE(Object)
+};
 
 }
+
+Q_DECLARE_METATYPE(QFB::Cover *)
+
+#endif // QFB_COVER_H

@@ -1,7 +1,7 @@
 include(../../../globals.pri)
 
 TEMPLATE = lib
-TARGET = qjson
+TARGET = qfb-qjson
 
 INCLUDE_HEADERS +=  src/parser.h \
                     src/qobjecthelper.h \
@@ -28,9 +28,12 @@ SOURCES +=  src/parser.cpp \
 target.path = $${LIBDIR}
 export(target.path)
 
+!contains(CONFIG, mobile) {
 includeHeaders.files = $${INCLUDE_HEADERS}
 includeHeaders.path = $${INCLUDEDIR}/qjson
 export(includeHeaders.files)
 export(includeHeaders.path)
+INSTALLS += includeHeaders
+}
 
-INSTALLS += target includeHeaders
+INSTALLS += target

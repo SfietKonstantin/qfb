@@ -14,53 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import QtWebKit 1.0
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.login 4.0
+#include "networkcookiejar.h"
+#include <QtCore/QSettings>
+#include <QtCore/QDebug>
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
-
-    QFBQueryManager {
-        id: queryManager
-        onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
-            }
-        }
-    }
-
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (BRIDGE.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = BRIDGE.token
-            }
-        }
-
-        onLoginSucceeded: {
-            BRIDGE.token = token
-            queryManager.token = token
-            loginSheet.accept()
-        }
-    }
-
-    LoginSheet {
-        id: loginSheet
-        loginManager: loginManager
-    }
-
-    MainPage {
-        id: mainPage
-        queryManager: queryManager
-    }
-
+NetworkCookieJar::NetworkCookieJar(QObject *parent):
+    QNetworkCookieJar(parent)
+{
+    load();
 }
+
+NetworkCookieJar::~NetworkCookieJar()
+{
+    save();
+}
+
+void NetworkCookieJar::load()
+{
+    QSettings settings;
+    QByteArray data = settings.value("cookies").toByteArray();
+    setAllCookies(QNetworkCookie::parseCookies(data));
+}
+
+void NetworkCookieJar::save()
+{
+    QList<QNetworkCookie> list = allCookies();
+    QByteArray data;
+    foreach (QNetworkCookie cookie, list) {
+        if (!cookie.isSessionCookie()) {
+            data.append(cookie.toRawForm());
+            data.append("\n");
+        }
+    }
+    QSettings settings;
+    settings.setValue("cookies", data);
+}
+
