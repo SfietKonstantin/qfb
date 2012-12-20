@@ -35,7 +35,11 @@ OTHER_FILES +=  qml/main.qml \
                 qml/ClickableEntry.qml \
     qml/LoginSheet.qml \
     qml/MainPage.qml \
-    qml/Banner.qml
+    qml/Banner.qml \
+    qml/FriendListPage.qml \
+    qml/FriendEntry.qml \
+    qml/UserPage.qml \
+    qml/Container.qml
 
 # Deployment
 contains(CONFIG, optify) {

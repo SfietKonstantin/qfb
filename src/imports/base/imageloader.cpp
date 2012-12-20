@@ -70,7 +70,10 @@ QString ImageLoader::imagePath() const
 
 AbstractReply * ImageLoader::createReply(const QUrl &url)
 {
-    return queryManager()->queryImage(url);
+    if (queryManager()) {
+        return queryManager()->queryImage(url);
+    }
+    return 0;
 }
 
 }

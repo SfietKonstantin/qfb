@@ -88,7 +88,7 @@ bool FriendListModelPrivate::processReply(const AbstractGraphReply *reply)
     if (!data.isEmpty()) {
         q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
         data.clear();
-        q->endInsertRows();
+        q->endRemoveRows();
     }
 
     data = friendListReply->friendList();

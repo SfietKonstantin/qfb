@@ -73,7 +73,10 @@ User * UserLoader::user() const
 
 AbstractGraphReply * UserLoader::createReply(const QString &graph, const QString &arguments)
 {
-    return queryManager()->queryUser(graph, arguments);
+    if (queryManager()) {
+        return queryManager()->queryUser(graph, arguments);
+    }
+    return 0;
 }
 
 }

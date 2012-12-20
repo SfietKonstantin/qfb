@@ -114,6 +114,10 @@ bool ImageReply::preprocesssRequest()
 {
     Q_D(ImageReply);
 
+    if (url().isEmpty()) {
+        return true;
+    }
+
     QDir dir (d->cacheFolderPath());
     QString fileName = d->imageName(url());
 

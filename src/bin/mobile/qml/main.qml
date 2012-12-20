@@ -24,32 +24,62 @@ PageStackWindow {
     id: window
     initialPage: mainPage
 
-    QFBQueryManager {
-        id: queryManager
+    Component.onCompleted: {
+        LOGIN_MANAGER.clientId = "390204064393625"
+        LOGIN_MANAGER.uiType = QFBLoginManager.Mobile
+        LOGIN_MANAGER.userPermissions = QFBLoginManager.UserBirthday + QFBLoginManager.Email
+                                        + QFBLoginManager.UserAboutMe + QFBLoginManager.UserLikes
+                                        + QFBLoginManager.UserEducationHistory
+                                        + QFBLoginManager.UserRelationshipDetails
+                                        + QFBLoginManager.UserReligionPolitics
+                                        + QFBLoginManager.UserRelationships
+        if (TOKEN_MANAGER.token == "") {
+            loginSheet.open()
+            LOGIN_MANAGER.login()
+        } else {
+            QUERY_MANAGER.token = TOKEN_MANAGER.token
+        }
+    }
+
+    Connections {
+        target: LOGIN_MANAGER
+        onLoginSucceeded: {
+            QUERY_MANAGER.token = token
+            TOKEN_MANAGER.token = token
+            loginSheet.close()
+        }
+    }
+
+    Connections {
+        target: QUERY_MANAGER
         onTokenChanged: {
-            if (token != "") {
-                mainPage.load()
+            if (QUERY_MANAGER.token != "") {
+                meLoader.load()
             }
         }
     }
 
-    QFBLoginManager {
-        id: loginManager
-        clientId: "390204064393625"
-        uiType: QFBLoginManager.Mobile
-        Component.onCompleted: {
-            if (TOKEN_MANAGER.token == "") {
-                loginSheet.open()
-                login()
-            } else {
-                queryManager.token = TOKEN_MANAGER.token
-            }
-        }
 
-        onLoginSucceeded: {
-            TOKEN_MANAGER.token = token
-            queryManager.token = token
-            loginSheet.accept()
+    QtObject {
+        id: me
+        property string name
+        property string coverUrl
+
+    }
+
+    QFBUserLoader {
+        id: meLoader
+        function load() {
+            request("me", "fields=name")
+        }
+        queryManager: QUERY_MANAGER
+        onUserChanged: {
+            if (me.name == "") {
+                me.name = user.name
+                request("me", "fields=cover")
+            } else if (me.coverUrl == "") {
+                me.coverUrl = user.cover.source
+            }
         }
     }
 
@@ -60,7 +90,6 @@ PageStackWindow {
 
     MainPage {
         id: mainPage
-        queryManager: queryManager
     }
 
 }

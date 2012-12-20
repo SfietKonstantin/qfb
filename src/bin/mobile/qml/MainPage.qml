@@ -20,18 +20,14 @@ import org.SfietKonstantin.qfb 4.0
 
 Page {
     id: container
-    property QtObject queryManager
-    function load() {
-        banner.load("me")
-    }
 
     Item {
         anchors.fill: parent
         Banner {
             id: banner
-            queryManager: container.queryManager
-            anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
-            height: parent.height * 0.3
+            large: true
+            name: me.name
+            coverUrl: me.coverUrl
         }
 
         ListView {
@@ -44,14 +40,36 @@ Page {
                 }
                 ListElement {
                     text: "Me"
+                    action: "showMe"
                 }
                 ListElement {
                     text: "Friends"
+                    action: "showFriends"
                 }
             }
             delegate: ClickableEntry {
                 text: model.text
+                onClicked: {
+                    if (model.action == "showMe") {
+                        mePage.load()
+                        window.pageStack.push(mePage)
+                    } else if (model.action == "showFriends") {
+                        friendListPage.load()
+                        window.pageStack.push(friendListPage)
+                    }
+                }
             }
+            ScrollDecorator {flickableItem: parent}
         }
+    }
+
+    FriendListPage {
+        id: friendListPage
+    }
+
+    UserPage {
+        id: mePage
+        facebookId: "me"
+        name: me.name
     }
 }

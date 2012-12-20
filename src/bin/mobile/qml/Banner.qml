@@ -15,37 +15,17 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
 Item {
     id: container
-    property QtObject queryManager
-    function load(graph) {
-        d_ptr.graph = graph
-        userLoader.request(d_ptr.graph, "fields=name")
-    }
-
-    QtObject {
-        id: d_ptr
-        property string graph
-        property string name
-        property string coverUrl
-    }
-
-    QFBUserLoader {
-        id: userLoader
-        queryManager: container.queryManager
-        onUserChanged: {
-            if (d_ptr.name == "") {
-                d_ptr.name = user.name
-                userLoader.request(d_ptr.graph, "fields=cover")
-            } else if (d_ptr.coverUrl == "") {
-                d_ptr.coverUrl = user.cover.source
-            }
-        }
-    }
+    property string name
+    property string coverUrl
+    property bool large: false
+    anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
+    height: !large ? Ui.BANNER_HEIGHT_DEFAULT : Ui.BANNER_HEIGHT_LARGE
+    onCoverUrlChanged: coverImageLoader.request(coverUrl)
 
     Rectangle {
         id: coverBackground
@@ -54,13 +34,8 @@ Item {
 
         QFBImageLoader {
             id: coverImageLoader
-            queryManager: container.queryManager
-
-        }
-
-        Connections {
-            target: d_ptr
-            onCoverUrlChanged: coverImageLoader.request(d_ptr.coverUrl)
+            queryManager: QUERY_MANAGER
+            Component.onCompleted: coverImageLoader.request(coverUrl)
         }
 
         Image {
@@ -88,7 +63,9 @@ Item {
         Text {
             id: nameText
             anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-            anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: !container.large ? (container.height - nameText.height) / 2
+                                                   : Ui.MARGIN_DEFAULT
             color: !theme.inverted ? Ui.FONT_COLOR_INVERTED_PRIMARY : Ui.FONT_COLOR_PRIMARY
             style: Text.Sunken
             styleColor: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
@@ -96,11 +73,11 @@ Item {
             font.pixelSize: Ui.FONT_SIZE_XXLARGE
             states: [
                 State {
-                    name: "visible"; when: d_ptr.name != ""
+                    name: "visible"; when: container.name != ""
                     PropertyChanges {
                         target: nameText
                         opacity: 1
-                        text: d_ptr.name
+                        text: container.name
                     }
                 }
             ]

@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,36 +14,32 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/qdeclarative.h>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import "UiConstants.js" as Ui
 
-#include "querymanager.h"
-#include "loginmanager.h"
-#include "tokenmanager.h"
-#include "networkaccessmanagerfactory.h"
+Rectangle {
+    property alias title: title.text
+    property alias content: content.children
+    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+    anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+    height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + content.height
+                      + Ui.MARGIN_DEFAULT
+                    : 0
 
-int main(int argc, char **argv)
-{
-    QApplication app (argc, argv);
-    app.setOrganizationName("SfietKonstantin");
-    app.setApplicationName("qfb-mobile");
+    Label {
+        id: title
+        anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        font.pixelSize: Ui.FONT_SIZE_LARGE
+    }
 
-    QFB::QueryManager queryManager;
-    QFB::LoginManager loginManager;
-    TokenManager tokenManager;
-
-    QDeclarativeView view;
-    view.engine()->addImportPath(IMPORT_PATH);
-    view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
-    view.rootContext()->setContextProperty("QUERY_MANAGER", &queryManager);
-    view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
-    view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
-    view.setSource(QUrl(MAIN_QML_FILE));
-    view.showFullScreen();
-    QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
-
-    return app.exec();
+    Item {
+        id: content
+        anchors.top: title.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        height: childrenRect.height
+    }
 }

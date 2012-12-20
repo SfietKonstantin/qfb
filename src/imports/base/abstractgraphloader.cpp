@@ -27,7 +27,10 @@ AbstractGraphLoader::AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent)
 
 void AbstractGraphLoader::request(const QString &graph, const QString &arguments)
 {
-    setReply(createReply(graph, arguments));
+    AbstractReply *reply = createReply(graph, arguments);
+    if (reply) {
+        setReply(reply);
+    }
 }
 
 }

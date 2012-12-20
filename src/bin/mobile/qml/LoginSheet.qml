@@ -50,7 +50,7 @@ Sheet {
                 id: webView
                 width: parent.width
                 preferredWidth: parent.width
-                onUrlChanged: loginManager.checkUrl(url)
+                onUrlChanged: LOGIN_MANAGER.checkUrl(url)
             }
         }
 
@@ -61,7 +61,7 @@ Sheet {
     }
 
     Connections {
-        target: loginManager
+        target: LOGIN_MANAGER
         onUrlRequested: webView.url = url
     }
 }
