@@ -14,46 +14,63 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+#include "imageloader.h"
+#include "loaderbase_p.h"
 
-#include "abstractgraphreply.h"
+#include "imagereply.h"
+#include "querymanager.h"
 
 namespace QFB
 {
 
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
+class ImageLoaderPrivate: public LoaderBasePrivate
 {
-    Q_OBJECT
 public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
+    ImageLoaderPrivate(ImageLoader *q);
+    QString imagePath;
+    bool checkReply(const AbstractReply *reply);
+    void processReply(const AbstractReply *reply);
 private:
-    Q_DECLARE_PRIVATE(FeedReply)
+    Q_DECLARE_PUBLIC(ImageLoader)
 };
 
+ImageLoaderPrivate::ImageLoaderPrivate(ImageLoader *q):
+    LoaderBasePrivate(q)
+{
 }
 
-#endif // QFB_FEEDREPLY_H
+bool ImageLoaderPrivate::checkReply(const AbstractReply *reply)
+{
+    return qobject_cast<const ImageReply *>(reply);
+}
+
+void ImageLoaderPrivate::processReply(const AbstractReply *reply)
+{
+    Q_Q(ImageLoader);
+    const ImageReply *imageReply = qobject_cast<const ImageReply *>(reply);
+    if (imagePath != imageReply->imagePath()) {
+        imagePath = imageReply->imagePath();
+        emit q->imagePathChanged();
+    }
+}
+
+
+////// End of private class //////
+
+ImageLoader::ImageLoader(QObject *parent) :
+    AbstractLoader(*(new ImageLoaderPrivate(this)), parent)
+{
+}
+
+QString ImageLoader::imagePath() const
+{
+    Q_D(const ImageLoader);
+    return d->imagePath;
+}
+
+AbstractReply * ImageLoader::createReply(const QUrl &url)
+{
+    return queryManager()->queryImage(url);
+}
+
+}

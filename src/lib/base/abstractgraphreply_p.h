@@ -14,29 +14,57 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "bridge.h"
-#include <QtCore/QSettings>
+#ifndef QFB_ABSTRACTGRAPHREPLY_P_H
+#define QFB_ABSTRACTGRAPHREPLY_P_H
 
-static const char *TOKEN_KEY = "login/token";
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
 
-Bridge::Bridge(QObject *parent) :
-    QObject(parent)
+/**
+ * @internal
+ * @file abstractgraphreply_p.h
+ * @brief Definition of QFB::AbstractGraphReplyPrivate
+ */
+
+#include "abstractreply_p.h"
+
+class QNetworkAccessManager;
+namespace QFB
 {
-    QSettings settings;
-    setToken(settings.value(TOKEN_KEY, QString()).toString());
+
+class AbstractGraphReply;
+
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractReply
+ */
+class AbstractGraphReplyPrivate: public AbstractReplyPrivate
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
+    AbstractGraphReplyPrivate(AbstractGraphReply *q);
+    /**
+     * @internal
+     * @brief Graph
+     */
+    QString graph;
+    /**
+     * @internal
+     * @brief Arguments
+     */
+    QList<ArgumentPair> arguments;
+private:
+    Q_DECLARE_PUBLIC(AbstractGraphReply)
+};
+
 }
 
-QString Bridge::token() const
-{
-    return m_token;
-}
-
-void Bridge::setToken(const QString &token)
-{
-    if (m_token != token) {
-        m_token = token;
-        emit tokenChanged();
-        QSettings settings;
-        settings.setValue(TOKEN_KEY, token);
-    }
-}
+#endif // QFB_ABSTRACTGRAPHREPLY_P_H

@@ -17,6 +17,11 @@
 #ifndef QFB_COVER_H
 #define QFB_COVER_H
 
+/**
+ * @file cover.h
+ * @brief Definition of QFB::Cover
+ */
+
 #include "base_global.h"
 #include "object.h"
 
@@ -25,10 +30,25 @@
 namespace QFB
 {
 
+/**
+ * @brief Information about a cover
+ *
+ * This class represents a cover. Extending QFB::Object,
+ * it contains the source of the cover, that can be accessed
+ * through the source() property, and the vertical offset that
+ * is used to display it, and that can be accessed through
+ * offsetY().
+ */
 class QFBBASE_EXPORT Cover: public Object
 {
     Q_OBJECT
+    /**
+     * @short Source
+     */
     Q_PROPERTY(QUrl source READ source CONSTANT)
+    /**
+     * @short Vertical offset
+     */
     Q_PROPERTY(double offsetY READ offsetY CONSTANT)
 public:
     /**
@@ -42,7 +62,15 @@ public:
      * @param parent parent object.
      */
     explicit Cover(const PropertiesMap propertiesMap, QObject *parent = 0);
+    /**
+     * @brief Source
+     * @return source.
+     */
     QUrl source() const;
+    /**
+     * @short Vertical offset
+     * @return vertical offset.
+     */
     double offsetY() const;
 private:
     Q_DECLARE_PRIVATE(Object)

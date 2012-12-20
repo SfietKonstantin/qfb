@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "feedreply.h"
-#include "abstractreply_p.h"
+#include "abstractgraphreply_p.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
@@ -153,7 +153,7 @@ static const char *UPDATED_TIME_KEY = "updated_time";
  * @internal
  * @brief Private class for QFB::UserReply
  */
-class FeedReplyPrivate: public AbstractReplyPrivate
+class FeedReplyPrivate: public AbstractGraphReplyPrivate
 {
 public:
     /**
@@ -170,19 +170,19 @@ public:
 };
 
 FeedReplyPrivate::FeedReplyPrivate(FeedReply *q):
-    AbstractReplyPrivate(q)
+    AbstractGraphReplyPrivate(q)
 {
 }
 
 ////// End of private class //////
 
 FeedReply::FeedReply(QObject *parent) :
-    AbstractReply(*(new FeedReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new FeedReplyPrivate(this)), parent)
 {
 }
 
 FeedReply::FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractReply(*(new FeedReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new FeedReplyPrivate(this)), parent)
 {
     Q_D(FeedReply);
     d->networkAccessManager = networkAccessManager;
@@ -226,7 +226,8 @@ bool FeedReply::processData(QIODevice *dataSource)
             JsonObject fromObject = QFB_JSON_GET_OBJECT(object.value(FROM_KEY));
             fromPropertiesMap.insert(IdProperty, fromObject.value(ID_KEY).toString());
             fromPropertiesMap.insert(NameProperty, fromObject.value(NAME_KEY).toString());
-            propertiesMap.insert(FromProperty, QVariant::fromValue(new UserBase(fromPropertiesMap, this)));
+            propertiesMap.insert(FromProperty,
+                                 QVariant::fromValue(new UserBase(fromPropertiesMap, this)));
 
             JsonArray toArray = QFB_JSON_GET_ARRAY(object.value(TO_KEY));
             QVariantList toList;

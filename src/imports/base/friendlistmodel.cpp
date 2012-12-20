@@ -60,7 +60,7 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    bool processReply(const AbstractReply *reply);
+    bool processReply(const AbstractGraphReply *reply);
     /**
      * @internal
      * @brief Data
@@ -75,7 +75,7 @@ FriendListModelPrivate::FriendListModelPrivate(FriendListModel *q):
 {
 }
 
-bool FriendListModelPrivate::processReply(const AbstractReply *reply)
+bool FriendListModelPrivate::processReply(const AbstractGraphReply *reply)
 {
     Q_Q(FriendListModel);
 
@@ -136,7 +136,7 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-AbstractReply * FriendListModel::createReply(const QString &graph, const QString &arguments)
+AbstractGraphReply * FriendListModel::createReply(const QString &graph, const QString &arguments)
 {
     return queryManager()->queryFriendList(graph, arguments);
 }

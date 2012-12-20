@@ -35,8 +35,8 @@
 #include "cover.h"
 #include "language.h"
 #include "post.h"
-#include "friendlistreply.h"
 #include "querymanager.h"
+#include "imageloader.h"
 #include "friendlistmodel.h"
 #include "pictureloader.h"
 #include "userloader.h"
@@ -77,6 +77,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
                                           "QFBPostcannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
+    qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");

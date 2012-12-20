@@ -14,46 +14,78 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+#ifndef QFB_LOADERBASE_P_H
+#define QFB_LOADERBASE_P_H
 
-#include "abstractgraphreply.h"
+#include <QtCore/QtGlobal>
 
 namespace QFB
 {
 
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
+class QueryManager;
+class AbstractReply;
+class LoaderBase;
+class LoaderBasePrivate
 {
-    Q_OBJECT
 public:
     /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
+     * @internal
      * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
+     * @param q Q-pointer
      */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    LoaderBasePrivate(LoaderBase *q);
     /**
-     * @brief Feed
-     * @return feed.
+     * @internal
+     * @brief Destructor
      */
-    QList<Post *> feed() const;
+    virtual ~LoaderBasePrivate();
+    virtual bool checkReply(const AbstractReply *reply) = 0;
     /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
+     * @internal
+     * @brief Process reply
+     *
+     * This method is used to process a reply from Facebook.
+     * It should be implemented in order to fill the model.
+     *
+     * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    bool processData(QIODevice *dataSource);
+    virtual void processReply(const AbstractReply *reply) = 0;
+protected:
+    /**
+     * @internal
+     * @brief Q-pointer
+     */
+    LoaderBase * const q_ptr;
 private:
-    Q_DECLARE_PRIVATE(FeedReply)
+    /**
+     * @internal
+     * @brief Slot when the request is finished
+     */
+    void slotFinished();
+    /**
+     * @internal
+     * @brief Slot when the request failed
+     */
+    void slotFailed();
+    /**
+     * @internal
+     * @brief Query manager
+     */
+    QueryManager *queryManager;
+    /**
+     * @internal
+     * @brief Reply
+     */
+    AbstractReply *reply;
+    /**
+     * @internal
+     * @brief New reply
+     */
+    AbstractReply *newReply;
+    Q_DECLARE_PUBLIC(LoaderBase)
 };
 
 }
 
-#endif // QFB_FEEDREPLY_H
+#endif // QFB_LOADERBASE_P_H

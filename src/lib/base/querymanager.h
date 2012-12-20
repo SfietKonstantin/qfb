@@ -25,10 +25,12 @@
 #include "base_global.h"
 #include <QtCore/QObject>
 
+class QUrl;
+class QNetworkAccessManager;
 class QNetworkReply;
 namespace QFB
 {
-
+class ImageReply;
 class FriendListReply;
 class PictureReply;
 class UserReply;
@@ -64,6 +66,8 @@ public:
      * @return access token.
      */
     QString token() const;
+    ImageReply * queryImage(const QUrl &url);
+
     /**
      * @brief Query a friend list
      * @param graph graph entry of the Facebook graph API.
@@ -85,6 +89,12 @@ public:
      * @return a user reply.
      */
     UserReply * queryUser(const QString &graph, const QString &arguments = QString());
+    /**
+     * @brief Query a feed
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a feed reply.
+     */
     FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**

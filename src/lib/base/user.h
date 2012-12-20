@@ -141,6 +141,11 @@ class QFBBASE_EXPORT User : public UserBase
      * appear as 1900.
      */
     Q_PROPERTY(QDate birthday READ birthday CONSTANT)
+    /**
+     * @short The user's cover photo
+     *
+     * (must be explicitly requested using fields=cover parameter)
+     */
     Q_PROPERTY(QFB::Cover * cover READ cover CONSTANT)
     /// @todo currency
     /// @todo devices
@@ -264,6 +269,10 @@ public:
      * @return birthday.
      */
     QDate birthday() const;
+    /**
+     * @brief Cover
+     * @return cover.
+     */
     Cover * cover() const;
     /**
      * @brief Email

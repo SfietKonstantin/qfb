@@ -24,40 +24,38 @@
 
 #include "base_global.h"
 #include <QtCore/QObject>
-#include <QtCore/QPair>
 
 class QIODevice;
-class QNetworkAccessManager;
 class QUrl;
+class QNetworkAccessManager;
 namespace QFB
 {
 
-/**
- * @brief Arguments as a key-value pair
- */
-typedef QPair<QString, QString> ArgumentPair;
 class AbstractReplyPrivate;
+
 /**
- * @brief Base for a reply from Facebook
+ * @brief Base for a reply
  *
  * This class contains base methods that are used for managing
- * a query to Facebook and getting the reply. It do not contain
+ * a network query and getting the reply. It do not contain
  * any way to get the result, and only provides a pure virtual
  * method, processData(), that should be implemented in order to
- * parse the data that is provided by Facebook.
+ * parse the retrived data.
  *
  * Retrived data can be stored in a subclass of this class, and
  * returned through a specific getter. Signals that informs that
  * data is ready do not need to be emitted, as they are emitted
  * automatically.
  *
+ * This class also provides preprocessRequest(), that can be used
+ * to handle caching, and get(), that is the method that perform
+ * the network operation.
+ *
  * Note that these replies objects only stores one reply. In order
  * to perform another request, you must create a new one.
  *
  * Warning: deleting this class should be done manually as, by
  * default, it stays in memory.
- *
- * @todo implement a way to manage OAuth exceptions.
  */
 class QFBBASE_EXPORT AbstractReply : public QObject
 {
@@ -88,19 +86,6 @@ public:
      * @return error.
      */
     QString error() const;
-public Q_SLOTS:
-    /**
-     * @brief Perform a request
-     *
-     * The request should be perform by sending a graph, like "me/friends",
-     * the access token, and a list of arguments, formatted with the following
-     * format: "key1=value1,key2=value2"
-     *
-     * @param graph graph entry of the Facebook graph API.
-     * @param token access token.
-     * @param arguments arguments.
-     */
-    void request(const QString &graph, const QString &token, const QString &arguments = QString());
 Q_SIGNALS:
     /**
      * @brief Error
@@ -130,17 +115,6 @@ protected:
      */
     bool event(QEvent *event);
     /**
-     * @brief Process arguments
-     *
-     * This method can be used to process arguments before sending them
-     * to the request. It makes them cleaner and can be used if arguments
-     * needs to be precise, or if arguments are used for storage.
-     *
-     * @param arguments arguments to process.
-     * @return processed arguments.
-     */
-    virtual QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
-    /**
      * @brief Preprocess request
      *
      * This method is used to do a preprocessing step before perfomring
@@ -155,25 +129,30 @@ protected:
      */
     virtual bool preprocesssRequest();
     /**
+     * @brief Perform the network operation
+     *
+     * This method is used to perform the network operation, by passing
+     * the URL that is used for that operation. Network operations are
+     * done through GET.
+     *
+     * @param url URL to use for the network operation.
+     */
+    void get(const QUrl &url);
+    /**
+     * @brief Url
+     * @return url.
+     */
+    QUrl url() const;
+    /**
      * @brief Process data
      *
      * This method should be implemented in order to process the
-     * data that is retrived from Facebook.
+     * data that is retrived.
      *
      * @param dataSource data source.
      * @return if the process is successful.
      */
     virtual bool processData(QIODevice *dataSource) = 0;
-    /**
-     * @brief Graph
-     * @return graph.
-     */
-    QString graph() const;
-    /**
-     * @brief Arguments
-     * @return arguments.
-     */
-    QList<ArgumentPair> arguments() const;
     /**
      * @brief Set error
      * @param error error to set.
@@ -189,6 +168,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void slotFinished())
     Q_PRIVATE_SLOT(d_func(), void slotError(QNetworkReply::NetworkError))
     /// @endcond
+
 };
 
 }

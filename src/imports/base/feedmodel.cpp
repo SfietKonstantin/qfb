@@ -44,7 +44,7 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    bool processReply(const AbstractReply *reply);
+    bool processReply(const AbstractGraphReply *reply);
     /**
      * @internal
      * @brief Data
@@ -59,7 +59,7 @@ FeedModelPrivate::FeedModelPrivate(FeedModel *q):
 {
 }
 
-bool FeedModelPrivate::processReply(const AbstractReply *reply)
+bool FeedModelPrivate::processReply(const AbstractGraphReply *reply)
 {
     Q_Q(FeedModel);
 
@@ -119,7 +119,7 @@ QVariant FeedModel::data(const QModelIndex &index, int role) const
     }
 }
 
-AbstractReply * FeedModel::createReply(const QString &graph, const QString &arguments)
+AbstractGraphReply * FeedModel::createReply(const QString &graph, const QString &arguments)
 {
     return queryManager()->queryFeed(graph, arguments);
 }

@@ -38,16 +38,16 @@ PageStackWindow {
         clientId: "390204064393625"
         uiType: QFBLoginManager.Mobile
         Component.onCompleted: {
-            if (BRIDGE.token == "") {
+            if (TOKEN_MANAGER.token == "") {
                 loginSheet.open()
                 login()
             } else {
-                queryManager.token = BRIDGE.token
+                queryManager.token = TOKEN_MANAGER.token
             }
         }
 
         onLoginSucceeded: {
-            BRIDGE.token = token
+            TOKEN_MANAGER.token = token
             queryManager.token = token
             loginSheet.accept()
         }

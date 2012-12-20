@@ -20,7 +20,7 @@
  */
 
 #include "userreply.h"
-#include "abstractreply_p.h"
+#include "abstractgraphreply_p.h"
 
 #include "helper_p.h"
 #include "user.h"
@@ -191,7 +191,7 @@ static const char *WEBSITE_KEY = "website";
  * @internal
  * @brief Private class for QFB::UserReply
  */
-class UserReplyPrivate: public AbstractReplyPrivate
+class UserReplyPrivate: public AbstractGraphReplyPrivate
 {
 public:
     /**
@@ -208,7 +208,7 @@ public:
 };
 
 UserReplyPrivate::UserReplyPrivate(UserReply *q):
-    AbstractReplyPrivate(q)
+    AbstractGraphReplyPrivate(q)
 {
     user = 0;
 }
@@ -216,12 +216,12 @@ UserReplyPrivate::UserReplyPrivate(UserReply *q):
 ////// End of private class //////
 
 UserReply::UserReply(QObject *parent) :
-    AbstractReply(*(new UserReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new UserReplyPrivate(this)), parent)
 {
 }
 
 UserReply::UserReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractReply(*(new UserReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new UserReplyPrivate(this)), parent)
 {
     Q_D(UserReply);
     d->networkAccessManager = networkAccessManager;

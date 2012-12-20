@@ -14,46 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
-
+#include "abstractgraphloader.h"
 #include "abstractgraphreply.h"
 
 namespace QFB
 {
 
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
+AbstractGraphLoader::AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent):
+    LoaderBase(dd, parent)
 {
-    Q_OBJECT
-public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(FeedReply)
-};
-
 }
 
-#endif // QFB_FEEDREPLY_H
+void AbstractGraphLoader::request(const QString &graph, const QString &arguments)
+{
+    setReply(createReply(graph, arguments));
+}
+
+}

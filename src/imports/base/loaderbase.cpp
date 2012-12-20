@@ -14,22 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file abstractloadablemodel.cpp
- * @brief Implementation of QFB::AbstractLoadableModel
- */
-
-#include "abstractloadablemodel.h"
-#include "abstractloadablemodel_p.h"
+#include "loaderbase.h"
+#include "loaderbase_p.h"
 
 #include <QtCore/QDebug>
 
-#include "abstractgraphreply.h"
+#include "abstractreply.h"
 
 namespace QFB
 {
 
-AbstractLoadableModelPrivate::AbstractLoadableModelPrivate(AbstractLoadableModel *q):
+LoaderBasePrivate::LoaderBasePrivate(LoaderBase *q):
     q_ptr(q)
 {
     queryManager = 0;
@@ -37,13 +32,13 @@ AbstractLoadableModelPrivate::AbstractLoadableModelPrivate(AbstractLoadableModel
     newReply = 0;
 }
 
-AbstractLoadableModelPrivate::~AbstractLoadableModelPrivate()
+LoaderBasePrivate::~LoaderBasePrivate()
 {
 }
 
-void AbstractLoadableModelPrivate::slotFinished()
+void LoaderBasePrivate::slotFinished()
 {
-    if (!processReply(newReply)) {
+    if (!checkReply(newReply)) {
         newReply->deleteLater();
         newReply = 0;
         return;
@@ -54,9 +49,11 @@ void AbstractLoadableModelPrivate::slotFinished()
     }
     reply = newReply;
     newReply = 0;
+
+    processReply(reply);
 }
 
-void AbstractLoadableModelPrivate::slotFailed()
+void LoaderBasePrivate::slotFailed()
 {
     qDebug() << newReply->error();
     newReply->deleteLater();
@@ -65,38 +62,33 @@ void AbstractLoadableModelPrivate::slotFailed()
 
 ////// End of private class //////
 
-AbstractLoadableModel::AbstractLoadableModel(AbstractLoadableModelPrivate &dd, QObject *parent):
-    QAbstractListModel(parent), d_ptr(&dd)
+LoaderBase::LoaderBase(LoaderBasePrivate &dd, QObject *parent):
+    QObject(parent), d_ptr(&dd)
 {
 }
 
-AbstractLoadableModel::~AbstractLoadableModel()
+LoaderBase::~LoaderBase()
 {
 }
 
-int AbstractLoadableModel::count() const
+QueryManager * LoaderBase::queryManager() const
 {
-    return rowCount();
-}
-
-QueryManager * AbstractLoadableModel::queryManager() const
-{
-    Q_D(const AbstractLoadableModel);
+    Q_D(const LoaderBase);
     return d->queryManager;
 }
 
-void AbstractLoadableModel::setQueryManager(QueryManager *queryManager)
+void LoaderBase::setQueryManager(QueryManager *queryManager)
 {
-    Q_D(AbstractLoadableModel);
+    Q_D(LoaderBase);
     if (d->queryManager != queryManager) {
         d->queryManager = queryManager;
         emit queryManagerChanged();
     }
 }
 
-void AbstractLoadableModel::request(const QString &graph, const QString &arguments)
+void LoaderBase::setReply(AbstractReply *reply)
 {
-    Q_D(AbstractLoadableModel);
+    Q_D(LoaderBase);
     if (!d->queryManager) {
         return;
     }
@@ -104,11 +96,11 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
         return;
     }
 
-    d->newReply = createReply(graph, arguments);
+    d->newReply = reply;
     connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
 }
 
 }
 
-#include "moc_abstractloadablemodel.cpp"
+#include "moc_loaderbase.cpp"

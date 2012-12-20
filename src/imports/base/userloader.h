@@ -17,7 +17,7 @@
 #ifndef QFB_USERLOADER_H
 #define QFB_USERLOADER_H
 
-#include "abstractloader.h"
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
@@ -25,7 +25,7 @@ namespace QFB
 class User;
 class QueryManager;
 class UserLoaderPrivate;
-class UserLoader : public AbstractLoader
+class UserLoader : public AbstractGraphLoader
 {
     Q_OBJECT
     Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
@@ -35,7 +35,7 @@ public:
 Q_SIGNALS:
     void userChanged();
 protected:
-    AbstractReply * createReply(const QString &graph, const QString &arguments = QString());
+    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
 private:
     Q_DECLARE_PRIVATE(UserLoader)
 };

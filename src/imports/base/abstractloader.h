@@ -17,75 +17,32 @@
 #ifndef QFB_ABSTRACTLOADER_H
 #define QFB_ABSTRACTLOADER_H
 
-#include <QtCore/QObject>
+#include "loaderbase.h"
 
 namespace QFB
 {
 
 class QueryManager;
 class AbstractReply;
-class AbstractLoaderPrivate;
-class AbstractLoader : public QObject
+class LoaderBasePrivate;
+class AbstractLoader : public LoaderBase
 {
     Q_OBJECT
-    /**
-     * @short Query manager
-     */
-    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
-               NOTIFY queryManagerChanged)
-public:
-    virtual ~AbstractLoader();
-    /**
-     * @brief Query manager
-     * @return query manager.
-     */
-    QueryManager * queryManager() const;
 public Q_SLOTS:
-    /**
-     * @brief Set the query manager
-     * @param queryManager query manager to set.
-     */
-    void setQueryManager(QueryManager *queryManager);
     /**
      * @brief Perform a request
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      */
-    void request(const QString &graph, const QString &arguments = QString());
-Q_SIGNALS:
-    /**
-     * @brief Query manager changed
-     */
-    void queryManagerChanged();
+    void request(const QUrl &url);
 protected:
     /**
      * @brief D-pointer constructor
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
-    /**
-     * @brief Create a reply used in the request
-     *
-     * You can use the query manager to create replies you
-     * are interested in.
-     *
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     * @return a reply.
-     */
-    virtual AbstractReply * createReply(const QString &graph,
-                                        const QString &arguments = QString()) = 0;
-    /**
-     * @short D-pointer
-     */
-    const QScopedPointer<AbstractLoaderPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(AbstractLoader)
-    /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotFailed())
-    /// @endcond
+    explicit AbstractLoader(LoaderBasePrivate &dd, QObject *parent = 0);
+    virtual AbstractReply * createReply(const QUrl &url) = 0;
 };
 
 }

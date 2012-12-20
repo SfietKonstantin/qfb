@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "userloader.h"
-#include "abstractloader_p.h"
+#include "loaderbase_p.h"
 
 #include "userreply.h"
 #include "querymanager.h"
@@ -25,7 +25,7 @@
 namespace QFB
 {
 
-class UserLoaderPrivate: public AbstractLoaderPrivate
+class UserLoaderPrivate: public LoaderBasePrivate
 {
 public:
     UserLoaderPrivate(UserLoader *q);
@@ -37,7 +37,7 @@ private:
 };
 
 UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
-    AbstractLoaderPrivate(q)
+    LoaderBasePrivate(q)
 {
     user = 0;
 }
@@ -61,7 +61,7 @@ void UserLoaderPrivate::processReply(const AbstractReply *reply)
 ////// End of private class //////
 
 UserLoader::UserLoader(QObject *parent) :
-    AbstractLoader(*(new UserLoaderPrivate(this)), parent)
+    AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
 {
 }
 
@@ -71,11 +71,9 @@ User * UserLoader::user() const
     return d->user;
 }
 
-AbstractReply * UserLoader::createReply(const QString &graph, const QString &arguments)
+AbstractGraphReply * UserLoader::createReply(const QString &graph, const QString &arguments)
 {
     return queryManager()->queryUser(graph, arguments);
 }
 
 }
-
-#include "moc_userloader.cpp"

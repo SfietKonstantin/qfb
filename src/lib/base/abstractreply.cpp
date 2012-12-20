@@ -14,16 +14,9 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file abstractreply.cpp
- * @brief Implementation of QFB::AbstractReply
- */
-
 #include "abstractreply.h"
 #include "abstractreply_p.h"
-#include "helper_p.h"
 
-#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
@@ -132,28 +125,16 @@ QString AbstractReply::error() const
     return d->error;
 }
 
-void AbstractReply::request(const QString &graph, const QString &token, const QString &arguments)
+bool AbstractReply::preprocesssRequest()
+{
+    return false;
+}
+
+void AbstractReply::get(const QUrl &url)
 {
     Q_D(AbstractReply);
-    if (d->reply) {
-        return;
-    }
+    d->url = url;
 
-    d->graph = graph;
-
-    QStringList argumentList = arguments.split(",");
-    QList<ArgumentPair> trueArguments;
-    foreach (QString argument, argumentList) {
-        QStringList argumentEntriesList = argument.split("=");
-        if (argumentEntriesList.count() == 2) {
-            ArgumentPair argumentPair;
-            argumentPair.first = argumentEntriesList.at(0).trimmed();
-            argumentPair.second = argumentEntriesList.at(1).trimmed();
-            trueArguments.append(argumentPair);
-        }
-    }
-
-    d->arguments = processArguments(trueArguments);
     if (preprocesssRequest()) {
         QEvent *event = new QEvent(QEvent::User);
         QCoreApplication::instance()->postEvent(this, event);
@@ -161,12 +142,16 @@ void AbstractReply::request(const QString &graph, const QString &token, const QS
     }
 
     d->running = true;
-    QUrl url = graphUrl(graph, token, d->arguments);
-    qDebug() << "Request:" << url;
     d->reply = d->networkAccessManager->get(QNetworkRequest(url));
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(slotError(QNetworkReply::NetworkError)));
+}
+
+QUrl AbstractReply::url() const
+{
+    Q_D(const AbstractReply);
+    return d->url;
 }
 
 bool AbstractReply::event(QEvent *event)
@@ -176,28 +161,6 @@ bool AbstractReply::event(QEvent *event)
         return true;
     }
     return QObject::event(event);
-}
-
-QList<ArgumentPair> AbstractReply::processArguments(const QList<ArgumentPair> &arguments)
-{
-    return arguments;
-}
-
-bool AbstractReply::preprocesssRequest()
-{
-    return false;
-}
-
-QString AbstractReply::graph() const
-{
-    Q_D(const AbstractReply);
-    return d->graph;
-}
-
-QList<ArgumentPair> AbstractReply::arguments() const
-{
-    Q_D(const AbstractReply);
-    return d->arguments;
 }
 
 void AbstractReply::setError(const QString &error)

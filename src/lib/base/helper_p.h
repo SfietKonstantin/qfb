@@ -30,7 +30,6 @@
  * @short Global helper methods functions
  */
 
-#include "abstractreply.h"
 #include <QtCore/QPair>
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
@@ -87,6 +86,12 @@ inline QUrl graphUrl(const QString &graph, const QString &token,
     return url;
 }
 
+/**
+ * @internal
+ * @brief Parse an URL from a string
+ * @param urlString the URL as a string.
+ * @return the parsed URL.
+ */
 inline QUrl parseUrl(const QString &urlString)
 {
     return QUrl::fromPercentEncoding(urlString.toAscii());

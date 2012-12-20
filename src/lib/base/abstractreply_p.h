@@ -35,13 +35,7 @@
 class QNetworkAccessManager;
 namespace QFB
 {
-
 class AbstractReply;
-
-/**
- * @internal
- * @brief Private class for QFB::AbstractReply
- */
 class AbstractReplyPrivate
 {
 public:
@@ -85,19 +79,14 @@ public:
     QNetworkReply *reply;
     /**
      * @internal
+     * @brief Url
+     */
+    QUrl url;
+    /**
+     * @internal
      * @brief If the reply is running
      */
     bool running;
-    /**
-     * @internal
-     * @brief Graph
-     */
-    QString graph;
-    /**
-     * @internal
-     * @brief Arguments
-     */
-    QList<ArgumentPair> arguments;
     /**
      * @internal
      * @brief If the reply is an error

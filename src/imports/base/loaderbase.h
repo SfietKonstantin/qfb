@@ -14,46 +14,64 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+#ifndef QFB_LOADERBASE_H
+#define QFB_LOADERBASE_H
 
-#include "abstractgraphreply.h"
+#include <QtCore/QObject>
 
+class QUrl;
 namespace QFB
 {
 
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
+class QueryManager;
+class AbstractReply;
+class LoaderBasePrivate;
+class LoaderBase : public QObject
 {
     Q_OBJECT
+    /**
+     * @short Query manager
+     */
+    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
+               NOTIFY queryManagerChanged)
 public:
+    virtual ~LoaderBase();
     /**
-     * @brief Invalid constructor
+     * @brief Query manager
+     * @return query manager.
+     */
+    QueryManager * queryManager() const;
+public Q_SLOTS:
+    /**
+     * @brief Set the query manager
+     * @param queryManager query manager to set.
+     */
+    void setQueryManager(QueryManager *queryManager);
+Q_SIGNALS:
+    /**
+     * @brief Query manager changed
+     */
+    void queryManagerChanged();
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit FeedReply(QObject *parent = 0);
+    explicit LoaderBase(LoaderBasePrivate &dd, QObject *parent = 0);
+    void setReply(AbstractReply *reply);
     /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
+     * @short D-pointer
      */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
+    const QScopedPointer<LoaderBasePrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(FeedReply)
+    Q_DECLARE_PRIVATE(LoaderBase)
+    /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(), void slotFinished())
+    Q_PRIVATE_SLOT(d_func(), void slotFailed())
+    /// @endcond
 };
 
 }
 
-#endif // QFB_FEEDREPLY_H
+#endif // QFB_LOADERBASE_H

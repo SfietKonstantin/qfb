@@ -27,7 +27,7 @@
 namespace QFB
 {
 
-class AbstractReply;
+class AbstractGraphReply;
 class QueryManager;
 class AbstractLoadableModelPrivate;
 /**
@@ -108,7 +108,7 @@ protected:
      * @param arguments arguments.
      * @return a reply.
      */
-    virtual AbstractReply * createReply(const QString &graph,
+    virtual AbstractGraphReply * createReply(const QString &graph,
                                         const QString &arguments = QString()) = 0;
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     /**

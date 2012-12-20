@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file cover.cpp
+ * @brief Implementation of QFB::Cover
+ */
+
 #include "cover.h"
 #include "object_p.h"
 

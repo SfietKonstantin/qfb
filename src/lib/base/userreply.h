@@ -22,7 +22,7 @@
  * @brief Definition of QFB::UserReply
  */
 
-#include "abstractreply.h"
+#include "abstractgraphreply.h"
 
 namespace QFB
 {
@@ -45,7 +45,7 @@ class UserReplyPrivate;
  *
  * @todo Allow the user not to have this reply as parent.
  */
-class QFBBASE_EXPORT UserReply : public AbstractReply
+class QFBBASE_EXPORT UserReply : public AbstractGraphReply
 {
     Q_OBJECT
 public:
@@ -65,6 +65,7 @@ public:
      * @return user.
      */
     User * user() const;
+protected:
     /**
      * @brief Implementation of AbstractReply::processData()
      * @param dataSource data source.

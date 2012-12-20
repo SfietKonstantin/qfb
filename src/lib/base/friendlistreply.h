@@ -22,7 +22,7 @@
  * @brief Definition of QFB::FriendListReply
  */
 
-#include "abstractreply.h"
+#include "abstractgraphreply.h"
 
 namespace QFB
 {
@@ -42,7 +42,7 @@ class FriendListReplyPrivate;
  *
  * @todo Allow the users not to have this reply as parent.
  */
-class FriendListReply: public AbstractReply
+class FriendListReply: public AbstractGraphReply
 {
     Q_OBJECT
 public:

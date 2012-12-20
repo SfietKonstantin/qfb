@@ -20,7 +20,7 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
 
-#include "bridge.h"
+#include "tokenmanager.h"
 #include "networkaccessmanagerfactory.h"
 
 int main(int argc, char **argv)
@@ -29,12 +29,12 @@ int main(int argc, char **argv)
     app.setOrganizationName("SfietKonstantin");
     app.setApplicationName("qfb-mobile");
 
-    Bridge bridge;
+    TokenManager tokenManager;
 
     QDeclarativeView view;
     view.engine()->addImportPath(IMPORT_PATH);
     view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
-    view.rootContext()->setContextProperty("BRIDGE", &bridge);
+    view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();
     QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));

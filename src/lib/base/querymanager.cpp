@@ -20,6 +20,7 @@
  */
 
 #include "querymanager.h"
+#include "imagereply.h"
 #include "friendlistreply.h"
 #include "picturereply.h"
 #include "userreply.h"
@@ -66,6 +67,14 @@ QString QueryManager::token() const
 {
     Q_D(const QueryManager);
     return d->token;
+}
+
+ImageReply * QueryManager::queryImage(const QUrl &url)
+{
+    Q_D(QueryManager);
+    ImageReply *reply = new ImageReply(d->networkAccessManager, this);
+    reply->request(url);
+    return reply;
 }
 
 FriendListReply * QueryManager::queryFriendList(const QString &graph, const QString &arguments)

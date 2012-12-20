@@ -14,46 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+#ifndef TOKENMANAGER_H
+#define TOKENMANAGER_H
 
-#include "abstractgraphreply.h"
+#include <QtCore/QObject>
 
-namespace QFB
-{
-
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
+class TokenManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
 public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
+    explicit TokenManager(QObject *parent = 0);
+    QString token() const;
+public slots:
+    void setToken(const QString &token);
+signals:
+    void tokenChanged();
 private:
-    Q_DECLARE_PRIVATE(FeedReply)
+    QString m_token;
 };
 
-}
-
-#endif // QFB_FEEDREPLY_H
+#endif // TOKENMANAGER_H

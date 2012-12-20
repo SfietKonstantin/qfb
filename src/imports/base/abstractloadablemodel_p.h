@@ -28,7 +28,7 @@
 namespace QFB
 {
 
-class AbstractReply;
+class AbstractGraphReply;
 class QueryManager;
 class AbstractLoadableModel;
 /**
@@ -63,7 +63,7 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    virtual bool processReply(const AbstractReply *reply) = 0;
+    virtual bool processReply(const AbstractGraphReply *reply) = 0;
 protected:
     /**
      * @internal
@@ -90,12 +90,12 @@ private:
      * @internal
      * @brief Reply
      */
-    AbstractReply *reply;
+    AbstractGraphReply *reply;
     /**
      * @internal
      * @brief New reply
      */
-    AbstractReply *newReply;
+    AbstractGraphReply *newReply;
     Q_DECLARE_PUBLIC(AbstractLoadableModel)
 };
 

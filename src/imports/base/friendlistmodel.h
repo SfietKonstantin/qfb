@@ -74,7 +74,7 @@ public:
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 protected:
-    AbstractReply * createReply(const QString &graph, const QString &arguments = QString());
+    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Role names
      * @return role names.

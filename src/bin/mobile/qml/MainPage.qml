@@ -14,46 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.qfb 4.0
 
-#include "abstractgraphreply.h"
+Page {
+    id: container
+    property QtObject queryManager
+    function load() {
+        banner.load("me")
+    }
 
-namespace QFB
-{
+    Item {
+        anchors.fill: parent
+        Banner {
+            id: banner
+            queryManager: container.queryManager
+            anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
+            height: parent.height * 0.3
+        }
 
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
-{
-    Q_OBJECT
-public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(FeedReply)
-};
-
+        ListView {
+            clip: true
+            anchors.top: banner.bottom; anchors.bottom: parent.bottom
+            anchors.left: parent.left; anchors.right: parent.right
+            model: ListModel {
+                ListElement {
+                    text: "News feed"
+                }
+                ListElement {
+                    text: "Me"
+                }
+                ListElement {
+                    text: "Friends"
+                }
+            }
+            delegate: ClickableEntry {
+                text: model.text
+            }
+        }
+    }
 }
-
-#endif // QFB_FEEDREPLY_H

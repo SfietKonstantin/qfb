@@ -14,24 +14,48 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef BRIDGE_H
-#define BRIDGE_H
+#ifndef QFB_ABSTRACTGRAPHLOADER_H
+#define QFB_ABSTRACTGRAPHLOADER_H
 
-#include <QtCore/QObject>
+#include "loaderbase.h"
 
-class Bridge : public QObject
+namespace QFB
+{
+
+class QueryManager;
+class AbstractGraphReply;
+class LoaderBasePrivate;
+class AbstractGraphLoader : public LoaderBase
 {
     Q_OBJECT
-    Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
-public:
-    explicit Bridge(QObject *parent = 0);
-    QString token() const;
-public slots:
-    void setToken(const QString &token);
-signals:
-    void tokenChanged();
-private:
-    QString m_token;
+public Q_SLOTS:
+    /**
+     * @brief Perform a request
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     */
+    void request(const QString &graph, const QString &arguments = QString());
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
+     * @param parent parent object.
+     */
+    explicit AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent = 0);
+    /**
+     * @brief Create a reply used in the request
+     *
+     * You can use the query manager to create replies you
+     * are interested in.
+     *
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a reply.
+     */
+    virtual AbstractGraphReply * createReply(const QString &graph,
+                                             const QString &arguments = QString()) = 0;
 };
 
-#endif // BRIDGE_H
+}
+
+#endif // QFB_ABSTRACTGRAPHLOADER_H

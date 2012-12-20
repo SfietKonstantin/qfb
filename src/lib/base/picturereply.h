@@ -22,7 +22,7 @@
  * @brief Definition of QFB::PictureReply
  */
 
-#include "abstractreply.h"
+#include "abstractgraphreply.h"
 
 namespace QFB
 {
@@ -35,7 +35,7 @@ class PictureReplyPrivate;
  * and cache pictures. This reply, when finished, returns a
  * path to the cached version of the picture to download.
  */
-class QFBBASE_EXPORT PictureReply : public AbstractReply
+class QFBBASE_EXPORT PictureReply : public AbstractGraphReply
 {
     Q_OBJECT
 public:

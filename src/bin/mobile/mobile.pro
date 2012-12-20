@@ -20,22 +20,24 @@ LIBS += -L../../lib/login -l$${NAME}login
 LIBS += -L../../lib/base -l$${NAME}
 LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
-HEADERS +=      bridge.h \
+HEADERS +=      tokenmanager.h \
     networkaccessmanagerfactory.h \
-    networkaccessmanager.h
+    networkaccessmanager.h \
 
 SOURCES +=      main.cpp \
-                bridge.cpp \
+                tokenmanager.cpp \
     networkaccessmanagerfactory.cpp \
-    networkaccessmanager.cpp
+    networkaccessmanager.cpp \
 
 
-OTHER_FILES +=  main.qml \
-    LoginSheet.qml \
-    MainPage.qml
+OTHER_FILES +=  qml/main.qml \
+                qml/UiConstants.js \
+                qml/ClickableEntry.qml \
+    qml/LoginSheet.qml \
+    qml/MainPage.qml \
+    qml/Banner.qml
 
 # Deployment
-
 contains(CONFIG, optify) {
 target.path = $${OPTDIR}/bin
 } else {

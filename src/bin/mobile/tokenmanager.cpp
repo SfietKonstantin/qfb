@@ -14,46 +14,29 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDREPLY_H
-#define QFB_FEEDREPLY_H
+#include "tokenmanager.h"
+#include <QtCore/QSettings>
 
-#include "abstractgraphreply.h"
+static const char *TOKEN_KEY = "login/token";
 
-namespace QFB
+TokenManager::TokenManager(QObject *parent) :
+    QObject(parent)
 {
-
-class Post;
-class FeedReplyPrivate;
-class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
-{
-    Q_OBJECT
-public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit FeedReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief Feed
-     * @return feed.
-     */
-    QList<Post *> feed() const;
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(FeedReply)
-};
-
+    QSettings settings;
+    setToken(settings.value(TOKEN_KEY, QString()).toString());
 }
 
-#endif // QFB_FEEDREPLY_H
+QString TokenManager::token() const
+{
+    return m_token;
+}
+
+void TokenManager::setToken(const QString &token)
+{
+    if (m_token != token) {
+        m_token = token;
+        emit tokenChanged();
+        QSettings settings;
+        settings.setValue(TOKEN_KEY, token);
+    }
+}

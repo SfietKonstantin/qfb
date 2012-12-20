@@ -20,31 +20,36 @@ HEADERS +=  base_global.h \
             userbase.h \
             user.h \
             language.h \
-            status.h \
+            cover.h \
+            post.h \
+#            status.h \
             abstractreply.h \
             abstractreply_p.h \
+            imagereply.h \
+            abstractgraphreply.h \
+            abstractgraphreply_p.h \
             friendlistreply.h \
             querymanager.h \
             picture_p.h \
             picturereply.h \
             userreply.h \
-    feedreply.h \
-    post.h \
-    cover.h
+            feedreply.h \
 
 SOURCES +=  object.cpp \
             userbase.cpp \
             user.cpp \
             language.cpp \
-            status.cpp \
+            cover.cpp \
+            post.cpp \
+#            status.cpp \
             abstractreply.cpp \
+            imagereply.cpp \
+            abstractgraphreply.cpp \
             friendlistreply.cpp \
             querymanager.cpp \
             picturereply.cpp \
             userreply.cpp \
-    feedreply.cpp \
-    post.cpp \
-    cover.cpp
+            feedreply.cpp \
 
 # Deployment
 target.path = $${LIBDIR}

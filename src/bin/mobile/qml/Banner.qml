@@ -17,15 +17,19 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import "UiConstants.js" as Ui
 
-Page {
+Item {
     id: container
     property QtObject queryManager
-    function load() {
-        userLoader.request("me", "fields=name")
+    function load(graph) {
+        d_ptr.graph = graph
+        userLoader.request(d_ptr.graph, "fields=name")
     }
+
     QtObject {
         id: d_ptr
+        property string graph
         property string name
         property string coverUrl
     }
@@ -36,55 +40,60 @@ Page {
         onUserChanged: {
             if (d_ptr.name == "") {
                 d_ptr.name = user.name
-                userLoader.request("me", "fields=cover")
+                userLoader.request(d_ptr.graph, "fields=cover")
             } else if (d_ptr.coverUrl == "") {
                 d_ptr.coverUrl = user.cover.source
             }
         }
     }
 
-    Item {
+    Rectangle {
+        id: coverBackground
         anchors.fill: parent
+        color: "#0057AE"
 
-        Rectangle {
-            id: coverBackground
-            anchors.top: parent.top
-            anchors.left: parent.left; anchors.right: parent.right
-            color: "#0057AE"
-            height: 0.3 * container.height
+        QFBImageLoader {
+            id: coverImageLoader
+            queryManager: container.queryManager
 
-            Image {
-                id: cover
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                clip: true
-                asynchronous: true
-                source: d_ptr.coverUrl
-                opacity: 0
-                states: [
-                    State {
-                        name: "visible"; when: cover.status == Image.Ready
-                        PropertyChanges {
-                            target: cover
-                            opacity: 1
-                        }
+        }
+
+        Connections {
+            target: d_ptr
+            onCoverUrlChanged: coverImageLoader.request(d_ptr.coverUrl)
+        }
+
+        Image {
+            id: cover
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            clip: true
+            asynchronous: true
+            source: coverImageLoader.imagePath
+            opacity: 0
+            states: [
+                State {
+                    name: "visible"; when: cover.status == Image.Ready
+                    PropertyChanges {
+                        target: cover
+                        opacity: 1
                     }
-                ]
-                Behavior on opacity {
-                    NumberAnimation {duration: 300}
                 }
+            ]
+            Behavior on opacity {
+                NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
             }
         }
 
         Text {
             id: nameText
-            anchors.left: coverBackground.left; anchors.leftMargin: 10
-            anchors.bottom: coverBackground.bottom; anchors.bottomMargin: 10
-            color: "white"
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+            color: !theme.inverted ? Ui.FONT_COLOR_INVERTED_PRIMARY : Ui.FONT_COLOR_PRIMARY
             style: Text.Sunken
-            styleColor: "black"
+            styleColor: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
             opacity: 0
-            font.pixelSize: 40
+            font.pixelSize: Ui.FONT_SIZE_XXLARGE
             states: [
                 State {
                     name: "visible"; when: d_ptr.name != ""
@@ -96,10 +105,8 @@ Page {
                 }
             ]
             Behavior on opacity {
-                NumberAnimation {duration: 300}
+                NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
             }
         }
     }
-
-
 }

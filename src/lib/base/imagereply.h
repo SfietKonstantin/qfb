@@ -14,78 +14,52 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTLOADER_P_H
-#define QFB_ABSTRACTLOADER_P_H
+#ifndef QFB_IMAGEREPLY_H
+#define QFB_IMAGEREPLY_H
+
+#include "abstractreply.h"
 
 namespace QFB
 {
 
-#include <QtCore/QtGlobal>
-
-class QueryManager;
-class AbstractReply;
-class AbstractLoader;
-class AbstractLoaderPrivate
+class ImageReplyPrivate;
+class QFBBASE_EXPORT ImageReply: public AbstractReply
 {
+    Q_OBJECT
 public:
     /**
-     * @internal
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit ImageReply(QObject *parent = 0);
+    /**
      * @brief Default constructor
-     * @param q Q-pointer
+     * @param networkAccessManager network access manager.
+     * @param parent parent object.
      */
-    AbstractLoaderPrivate(AbstractLoader *q);
+    explicit ImageReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
     /**
-     * @internal
-     * @brief Destructor
+     * @brief Path to picture
+     * @return path to the picture.
      */
-    virtual ~AbstractLoaderPrivate();
-    virtual bool checkReply(const AbstractReply *reply) = 0;
-    /**
-     * @internal
-     * @brief Process reply
-     *
-     * This method is used to process a reply from Facebook.
-     * It should be implemented in order to fill the model.
-     *
-     * @param reply reply to be processed.
-     * @return if the process is successful.
-     */
-    virtual void processReply(const AbstractReply *reply) = 0;
+    QString imagePath() const;
+    void request(const QUrl &url);
 protected:
     /**
-     * @internal
-     * @brief Q-pointer
+     * @brief Reimplementation of AbstractReply::preprocesssRequest()
+     * @return if the process should be performed.
      */
-    AbstractLoader * const q_ptr;
+    bool preprocesssRequest();
+    /**
+     * @brief Implementation of AbstractReply::processData()
+     * @param dataSource data source.
+     * @return if the process is successful.
+     */
+    bool processData(QIODevice *dataSource);
 private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotFailed();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    AbstractReply *reply;
-    /**
-     * @internal
-     * @brief New reply
-     */
-    AbstractReply *newReply;
-    Q_DECLARE_PUBLIC(AbstractLoader)
+    Q_DECLARE_PRIVATE(ImageReply)
 };
 
 }
 
-#endif // QFB_ABSTRACTLOADER_P_H
+#endif // QFB_IMAGEREPLY_H

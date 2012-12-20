@@ -15,92 +15,19 @@
  ****************************************************************************************/
 
 #include "abstractloader.h"
-#include "abstractloader_p.h"
-
-#include <QtCore/QDebug>
-
 #include "abstractreply.h"
 
 namespace QFB
 {
 
-AbstractLoaderPrivate::AbstractLoaderPrivate(AbstractLoader *q):
-    q_ptr(q)
-{
-    queryManager = 0;
-    reply = 0;
-    newReply = 0;
-}
-
-AbstractLoaderPrivate::~AbstractLoaderPrivate()
+AbstractLoader::AbstractLoader(LoaderBasePrivate &dd, QObject *parent):
+    LoaderBase(dd, parent)
 {
 }
 
-void AbstractLoaderPrivate::slotFinished()
+void AbstractLoader::request(const QUrl &url)
 {
-    if (!checkReply(newReply)) {
-        newReply->deleteLater();
-        newReply = 0;
-        return;
-    }
-
-    if (reply) {
-        reply->deleteLater();
-    }
-    reply = newReply;
-    newReply = 0;
-
-    processReply(reply);
-}
-
-void AbstractLoaderPrivate::slotFailed()
-{
-    qDebug() << newReply->error();
-    newReply->deleteLater();
-    newReply = 0;
-}
-
-////// End of private class //////
-
-AbstractLoader::AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent):
-    QObject(parent), d_ptr(&dd)
-{
-}
-
-AbstractLoader::~AbstractLoader()
-{
-}
-
-QueryManager * AbstractLoader::queryManager() const
-{
-    Q_D(const AbstractLoader);
-    return d->queryManager;
-}
-
-void AbstractLoader::setQueryManager(QueryManager *queryManager)
-{
-    Q_D(AbstractLoader);
-    if (d->queryManager != queryManager) {
-        d->queryManager = queryManager;
-        emit queryManagerChanged();
-    }
-}
-
-void AbstractLoader::request(const QString &graph, const QString &arguments)
-{
-    Q_D(AbstractLoader);
-    if (!d->queryManager) {
-        return;
-    }
-    if (d->newReply) {
-        return;
-    }
-
-    d->newReply = createReply(graph, arguments);
-    connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    setReply(createReply(url));
 }
 
 }
-
-#include "moc_abstractloader.cpp"

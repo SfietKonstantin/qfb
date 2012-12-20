@@ -20,7 +20,7 @@
  */
 
 #include "picturereply.h"
-#include "abstractreply_p.h"
+#include "abstractgraphreply_p.h"
 #include "picture_p.h"
 
 #include <QtCore/QDebug>
@@ -41,7 +41,7 @@ namespace QFB
  * @internal
  * @brief Private class for QFB::PictureReply
  */
-class PictureReplyPrivate: public AbstractReplyPrivate
+class PictureReplyPrivate: public AbstractGraphReplyPrivate
 {
 public:
     /**
@@ -72,7 +72,7 @@ public:
 };
 
 PictureReplyPrivate::PictureReplyPrivate(PictureReply *q):
-    AbstractReplyPrivate(q)
+    AbstractGraphReplyPrivate(q)
 {
 }
 
@@ -90,18 +90,18 @@ QString PictureReplyPrivate::pictureName(const QString &graph, const QList<Argum
     QString suffix = arguments.first().second;
     QString newGraph = graph;
     newGraph.replace("/", "-");
-    return QString("%1_%2.jpg").arg(newGraph, suffix);
+    return QString("pic_%1_%2.jpg").arg(newGraph, suffix);
 }
 
 ////// End of private class //////
 
 PictureReply::PictureReply(QObject *parent):
-    AbstractReply(*(new PictureReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new PictureReplyPrivate(this)), parent)
 {
 }
 
 PictureReply::PictureReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractReply(*(new PictureReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new PictureReplyPrivate(this)), parent)
 {
     Q_D(PictureReply);
     d->networkAccessManager = networkAccessManager;
@@ -143,7 +143,7 @@ bool PictureReply::preprocesssRequest()
     Q_D(PictureReply);
 
     QDir dir (d->cacheFolderPath());
-    QString fileName = d->pictureName(d->graph, d->arguments);
+    QString fileName = d->pictureName(graph(), arguments());
 
     if (dir.exists(fileName)) {
         d->picturePath = dir.absoluteFilePath(fileName);
@@ -160,7 +160,7 @@ bool PictureReply::processData(QIODevice *dataSource)
     QString path = d->cacheFolderPath();
     QDir::root().mkpath(path);
     QDir dir (path);
-    QString fileName = d->pictureName(d->graph, d->arguments);
+    QString fileName = d->pictureName(graph(), arguments());
 
     QImage image;
     image.load(dataSource, "JPG");

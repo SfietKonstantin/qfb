@@ -20,7 +20,7 @@
  */
 
 #include "friendlistreply.h"
-#include "abstractreply_p.h"
+#include "abstractgraphreply_p.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QIODevice>
@@ -58,7 +58,7 @@ static const char *ID_KEY = "id";
  * @internal
  * @brief Private class for QFB::FriendListReplyPrivate
  */
-class FriendListReplyPrivate: public AbstractReplyPrivate
+class FriendListReplyPrivate: public AbstractGraphReplyPrivate
 {
 public:
     /**
@@ -77,19 +77,19 @@ private:
 };
 
 FriendListReplyPrivate::FriendListReplyPrivate(FriendListReply *q):
-    AbstractReplyPrivate(q)
+    AbstractGraphReplyPrivate(q)
 {
 }
 
 ////// End of private class //////
 
 FriendListReply::FriendListReply(QObject *parent):
-    AbstractReply(*(new FriendListReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new FriendListReplyPrivate(this)), parent)
 {
 }
 
 FriendListReply::FriendListReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractReply(*(new FriendListReplyPrivate(this)), parent)
+    AbstractGraphReply(*(new FriendListReplyPrivate(this)), parent)
 {
     Q_D(FriendListReply);
     d->networkAccessManager = networkAccessManager;
