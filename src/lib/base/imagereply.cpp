@@ -85,7 +85,7 @@ QString ImageReplyPrivate::cacheFolderPath()
 
 QString ImageReplyPrivate::imageName(const QUrl &url)
 {
-    QByteArray asciiUrl = url.toString().toAscii();
+    QByteArray asciiUrl = url.toString().toLocal8Bit();
     QByteArray encodedUrl = QCryptographicHash::hash(asciiUrl, QCryptographicHash::Md5);
     return QString("img_%1.jpg").arg(QString(encodedUrl.toHex()));
 }

@@ -94,7 +94,7 @@ inline QUrl graphUrl(const QString &graph, const QString &token,
  */
 inline QUrl parseUrl(const QString &urlString)
 {
-    return QUrl::fromPercentEncoding(urlString.toAscii());
+    return QUrl::fromPercentEncoding(urlString.toLocal8Bit());
 }
 
 }
