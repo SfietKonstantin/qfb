@@ -17,6 +17,11 @@
 #ifndef QFB_FEEDREPLY_H
 #define QFB_FEEDREPLY_H
 
+/**
+ * @file feedreply.h
+ * @brief Definition of QFB::FeedReply
+ */
+
 #include "abstractgraphreply.h"
 
 namespace QFB
@@ -24,6 +29,15 @@ namespace QFB
 
 class Post;
 class FeedReplyPrivate;
+/**
+ * @brief Reply containing a feed
+ *
+ * This class subclasses AbstractGraphReply, making it be able to parse
+ * feeds. This reply, when finished, will create a list of posts
+ * that have this reply as parent.
+ *
+ * @todo Allow the posts not to have this reply as parent.
+ */
 class QFBBASE_EXPORT FeedReply : public AbstractGraphReply
 {
     Q_OBJECT

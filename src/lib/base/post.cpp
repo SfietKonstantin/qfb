@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file post.cpp
+ * @brief Implementation of QFB::Post
+ */
+
 #include "post.h"
 #include "object_p.h"
 

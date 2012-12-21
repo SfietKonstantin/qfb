@@ -15,56 +15,47 @@
  ****************************************************************************************/
 
 #include "pictureloader.h"
+#include "loaderbase_p.h"
+
 #include "querymanager.h"
 #include "picturereply.h"
 #include "picture_p.h"
 
-#include <QtCore/QDebug>
-
 namespace QFB
 {
 
-class PictureLoaderPrivate
+class PictureLoaderPrivate: public LoaderBasePrivate
 {
 public:
     PictureLoaderPrivate(PictureLoader *q);
-    void slotFinished();
-    void slotFailed();
+    bool checkReply(const AbstractReply *reply);
+    void processReply(const AbstractReply *reply);
     static QString pictureString(PictureLoader::Type type);
-    QueryManager *queryManager;
     PictureLoader::Type type;
     QString picturePath;
-    PictureReply *reply;
 private:
-    PictureLoader * const q_ptr;
     Q_DECLARE_PUBLIC(PictureLoader)
 };
 
 PictureLoaderPrivate::PictureLoaderPrivate(PictureLoader *q):
-    q_ptr(q)
+    LoaderBasePrivate(q)
 {
-    queryManager = 0;
-    reply = 0;
     type = PictureLoader::Square;
 }
 
-void PictureLoaderPrivate::slotFinished()
+bool PictureLoaderPrivate::checkReply(const AbstractReply *reply)
 {
-    Q_Q(PictureLoader);
-    if (picturePath != reply->picturePath()) {
-        picturePath = reply->picturePath();
-        emit q->picturePathChanged();
-    }
-
-    reply->deleteLater();
-    reply = 0;
+        return qobject_cast<const PictureReply *>(reply);
 }
 
-void PictureLoaderPrivate::slotFailed()
+void PictureLoaderPrivate::processReply(const AbstractReply *reply)
 {
-    qDebug() << reply->error();
-    reply->deleteLater();
-    reply = 0;
+    Q_Q(PictureLoader);
+    const PictureReply *pictureReply = qobject_cast<const PictureReply *>(reply);
+    if (picturePath != pictureReply->picturePath()) {
+        picturePath = pictureReply->picturePath();
+        emit q->picturePathChanged();
+    }
 }
 
 QString PictureLoaderPrivate::pictureString(PictureLoader::Type type)
@@ -91,18 +82,8 @@ QString PictureLoaderPrivate::pictureString(PictureLoader::Type type)
 ////// End of private class //////
 
 PictureLoader::PictureLoader(QObject *parent) :
-    QObject(parent), d_ptr(new PictureLoaderPrivate(this))
+    AbstractGraphLoader(*(new PictureLoaderPrivate(this)), parent)
 {
-}
-
-PictureLoader::~PictureLoader()
-{
-}
-
-QueryManager * PictureLoader::queryManager() const
-{
-    Q_D(const PictureLoader);
-    return d->queryManager;
 }
 
 PictureLoader::Type PictureLoader::type() const
@@ -117,17 +98,6 @@ QString PictureLoader::picturePath() const
     return d->picturePath;
 }
 
-void PictureLoader::setQueryManager(QueryManager *queryManager)
-{
-    Q_D(PictureLoader);
-    if (d->queryManager != queryManager) {
-        d->queryManager = queryManager;
-        emit queryManagerChanged();
-
-    }
-}
-
-
 void PictureLoader::setType(Type type)
 {
     Q_D(PictureLoader);
@@ -137,25 +107,17 @@ void PictureLoader::setType(Type type)
     }
 }
 
-void PictureLoader::request(const QString &graph)
+AbstractGraphReply * PictureLoader::createReply(const QString &graph, const QString &arguments)
 {
     Q_D(PictureLoader);
-
-    if (!d->queryManager) {
-        return;
+    QString finalArguments = arguments;
+    QString newArguments = QString("%1=%2").arg(PICTURE_TYPE_KEY, d->pictureString(d->type));
+    if (!arguments.isEmpty()) {
+        finalArguments.append(",");
     }
+    finalArguments.append(newArguments);
 
-    if (d->reply) {
-        return;
-    }
-
-    QString arguments = QString("%1=%2").arg(PICTURE_TYPE_KEY, d->pictureString(d->type));
-
-    d->reply = d->queryManager->queryPicture(graph, arguments);
-    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    return queryManager()->queryPicture(graph, finalArguments);
 }
 
 }
-
-#include "moc_pictureloader.cpp"

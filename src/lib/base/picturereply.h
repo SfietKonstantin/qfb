@@ -31,9 +31,9 @@ class PictureReplyPrivate;
 /**
  * @brief Reply containing a picture
  *
- * This class subclasses AbstractReply, making it be able to get
+ * This class subclasses AbstractGraphReply, making it be able to get
  * and cache pictures. This reply, when finished, returns a
- * path to the cached version of the picture to download.
+ * path to the cached version of the downloaded picture.
  */
 class QFBBASE_EXPORT PictureReply : public AbstractGraphReply
 {

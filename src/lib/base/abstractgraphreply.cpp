@@ -15,8 +15,8 @@
  ****************************************************************************************/
 
 /**
- * @file abstractreply.cpp
- * @brief Implementation of QFB::AbstractReply
+ * @file abstractgraphreply.cpp
+ * @brief Implementation of QFB::AbstractGraphReply
  */
 
 #include "abstractgraphreply.h"

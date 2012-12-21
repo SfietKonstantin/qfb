@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file feedreply.cpp
+ * @brief Implementation of QFB::FeedReply
+ */
+
 #include "feedreply.h"
 #include "abstractgraphreply_p.h"
 

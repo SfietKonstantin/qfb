@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file abstractreply.cpp
+ * @brief Implementation of QFB::AbstractReply
+ */
+
 #include "abstractreply.h"
 #include "abstractreply_p.h"
 

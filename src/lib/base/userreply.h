@@ -32,7 +32,7 @@ class UserReplyPrivate;
 /**
  * @brief Reply containing an user
  *
- * This class subclasses AbstractReply, making it be able to get
+ * This class subclasses AbstractGraphReply, making it be able to get
  * users. This reply, when finished, will create an user that
  * have this reply as parent.
  *

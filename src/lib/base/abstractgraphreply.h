@@ -17,6 +17,11 @@
 #ifndef QFB_ABSTRACTGRAPHREPLY_H
 #define QFB_ABSTRACTGRAPHREPLY_H
 
+/**
+ * @file abstractgraphreply.h
+ * @brief Definition of QFB::AbstractGraphReply
+ */
+
 #include "abstractreply.h"
 #include <QtCore/QPair>
 

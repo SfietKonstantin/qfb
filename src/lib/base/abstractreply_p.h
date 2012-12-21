@@ -36,6 +36,10 @@ class QNetworkAccessManager;
 namespace QFB
 {
 class AbstractReply;
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractReply
+ */
 class AbstractReplyPrivate
 {
 public:

@@ -22,7 +22,6 @@ HEADERS +=  base_global.h \
             language.h \
             cover.h \
             post.h \
-#            status.h \
             abstractreply.h \
             abstractreply_p.h \
             imagereply.h \
@@ -41,7 +40,6 @@ SOURCES +=  object.cpp \
             language.cpp \
             cover.cpp \
             post.cpp \
-#            status.cpp \
             abstractreply.cpp \
             imagereply.cpp \
             abstractgraphreply.cpp \

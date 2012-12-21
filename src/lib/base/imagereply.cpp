@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file imagereply.cpp
+ * @brief Implementation of QFB::ImageReply
+ */
+
 #include "imagereply.h"
 #include "abstractreply_p.h"
 

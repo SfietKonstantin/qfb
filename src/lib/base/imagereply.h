@@ -17,12 +17,25 @@
 #ifndef QFB_IMAGEREPLY_H
 #define QFB_IMAGEREPLY_H
 
+/**
+ * @file imagereply.h
+ * @brief Definition of QFB::ImageReply
+ */
+
+
 #include "abstractreply.h"
 
 namespace QFB
 {
 
 class ImageReplyPrivate;
+/**
+ * @brief Reply containing a picture
+ *
+ * This class subclasses AbstractReply, making it be able to get
+ * and cache images, based on their URL. This reply, when finished,
+ * returns a path to the cached version of the downloaded image.
+ */
 class QFBBASE_EXPORT ImageReply: public AbstractReply
 {
     Q_OBJECT
@@ -43,6 +56,14 @@ public:
      * @return path to the picture.
      */
     QString imagePath() const;
+    /**
+     * @brief Perform a request
+     *
+     * This method is used to request a image, given it's URL. It
+     * simply perform the get request.
+     *
+     * @param url URL of the request.
+     */
     void request(const QUrl &url);
 protected:
     /**

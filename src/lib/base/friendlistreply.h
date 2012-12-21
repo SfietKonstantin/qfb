@@ -30,9 +30,9 @@ namespace QFB
 class UserBase;
 class FriendListReplyPrivate;
 /**
- * @brief Reply containing the friend list
+ * @brief Reply containing a list of friends
  *
- * This class subclasses AbstractReply, making it be able to parse
+ * This class subclasses AbstractGraphReply, making it be able to parse
  * friend lists. This reply, when finished, will create a list of users
  * that have this reply as parent.
  *

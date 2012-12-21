@@ -17,18 +17,15 @@
 #ifndef QFB_PICTURELOADER_H
 #define QFB_PICTURELOADER_H
 
-#include <QtCore/QObject>
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
-class QueryManager;
 class PictureLoaderPrivate;
-class PictureLoader : public QObject
+class PictureLoader : public AbstractGraphLoader
 {
     Q_OBJECT
     Q_ENUMS(Type)
-    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
-               NOTIFY queryManagerChanged)
     Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString picturePath READ picturePath NOTIFY picturePathChanged)
 public:
@@ -39,26 +36,17 @@ public:
         Large
     };
     explicit PictureLoader(QObject *parent = 0);
-    virtual ~PictureLoader();
-    QueryManager * queryManager() const;
     Type type() const;
     QString picturePath() const;
 public Q_SLOTS:
-    void setQueryManager(QueryManager *queryManager);
     void setType(Type type);
-    void request(const QString &graph);
 Q_SIGNALS:
-    void queryManagerChanged();
     void typeChanged();
     void picturePathChanged();
 protected:
-    QScopedPointer<PictureLoaderPrivate> d_ptr;
+    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
 private:
     Q_DECLARE_PRIVATE(PictureLoader)
-    /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotFailed())
-    /// @endcond
 };
 
 }

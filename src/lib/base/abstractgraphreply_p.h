@@ -37,10 +37,9 @@ namespace QFB
 {
 
 class AbstractGraphReply;
-
 /**
  * @internal
- * @brief Private class for QFB::AbstractReply
+ * @brief Private class for QFB::AbstractGraphReply
  */
 class AbstractGraphReplyPrivate: public AbstractReplyPrivate
 {
