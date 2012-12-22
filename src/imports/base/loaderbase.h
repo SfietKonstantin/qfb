@@ -26,6 +26,16 @@ namespace QFB
 class QueryManager;
 class AbstractReply;
 class LoaderBasePrivate;
+/**
+ * @brief Base class for a loader
+ *
+ * This class provides base properties and methods for a
+ * loader, that have to create and interact with replies
+ * and provide results.
+ *
+ * In order to create replies, a query manager can be set
+ * with the queryManager() property.
+ */
 class LoaderBase : public QObject
 {
     Q_OBJECT
@@ -59,7 +69,16 @@ protected:
      * @param parent parent object.
      */
     explicit LoaderBase(LoaderBasePrivate &dd, QObject *parent = 0);
-    void setReply(AbstractReply *reply);
+    /**
+     * @brief Handle the reply
+     *
+     * This method is used to handle the reply, it perform
+     * the different connections and perform it's lifecycle
+     * management.
+     *
+     * @param reply reply to handle.
+     */
+    void handleReply(AbstractReply *reply);
     /**
      * @short D-pointer
      */

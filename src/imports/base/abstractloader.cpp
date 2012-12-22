@@ -29,7 +29,7 @@ void AbstractLoader::request(const QUrl &url)
 {
     AbstractReply *reply = createReply(url);
     if (reply) {
-        setReply(reply);
+        handleReply(reply);
     }
 }
 

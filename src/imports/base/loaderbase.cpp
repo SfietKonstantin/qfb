@@ -86,7 +86,7 @@ void LoaderBase::setQueryManager(QueryManager *queryManager)
     }
 }
 
-void LoaderBase::setReply(AbstractReply *reply)
+void LoaderBase::handleReply(AbstractReply *reply)
 {
     Q_D(LoaderBase);
     if (!d->queryManager) {

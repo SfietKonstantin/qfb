@@ -14,23 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "abstractgraphloader.h"
-#include "abstractgraphreply.h"
+#ifndef USERINFOHELPER_H
+#define USERINFOHELPER_H
 
-namespace QFB
+#include <QtCore/QObject>
+#include "user.h"
+
+class UserInfoHelper : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QFB::User * user READ user WRITE setUser NOTIFY userChanged)
+    Q_PROPERTY(QString formattedInformations READ formattedInformations
+               NOTIFY formattedInformationsChanged)
+    Q_PROPERTY(QString bio READ bio NOTIFY bioChanged)
+    Q_PROPERTY(QString quotes READ quotes NOTIFY quotesChanged)
+public:
+    explicit UserInfoHelper(QObject *parent = 0);
+    QFB::User * user() const;
+    QString formattedInformations() const;
+    QString bio() const;
+    QString quotes() const;
+public slots:
+    void setUser(QFB::User *user);
+signals:
+    void formattedInformationsChanged();
+    void userChanged();
+    void bioChanged();
+    void quotesChanged();
+private:
+    void createText();
+    QFB::User *m_user;
+    QString m_formattedInformations;
+    QString m_bio;
+    QString m_quotes;
+};
 
-AbstractGraphLoader::AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent):
-    LoaderBase(dd, parent)
-{
-}
-
-void AbstractGraphLoader::request(const QString &graph, const QString &arguments)
-{
-    AbstractReply *reply = createReply(graph, arguments);
-    if (reply) {
-        handleReply(reply);
-    }
-}
-
-}
+#endif // USERINFOHELPER_H

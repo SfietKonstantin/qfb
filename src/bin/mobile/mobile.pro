@@ -23,11 +23,13 @@ LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 HEADERS +=      tokenmanager.h \
     networkaccessmanagerfactory.h \
     networkaccessmanager.h \
+    userinfohelper.h
 
 SOURCES +=      main.cpp \
                 tokenmanager.cpp \
     networkaccessmanagerfactory.cpp \
     networkaccessmanager.cpp \
+    userinfohelper.cpp
 
 
 OTHER_FILES +=  qml/main.qml \
@@ -39,7 +41,8 @@ OTHER_FILES +=  qml/main.qml \
     qml/FriendListPage.qml \
     qml/FriendEntry.qml \
     qml/UserPage.qml \
-    qml/Container.qml
+    qml/Container.qml \
+    qml/UserInfo.qml
 
 # Deployment
 contains(CONFIG, optify) {

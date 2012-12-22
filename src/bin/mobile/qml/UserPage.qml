@@ -17,6 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
 Page {
@@ -59,15 +60,15 @@ Page {
         }
     }
 
+    ScrollDecorator { flickableItem: flickable }
     Flickable {
         id: flickable
         property bool displayFeed: true
         anchors.fill: parent
         contentWidth: width
         contentHeight: banner.height + portraitContainer.height / 2 + Ui.MARGIN_DEFAULT
-                       + (displayFeed ? 0 : infoContainer.height)
+                       + (displayFeed ? 0 : userInfo.height)
 
-        ScrollDecorator { flickableItem: parent }
 
         Banner {
             id: banner
@@ -111,108 +112,10 @@ Page {
             }
         }
 
-        Item {
-            id: infoContainer
-            visible: !flickable.displayFeed
+        UserInfo {
+            id: userInfo
             anchors.top: portraitContainer.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            width: parent.width
-            height: Ui.MARGIN_DEFAULT + informationsContainer.height
-                    + Ui.MARGIN_DEFAULT + bioContainer.height + Ui.MARGIN_DEFAULT
-                    + quotesContainer.height + Ui.MARGIN_DEFAULT
-
-            Container {
-                id: informationsContainer
-                title: qsTr("Informations")
-                visible: informations.text != ""
-                content: Item {
-                    width: parent.width
-                    height: informations.height
-
-                    Label {
-                        id: informations
-                        function createText() {
-                            if (userLoader.user == null) {
-                                return ""
-                            }
-                            var text = ""
-
-                            if (userLoader.user.gender != "") {
-                                text += "<b>" + qsTr("Gender") + "</b>: "
-                                        + userLoader.user.gender + "<br/>"
-                            }
-                            text += "<br/>"
-
-                            if(Qt.formatDate(userLoader.user.birthday, "yyyy") != "") {
-                                text += "<b>" + qsTr("Birthday") + "</b>: "
-                                if(Qt.formatDate(userLoader.user.birthday, "yyyy") == "1900") {
-                                    text += Qt.formatDate(userLoader.user.birthday, "dd/MM")
-                                } else {
-                                    text += Qt.formatDate(userLoader.user.birthday, "dd/MM/yyyy")
-                                }
-                                text += "<br/>"
-                            }
-
-                            text += "<br/>"
-
-                            if (userLoader.user.religion != "") {
-                                text += "<b>" + qsTr("Religion") + "</b>: "
-                                        + userLoader.user.religion + "<br/>"
-                            }
-                            if (userLoader.user.political != "") {
-                                text += "<b>" + qsTr("Political view") + "</b>: "
-                                        + userLoader.user.political + "<br/>"
-                            }
-
-                            text += "\n"
-
-                            return text.trim()
-                        }
-
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        text: createText()
-
-                        Connections {
-                            target: userLoader
-                            onUserChanged: informations.text = informations.createText()
-                        }
-                    }
-                }
-            }
-
-            Container {
-                id: bioContainer
-                anchors.top: informationsContainer.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-                title: qsTr("Biography")
-                visible: bio.text != ""
-                content: Item {
-                    width: parent.width
-                    height: bio.height
-                    Label {
-                        id: bio
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        text: userLoader.user == null ? "" : userLoader.user.bio
-                    }
-                }
-            }
-
-            Container {
-                id: quotesContainer
-                anchors.top: bioContainer.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-                title: qsTr("Quotes")
-                visible: quotes.text != ""
-                content: Item {
-                    width: parent.width
-                    height: quotes.height
-                    Label {
-                        id: quotes
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        text: userLoader.user == null ? "" : userLoader.user.quotes
-                    }
-                }
-            }
+            user: userLoader.user
         }
     }
 }

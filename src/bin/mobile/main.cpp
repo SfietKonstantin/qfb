@@ -20,6 +20,7 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
 
+#include "userinfohelper.h"
 #include "querymanager.h"
 #include "loginmanager.h"
 #include "tokenmanager.h"
@@ -34,6 +35,8 @@ int main(int argc, char **argv)
     QFB::QueryManager queryManager;
     QFB::LoginManager loginManager;
     TokenManager tokenManager;
+
+    qmlRegisterType<UserInfoHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBUserInfoHelper");
 
     QDeclarativeView view;
     view.engine()->addImportPath(IMPORT_PATH);
