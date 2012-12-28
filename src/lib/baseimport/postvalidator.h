@@ -14,33 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file userbase.cpp
- * @brief Implementation of QFB::UserBase
- */
+#ifndef QFB_POSTVALIDATOR_H
+#define QFB_POSTVALIDATOR_H
 
-#include "userbase.h"
-#include "object_p.h"
+#include <QtCore/QObject>
+#include <QtCore/QMetaType>
 
 namespace QFB
 {
 
-UserBase::UserBase(QObject *parent) :
-    Object(parent)
+class Post;
+class PostValidator: public QObject
 {
-}
-
-UserBase::UserBase(const PropertiesMap propertiesMap, QObject *parent):
-    Object(parent)
-{
-    Q_D(Object);
-    d->propertiesMap = propertiesMap;
-}
-
-QString UserBase::name() const
-{
-    Q_D(const Object);
-    return d->propertiesMap.value(NameProperty).toString();
-}
+    Q_OBJECT
+public:
+    explicit PostValidator(QObject *parent = 0);
+    virtual ~PostValidator();
+    virtual bool validate(Post *post);
+};
 
 }
+
+Q_DECLARE_METATYPE(QFB::PostValidator *)
+
+#endif // QFB_POSTVALIDATOR_H

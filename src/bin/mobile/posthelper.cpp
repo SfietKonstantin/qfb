@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,51 +14,73 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+#include "posthelper.h"
+#include "namedobject.h"
 
-Page {
-    id: container
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
-        }
+#include <QtCore/QDebug>
+
+PostHelper::PostHelper(QObject *parent) :
+    QObject(parent)
+{
+    m_post = 0;
+    m_haveAdressee = false;
+}
+
+QFB::Post * PostHelper::post() const
+{
+    return m_post;
+}
+
+bool PostHelper::haveAdressee() const
+{
+    return m_haveAdressee;
+}
+
+QFB::NamedObject * PostHelper::to() const
+{
+    return m_to;
+}
+
+QString PostHelper::message() const
+{
+    return m_message;
+}
+
+void PostHelper::setPost(QFB::Post *post)
+{
+    if (m_post != post) {
+        m_post = post;
+        createPost();
+        emit postChanged();
+    }
+}
+
+void PostHelper::createPost()
+{
+    // Create the title
+    // Extract the poster
+    QString message;
+
+    bool haveAdressee = false;
+    QFB::NamedObject *to = 0;
+    if (m_post->to().count() == 1) {
+        haveAdressee = true;
+        to = m_post->to().first();
+    }
+    message = m_post->message();
+
+    if (m_haveAdressee != haveAdressee) {
+        m_haveAdressee = haveAdressee;
+        emit haveAdresseeChanged();
     }
 
-    function load() {
-        friendListModel.request("me/friends")
+    if (m_to != to) {
+        m_to = to;
+        emit toChanged();
     }
 
-    Item {
-        anchors.fill: parent
-
-        Banner {
-            id: banner
-            name: me.name
-            coverUrl: me.coverUrl
-        }
-
-        QFBFriendListModel {
-            id: friendListModel
-            queryManager: QUERY_MANAGER
-            autoLoadNext: true
-        }
-
-        ListView {
-            clip: true
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            model: friendListModel
-            delegate: FriendEntry {
-                facebookId: model.data.id
-                name: model.data.name
-            }
-            ScrollDecorator {flickableItem: parent}
-            cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
-        }
+    if (m_message != message) {
+        m_message = message;
+        emit messageChanged();
     }
-
 }

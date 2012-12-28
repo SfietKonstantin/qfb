@@ -21,6 +21,8 @@
 #include <QtDeclarative/QDeclarativeView>
 
 #include "userinfohelper.h"
+#include "posthelper.h"
+#include "mobilepostvalidator.h"
 #include "querymanager.h"
 #include "loginmanager.h"
 #include "tokenmanager.h"
@@ -37,6 +39,9 @@ int main(int argc, char **argv)
     TokenManager tokenManager;
 
     qmlRegisterType<UserInfoHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBUserInfoHelper");
+    qmlRegisterType<PostHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBPostHelper");
+    qmlRegisterType<MobilePostValidator>("org.SfietKonstantin.qfb.mobile", 4, 0,
+                                         "QFBMobilePostValidator");
 
     QDeclarativeView view;
     view.engine()->addImportPath(IMPORT_PATH);

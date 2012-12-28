@@ -29,7 +29,7 @@ LoaderBasePrivate::LoaderBasePrivate(LoaderBase *q):
 {
     queryManager = 0;
     reply = 0;
-    newReply = 0;
+    loading = false;
 }
 
 LoaderBasePrivate::~LoaderBasePrivate()
@@ -38,26 +38,24 @@ LoaderBasePrivate::~LoaderBasePrivate()
 
 void LoaderBasePrivate::slotFinished()
 {
-    if (!checkReply(newReply)) {
-        newReply->deleteLater();
-        newReply = 0;
-        return;
+    Q_Q(LoaderBase);
+    if (checkReply(reply)) {
+        processReply(reply);
     }
-
-    if (reply) {
-        reply->deleteLater();
-    }
-    reply = newReply;
-    newReply = 0;
-
-    processReply(reply);
+    reply->deleteLater();
+    reply = 0;
+    loading = false;
+    emit q->loadingChanged();
 }
 
 void LoaderBasePrivate::slotFailed()
 {
-    qDebug() << newReply->error();
-    newReply->deleteLater();
-    newReply = 0;
+    Q_Q(LoaderBase);
+    qDebug() << reply->error();
+    reply->deleteLater();
+    reply = 0;
+    loading = false;
+    emit q->loadingChanged();
 }
 
 ////// End of private class //////
@@ -77,6 +75,12 @@ QueryManager * LoaderBase::queryManager() const
     return d->queryManager;
 }
 
+bool LoaderBase::loading() const
+{
+    Q_D(const LoaderBase);
+    return d->loading;
+}
+
 void LoaderBase::setQueryManager(QueryManager *queryManager)
 {
     Q_D(LoaderBase);
@@ -92,13 +96,15 @@ void LoaderBase::handleReply(AbstractReply *reply)
     if (!d->queryManager) {
         return;
     }
-    if (d->newReply) {
+    if (d->reply) {
         return;
     }
 
-    d->newReply = reply;
-    connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    d->reply = reply;
+    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    d->loading = true;
+    emit loadingChanged();
 }
 
 }

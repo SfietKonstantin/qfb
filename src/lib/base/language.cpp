@@ -31,10 +31,8 @@ Language::Language(QObject *parent):
 }
 
 Language::Language(const PropertiesMap propertiesMap, QObject *parent):
-    Object(parent)
+    Object(propertiesMap, parent)
 {
-    Q_D(Object);
-    d->propertiesMap = propertiesMap;
 }
 
 QString Language::name() const

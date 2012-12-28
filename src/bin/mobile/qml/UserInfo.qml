@@ -22,7 +22,6 @@ import "UiConstants.js" as Ui
 Item {
     id: container
     property QtObject user
-    visible: !flickable.displayFeed
     width: parent.width
     height: Ui.MARGIN_DEFAULT + informationsContainer.height
             + Ui.MARGIN_DEFAULT + bioContainer.height + Ui.MARGIN_DEFAULT

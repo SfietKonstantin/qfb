@@ -12,29 +12,17 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#include "abstractgraphloader.h"
-#include "abstractgraphreply.h"
+#ifndef BASEIMPORT_GLOBAL_H
+#define BASEIMPORT_GLOBAL_H
 
-namespace QFB
-{
+#include <QtCore/qglobal.h>
 
-AbstractGraphLoader::AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent):
-    LoaderBase(dd, parent)
-{
-}
+#if defined(BASEIMPORT_LIBRARY)
+#  define BASEIMPORTSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define BASEIMPORTSHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-void AbstractGraphLoader::request(const QString &graph, const QString &arguments)
-{
-    if (!queryManager()) {
-        return;
-    }
-
-    AbstractReply *reply = createReply(graph, arguments);
-    if (reply) {
-        handleReply(reply);
-    }
-}
-
-}
+#endif // BASEIMPORT_GLOBAL_H

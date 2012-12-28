@@ -24,6 +24,7 @@ namespace QFB
 
 class QueryManager;
 class FeedModelPrivate;
+class PostValidator;
 
 /**
  * @brief Model for a feed
@@ -38,6 +39,8 @@ class FeedModelPrivate;
 class FeedModel: public AbstractLoadableModel
 {
     Q_OBJECT
+    Q_PROPERTY(QFB::PostValidator * validator READ validator WRITE setValidator
+               NOTIFY validatorChanged)
 public:
     /**
      * @short Model roles
@@ -68,8 +71,14 @@ public:
      * @return retrieved data as a variant.
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    PostValidator * validator() const;
+public Q_SLOTS:
+    void setValidator(PostValidator *validator);
+Q_SIGNALS:
+    void validatorChanged();
 protected:
-    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
+    AbstractGraphPagingReply * createReply(const QString &graph,
+                                           const QString &arguments = QString());
     /**
      * @brief Role names
      * @return role names.

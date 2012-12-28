@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,51 +14,43 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+#ifndef QFB_ABSTRACTGRAPHPAGINGREPLY_H
+#define QFB_ABSTRACTGRAPHPAGINGREPLY_H
 
-Page {
-    id: container
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
-        }
-    }
+#include "abstractgraphreply.h"
 
-    function load() {
-        friendListModel.request("me/friends")
-    }
-
-    Item {
-        anchors.fill: parent
-
-        Banner {
-            id: banner
-            name: me.name
-            coverUrl: me.coverUrl
-        }
-
-        QFBFriendListModel {
-            id: friendListModel
-            queryManager: QUERY_MANAGER
-            autoLoadNext: true
-        }
-
-        ListView {
-            clip: true
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            model: friendListModel
-            delegate: FriendEntry {
-                facebookId: model.data.id
-                name: model.data.name
-            }
-            ScrollDecorator {flickableItem: parent}
-            cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
-        }
-    }
+namespace QFB
+{
+class AbstractGraphPagingReplyPrivate;
+class QFBBASE_EXPORT AbstractGraphPagingReply: public AbstractGraphReply
+{
+public:
+    /**
+     * @brief Invalid constructor
+     * @param parent parent object.
+     */
+    explicit AbstractGraphPagingReply(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param networkAccessManager network access manager.
+     * @param parent parent object.
+     */
+    explicit AbstractGraphPagingReply(QNetworkAccessManager *networkAccessManager,
+                                         QObject *parent = 0);
+    QString nextPageGraph() const;
+    QString nextPageArguments() const;
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd D-pointer.
+     * @param parent parent object.
+     */
+    explicit AbstractGraphPagingReply(AbstractGraphReplyPrivate &dd, QObject *parent = 0);
+    void setNextPageUrl(const QUrl &url);
+private:
+    Q_DECLARE_PRIVATE(AbstractGraphPagingReply)
+};
 
 }
+
+#endif // QFB_ABSTRACTGRAPHPAGINGREPLY_H

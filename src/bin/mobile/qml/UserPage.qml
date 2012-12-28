@@ -39,7 +39,10 @@ Page {
             style: TabButtonStyle {}
             TabButton {
                 text: qsTr("Feed")
-                onClicked: flickable.displayFeed = true
+                onClicked: {
+                    flickable.displayFeed = true
+                    feed.load()
+                }
             }
             TabButton {
                 text: qsTr("Informations")
@@ -51,11 +54,13 @@ Page {
     QFBUserLoader {
         id: userLoader
         queryManager: QUERY_MANAGER
-        onUserChanged: {
-            if (!banner.loaded) {
-                banner.loaded = true
-                banner.coverUrl = user.cover.source
-                userLoader.request(facebookId)
+        onLoadingChanged: {
+            if (!loading) {
+                if (!banner.loaded) {
+                    banner.loaded = true
+                    banner.coverUrl = user.cover.source
+                    userLoader.request(facebookId)
+                }
             }
         }
     }
@@ -66,8 +71,8 @@ Page {
         property bool displayFeed: true
         anchors.fill: parent
         contentWidth: width
-        contentHeight: banner.height + portraitContainer.height / 2 + Ui.MARGIN_DEFAULT
-                       + (displayFeed ? 0 : userInfo.height)
+        contentHeight: banner.height + (displayFeed ? feed.height : userInfo.height)
+                       + Ui.MARGIN_DEFAULT
 
 
         Banner {
@@ -81,7 +86,7 @@ Page {
             id: portraitContainer
             opacity: 0
             anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            anchors.bottom: banner.bottom; anchors.bottomMargin: - height / 2
+            anchors.bottom: banner.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
             width: portrait.width + Ui.MARGIN_SMALL
             height: portrait.height + Ui.MARGIN_SMALL
             color: "white"
@@ -114,8 +119,17 @@ Page {
 
         UserInfo {
             id: userInfo
-            anchors.top: portraitContainer.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+            visible: !flickable.displayFeed
+            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             user: userLoader.user
+
+        }
+
+        Feed {
+            id: feed
+            visible: flickable.displayFeed
+            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+            graph: "me/feed"
         }
     }
 }

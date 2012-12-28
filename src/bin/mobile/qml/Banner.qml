@@ -25,7 +25,9 @@ Item {
     property bool large: false
     anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
     height: !large ? Ui.BANNER_HEIGHT_DEFAULT : Ui.BANNER_HEIGHT_LARGE
-    onCoverUrlChanged: coverImageLoader.request(coverUrl)
+    onCoverUrlChanged: {
+        coverImageLoader.request(coverUrl)
+    }
 
     Rectangle {
         id: coverBackground

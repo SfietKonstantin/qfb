@@ -14,51 +14,35 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
-Page {
-    id: container
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
+Image {
+    id: picture
+    property QtObject queryManager
+    property string facebookId
+    width: Ui.ICON_SIZE_DEFAULT
+    height: Ui.ICON_SIZE_DEFAULT
+    smooth: true
+    source: pictureLoader.picturePath
+    asynchronous: true
+    opacity: 0
+    states: State {
+        name: "visible"; when: picture.status == Image.Ready
+        PropertyChanges {
+            target: picture
+            opacity: 1
         }
     }
-
-    function load() {
-        friendListModel.request("me/friends")
+    Behavior on opacity {
+        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
     }
 
-    Item {
-        anchors.fill: parent
-
-        Banner {
-            id: banner
-            name: me.name
-            coverUrl: me.coverUrl
-        }
-
-        QFBFriendListModel {
-            id: friendListModel
-            queryManager: QUERY_MANAGER
-            autoLoadNext: true
-        }
-
-        ListView {
-            clip: true
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            model: friendListModel
-            delegate: FriendEntry {
-                facebookId: model.data.id
-                name: model.data.name
-            }
-            ScrollDecorator {flickableItem: parent}
-            cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
-        }
+    QFBPictureLoader {
+        id: pictureLoader
+        queryManager: picture.queryManager
+        Component.onCompleted: request(picture.facebookId + "/picture")
     }
-
 }

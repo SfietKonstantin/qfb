@@ -73,12 +73,14 @@ PageStackWindow {
             request("me", "fields=name")
         }
         queryManager: QUERY_MANAGER
-        onUserChanged: {
-            if (me.name == "") {
-                me.name = user.name
-                request("me", "fields=cover")
-            } else if (me.coverUrl == "") {
-                me.coverUrl = user.cover.source
+        onLoadingChanged: {
+            if (!loading) {
+                if (me.name == "") {
+                    me.name = user.name
+                    request("me", "fields=cover")
+                } else if (me.coverUrl == "") {
+                    me.coverUrl = user.cover.source
+                }
             }
         }
     }

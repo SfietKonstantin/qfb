@@ -14,57 +14,38 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERBASE_H
-#define QFB_USERBASE_H
+#ifndef POSTHELPER_H
+#define POSTHELPER_H
 
-/**
- * @file userbase.h
- * @brief Definition of QFB::UserBase
- */
+#include <QtCore/QObject>
+#include "post.h"
 
-#include "base_global.h"
-#include "object.h"
-
-namespace QFB
-{
-
-/**
- * @brief Base entries for a user
- *
- * This class represents the base entries for an user in Facebook.
- * Extending QFB::Object, it contains the name of a friend, that
- * can be accessed through the name() property.
- */
-class QFBBASE_EXPORT UserBase : public Object
+class PostHelper : public QObject
 {
     Q_OBJECT
-    /**
-     * @short The user's full name
-     */
-    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QFB::Post * post READ post WRITE setPost NOTIFY postChanged)
+    Q_PROPERTY(bool haveAdressee READ haveAdressee NOTIFY haveAdresseeChanged)
+    Q_PROPERTY(QFB::NamedObject * to READ to NOTIFY toChanged)
+    Q_PROPERTY(QString message READ message NOTIFY messageChanged)
 public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit UserBase(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param propertiesMap properties.
-     * @param parent parent object.
-     */
-    explicit UserBase(const PropertiesMap propertiesMap, QObject *parent = 0);
-    /**
-     * @brief Name
-     * @return name.
-     */
-    QString name() const;
+    explicit PostHelper(QObject *parent = 0);
+    QFB::Post * post() const;
+    bool haveAdressee() const;
+    QFB::NamedObject * to() const;
+    QString message() const;
+public slots:
+    void setPost(QFB::Post *post);
+signals:
+    void postChanged();
+    void haveAdresseeChanged();
+    void toChanged();
+    void messageChanged();
 private:
-    Q_DECLARE_PRIVATE(Object)
+    void createPost();
+    QFB::Post *m_post;
+    bool m_haveAdressee;
+    QFB::NamedObject *m_to;
+    QString m_message;
 };
 
-}
-
-Q_DECLARE_METATYPE(QFB::UserBase *)
-
-#endif // QFB_USERBASE_H
+#endif // POSTHELPER_H

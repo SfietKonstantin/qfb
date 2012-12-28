@@ -23,7 +23,7 @@
  */
 
 
-#include "userbase.h"
+#include "namedobject.h"
 
 #include <QtCore/QDate>
 #include <QtCore/QUrl>
@@ -85,9 +85,10 @@ namespace QFB
  *
  * @see QFB::Property
  */
-class QFBBASE_EXPORT User : public UserBase
+class QFBBASE_EXPORT User : public NamedObject
 {
     Q_OBJECT
+    Q_ENUMS(Gender)
     /**
      * @short The user's first name
      */
@@ -100,11 +101,10 @@ class QFBBASE_EXPORT User : public UserBase
      * @short The user's last name
      */
     Q_PROPERTY(QString lastName READ lastName CONSTANT)
-    /// @todo Do better for gender
     /**
      * @short The user's gender
      */
-    Q_PROPERTY(QString gender READ gender CONSTANT)
+    Q_PROPERTY(Gender gender READ gender CONSTANT)
     /**
      * @short The user's locale
      *
@@ -190,7 +190,7 @@ class QFBBASE_EXPORT User : public UserBase
     /**
      * @short The user's significant other
      */
-    Q_PROPERTY(QFB::UserBase * significantOther READ significantOther CONSTANT)
+    Q_PROPERTY(QFB::NamedObject * significantOther READ significantOther CONSTANT)
     /// @todo video_upload_limits
     /**
      * @short The URL of the user's personal website
@@ -198,6 +198,24 @@ class QFBBASE_EXPORT User : public UserBase
     Q_PROPERTY(QUrl website READ website CONSTANT)
     /// @todo work
 public:
+    /**
+     * @brief Enumeration describing the gender
+     */
+    enum Gender {
+        /**
+         * @short Unknown
+         */
+        Unknown,
+        /**
+         * @short Male
+         */
+        Male,
+        /**
+         * @short Female
+         */
+        Female
+    };
+
     /**
      * @brief Invalid constructor
      * @param parent parent object.
@@ -228,7 +246,7 @@ public:
      * @brief Gender
      * @return gender.
      */
-    QString gender() const;
+    Gender gender() const;
     /**
      * @brief Locale
      * @return locale.
@@ -308,7 +326,7 @@ public:
      * @brief Significant other
      * @return significant other.
      */
-    UserBase * significantOther() const;
+    NamedObject * significantOther() const;
     /**
      * @brief Website
      * @return website.

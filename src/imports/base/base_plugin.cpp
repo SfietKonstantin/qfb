@@ -30,7 +30,7 @@
 #endif
 
 #include "object.h"
-#include "userbase.h"
+#include "namedobject.h"
 #include "user.h"
 #include "cover.h"
 #include "language.h"
@@ -41,6 +41,7 @@
 #include "pictureloader.h"
 #include "userloader.h"
 #include "feedmodel.h"
+#include "postvalidator.h"
 
 namespace QFB
 {
@@ -66,7 +67,7 @@ void BasePlugin5::registerTypes(const char *uri)
     // @uri org.SfietKonstantin.qfb
     qmlRegisterUncreatableType<QFB::Object>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBObject",
                                             "QFBObject cannot be created");
-    qmlRegisterUncreatableType<QFB::UserBase>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserBase",
+    qmlRegisterUncreatableType<QFB::NamedObject>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserBase",
                                               "QFBUserBase cannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
                                           "QFBUser cannot be created");
@@ -82,6 +83,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
+    qmlRegisterType<QFB::PostValidator>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostValidator");
 }
 
 }

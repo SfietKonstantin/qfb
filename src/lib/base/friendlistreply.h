@@ -22,12 +22,12 @@
  * @brief Definition of QFB::FriendListReply
  */
 
-#include "abstractgraphreply.h"
+#include "abstractgraphpagingreply.h"
 
 namespace QFB
 {
 
-class UserBase;
+class NamedObject;
 class FriendListReplyPrivate;
 /**
  * @brief Reply containing a list of friends
@@ -42,7 +42,7 @@ class FriendListReplyPrivate;
  *
  * @todo Allow the users not to have this reply as parent.
  */
-class FriendListReply: public AbstractGraphReply
+class FriendListReply: public AbstractGraphPagingReply
 {
     Q_OBJECT
 public:
@@ -58,14 +58,10 @@ public:
      */
     explicit FriendListReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
     /**
-     * @brief Destructor
-     */
-    virtual ~FriendListReply();
-    /**
      * @brief Friend list
      * @return friend list.
      */
-    QList<UserBase *> friendList() const;
+    QList<NamedObject *> friendList() const;
 protected:
     /**
      * @brief Implementation of AbstractReply::processData()

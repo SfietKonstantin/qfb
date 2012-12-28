@@ -17,7 +17,7 @@ HEADERS +=  base_global.h \
             jsonhelper_p.h \
             object.h \
             object_p.h \
-            userbase.h \
+            namedobject.h \
             user.h \
             language.h \
             cover.h \
@@ -33,9 +33,13 @@ HEADERS +=  base_global.h \
             picturereply.h \
             userreply.h \
             feedreply.h \
+    abstractgraphpagingreply.h \
+    abstractgraphpagingreply_p.h \
+    abstractgraphobjectreply.h \
+    abstractgraphobjectreply_p.h
 
 SOURCES +=  object.cpp \
-            userbase.cpp \
+            namedobject.cpp \
             user.cpp \
             language.cpp \
             cover.cpp \
@@ -48,6 +52,8 @@ SOURCES +=  object.cpp \
             picturereply.cpp \
             userreply.cpp \
             feedreply.cpp \
+    abstractgraphpagingreply.cpp \
+    abstractgraphobjectreply.cpp
 
 # Deployment
 target.path = $${LIBDIR}

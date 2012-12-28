@@ -27,7 +27,7 @@
 namespace QFB
 {
 
-class AbstractGraphReply;
+class AbstractGraphPagingReply;
 class QueryManager;
 class AbstractLoadableModelPrivate;
 /**
@@ -55,6 +55,9 @@ class AbstractLoadableModel : public QAbstractListModel
      */
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(bool autoLoadNext READ autoLoadNext WRITE setAutoLoadNext
+               NOTIFY autoLoadNextChanged)
 public:
     /**
      * @brief Destructor
@@ -70,6 +73,8 @@ public:
      * @return query manager.
      */
     QueryManager * queryManager() const;
+    bool loading() const;
+    bool autoLoadNext() const;
 public Q_SLOTS:
     /**
      * @brief Set the query manager
@@ -82,6 +87,8 @@ public Q_SLOTS:
      * @param arguments arguments.
      */
     void request(const QString &graph, const QString &arguments = QString());
+    void setAutoLoadNext(bool autoLoadNext);
+    void loadNext();
 Q_SIGNALS:
     /**
      * @short Count changed
@@ -91,6 +98,8 @@ Q_SIGNALS:
      * @brief Query manager changed
      */
     void queryManagerChanged();
+    void loadingChanged();
+    void autoLoadNextChanged();
 protected:
     /**
      * @brief D-pointer constructor
@@ -108,8 +117,8 @@ protected:
      * @param arguments arguments.
      * @return a reply.
      */
-    virtual AbstractGraphReply * createReply(const QString &graph,
-                                        const QString &arguments = QString()) = 0;
+    virtual AbstractGraphPagingReply * createReply(const QString &graph,
+                                                   const QString &arguments = QString()) = 0;
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     /**
      * @brief Role names

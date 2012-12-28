@@ -16,20 +16,26 @@ DEFINES += 'IMPORT_PATH=\'\"$${IMPORTDIR}\"\''
 
 INCLUDEPATH += ../../lib/login
 INCLUDEPATH += ../../lib/base
+INCLUDEPATH += ../../lib/baseimport
 LIBS += -L../../lib/login -l$${NAME}login
 LIBS += -L../../lib/base -l$${NAME}
+LIBS += -L../../lib/baseimport -l$${NAME}import
 LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 HEADERS +=      tokenmanager.h \
     networkaccessmanagerfactory.h \
     networkaccessmanager.h \
-    userinfohelper.h
+    userinfohelper.h \
+    posthelper.h \
+    mobilepostvalidator.h
 
 SOURCES +=      main.cpp \
                 tokenmanager.cpp \
     networkaccessmanagerfactory.cpp \
     networkaccessmanager.cpp \
-    userinfohelper.cpp
+    userinfohelper.cpp \
+    posthelper.cpp \
+    mobilepostvalidator.cpp
 
 
 OTHER_FILES +=  qml/main.qml \
@@ -42,7 +48,10 @@ OTHER_FILES +=  qml/main.qml \
     qml/FriendEntry.qml \
     qml/UserPage.qml \
     qml/Container.qml \
-    qml/UserInfo.qml
+    qml/UserInfo.qml \
+    qml/Feed.qml \
+    qml/Post.qml \
+    qml/FacebookPicture.qml
 
 # Deployment
 contains(CONFIG, optify) {

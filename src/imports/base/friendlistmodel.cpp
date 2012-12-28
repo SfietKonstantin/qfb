@@ -22,8 +22,10 @@
 #include "friendlistmodel.h"
 #include "abstractloadablemodel_p.h"
 
+#include <QtCore/QDebug>
+
 #include "querymanager.h"
-#include "userbase.h"
+#include "namedobject.h"
 #include "friendlistreply.h"
 
 namespace QFB
@@ -36,7 +38,7 @@ namespace QFB
  * @param friend2 second friend.
  * @return if the first friend is smaller (in the lexicographical sense) to the second.
  */
-bool nameSortLesser(const UserBase *friend1, const UserBase *friend2)
+bool nameSortLesser(const NamedObject *friend1, const NamedObject *friend2)
 {
     return friend1->name() < friend2->name();
 }
@@ -60,12 +62,14 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    bool processReply(const AbstractGraphReply *reply);
+    bool processReply(const AbstractGraphPagingReply *reply);
+    virtual void clear();
+    QList<NamedObject *> temporaryData;
     /**
      * @internal
      * @brief Data
      */
-    QList<UserBase *> data;
+    QList<NamedObject *> data;
 private:
     Q_DECLARE_PUBLIC(FriendListModel)
 };
@@ -75,7 +79,7 @@ FriendListModelPrivate::FriendListModelPrivate(FriendListModel *q):
 {
 }
 
-bool FriendListModelPrivate::processReply(const AbstractGraphReply *reply)
+bool FriendListModelPrivate::processReply(const AbstractGraphPagingReply *reply)
 {
     Q_Q(FriendListModel);
 
@@ -84,19 +88,36 @@ bool FriendListModelPrivate::processReply(const AbstractGraphReply *reply)
         return false;
     }
 
-    // Clean old data
+    QList<NamedObject *> friendList = friendListReply->friendList();
+    if (friendList.isEmpty()) {
+        setDoNotHaveNext();
+        qSort(temporaryData.begin(), temporaryData.end(), nameSortLesser);
+        q->beginInsertRows(QModelIndex(), q->rowCount(), temporaryData.count() - 1);
+        data = temporaryData;
+        temporaryData.clear();
+        emit q->countChanged();
+        q->endInsertRows();
+        return true;
+    }
+
+    foreach (NamedObject *user, friendList) {
+        user->setParent(q);
+    }
+
+    temporaryData.append(friendList);
+
+    return true;
+}
+
+void FriendListModelPrivate::clear()
+{
+    Q_Q(FriendListModel);
     if (!data.isEmpty()) {
         q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
+        qDeleteAll(data);
         data.clear();
         q->endRemoveRows();
     }
-
-    data = friendListReply->friendList();
-    qSort(data.begin(), data.end(), nameSortLesser);
-    q->beginInsertRows(QModelIndex(), 0, data.count() - 1);
-    emit q->countChanged();
-    q->endInsertRows();
-    return true;
 }
 
 ////// End of private class //////
@@ -124,7 +145,7 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    UserBase *item = d->data.at(row);
+    NamedObject *item = d->data.at(row);
 
     switch (role) {
     case DataRole:
@@ -136,7 +157,8 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-AbstractGraphReply * FriendListModel::createReply(const QString &graph, const QString &arguments)
+AbstractGraphPagingReply *FriendListModel::createReply(const QString &graph,
+                                                       const QString &arguments)
 {
     return queryManager()->queryFriendList(graph, arguments);
 }

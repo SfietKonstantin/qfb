@@ -10,7 +10,9 @@ isEqual(QT_MAJOR_VERSION, 5): QT += qml
 CONFIG +=       qt plugin
 
 INCLUDEPATH +=  ../../lib/base/
+INCLUDEPATH += ../../lib/baseimport
 LIBS +=         -L ../../lib/base/ -l$${NAME}
+LIBS += -L../../lib/baseimport -l$${NAME}import
 
 HEADERS +=      abstractloadablemodel.h \
                 abstractloadablemodel_p.h \

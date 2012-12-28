@@ -37,33 +37,13 @@ Item
                 "-background-pressed-center"
     }
 
-    Image {
+    FacebookPicture {
         id: picture
+        facebookId: container.facebookId
+        queryManager: QUERY_MANAGER
         anchors.left: parent.left;
         anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.verticalCenter: parent.verticalCenter
-        width: Ui.ICON_SIZE_DEFAULT
-        height: Ui.ICON_SIZE_DEFAULT
-        smooth: true
-        source: pictureLoader.picturePath
-        asynchronous: true
-        opacity: 0
-        states: State {
-            name: "visible"; when: picture.status == Image.Ready
-            PropertyChanges {
-                target: picture
-                opacity: 1
-            }
-        }
-        Behavior on opacity {
-            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
-        }
-
-        QFBPictureLoader {
-            id: pictureLoader
-            queryManager: QUERY_MANAGER
-            Component.onCompleted: request(container.facebookId + "/picture")
-        }
     }
 
     Label {

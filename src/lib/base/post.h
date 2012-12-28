@@ -31,7 +31,7 @@
 namespace QFB
 {
 
-class UserBase;
+class NamedObject;
 /**
  * @brief An user
  *
@@ -73,7 +73,7 @@ class QFBBASE_EXPORT Post: public Object
     /**
      * @short Information about the user who posted the message
      */
-    Q_PROPERTY(QFB::UserBase * from READ from CONSTANT)
+    Q_PROPERTY(QFB::NamedObject * from READ from CONSTANT)
     /**
      * @short Profiles mentioned or targeted in this post
      */
@@ -153,6 +153,11 @@ class QFBBASE_EXPORT Post: public Object
     Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
     /// @todo include_hidden
 public:
+    enum Type {
+//        Checkin,
+
+    };
+
     /**
      * @brief Invalid constructor
      * @param parent parent object.
@@ -168,7 +173,7 @@ public:
      * @brief From
      * @return from.
      */
-    UserBase * from() const;
+    NamedObject * from() const;
     /**
      * @brief To as a variant
      *
@@ -183,7 +188,7 @@ public:
      * @brief To
      * @return to.
      */
-    QList<UserBase *> to() const;
+    QList<NamedObject *> to() const;
     /**
      * @brief Message
      * @return message.

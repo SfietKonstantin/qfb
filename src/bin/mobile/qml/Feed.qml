@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -17,48 +17,47 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
-Page {
+Item {
     id: container
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
-        }
-    }
-
+    width: parent.width
+    height: column.height + Ui.MARGIN_DEFAULT
+    property string graph
     function load() {
-        friendListModel.request("me/friends")
+        model.request(container.graph)
     }
 
-    Item {
-        anchors.fill: parent
-
-        Banner {
-            id: banner
-            name: me.name
-            coverUrl: me.coverUrl
-        }
-
-        QFBFriendListModel {
-            id: friendListModel
-            queryManager: QUERY_MANAGER
-            autoLoadNext: true
-        }
-
-        ListView {
-            clip: true
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            model: friendListModel
-            delegate: FriendEntry {
-                facebookId: model.data.id
-                name: model.data.name
+    Column {
+        id: column
+        width: parent.width
+        spacing: Ui.MARGIN_DEFAULT
+        Repeater {
+            model: QFBFeedModel {
+                id: model
+                queryManager: QUERY_MANAGER
+                validator: QFBMobilePostValidator {}
             }
-            ScrollDecorator {flickableItem: parent}
-            cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
+
+            delegate: Item {
+                width: container.width
+                height: content.height
+
+                QFBPostHelper {
+                    id: postHelper
+                    post: model.data
+                }
+
+                Post {
+                    id: content
+                    from: model.data.from
+                    createdTime: model.data.createdTime
+                    haveAdressee: postHelper.haveAdressee
+                    to: postHelper.to
+                    message: postHelper.message
+                }
+            }
         }
     }
-
 }

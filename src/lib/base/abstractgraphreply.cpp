@@ -85,7 +85,6 @@ void AbstractGraphReply::request(const QString &graph, const QString &token, con
 
     d->arguments = processArguments(trueArguments);
     QUrl url = graphUrl(graph, token, d->arguments);
-    qDebug() << "Request:" << url;
     get(url);
 }
 

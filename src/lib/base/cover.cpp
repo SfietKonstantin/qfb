@@ -31,10 +31,8 @@ Cover::Cover(QObject *parent) :
 }
 
 Cover::Cover(const PropertiesMap propertiesMap, QObject *parent):
-    Object(parent)
+    Object(propertiesMap, parent)
 {
-    Q_D(Object);
-    d->propertiesMap = propertiesMap;
 }
 
 QUrl Cover::source() const

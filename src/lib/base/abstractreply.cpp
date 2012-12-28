@@ -53,6 +53,7 @@ void AbstractReplyPrivate::slotFinished()
 {
     Q_Q(AbstractReply);
     if (isError) {
+        qDebug() << "Url: " << reply->url();
         qDebug() << "Received data";
         qDebug() << reply->readAll();
         return;

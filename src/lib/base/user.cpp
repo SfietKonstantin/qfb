@@ -22,19 +22,42 @@
 #include "user.h"
 #include "object_p.h"
 
+#include <QtCore/QDebug>
+
 namespace QFB
 {
 
 User::User(QObject *parent) :
-    UserBase(parent)
+    NamedObject(parent)
 {
 }
 
 User::User(const PropertiesMap propertiesMap, QObject *parent):
-    UserBase(parent)
+    NamedObject(propertiesMap, parent)
 {
     Q_D(Object);
-    d->propertiesMap = propertiesMap;
+
+    // Reparent languages
+    QVariantList languagesVariant = d->propertiesMap.value(LanguagesProperty).toList();
+    foreach (QVariant languageVariant, languagesVariant) {
+        QObject *language = languageVariant.value<Language *>();
+        language->setParent(this);
+    }
+
+    // Reparent cover
+    QObject *coverObject = d->propertiesMap.value(CoverProperty).value<Cover *>();
+    if (coverObject) {
+        coverObject->setParent(this);
+    }
+
+
+    // Reparent significant other
+    QObject *significantOtherObject
+            = d->propertiesMap.value(SignificantOtherProperty).value<NamedObject *>();
+    if (significantOtherObject) {
+        significantOtherObject->setParent(this);
+    }
+
 }
 
 QString User::firstName() const
@@ -55,10 +78,12 @@ QString User::lastName() const
     return d->propertiesMap.value(LastNameProperty).toString();
 }
 
-QString User::gender() const
+User::Gender User::gender() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(GenderProperty).toString();
+    int genderInt = d->propertiesMap.value(GenderProperty).toInt();
+    Gender gender = (Gender) genderInt;
+    return gender;
 }
 
 QString User::locale() const
@@ -150,10 +175,10 @@ QString User::religion() const
     return d->propertiesMap.value(ReligionProperty).toString();
 }
 
-UserBase * User::significantOther() const
+NamedObject * User::significantOther() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(SignificantOtherProperty).value<UserBase *>();
+    return d->propertiesMap.value(SignificantOtherProperty).value<NamedObject *>();
 }
 
 QUrl User::website() const

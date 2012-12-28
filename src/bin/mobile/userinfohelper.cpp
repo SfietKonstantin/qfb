@@ -63,8 +63,20 @@ void UserInfoHelper::createText()
     QString formattedInformations;
 
     // Add gender (and interested in)
-    if (!m_user->gender().isEmpty()) {
-        formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Gender"), m_user->gender());
+    if (!m_user->gender() == QFB::User::Unknown) {
+        QString gender;
+        switch(m_user->gender()) {
+        case QFB::User::Male:
+            gender = tr("Male");
+            break;
+        case QFB::User::Female:
+            gender = tr("Female");
+            break;
+        default:
+            break;
+        }
+
+        formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Gender"), gender);
     }
 
     formattedInformations += "\n";

@@ -78,11 +78,7 @@ private:
      * @brief Reply
      */
     AbstractReply *reply;
-    /**
-     * @internal
-     * @brief New reply
-     */
-    AbstractReply *newReply;
+    bool loading;
     Q_DECLARE_PUBLIC(LoaderBase)
 };
 

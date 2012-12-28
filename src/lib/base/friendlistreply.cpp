@@ -20,14 +20,15 @@
  */
 
 #include "friendlistreply.h"
-#include "abstractgraphreply_p.h"
+#include "abstractgraphpagingreply_p.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QIODevice>
 #include <QtCore/QVariant>
 
+#include "helper_p.h"
 #include "jsonhelper_p.h"
-#include "userbase.h"
+#include "namedobject.h"
 
 namespace QFB
 {
@@ -53,12 +54,26 @@ static const char *NAME_KEY = "name";
  * Used in QFB::FriendListReply.
  */
 static const char *ID_KEY = "id";
+/**
+ * @internal
+ * @brief PAGING_KEY
+ *
+ * Used in QFB::FriendListReply.
+ */
+static const char *PAGING_KEY = "paging";
+/**
+ * @internal
+ * @brief PAGING_NEXT_KEY
+ *
+ * Used in QFB::FriendListReply.
+ */
+static const char *PAGING_NEXT_KEY = "next";
 
 /**
  * @internal
  * @brief Private class for QFB::FriendListReplyPrivate
  */
-class FriendListReplyPrivate: public AbstractGraphReplyPrivate
+class FriendListReplyPrivate: public AbstractGraphPagingReplyPrivate
 {
 public:
     /**
@@ -71,37 +86,31 @@ public:
      * @internal
      * @brief Friend list
      */
-    QList<UserBase *> friendList;
+    QList<NamedObject *> friendList;
 private:
     Q_DECLARE_PUBLIC(FriendListReply)
 };
 
 FriendListReplyPrivate::FriendListReplyPrivate(FriendListReply *q):
-    AbstractGraphReplyPrivate(q)
+    AbstractGraphPagingReplyPrivate(q)
 {
 }
 
 ////// End of private class //////
 
 FriendListReply::FriendListReply(QObject *parent):
-    AbstractGraphReply(*(new FriendListReplyPrivate(this)), parent)
+    AbstractGraphPagingReply(*(new FriendListReplyPrivate(this)), parent)
 {
 }
 
 FriendListReply::FriendListReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractGraphReply(*(new FriendListReplyPrivate(this)), parent)
+    AbstractGraphPagingReply(*(new FriendListReplyPrivate(this)), parent)
 {
     Q_D(FriendListReply);
     d->networkAccessManager = networkAccessManager;
 }
 
-FriendListReply::~FriendListReply()
-{
-    Q_D(FriendListReply);
-    qDeleteAll(d->friendList);
-}
-
-QList<UserBase *> FriendListReply::friendList() const
+QList<NamedObject *> FriendListReply::friendList() const
 {
     Q_D(const FriendListReply);
     return d->friendList;
@@ -137,11 +146,16 @@ bool FriendListReply::processData(QIODevice *dataSource)
                 PropertiesMap propertiesMap;
                 propertiesMap.insert(IdProperty, id);
                 propertiesMap.insert(NameProperty, name);
-                UserBase *userBase = new UserBase(propertiesMap, this);
+                NamedObject *userBase = new NamedObject(propertiesMap, this);
                 d->friendList.append(userBase);
             }
         }
     }
+
+    JsonObject pagingObject = QFB_JSON_GET_OBJECT(rootObject.value(PAGING_KEY));
+    QUrl nextPageUrl = parseUrl(pagingObject.value(PAGING_NEXT_KEY).toString());
+    setNextPageUrl(nextPageUrl);
+
     return true;
 }
 

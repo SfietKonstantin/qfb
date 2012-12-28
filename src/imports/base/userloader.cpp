@@ -17,6 +17,7 @@
 #include "userloader.h"
 #include "loaderbase_p.h"
 
+#include "user.h"
 #include "userreply.h"
 #include "querymanager.h"
 
@@ -50,10 +51,16 @@ bool UserLoaderPrivate::checkReply(const AbstractReply *reply)
 void UserLoaderPrivate::processReply(const AbstractReply *reply)
 {
     Q_Q(UserLoader);
+    if (user) {
+        user->deleteLater();
+        user = 0;
+    }
+
     const UserReply *userReply = qobject_cast<const UserReply *>(reply);
     User *newUser = userReply->user();
 
     user = newUser;
+    user->setParent(q);
     emit q->userChanged();
 }
 

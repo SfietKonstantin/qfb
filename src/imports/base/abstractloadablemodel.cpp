@@ -24,7 +24,7 @@
 
 #include <QtCore/QDebug>
 
-#include "abstractgraphreply.h"
+#include "abstractgraphpagingreply.h"
 
 namespace QFB
 {
@@ -34,33 +34,54 @@ AbstractLoadableModelPrivate::AbstractLoadableModelPrivate(AbstractLoadableModel
 {
     queryManager = 0;
     reply = 0;
-    newReply = 0;
+    loading = false;
+    autoLoadNext = false;
+    haveNext = false;
 }
 
 AbstractLoadableModelPrivate::~AbstractLoadableModelPrivate()
 {
 }
 
+void AbstractLoadableModelPrivate::setDoNotHaveNext()
+{
+    haveNext = false;
+}
+
 void AbstractLoadableModelPrivate::slotFinished()
 {
-    if (!processReply(newReply)) {
-        newReply->deleteLater();
-        newReply = 0;
+    Q_Q(AbstractLoadableModel);
+    bool ok = processReply(reply);
+    nextPageGraph = QString();
+    nextPageArguments = QString();
+    if (ok) {
+        nextPageGraph = reply->nextPageGraph();
+        nextPageArguments = reply->nextPageArguments();
+    }
+    reply->deleteLater();
+    reply = 0;
+
+    if (!ok) {
         return;
     }
 
-    if (reply) {
-        reply->deleteLater();
+    if (autoLoadNext) {
+        q->loadNext();
     }
-    reply = newReply;
-    newReply = 0;
+    loading = false;
+    emit q->loadingChanged();
 }
 
 void AbstractLoadableModelPrivate::slotFailed()
 {
-    qDebug() << newReply->error();
-    newReply->deleteLater();
-    newReply = 0;
+    Q_Q(AbstractLoadableModel);
+
+    qDebug() << reply->error();
+    reply->deleteLater();
+    reply = 0;
+
+    loading = false;
+    emit q->loadingChanged();
 }
 
 ////// End of private class //////
@@ -85,6 +106,18 @@ QueryManager * AbstractLoadableModel::queryManager() const
     return d->queryManager;
 }
 
+bool AbstractLoadableModel::loading() const
+{
+    Q_D(const AbstractLoadableModel);
+    return d->loading;
+}
+
+bool AbstractLoadableModel::autoLoadNext() const
+{
+    Q_D(const AbstractLoadableModel);
+    return d->autoLoadNext;
+}
+
 void AbstractLoadableModel::setQueryManager(QueryManager *queryManager)
 {
     Q_D(AbstractLoadableModel);
@@ -94,19 +127,51 @@ void AbstractLoadableModel::setQueryManager(QueryManager *queryManager)
     }
 }
 
+void AbstractLoadableModel::setAutoLoadNext(bool autoLoadNext)
+{
+    Q_D(AbstractLoadableModel);
+    if (d->autoLoadNext != autoLoadNext) {
+        d->autoLoadNext = autoLoadNext;
+        emit autoLoadNextChanged();
+    }
+}
+
 void AbstractLoadableModel::request(const QString &graph, const QString &arguments)
 {
     Q_D(AbstractLoadableModel);
     if (!d->queryManager) {
         return;
     }
-    if (d->newReply) {
+    if (d->reply) {
         return;
     }
 
-    d->newReply = createReply(graph, arguments);
-    connect(d->newReply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->newReply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    d->clear();
+    d->haveNext = true;
+    d->reply = createReply(graph, arguments);
+    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+}
+
+void AbstractLoadableModel::loadNext()
+{
+    Q_D(AbstractLoadableModel);
+    if (!d->queryManager) {
+        return;
+    }
+    if (d->reply) {
+        return;
+    }
+
+    if (!d->haveNext) {
+        return;
+    }
+
+    d->reply = createReply(d->nextPageGraph, d->nextPageArguments);
+    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    d->loading = true;
+    emit loadingChanged();
 }
 
 }

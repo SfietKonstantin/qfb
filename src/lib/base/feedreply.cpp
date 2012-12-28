@@ -20,14 +20,14 @@
  */
 
 #include "feedreply.h"
-#include "abstractgraphreply_p.h"
+#include "abstractgraphpagingreply_p.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
 
 #include "helper_p.h"
 #include "post.h"
-#include "userbase.h"
+#include "namedobject.h"
 #include "jsonhelper_p.h"
 
 
@@ -69,6 +69,13 @@ static const char *NAME_KEY = "name";
  * Used in QFB::FeedReply.
  */
 static const char *TO_KEY = "to";
+/**
+ * @internal
+ * @brief TO_KEY
+ *
+ * Used in QFB::FeedReply.
+ */
+static const char *TO_DATA_KEY = "data";
 /**
  * @internal
  * @brief MESSAGE_KEY
@@ -158,7 +165,7 @@ static const char *UPDATED_TIME_KEY = "updated_time";
  * @internal
  * @brief Private class for QFB::UserReply
  */
-class FeedReplyPrivate: public AbstractGraphReplyPrivate
+class FeedReplyPrivate: public AbstractGraphPagingReplyPrivate
 {
 public:
     /**
@@ -175,19 +182,19 @@ public:
 };
 
 FeedReplyPrivate::FeedReplyPrivate(FeedReply *q):
-    AbstractGraphReplyPrivate(q)
+    AbstractGraphPagingReplyPrivate(q)
 {
 }
 
 ////// End of private class //////
 
 FeedReply::FeedReply(QObject *parent) :
-    AbstractGraphReply(*(new FeedReplyPrivate(this)), parent)
+    AbstractGraphPagingReply(*(new FeedReplyPrivate(this)), parent)
 {
 }
 
 FeedReply::FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractGraphReply(*(new FeedReplyPrivate(this)), parent)
+    AbstractGraphPagingReply(*(new FeedReplyPrivate(this)), parent)
 {
     Q_D(FeedReply);
     d->networkAccessManager = networkAccessManager;
@@ -232,16 +239,17 @@ bool FeedReply::processData(QIODevice *dataSource)
             fromPropertiesMap.insert(IdProperty, fromObject.value(ID_KEY).toString());
             fromPropertiesMap.insert(NameProperty, fromObject.value(NAME_KEY).toString());
             propertiesMap.insert(FromProperty,
-                                 QVariant::fromValue(new UserBase(fromPropertiesMap, this)));
+                                 QVariant::fromValue(new NamedObject(fromPropertiesMap, this)));
 
-            JsonArray toArray = QFB_JSON_GET_ARRAY(object.value(TO_KEY));
+            JsonObject toParentObject = QFB_JSON_GET_OBJECT(object.value(TO_KEY));
+            JsonArray toArray = QFB_JSON_GET_ARRAY(toParentObject.value(TO_DATA_KEY));
             QVariantList toList;
             foreach (JsonValue toValue, toArray) {
                 JsonObject toObject = QFB_JSON_GET_OBJECT(toValue);
                 PropertiesMap toPropertiesMap;
                 toPropertiesMap.insert(IdProperty, toObject.value(ID_KEY).toString());
                 toPropertiesMap.insert(NameProperty, toObject.value(NAME_KEY).toString());
-                toList.append(QVariant::fromValue(new UserBase(fromPropertiesMap, this)));
+                toList.append(QVariant::fromValue(new NamedObject(toPropertiesMap)));
             }
             propertiesMap.insert(ToProperty, toList);
 

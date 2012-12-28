@@ -22,7 +22,8 @@
 #include "post.h"
 #include "object_p.h"
 
-#include "userbase.h"
+#include "namedobject.h"
+#include <QtCore/QDebug>
 
 namespace QFB
 {
@@ -33,16 +34,22 @@ Post::Post(QObject *parent) :
 }
 
 Post::Post(const PropertiesMap propertiesMap, QObject *parent):
-    Object(parent)
+    Object(propertiesMap, parent)
 {
     Q_D(Object);
-    d->propertiesMap = propertiesMap;
+    // Reparent to
+    QVariantList toVariantList = d->propertiesMap.value(ToProperty).toList();
+    foreach (QVariant toVariant, toVariantList) {
+        QObject *to = toVariant.value<NamedObject *>();
+        to->setParent(this);
+    }
+
 }
 
-UserBase * Post::from() const
+NamedObject * Post::from() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(FromProperty).value<UserBase *>();
+    return d->propertiesMap.value(FromProperty).value<NamedObject *>();
 }
 
 QVariantList Post::toVariant() const
@@ -51,13 +58,13 @@ QVariantList Post::toVariant() const
     return d->propertiesMap.value(ToProperty).toList();
 }
 
-QList<UserBase *> Post::to() const
+QList<NamedObject *> Post::to() const
 {
     Q_D(const Object);
     QVariantList toVariantList = d->propertiesMap.value(ToProperty).toList();
-    QList<UserBase *> returned;
+    QList<NamedObject *> returned;
     foreach (QVariant toVariant, toVariantList) {
-        returned.append(toVariant.value<UserBase *>());
+        returned.append(toVariant.value<NamedObject *>());
     }
     return returned;
 }

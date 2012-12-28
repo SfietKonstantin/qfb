@@ -44,6 +44,7 @@ class LoaderBase : public QObject
      */
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
 public:
     virtual ~LoaderBase();
     /**
@@ -51,6 +52,7 @@ public:
      * @return query manager.
      */
     QueryManager * queryManager() const;
+    bool loading() const;
 public Q_SLOTS:
     /**
      * @brief Set the query manager
@@ -62,6 +64,7 @@ Q_SIGNALS:
      * @brief Query manager changed
      */
     void queryManagerChanged();
+    void loadingChanged();
 protected:
     /**
      * @brief D-pointer constructor

@@ -15,12 +15,14 @@
  ****************************************************************************************/
 
 #include "feedmodel.h"
-
 #include "abstractloadablemodel_p.h"
+
+#include <QtCore/QDebug>
 
 #include "querymanager.h"
 #include "post.h"
 #include "feedreply.h"
+#include "postvalidator.h"
 
 namespace QFB
 {
@@ -44,12 +46,14 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    bool processReply(const AbstractGraphReply *reply);
+    bool processReply(const AbstractGraphPagingReply *reply);
+    void clear();
     /**
      * @internal
      * @brief Data
      */
     QList<Post *> data;
+    PostValidator *validator;
 private:
     Q_DECLARE_PUBLIC(FeedModel)
 };
@@ -57,29 +61,50 @@ private:
 FeedModelPrivate::FeedModelPrivate(FeedModel *q):
     AbstractLoadableModelPrivate(q)
 {
+    validator = 0;
 }
 
-bool FeedModelPrivate::processReply(const AbstractGraphReply *reply)
+bool FeedModelPrivate::processReply(const AbstractGraphPagingReply *reply)
 {
     Q_Q(FeedModel);
-
     const FeedReply *feedReply = qobject_cast<const FeedReply *>(reply);
     if (!feedReply) {
         return false;
     }
 
-    // Clean old data
-    if (!data.isEmpty()) {
-        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
-        data.clear();
-        q->endInsertRows();
+    QList<Post *> feed = feedReply->feed();
+    QList<Post *> finalFeed;
+    foreach (Post *post, feed) {
+        if (!validator->validate(post)) {
+            post->deleteLater();
+        } else {
+            post->setParent(q);
+            finalFeed.append(post);
+        }
     }
 
-    data = feedReply->feed();
-    q->beginInsertRows(QModelIndex(), 0, data.count() - 1);
+    if (finalFeed.isEmpty()) {
+        setDoNotHaveNext();
+        return true;
+    }
+
+    q->beginInsertRows(QModelIndex(), data.count(), data.count() + finalFeed.count() - 1);
+    data.append(finalFeed);
     emit q->countChanged();
     q->endInsertRows();
     return true;
+}
+
+void FeedModelPrivate::clear()
+{
+    Q_Q(FeedModel);
+    // Clean old data
+    if (!data.isEmpty()) {
+        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
+        qDeleteAll(data);
+        data.clear();
+        q->endRemoveRows();
+    }
 }
 
 ////// End of private class //////
@@ -119,7 +144,22 @@ QVariant FeedModel::data(const QModelIndex &index, int role) const
     }
 }
 
-AbstractGraphReply * FeedModel::createReply(const QString &graph, const QString &arguments)
+PostValidator * FeedModel::validator() const
+{
+    Q_D(const FeedModel);
+    return d->validator;
+}
+
+void FeedModel::setValidator(PostValidator *validator)
+{
+    Q_D(FeedModel);
+    if (d->validator != validator) {
+        d->validator = validator;
+        emit validatorChanged();
+    }
+}
+
+AbstractGraphPagingReply * FeedModel::createReply(const QString &graph, const QString &arguments)
 {
     return queryManager()->queryFeed(graph, arguments);
 }

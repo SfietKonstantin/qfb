@@ -187,6 +187,9 @@ static const char *SIGNIFICANT_OTHER_KEY = "significant_other";
  */
 static const char *WEBSITE_KEY = "website";
 
+static const char *GENDER_MALE = "male";
+static const char *GENDER_FEMALE = "female";
+
 /**
  * @internal
  * @brief Private class for QFB::UserReply
@@ -253,7 +256,16 @@ bool UserReply::processData(QIODevice *dataSource)
     propertiesMap.insert(FirstNameProperty, rootObject.value(FIRST_NAME_KEY).toString());
     propertiesMap.insert(MiddleNameProperty, rootObject.value(MIDDLE_NAME_KEY).toString());
     propertiesMap.insert(LastNameProperty, rootObject.value(LAST_NAME_KEY).toString());
-    propertiesMap.insert(GenderProperty, rootObject.value(GENDER_KEY).toString());
+
+    QString genderString = rootObject.value(GENDER_KEY).toString();
+    if (genderString == GENDER_MALE) {
+        propertiesMap.insert(GenderProperty, (int) User::Male);
+    } else if (genderString == GENDER_FEMALE) {
+        propertiesMap.insert(GenderProperty, (int) User::Female);
+    } else {
+        propertiesMap.insert(GenderProperty, (int) User::Unknown);
+    }
+
     propertiesMap.insert(LocaleProperty, rootObject.value(LOCALE_KEY).toString());
 
     JsonArray languages = QFB_JSON_GET_ARRAY(rootObject.value(LANGUAGES_KEY));
@@ -266,7 +278,7 @@ bool UserReply::processData(QIODevice *dataSource)
                 languagePropertiesMap.insert(IdProperty, languageObject.value(ID_KEY).toString());
                 languagePropertiesMap.insert(NameProperty,
                                              languageObject.value(NAME_KEY).toString());
-                Language *language = new Language(languagePropertiesMap, this);
+                Language *language = new Language(languagePropertiesMap);
                 languagesVariant.append(QVariant::fromValue(language));
             }
         }
@@ -290,7 +302,7 @@ bool UserReply::processData(QIODevice *dataSource)
     coverPropertiesMap.insert(IdProperty, cover.value(ID_KEY).toString());
     coverPropertiesMap.insert(SourceProperty, parseUrl(cover.value(SOURCE_KEY).toString()));
     coverPropertiesMap.insert(OffsetYProperty, cover.value(OFFSET_Y_KEY).toDouble());
-    propertiesMap.insert(CoverProperty, QVariant::fromValue(new Cover(coverPropertiesMap, this)));
+    propertiesMap.insert(CoverProperty, QVariant::fromValue(new Cover(coverPropertiesMap)));
 
 
     propertiesMap.insert(EmailProperty, rootObject.value(EMAIL_KEY).toString());
@@ -304,13 +316,13 @@ bool UserReply::processData(QIODevice *dataSource)
     PropertiesMap significantOtherPropertiesMap;
     significantOtherPropertiesMap.insert(IdProperty, significantOther.value(ID_KEY).toString());
     significantOtherPropertiesMap.insert(NameProperty, significantOther.value(NAME_KEY).toString());
-    UserBase *significantOtherUser = new UserBase(significantOtherPropertiesMap, this);
+    NamedObject *significantOtherUser = new NamedObject(significantOtherPropertiesMap);
     propertiesMap.insert(SignificantOtherProperty, QVariant::fromValue(significantOtherUser));
     propertiesMap.insert(WebsiteProperty, parseUrl(rootObject.value(WEBSITE_KEY).toString()));
 
     d->user = new User(propertiesMap, this);
-    return true;
 
+    return true;
 }
 
 }

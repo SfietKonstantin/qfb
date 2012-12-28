@@ -63,7 +63,9 @@ public:
      * @param reply reply to be processed.
      * @return if the process is successful.
      */
-    virtual bool processReply(const AbstractGraphReply *reply) = 0;
+    virtual bool processReply(const AbstractGraphPagingReply *reply) = 0;
+    virtual void clear() = 0;
+    void setDoNotHaveNext();
 protected:
     /**
      * @internal
@@ -90,12 +92,12 @@ private:
      * @internal
      * @brief Reply
      */
-    AbstractGraphReply *reply;
-    /**
-     * @internal
-     * @brief New reply
-     */
-    AbstractGraphReply *newReply;
+    AbstractGraphPagingReply *reply;
+    QString nextPageGraph;
+    QString nextPageArguments;
+    bool haveNext;
+    bool loading;
+    bool autoLoadNext;
     Q_DECLARE_PUBLIC(AbstractLoadableModel)
 };
 
