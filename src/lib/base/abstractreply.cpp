@@ -139,6 +139,9 @@ bool AbstractReply::preprocesssRequest()
 void AbstractReply::get(const QUrl &url)
 {
     Q_D(AbstractReply);
+
+    qDebug() << "Request url: " << url;
+
     d->url = url;
 
     if (preprocesssRequest()) {
