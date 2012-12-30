@@ -76,7 +76,7 @@ Page {
         property bool displayFeed: true
         anchors.fill: parent
         contentWidth: width
-        contentHeight: banner.height + (displayFeed ? feed.height : userInfo.height)
+        contentHeight: banner.height + (feedButton.checked ? feed.height : userInfo.height)
                        + Ui.MARGIN_DEFAULT
 
 

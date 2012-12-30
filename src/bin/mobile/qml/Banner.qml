@@ -25,41 +25,18 @@ Item {
     property bool large: false
     anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
     height: !large ? Ui.BANNER_HEIGHT_DEFAULT : Ui.BANNER_HEIGHT_LARGE
-    onCoverUrlChanged: {
-        coverImageLoader.request(coverUrl)
-    }
 
     Rectangle {
         id: coverBackground
         anchors.fill: parent
         color: "#0057AE"
+        clip: true
 
-        QFBImageLoader {
-            id: coverImageLoader
+        FacebookImage {
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
             queryManager: QUERY_MANAGER
-            Component.onCompleted: coverImageLoader.request(coverUrl)
-        }
-
-        Image {
-            id: cover
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            clip: true
-            asynchronous: true
-            source: coverImageLoader.imagePath
-            opacity: 0
-            states: [
-                State {
-                    name: "visible"; when: cover.status == Image.Ready
-                    PropertyChanges {
-                        target: cover
-                        opacity: 1
-                    }
-                }
-            ]
-            Behavior on opacity {
-                NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
-            }
+            url: coverUrl
         }
 
         Text {

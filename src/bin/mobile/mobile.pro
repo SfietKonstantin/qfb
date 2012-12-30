@@ -53,6 +53,7 @@ OTHER_FILES +=  qml/main.qml \
     qml/Post.qml \
     qml/FacebookPicture.qml \
     qml/NewsPage.qml \
+    qml/FacebookImage.qml
 
 # Deployment
 contains(CONFIG, optify) {
@@ -65,3 +66,9 @@ qmlFiles.path = $${QML_FOLDER}
 qmlFiles.files = $${OTHER_FILES}
 
 INSTALLS += target qmlFiles
+
+contains(MEEGO_EDITION, harmattan) {
+    desktopfile.files = qfb.desktop
+    desktopfile.path = /usr/share/applications
+    INSTALLS += desktopfile
+}

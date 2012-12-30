@@ -163,9 +163,21 @@ bool PictureReply::processData(QIODevice *dataSource)
     QString fileName = d->pictureName(graph(), arguments());
 
     QImage image;
-    if (!image.load(dataSource, "JPG")) {
-        image.load(dataSource, "GIF");
+    bool ok = false;
+    if (image.load(dataSource, "JPG")) {
+        ok = true;
     }
+    if (!ok) {
+        if (image.load(dataSource, "GIF")) {
+            ok = true;
+        }
+    }
+    if (!ok) {
+        if (image.load(dataSource, "PNG")) {
+            ok = true;
+        }
+    }
+
     if (image.isNull()) {
         return false;
     }

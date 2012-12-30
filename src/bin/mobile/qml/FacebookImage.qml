@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,34 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef POSTHELPER_H
-#define POSTHELPER_H
 
-#include <QtCore/QObject>
-#include "post.h"
+import QtQuick 1.1
+import org.SfietKonstantin.qfb 4.0
+import "UiConstants.js" as Ui
 
-class PostHelper : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QFB::Post * post READ post WRITE setPost NOTIFY postChanged)
-    Q_PROPERTY(QFB::NamedObject * to READ to NOTIFY toChanged)
-    Q_PROPERTY(QString message READ message NOTIFY messageChanged)
-public:
-    explicit PostHelper(QObject *parent = 0);
-    QFB::Post * post() const;
-    QFB::NamedObject * to() const;
-    QString message() const;
-public slots:
-    void setPost(QFB::Post *post);
-signals:
-    void postChanged();
-    void toChanged();
-    void messageChanged();
-private:
-    void createPost();
-    QFB::Post *m_post;
-    QFB::NamedObject *m_to;
-    QString m_message;
-};
+Image {
+    id: image
+    property QtObject queryManager
+    property string url
+    onUrlChanged: imageLoader.request(url)
+    smooth: true
+    source: imageLoader.imagePath
+    asynchronous: true
+    opacity: 0
+    states: State {
+        name: "visible"; when: image.status == Image.Ready
+        PropertyChanges {
+            target: image
+            opacity: 1
+        }
+    }
+    Behavior on opacity {
+        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
+    }
 
-#endif // POSTHELPER_H
+    QFBImageLoader {
+        id: imageLoader
+        queryManager: image.queryManager
+        Component.onCompleted: request(image.url)
+    }
+}

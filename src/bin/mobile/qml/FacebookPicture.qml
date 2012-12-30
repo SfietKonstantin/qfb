@@ -23,6 +23,7 @@ Image {
     id: picture
     property QtObject queryManager
     property string facebookId
+    onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
     width: Ui.ICON_SIZE_DEFAULT
     height: Ui.ICON_SIZE_DEFAULT
     smooth: true

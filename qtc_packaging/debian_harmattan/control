@@ -1,21 +1,17 @@
-Source: qfb
+Source: qfb-friends
 Section: user/other
 Priority: optional
-Maintainer: Lucien XU <sk@localhost.localdomain>
+Maintainer: Lucien XU <sfietkonstantin@free.fr>
 Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.7.3
-Homepage: <insert the upstream URL, if relevant>
+Homepage: https://github.com/SfietKonstantin/qfb
 
-Package: qfb
+Package: qfb-friends
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
-XSBC-Maemo-Display-Name: qfb
+Description: Friends for Harmattan
+ Friends for Harmattan is a simple and fast client
+ for Harmattan, based on qfb, a Qt library for
+ Facebook
+XSBC-Maemo-Display-Name: Friends
 XB-Maemo-Flags: visible
-XB-MeeGo-Desktop-Entry-Filename: qfb_harmattan
-XB-MeeGo-Desktop-Entry: 
- [Desktop Entry]
- Type=Application
- Name=qfb
- Icon=/usr/share/icons/hicolor/80x80/apps/qfb80.png

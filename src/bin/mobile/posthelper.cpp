@@ -23,19 +23,12 @@ PostHelper::PostHelper(QObject *parent) :
     QObject(parent)
 {
     m_post = 0;
-    m_haveAdressee = false;
 }
 
 QFB::Post * PostHelper::post() const
 {
     return m_post;
 }
-
-bool PostHelper::haveAdressee() const
-{
-    return m_haveAdressee;
-}
-
 QFB::NamedObject * PostHelper::to() const
 {
     return m_to;
@@ -57,21 +50,20 @@ void PostHelper::setPost(QFB::Post *post)
 
 void PostHelper::createPost()
 {
-    // Create the title
-    // Extract the poster
-    QString message;
+    // Extract the to
 
-    bool haveAdressee = false;
+    QString message;
+    if (!m_post->message().isEmpty()) {
+        message = m_post->message();
+    }
+
+    if (m_post->message().isEmpty() && !m_post->story().isEmpty()) {
+        message = m_post->story();
+    }
+
     QFB::NamedObject *to = 0;
     if (m_post->to().count() == 1) {
-        haveAdressee = true;
         to = m_post->to().first();
-    }
-    message = m_post->message();
-
-    if (m_haveAdressee != haveAdressee) {
-        m_haveAdressee = haveAdressee;
-        emit haveAdresseeChanged();
     }
 
     if (m_to != to) {

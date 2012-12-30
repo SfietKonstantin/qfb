@@ -16,20 +16,22 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
 Rectangle {
+    id: container
     property QtObject from
-    property bool haveAdressee: false
     property QtObject to
     property date createdTime
-    property alias message: message.text
-    property alias content: content.children
+    property string message
+    property string picture
+    property string name
+    property string caption
+    property string description
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-    height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + message.height
-                      + Ui.MARGIN_DEFAULT + content.height + Ui.MARGIN_DEFAULT
-                    : 0
+    height: childrenRect.height + 2 * Ui.MARGIN_DEFAULT
     color: !theme.inverted ? "white" : "black"
 
     Item {
@@ -57,7 +59,7 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
-                text: from.name + (haveAdressee ? " > " + to.name : "")
+                text: from.name + (to != null ? " > " + to.name : "")
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
             }
@@ -73,18 +75,65 @@ Rectangle {
         }
     }
 
-    Label {
-        id: message
-        anchors.top: title.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+    Item {
+        id: messageContainer
+        height: container.message != "" ? Ui.MARGIN_DEFAULT + message.height : 0
+        anchors.top: title.bottom
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+
+        Label {
+            id: message
+            text: container.message
+            anchors.top: parent.top;  anchors.topMargin: Ui.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.right: parent.right
+        }
     }
 
     Item {
         id: content
-        anchors.top: message.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        property bool valid: container.picture != "" || container.name != ""
+                             || container.caption != "" || container.description != ""
+        anchors.top: messageContainer.bottom
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        height: childrenRect.height
+        height: valid ? contentColumn.height + Ui.MARGIN_DEFAULT : 0
+
+        Column {
+            id: contentColumn
+            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: Ui.MARGIN_DEFAULT
+
+            FacebookImage {
+                id: postImage
+                anchors.horizontalCenter: parent.horizontalCenter
+                queryManager: QUERY_MANAGER
+                url: container.picture
+            }
+
+            Label {
+                text: container.name
+                width: parent.width
+                visible: text != ""
+            }
+
+            Label {
+                text: container.caption
+                width: parent.width
+                visible: text != ""
+                font.pixelSize: Ui.FONT_SIZE_SMALL
+                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+            }
+
+            Label {
+                text: container.description
+                width: parent.width
+                visible: text != ""
+                font.pixelSize: Ui.FONT_SIZE_SMALL
+                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+            }
+        }
     }
 }

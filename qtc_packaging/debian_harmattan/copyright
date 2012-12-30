@@ -1,23 +1,21 @@
-This package was debianized by Lucien XU <sk@localhost.localdomain> on
+This package was debianized by Lucien XU <sfietkonstantin@free.fr> on
 Wed, 19 Dec 2012 18:59:23 +0100.
 
-It was downloaded from <url://example.com>
+It was downloaded from https://github.com/SfietKonstantin/qfb
 
 Upstream Author(s):
 
-    <put author's name and email here>
-    <likewise for another author>
+    Lucien XU <sfietkonstantin@free.fr>
 
 Copyright:
 
-    <Copyright (C) YYYY Name OfAuthor>
-    <likewise for another author>
+    Lucien XU <sfietkonstantin@free.fr>
 
 License:
 
     This package is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This package is distributed in the hope that it will be useful,
@@ -35,6 +33,3 @@ Public License can be found in `/usr/share/common-licenses/GPL'.
 The Debian packaging is (C) 2012, Lucien XU <sk@localhost.localdomain> and
 is licensed under the GPL, see above.
 
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.

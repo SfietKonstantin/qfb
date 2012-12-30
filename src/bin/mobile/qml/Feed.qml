@@ -56,9 +56,12 @@ Item {
                     id: content
                     from: model.data.from
                     createdTime: model.data.createdTime
-                    haveAdressee: postHelper.haveAdressee
                     to: postHelper.to
                     message: postHelper.message
+                    picture: model.data.picture
+                    name: model.data.name
+                    caption: model.data.caption
+                    description: model.data.description
                     opacity: 0
                     Component.onCompleted: opacity = 1
 
