@@ -37,6 +37,7 @@ Page {
             model: ListModel {
                 ListElement {
                     text: "News feed"
+                    action: "showNews"
                 }
                 ListElement {
                     text: "Me"
@@ -50,7 +51,10 @@ Page {
             delegate: ClickableEntry {
                 text: model.text
                 onClicked: {
-                    if (model.action == "showMe") {
+                    if (model.action == "showNews") {
+                        window.pageStack.push(newsPage)
+                        newsPage.load()
+                    } else if (model.action == "showMe") {
                         mePage.load()
                         window.pageStack.push(mePage)
                     } else if (model.action == "showFriends") {
@@ -65,6 +69,12 @@ Page {
 
     FriendListPage {
         id: friendListPage
+    }
+
+    NewsPage {
+        id: newsPage
+        facebookId: "me"
+        name: me.name
     }
 
     UserPage {

@@ -51,6 +51,8 @@ QUrl AbstractReplyPrivate::redirectUrl()
 
 void AbstractReplyPrivate::slotFinished()
 {
+    qDebug() << "Finished";
+
     Q_Q(AbstractReply);
     if (isError) {
         qDebug() << "Url: " << reply->url();
@@ -140,15 +142,14 @@ void AbstractReply::get(const QUrl &url)
 {
     Q_D(AbstractReply);
 
-    qDebug() << "Request url: " << url;
-
     d->url = url;
 
-    if (preprocesssRequest()) {
+    if (preprocesssRequest() || url.isEmpty()) {
         QEvent *event = new QEvent(QEvent::User);
         QCoreApplication::instance()->postEvent(this, event);
         return;
     }
+    qDebug() << "Request url: " << url;
 
     d->running = true;
     d->reply = d->networkAccessManager->get(QNetworkRequest(url));

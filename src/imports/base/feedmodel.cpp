@@ -75,7 +75,14 @@ bool FeedModelPrivate::processReply(const AbstractGraphPagingReply *reply)
     QList<Post *> feed = feedReply->feed();
     QList<Post *> finalFeed;
     foreach (Post *post, feed) {
-        if (!validator->validate(post)) {
+        bool postOk = true;
+        if (validator) {
+            if (!validator->validate(post)) {
+                postOk = false;
+            }
+        }
+
+        if (!postOk) {
             post->deleteLater();
         } else {
             post->setParent(q);
@@ -83,7 +90,7 @@ bool FeedModelPrivate::processReply(const AbstractGraphPagingReply *reply)
         }
     }
 
-    if (finalFeed.isEmpty()) {
+    if (feed.isEmpty()) {
         setDoNotHaveNext();
         return true;
     }

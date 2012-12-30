@@ -160,6 +160,20 @@ static const char *CREATED_TIME_KEY = "created_time";
  * Used in QFB::FeedReply.
  */
 static const char *UPDATED_TIME_KEY = "updated_time";
+/**
+ * @internal
+ * @brief PAGING_KEY
+ *
+ * Used in QFB::FriendListReply.
+ */
+static const char *PAGING_KEY = "paging";
+/**
+ * @internal
+ * @brief PAGING_NEXT_KEY
+ *
+ * Used in QFB::FriendListReply.
+ */
+static const char *PAGING_NEXT_KEY = "next";
 
 /**
  * @internal
@@ -276,6 +290,12 @@ bool FeedReply::processData(QIODevice *dataSource)
             d->feed.append(new Post(propertiesMap, this));
         }
     }
+
+    qDebug() << d->feed.size();
+
+    JsonObject pagingObject = QFB_JSON_GET_OBJECT(rootObject.value(PAGING_KEY));
+    QUrl nextPageUrl = parseUrl(pagingObject.value(PAGING_NEXT_KEY).toString());
+    setNextPageUrl(nextPageUrl);
 
     return true;
 

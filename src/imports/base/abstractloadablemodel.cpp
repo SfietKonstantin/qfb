@@ -45,7 +45,9 @@ AbstractLoadableModelPrivate::~AbstractLoadableModelPrivate()
 
 void AbstractLoadableModelPrivate::setDoNotHaveNext()
 {
+    Q_Q(AbstractLoadableModel);
     haveNext = false;
+    emit q->haveNextChanged();
 }
 
 void AbstractLoadableModelPrivate::slotFinished()
@@ -112,6 +114,12 @@ bool AbstractLoadableModel::loading() const
     return d->loading;
 }
 
+bool AbstractLoadableModel::haveNext() const
+{
+    Q_D(const AbstractLoadableModel);
+    return d->haveNext;
+}
+
 bool AbstractLoadableModel::autoLoadNext() const
 {
     Q_D(const AbstractLoadableModel);
@@ -148,6 +156,7 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
 
     d->clear();
     d->haveNext = true;
+    emit haveNextChanged();
     d->reply = createReply(graph, arguments);
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));

@@ -56,6 +56,7 @@ class AbstractLoadableModel : public QAbstractListModel
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(bool haveNext READ haveNext NOTIFY haveNextChanged)
     Q_PROPERTY(bool autoLoadNext READ autoLoadNext WRITE setAutoLoadNext
                NOTIFY autoLoadNextChanged)
 public:
@@ -74,6 +75,7 @@ public:
      */
     QueryManager * queryManager() const;
     bool loading() const;
+    bool haveNext() const;
     bool autoLoadNext() const;
 public Q_SLOTS:
     /**
@@ -99,6 +101,7 @@ Q_SIGNALS:
      */
     void queryManagerChanged();
     void loadingChanged();
+    void haveNextChanged();
     void autoLoadNextChanged();
 protected:
     /**

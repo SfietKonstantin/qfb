@@ -130,6 +130,7 @@ Page {
             visible: flickable.displayFeed
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             graph: "me/feed"
+            validator: QFBMobilePostValidator {}
         }
     }
 }

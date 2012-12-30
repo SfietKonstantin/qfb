@@ -20,55 +20,54 @@ import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
-Item {
+Page {
     id: container
-    width: parent.width
-    height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
-                                                                : 0)
-    property string graph
-    property alias validator: model.validator
+    property string facebookId
+    property string name
     function load() {
-        model.request(container.graph)
+        banner.loaded = false
+        userLoader.request(facebookId, "fields=cover")
+        feed.load()
     }
 
-    Column {
-        id: column
-        width: parent.width
-        spacing: Ui.MARGIN_DEFAULT
-        Repeater {
-            model: QFBFeedModel {
-                id: model
-                queryManager: QUERY_MANAGER
-            }
+    tools: ToolBarLayout {
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: window.pageStack.pop()
+        }
+    }
 
-            delegate: Item {
-                width: container.width
-                height: content.height
-
-                QFBPostHelper {
-                    id: postHelper
-                    post: model.data
-                }
-
-                Post {
-                    id: content
-                    from: model.data.from
-                    createdTime: model.data.createdTime
-                    haveAdressee: postHelper.haveAdressee
-                    to: postHelper.to
-                    message: postHelper.message
+    QFBUserLoader {
+        id: userLoader
+        queryManager: QUERY_MANAGER
+        onLoadingChanged: {
+            if (!loading) {
+                if (!banner.loaded) {
+                    banner.loaded = true
+                    banner.coverUrl = user.cover.source
+                    userLoader.request(facebookId)
                 }
             }
         }
     }
 
-    Button {
-        id: button
-        visible: model.haveNext && model.count > 0
-        anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: !model.loading ? qsTr("Load more") : qsTr("Loading")
-        enabled: !model.loading
-        onClicked: model.loadNext()
+    Flickable {
+        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+
+        contentWidth: width
+        contentHeight: feed.height
+
+        Feed {
+            id: feed
+            graph: "me/home"
+        }
+    }
+
+    Banner {
+        id: banner
+        property bool loaded: false
+        name: container.name
     }
 }
