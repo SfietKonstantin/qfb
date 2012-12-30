@@ -51,19 +51,30 @@ Page {
         }
     }
 
-    Flickable {
+
+    Item {
         anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.bottom: parent.bottom
         anchors.left: parent.left; anchors.right: parent.right
 
-        contentWidth: width
-        contentHeight: feed.height
+//        LoadingDecorator {
+//            loading: feed.loading
+//        }
 
-        Feed {
-            id: feed
-            graph: "me/home"
+        ScrollDecorator { flickableItem: flickable }
+        Flickable {
+            id: flickable
+            anchors.fill: parent
+            contentWidth: width
+            contentHeight: feed.height
+
+            Feed {
+                id: feed
+                graph: "me/home"
+            }
         }
     }
+
 
     Banner {
         id: banner

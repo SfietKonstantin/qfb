@@ -26,6 +26,7 @@ Rectangle {
     height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + content.height
                       + Ui.MARGIN_DEFAULT
                     : 0
+    color: !theme.inverted ? "white" : "black"
 
     Label {
         id: title

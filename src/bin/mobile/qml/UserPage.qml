@@ -28,6 +28,9 @@ Page {
         banner.loaded = false
         portraitLoader.request(facebookId + "/picture")
         userLoader.request(facebookId, "fields=cover")
+        feed.load()
+        feedButton.checked = true
+
     }
 
     tools: ToolBarLayout {
@@ -38,15 +41,15 @@ Page {
         ButtonRow {
             style: TabButtonStyle {}
             TabButton {
+                id: feedButton
                 text: qsTr("Feed")
                 onClicked: {
-                    flickable.displayFeed = true
                     feed.load()
                 }
             }
             TabButton {
+                id: infoButton
                 text: qsTr("Informations")
-                onClicked: flickable.displayFeed = false
             }
         }
     }
@@ -64,6 +67,8 @@ Page {
             }
         }
     }
+
+
 
     ScrollDecorator { flickableItem: flickable }
     Flickable {
@@ -117,20 +122,19 @@ Page {
             }
         }
 
-        UserInfo {
-            id: userInfo
-            visible: !flickable.displayFeed
-            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            user: userLoader.user
-
-        }
-
         Feed {
             id: feed
-            visible: flickable.displayFeed
+            visible: feedButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             graph: "me/feed"
             validator: QFBMobilePostValidator {}
+        }
+
+        UserInfo {
+            id: userInfo
+            visible: infoButton.checked
+            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+            user: userLoader.user
         }
     }
 }

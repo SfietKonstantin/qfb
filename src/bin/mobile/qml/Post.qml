@@ -30,6 +30,7 @@ Rectangle {
     height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + message.height
                       + Ui.MARGIN_DEFAULT + content.height + Ui.MARGIN_DEFAULT
                     : 0
+    color: !theme.inverted ? "white" : "black"
 
     Item {
         id: title

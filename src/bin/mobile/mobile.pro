@@ -52,7 +52,7 @@ OTHER_FILES +=  qml/main.qml \
     qml/Feed.qml \
     qml/Post.qml \
     qml/FacebookPicture.qml \
-    qml/NewsPage.qml
+    qml/NewsPage.qml \
 
 # Deployment
 contains(CONFIG, optify) {

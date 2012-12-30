@@ -25,6 +25,7 @@ Item {
     width: parent.width
     height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
                                                                 : 0)
+    property bool loading: model.loading
     property string graph
     property alias validator: model.validator
     function load() {
@@ -35,6 +36,7 @@ Item {
         id: column
         width: parent.width
         spacing: Ui.MARGIN_DEFAULT
+
         Repeater {
             model: QFBFeedModel {
                 id: model
@@ -57,14 +59,27 @@ Item {
                     haveAdressee: postHelper.haveAdressee
                     to: postHelper.to
                     message: postHelper.message
+                    opacity: 0
+                    Component.onCompleted: opacity = 1
+
+                    Behavior on opacity {
+                        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
+                    }
                 }
             }
         }
     }
 
+    BusyIndicator {
+        anchors.verticalCenter: button.verticalCenter
+        anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        visible: model.loading
+        running: visible
+    }
+
     Button {
         id: button
-        visible: model.haveNext && model.count > 0
+        visible: (model.haveNext && model.count > 0) || model.loading
         anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.horizontalCenter: parent.horizontalCenter
         text: !model.loading ? qsTr("Load more") : qsTr("Loading")

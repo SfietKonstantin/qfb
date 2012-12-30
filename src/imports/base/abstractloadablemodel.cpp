@@ -158,6 +158,8 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
     d->haveNext = true;
     emit haveNextChanged();
     d->reply = createReply(graph, arguments);
+    d->loading = true;
+    emit loadingChanged();
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
 }
