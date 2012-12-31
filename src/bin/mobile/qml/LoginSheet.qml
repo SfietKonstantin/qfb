@@ -21,7 +21,6 @@ import com.nokia.meego 1.0
 import com.nokia.extras 1.1
 
 Sheet {
-    property QtObject loginManager
     onRejected: Qt.quit()
     rejectButtonText: qsTr("Cancel")
     onStatusChanged: {

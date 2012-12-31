@@ -21,7 +21,6 @@ import "UiConstants.js" as Ui
 
 Image {
     id: picture
-    property QtObject queryManager
     property string facebookId
     onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
     width: Ui.ICON_SIZE_DEFAULT
@@ -43,7 +42,7 @@ Image {
 
     QFBPictureLoader {
         id: pictureLoader
-        queryManager: picture.queryManager
+        queryManager: QUERY_MANAGER
         Component.onCompleted: request(picture.facebookId + "/picture")
     }
 }

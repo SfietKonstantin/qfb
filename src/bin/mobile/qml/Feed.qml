@@ -22,13 +22,12 @@ import "UiConstants.js" as Ui
 
 Item {
     id: container
-    signal addPage(string userData)
     width: parent.width
     height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
                                                                 : 0)
     property bool loading: model.loading
     property string graph
-    property alias validator: model.validator
+//    property alias validator: model.validator
     function load() {
         model.request(container.graph)
     }

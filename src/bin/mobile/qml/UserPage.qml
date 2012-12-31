@@ -35,9 +35,7 @@ Page {
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: {
-                window.pageStack.pop()
-            }
+            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
         ButtonRow {
             style: TabButtonStyle {}

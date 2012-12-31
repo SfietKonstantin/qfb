@@ -22,6 +22,11 @@ PageManagementBridge::PageManagementBridge(QObject *parent) :
 {
 }
 
+void PageManagementBridge::pop()
+{
+    emit popRequested();
+}
+
 void PageManagementBridge::addUserPage(const QString &userInfo)
 {
     QStringList splittedUserInfo = userInfo.split("-");

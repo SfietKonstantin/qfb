@@ -35,7 +35,6 @@ Item {
         FacebookImage {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            queryManager: QUERY_MANAGER
             url: coverUrl
         }
 

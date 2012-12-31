@@ -27,12 +27,13 @@ Page {
         banner.loaded = false
         userLoader.request("me", "fields=cover")
         feed.load()
+//        model.request("me/home")
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
+            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
     }
 
@@ -67,6 +68,43 @@ Page {
                 graph: "me/home"
             }
         }
+
+//        ListView {
+//            anchors.fill: parent
+//            model: QFBFeedModel {
+//                id: model
+//                queryManager: QUERY_MANAGER
+//            }
+//            spacing: Ui.MARGIN_DEFAULT
+
+//            delegate: Item {
+//                width: container.width
+//                height: content.height
+
+//                QFBPostHelper {
+//                    id: postHelper
+//                    post: model.data
+//                }
+
+//                Post {
+//                    id: content
+//                    header: postHelper.header
+//                    from: model.data.from
+//                    createdTime: model.data.createdTime
+//                    message: postHelper.message
+//                    picture: model.data.picture
+//                    name: model.data.name
+//                    caption: model.data.caption
+//                    description: model.data.description
+//                    opacity: 0
+//                    Component.onCompleted: opacity = 1
+
+//                    Behavior on opacity {
+//                        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
+//                    }
+//                }
+//            }
+//        }
     }
 
 

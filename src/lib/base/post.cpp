@@ -37,6 +37,12 @@ Post::Post(const PropertiesMap propertiesMap, QObject *parent):
     Object(propertiesMap, parent)
 {
     Q_D(Object);
+    // Reparent from
+    QObject *fromObject = d->propertiesMap.value(FromProperty).value<NamedObject *>();
+    if (fromObject) {
+        fromObject->setParent(this);
+    }
+
     // Reparent to
     QVariantList toVariantList = d->propertiesMap.value(ToProperty).toList();
     foreach (QVariant toVariant, toVariantList) {

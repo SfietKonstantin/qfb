@@ -21,7 +21,6 @@ import "UiConstants.js" as Ui
 
 Image {
     id: image
-    property QtObject queryManager
     property string url
     onUrlChanged: imageLoader.request(url)
     smooth: true
@@ -41,7 +40,7 @@ Image {
 
     QFBImageLoader {
         id: imageLoader
-        queryManager: image.queryManager
+        queryManager: QUERY_MANAGER
         Component.onCompleted: request(image.url)
     }
 }

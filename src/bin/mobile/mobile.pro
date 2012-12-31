@@ -43,19 +43,19 @@ SOURCES +=      main.cpp \
 OTHER_FILES +=  qml/main.qml \
                 qml/UiConstants.js \
                 qml/ClickableEntry.qml \
-    qml/LoginSheet.qml \
-    qml/MainPage.qml \
-    qml/Banner.qml \
-    qml/FriendListPage.qml \
-    qml/FriendEntry.qml \
-    qml/UserPage.qml \
-    qml/Container.qml \
-    qml/UserInfo.qml \
-    qml/Feed.qml \
-    qml/Post.qml \
-    qml/FacebookPicture.qml \
-    qml/NewsPage.qml \
-    qml/FacebookImage.qml \
+                qml/FacebookImage.qml \
+                qml/FacebookPicture.qml \
+                qml/Banner.qml \
+                qml/Container.qml \
+                qml/Post.qml \
+                qml/Feed.qml \
+                qml/LoginSheet.qml \
+                qml/NewsPage.qml \
+                qml/MainPage.qml \
+                qml/UserInfo.qml \
+                qml/UserPage.qml \
+#    qml/FriendListPage.qml \
+#    qml/FriendEntry.qml \
 
 # Deployment
 contains(CONFIG, optify) {

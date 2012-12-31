@@ -26,8 +26,10 @@ public:
     explicit PageManagementBridge(QObject *parent = 0);
 
 signals:
+    void popRequested();
     void addUserPageRequested(const QString &facebookId, const QString &name);
 public slots:
+    void pop();
     void addUserPage(const QString &userInfo);
     void addUserPage(const QString &facebookId, const QString &name);
 };

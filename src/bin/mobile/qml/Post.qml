@@ -43,7 +43,6 @@ Rectangle {
 
         FacebookPicture {
             id: picture
-            queryManager: QUERY_MANAGER
             anchors.verticalCenter: parent.verticalCenter
             facebookId: from.facebookId
         }
@@ -110,7 +109,6 @@ Rectangle {
             FacebookImage {
                 id: postImage
                 anchors.horizontalCenter: parent.horizontalCenter
-                queryManager: QUERY_MANAGER
                 url: container.picture
             }
 

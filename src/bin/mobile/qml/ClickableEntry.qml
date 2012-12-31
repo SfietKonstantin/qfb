@@ -56,8 +56,7 @@ Item
                 "-background-pressed-center"
     }
 
-    Image
-    {
+    Image {
         id: icon
         anchors.left: parent.left;
         anchors.leftMargin: container.icon != "" ? Ui.MARGIN_DEFAULT : 0
@@ -70,7 +69,7 @@ Item
         asynchronous: true
         opacity: 0
         states: State {
-            name: "visible"; when: status == Image.Ready
+            name: "visible"; when: icon.status == Image.Ready
             PropertyChanges {
                 target: icon
                 opacity: 1

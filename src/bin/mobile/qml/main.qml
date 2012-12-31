@@ -24,15 +24,6 @@ PageStackWindow {
     id: window
     initialPage: mainPage
 
-    Connections {
-        target: PAGE_MANAGEMENT_BRIDGE
-        onAddUserPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
-                                                {"facebookId": facebookId, "name": name})
-            newPage.load()
-        }
-    }
-
     Component.onCompleted: {
         LOGIN_MANAGER.clientId = "390204064393625"
         LOGIN_MANAGER.uiType = QFBLoginManager.Mobile
@@ -90,6 +81,16 @@ PageStackWindow {
         }
     }
 
+    Connections {
+        target: PAGE_MANAGEMENT_BRIDGE
+        onPopRequested: window.pageStack.pop()
+        onAddUserPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                                                {"facebookId": facebookId, "name": name})
+            newPage.load()
+        }
+    }
+
 
     QtObject {
         id: me
@@ -118,7 +119,6 @@ PageStackWindow {
 
     LoginSheet {
         id: loginSheet
-        loginManager: loginManager
     }
 
     MainPage {
