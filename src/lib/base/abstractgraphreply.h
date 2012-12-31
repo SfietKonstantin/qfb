@@ -45,6 +45,12 @@ class AbstractGraphReplyPrivate;
  * processData() should be implemented in order to parse the data
  * that is retrived from Facebook.
  *
+ * This class provides useful methods to use and reimplement in order
+ * to perform replies to Facebook in an easy way. First, it provides
+ * the request() method, that perform a query, depending on the graph
+ * and argument that are passed. preprocessArguments() can also be
+ * reimplemented in order to modify the arguments that are passed.
+ *
  * @see AbstractReply
  *
  * @todo implement a way to manage OAuth exceptions.

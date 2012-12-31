@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file abstractgraphpagingreply.cpp
+ * @brief Implementation of QFB::AbstractGraphPagingReply
+ */
+
 #include "abstractgraphpagingreply.h"
 #include "abstractgraphpagingreply_p.h"
 

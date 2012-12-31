@@ -186,8 +186,19 @@ static const char *SIGNIFICANT_OTHER_KEY = "significant_other";
  * Used in QFB::UserReply.
  */
 static const char *WEBSITE_KEY = "website";
-
+/**
+ * @internal
+ * @brief GENDER_MALE
+ *
+ * Used in QFB::UserReply.
+ */
 static const char *GENDER_MALE = "male";
+/**
+ * @internal
+ * @brief GENDER_FEMALE
+ *
+ * Used in QFB::UserReply.
+ */
 static const char *GENDER_FEMALE = "female";
 
 /**

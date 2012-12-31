@@ -66,8 +66,12 @@ public:
      * @return access token.
      */
     QString token() const;
+    /**
+     * @brief Query an image
+     * @param url url to the image.
+     * @return an image reply.
+     */
     ImageReply * queryImage(const QUrl &url);
-
     /**
      * @brief Query a friend list
      * @param graph graph entry of the Facebook graph API.

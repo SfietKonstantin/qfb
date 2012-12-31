@@ -12,17 +12,27 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef BASEIMPORT_GLOBAL_H
 #define BASEIMPORT_GLOBAL_H
 
+/**
+ * @file baseimport_global.h
+ * @short Global qfbimport library header
+ */
+
 #include <QtCore/qglobal.h>
 
-#if defined(BASEIMPORT_LIBRARY)
-#  define BASEIMPORTSHARED_EXPORT Q_DECL_EXPORT
+/**
+ * \def QFBBASEIMPORT_EXPORT
+ * @short Library export or import
+ */
+
+#if defined(QFBBASEIMPORT_LIBRARY)
+#  define QFBBASEIMPORT_EXPORT Q_DECL_EXPORT
 #else
-#  define BASEIMPORTSHARED_EXPORT Q_DECL_IMPORT
+#  define QFBBASEIMPORT_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // BASEIMPORT_GLOBAL_H

@@ -17,12 +17,29 @@
 #ifndef QFB_ABSTRACTGRAPHPAGINATEDREPLY_P_H
 #define QFB_ABSTRACTGRAPHPAGINATEDREPLY_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
+/**
+ * @internal
+ * @file abstractgraphpagingreply_p.h
+ * @brief Definition of QFB::AbstractGraphPagingReplyPrivate
+ */
+
 #include "abstractgraphreply_p.h"
 
 namespace QFB
 {
 
 class AbstractGraphPagingReply;
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractGraphPagingReply
+ */
 class AbstractGraphPagingReplyPrivate: public AbstractGraphReplyPrivate
 {
 public:
@@ -32,7 +49,15 @@ public:
      * @param q Q-pointer
      */
     AbstractGraphPagingReplyPrivate(AbstractGraphPagingReply *q);
+    /**
+     * @internal
+     * @brief Graph used to get the next page
+     */
     QString nextPageGraph;
+    /**
+     * @internal
+     * @brief Arguments used to get the next page
+     */
     QString nextPageArguments;
 private:
     Q_DECLARE_PUBLIC(AbstractGraphPagingReply)

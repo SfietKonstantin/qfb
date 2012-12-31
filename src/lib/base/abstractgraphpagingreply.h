@@ -17,11 +17,27 @@
 #ifndef QFB_ABSTRACTGRAPHPAGINGREPLY_H
 #define QFB_ABSTRACTGRAPHPAGINGREPLY_H
 
+/**
+ * @file abstractgraphpagingreply.h
+ * @brief Definition of QFB::AbstractGraphPagingReply
+ */
+
 #include "abstractgraphreply.h"
 
 namespace QFB
 {
 class AbstractGraphPagingReplyPrivate;
+/**
+ * @brief Base class for a reply that have several pages
+ *
+ * This class is the base class for graph based replies that
+ * have pages. It only provides some getters and setters, in
+ * order for the implemented reply to set the next pages.
+ *
+ * setNextPageUrl() should be used in order to automatically
+ * extract the relevant part of the URL that can be used in
+ * a query for the next page.
+ */
 class QFBBASE_EXPORT AbstractGraphPagingReply: public AbstractGraphReply
 {
 public:
@@ -37,7 +53,15 @@ public:
      */
     explicit AbstractGraphPagingReply(QNetworkAccessManager *networkAccessManager,
                                          QObject *parent = 0);
+    /**
+     * @brief Graph used to get the next page
+     * @return graph used to get the next page.
+     */
     QString nextPageGraph() const;
+    /**
+     * @brief Arguments used to get the next page
+     * @return arguments used to get the next page.
+     */
     QString nextPageArguments() const;
 protected:
     /**
@@ -46,6 +70,10 @@ protected:
      * @param parent parent object.
      */
     explicit AbstractGraphPagingReply(AbstractGraphReplyPrivate &dd, QObject *parent = 0);
+    /**
+     * @brief Set the url used to get the next page
+     * @param url url used to get the next page.
+     */
     void setNextPageUrl(const QUrl &url);
 private:
     Q_DECLARE_PRIVATE(AbstractGraphPagingReply)

@@ -17,6 +17,8 @@
 #ifndef QFB_POSTVALIDATOR_H
 #define QFB_POSTVALIDATOR_H
 
+#include "baseimport_global.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
 
@@ -24,7 +26,8 @@ namespace QFB
 {
 
 class Post;
-class PostValidator: public QObject
+
+class QFBBASEIMPORT_EXPORT PostValidator: public QObject
 {
     Q_OBJECT
 public:

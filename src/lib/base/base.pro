@@ -35,8 +35,6 @@ HEADERS +=  base_global.h \
             feedreply.h \
     abstractgraphpagingreply.h \
     abstractgraphpagingreply_p.h \
-    abstractgraphobjectreply.h \
-    abstractgraphobjectreply_p.h
 
 SOURCES +=  object.cpp \
             namedobject.cpp \
@@ -53,7 +51,6 @@ SOURCES +=  object.cpp \
             userreply.cpp \
             feedreply.cpp \
     abstractgraphpagingreply.cpp \
-    abstractgraphobjectreply.cpp
 
 # Deployment
 target.path = $${LIBDIR}
