@@ -61,9 +61,9 @@ Page {
                             PAGE_MANAGEMENT_BRIDGE.addUserPage("me", me.name)
                         }
 
-//                    } else if (model.action == "showFriends") {
-//                        friendListPage.load()
-//                        window.pageStack.push(friendListPage)
+                    } else if (model.action == "showFriends") {
+                        friendListPage.load()
+                        window.pageStack.push(friendListPage)
                     }
                 }
             }
@@ -76,7 +76,7 @@ Page {
         name: me.name
     }
 
-//    FriendListPage {
-//        id: friendListPage
-//    }
+    FriendListPage {
+        id: friendListPage
+    }
 }
