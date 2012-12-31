@@ -45,19 +45,51 @@ Page {
             id: friendListModel
             queryManager: QUERY_MANAGER
             autoLoadNext: true
+            onLoadingChanged: console.debug(friendListModel.loading)
         }
 
         ListView {
-            clip: true
+            id: listView
+            property double opacityValue: 0
             anchors.top: banner.bottom; anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
+            clip: true
             model: friendListModel
             delegate: FriendEntry {
                 facebookId: model.data.id
                 name: model.data.name
+                opacity: listView.opacityValue
             }
             ScrollDecorator {flickableItem: parent}
             cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
+            states: [
+                State {
+                    name: "loaded"; when: !friendListModel.loading
+                    PropertyChanges {
+                        target: listView
+                        opacityValue: 1
+                    }
+                }
+            ]
+
+            Behavior on opacityValue {
+                NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
+            }
+
+            Row {
+                id: loadingIndicator
+                anchors.centerIn: parent
+                visible: friendListModel.loading
+                spacing: Ui.MARGIN_DEFAULT
+
+                BusyIndicator {
+                    running: loadingIndicator.visible
+                }
+
+                Label {
+                    text: qsTr("Loading")
+                }
+            }
         }
     }
 

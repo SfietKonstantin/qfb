@@ -48,7 +48,7 @@ class ObjectPrivate;
  *
  * This class represents any entity in Facebook, as
  * a QObject based object. All Facebook entities
- * provides an id, that can be accessed though the id()
+ * provides an id, that can be accessed though the facebookId()
  * property.
  *
  * All Facebook entities can carry quite a lot of types
@@ -62,7 +62,7 @@ class QFBBASE_EXPORT Object : public QObject
     /**
      * @short The object's Facebook ID
      */
-    Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(QString facebookId READ facebookId CONSTANT)
 public:
     /**
      * @brief Invalid constructor
@@ -80,10 +80,10 @@ public:
      */
     virtual ~Object();
     /**
-     * @brief Id
-     * @return id.
+     * @brief Facebook identifier
+     * @return facebook identifier.
      */
-    QString id() const;
+    QString facebookId() const;
 protected:
     /**
      * @brief D-pointer constructor

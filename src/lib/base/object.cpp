@@ -53,7 +53,7 @@ Object::~Object()
 {
 }
 
-QString Object::id() const
+QString Object::facebookId() const
 {
     Q_D(const Object);
     return d->propertiesMap.value(IdProperty).toString();

@@ -21,14 +21,15 @@ import "UiConstants.js" as Ui
 
 Rectangle {
     id: container
+    property string header
     property QtObject from
-    property QtObject to
     property date createdTime
     property string message
     property string picture
     property string name
     property string caption
     property string description
+    signal userClicked(string userData)
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
     height: childrenRect.height + 2 * Ui.MARGIN_DEFAULT
@@ -45,7 +46,7 @@ Rectangle {
             id: picture
             queryManager: QUERY_MANAGER
             anchors.verticalCenter: parent.verticalCenter
-            facebookId: from.id
+            facebookId: from.facebookId
         }
 
         Item {
@@ -59,9 +60,10 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
-                text: from.name + (to != null ? " > " + to.name : "")
+                text: header
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
+                onLinkActivated: container.userClicked(link)
             }
 
             Label {

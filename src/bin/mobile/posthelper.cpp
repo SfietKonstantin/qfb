@@ -19,19 +19,29 @@
 
 #include <QtCore/QDebug>
 
+static const char *RICH_TEXT_NAME
+    = "<a style=\"text-decoration:none; color:#0057AE\" href=\"%1-%2\">%3</a>";
+
 PostHelper::PostHelper(QObject *parent) :
     QObject(parent)
 {
     m_post = 0;
+    m_to = 0;
 }
 
 QFB::Post * PostHelper::post() const
 {
     return m_post;
 }
+
 QFB::NamedObject * PostHelper::to() const
 {
     return m_to;
+}
+
+QString PostHelper::header() const
+{
+    return m_header;
 }
 
 QString PostHelper::message() const
@@ -61,18 +71,34 @@ void PostHelper::createPost()
         message = m_post->story();
     }
 
+    if (m_message != message) {
+        m_message = message;
+        emit messageChanged();
+    }
+
+    QFB::NamedObject *from = m_post->from();
     QFB::NamedObject *to = 0;
     if (m_post->to().count() == 1) {
         to = m_post->to().first();
+    }
+    QString toHeader = RICH_TEXT_NAME;
+    if (to) {
+        toHeader = toHeader.arg(to->facebookId(), to->name(), to->name());
+    }
+    QString header = RICH_TEXT_NAME;
+    header = header.arg(from->facebookId(), from->name(), from->name());
+
+    if (to) {
+        header.append(" &gt; ");
+        header.append(toHeader);
     }
 
     if (m_to != to) {
         m_to = to;
         emit toChanged();
     }
-
-    if (m_message != message) {
-        m_message = message;
-        emit messageChanged();
+    if (m_header != header) {
+        m_header = header;
+        emit headerChanged();
     }
 }

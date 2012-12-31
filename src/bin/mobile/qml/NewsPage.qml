@@ -57,10 +57,6 @@ Page {
         anchors.bottom: parent.bottom
         anchors.left: parent.left; anchors.right: parent.right
 
-//        LoadingDecorator {
-//            loading: feed.loading
-//        }
-
         ScrollDecorator { flickableItem: flickable }
         Flickable {
             id: flickable

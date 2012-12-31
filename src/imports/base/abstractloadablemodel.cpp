@@ -48,6 +48,11 @@ void AbstractLoadableModelPrivate::setDoNotHaveNext()
     Q_Q(AbstractLoadableModel);
     haveNext = false;
     emit q->haveNextChanged();
+
+    if (loading) {
+        loading = false;
+        emit q->loadingChanged();
+    }
 }
 
 void AbstractLoadableModelPrivate::slotFinished()
@@ -64,12 +69,16 @@ void AbstractLoadableModelPrivate::slotFinished()
     reply = 0;
 
     if (!ok) {
+        loading = false;
+        emit q->loadingChanged();
         return;
     }
 
     if (autoLoadNext) {
         q->loadNext();
+        return;
     }
+
     loading = false;
     emit q->loadingChanged();
 }
@@ -158,8 +167,11 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
     d->haveNext = true;
     emit haveNextChanged();
     d->reply = createReply(graph, arguments);
-    d->loading = true;
-    emit loadingChanged();
+
+    if (!d->loading) {
+        d->loading = true;
+        emit loadingChanged();
+    }
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
 }
@@ -179,10 +191,12 @@ void AbstractLoadableModel::loadNext()
     }
 
     d->reply = createReply(d->nextPageGraph, d->nextPageArguments);
+    if (!d->loading) {
+        d->loading = true;
+        emit loadingChanged();
+    }
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
-    d->loading = true;
-    emit loadingChanged();
 }
 
 }

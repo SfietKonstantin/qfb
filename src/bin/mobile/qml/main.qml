@@ -24,6 +24,10 @@ PageStackWindow {
     id: window
     initialPage: mainPage
 
+    Connections {
+        target: window.pageStack
+    }
+
     Component.onCompleted: {
         LOGIN_MANAGER.clientId = "390204064393625"
         LOGIN_MANAGER.uiType = QFBLoginManager.Mobile

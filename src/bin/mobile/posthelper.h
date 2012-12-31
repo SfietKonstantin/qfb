@@ -24,22 +24,26 @@ class PostHelper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QFB::Post * post READ post WRITE setPost NOTIFY postChanged)
+    Q_PROPERTY(QString header READ header NOTIFY headerChanged)
     Q_PROPERTY(QFB::NamedObject * to READ to NOTIFY toChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
 public:
     explicit PostHelper(QObject *parent = 0);
     QFB::Post * post() const;
+    QString header() const;
     QFB::NamedObject * to() const;
     QString message() const;
 public slots:
     void setPost(QFB::Post *post);
 signals:
     void postChanged();
+    void headerChanged();
     void toChanged();
     void messageChanged();
 private:
     void createPost();
     QFB::Post *m_post;
+    QString m_header;
     QFB::NamedObject *m_to;
     QString m_message;
 };

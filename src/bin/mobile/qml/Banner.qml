@@ -33,8 +33,8 @@ Item {
         clip: true
 
         FacebookImage {
-            width: parent.width
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
             queryManager: QUERY_MANAGER
             url: coverUrl
         }

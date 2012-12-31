@@ -54,9 +54,9 @@ Item {
 
                 Post {
                     id: content
+                    header: postHelper.header
                     from: model.data.from
                     createdTime: model.data.createdTime
-                    to: postHelper.to
                     message: postHelper.message
                     picture: model.data.picture
                     name: model.data.name
@@ -64,6 +64,15 @@ Item {
                     description: model.data.description
                     opacity: 0
                     Component.onCompleted: opacity = 1
+                    onUserClicked: {
+                        var userDataSplitted = userData.split("-")
+                        var facebookId = userDataSplitted[0]
+                        var name = userDataSplitted[1]
+                        var userPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                                                             {"facebookId": facebookId,
+                                                              "name": name})
+                        userPage.load()
+                    }
 
                     Behavior on opacity {
                         NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }

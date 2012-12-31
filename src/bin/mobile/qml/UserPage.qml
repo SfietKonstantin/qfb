@@ -28,15 +28,16 @@ Page {
         banner.loaded = false
         portraitLoader.request(facebookId + "/picture")
         userLoader.request(facebookId, "fields=cover")
-        feed.load()
         feedButton.checked = true
-
+        feed.load()
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: window.pageStack.pop()
+            onClicked: {
+                window.pageStack.pop()
+            }
         }
         ButtonRow {
             style: TabButtonStyle {}
@@ -67,8 +68,6 @@ Page {
             }
         }
     }
-
-
 
     ScrollDecorator { flickableItem: flickable }
     Flickable {
@@ -126,7 +125,7 @@ Page {
             id: feed
             visible: feedButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            graph: "me/feed"
+            graph: container.facebookId + "/feed"
             validator: QFBMobilePostValidator {}
         }
 

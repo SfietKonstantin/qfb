@@ -52,11 +52,20 @@ Page {
                 text: model.text
                 onClicked: {
                     if (model.action == "showNews") {
-                        window.pageStack.push(newsPage)
-                        newsPage.load()
+                        if (me.name != "") {
+                            var newsPage = window.pageStack.push(Qt.resolvedUrl("NewsPage.qml"),
+                                                                 {"facebookId": "me",
+                                                                  "name": me.name})
+                            newsPage.load()
+                        }
                     } else if (model.action == "showMe") {
-                        mePage.load()
-                        window.pageStack.push(mePage)
+                        if (me.name != "") {
+                            var mePage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                                                               {"facebookId": "me",
+                                                                "name": me.name})
+                            mePage.load()
+                        }
+
                     } else if (model.action == "showFriends") {
                         friendListPage.load()
                         window.pageStack.push(friendListPage)
@@ -70,17 +79,4 @@ Page {
     FriendListPage {
         id: friendListPage
     }
-
-    NewsPage {
-        id: newsPage
-        facebookId: "me"
-        name: me.name
-    }
-
-    UserPage {
-        id: mePage
-        facebookId: "me"
-        name: me.name
-    }
-
 }
