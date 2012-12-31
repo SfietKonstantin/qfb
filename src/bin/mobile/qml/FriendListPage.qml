@@ -59,6 +59,8 @@ Page {
                 facebookId: model.data.facebookId
                 name: model.data.name
                 opacity: listView.opacityValue
+                onClicked: PAGE_MANAGEMENT_BRIDGE.addUserPage(model.data.facebookId,
+                                                              model.data.name)
             }
             ScrollDecorator {flickableItem: parent}
             cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5

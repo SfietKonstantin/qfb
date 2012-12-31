@@ -40,7 +40,6 @@ Item
     FacebookPicture {
         id: picture
         facebookId: container.facebookId
-        queryManager: QUERY_MANAGER
         anchors.left: parent.left;
         anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.verticalCenter: parent.verticalCenter
