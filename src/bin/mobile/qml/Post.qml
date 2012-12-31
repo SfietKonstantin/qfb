@@ -29,7 +29,6 @@ Rectangle {
     property string name
     property string caption
     property string description
-    signal userClicked(string userData)
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
     height: childrenRect.height + 2 * Ui.MARGIN_DEFAULT
@@ -63,7 +62,7 @@ Rectangle {
                 text: header
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
-                onLinkActivated: container.userClicked(link)
+                onLinkActivated: PAGE_MANAGEMENT_BRIDGE.addUserPage(link)
             }
 
             Label {

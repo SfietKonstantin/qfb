@@ -22,11 +22,10 @@ import "UiConstants.js" as Ui
 
 Page {
     id: container
-    property string facebookId
     property string name
     function load() {
         banner.loaded = false
-        userLoader.request(facebookId, "fields=cover")
+        userLoader.request("me", "fields=cover")
         feed.load()
     }
 
@@ -45,7 +44,6 @@ Page {
                 if (!banner.loaded) {
                     banner.loaded = true
                     banner.coverUrl = user.cover.source
-                    userLoader.request(facebookId)
                 }
             }
         }

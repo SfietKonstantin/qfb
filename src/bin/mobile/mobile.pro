@@ -27,7 +27,8 @@ HEADERS +=      tokenmanager.h \
     networkaccessmanager.h \
     userinfohelper.h \
     posthelper.h \
-    mobilepostvalidator.h
+    mobilepostvalidator.h \
+    pagemanagementbridge.h
 
 SOURCES +=      main.cpp \
                 tokenmanager.cpp \
@@ -35,7 +36,8 @@ SOURCES +=      main.cpp \
     networkaccessmanager.cpp \
     userinfohelper.cpp \
     posthelper.cpp \
-    mobilepostvalidator.cpp
+    mobilepostvalidator.cpp \
+    pagemanagementbridge.cpp
 
 
 OTHER_FILES +=  qml/main.qml \

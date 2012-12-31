@@ -126,7 +126,6 @@ Page {
             visible: feedButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             graph: container.facebookId + "/feed"
-            validator: QFBMobilePostValidator {}
         }
 
         UserInfo {

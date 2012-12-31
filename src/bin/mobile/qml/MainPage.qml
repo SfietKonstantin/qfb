@@ -53,17 +53,12 @@ Page {
                 onClicked: {
                     if (model.action == "showNews") {
                         if (me.name != "") {
-                            var newsPage = window.pageStack.push(Qt.resolvedUrl("NewsPage.qml"),
-                                                                 {"facebookId": "me",
-                                                                  "name": me.name})
                             newsPage.load()
+                            window.pageStack.push(newsPage)
                         }
                     } else if (model.action == "showMe") {
                         if (me.name != "") {
-                            var mePage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
-                                                               {"facebookId": "me",
-                                                                "name": me.name})
-                            mePage.load()
+                            PAGE_MANAGEMENT_BRIDGE.addUserPage("me", me.name)
                         }
 
                     } else if (model.action == "showFriends") {
@@ -74,6 +69,11 @@ Page {
             }
             ScrollDecorator {flickableItem: parent}
         }
+    }
+
+    NewsPage {
+        id: newsPage
+        name: me.name
     }
 
     FriendListPage {

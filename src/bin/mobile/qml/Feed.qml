@@ -22,6 +22,7 @@ import "UiConstants.js" as Ui
 
 Item {
     id: container
+    signal addPage(string userData)
     width: parent.width
     height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
                                                                 : 0)
@@ -64,15 +65,6 @@ Item {
                     description: model.data.description
                     opacity: 0
                     Component.onCompleted: opacity = 1
-                    onUserClicked: {
-                        var userDataSplitted = userData.split("-")
-                        var facebookId = userDataSplitted[0]
-                        var name = userDataSplitted[1]
-                        var userPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
-                                                             {"facebookId": facebookId,
-                                                              "name": name})
-                        userPage.load()
-                    }
 
                     Behavior on opacity {
                         NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }

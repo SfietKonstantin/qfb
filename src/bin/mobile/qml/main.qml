@@ -25,7 +25,12 @@ PageStackWindow {
     initialPage: mainPage
 
     Connections {
-        target: window.pageStack
+        target: PAGE_MANAGEMENT_BRIDGE
+        onAddUserPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                                                {"facebookId": facebookId, "name": name})
+            newPage.load()
+        }
     }
 
     Component.onCompleted: {
