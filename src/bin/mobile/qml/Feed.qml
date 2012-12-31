@@ -27,7 +27,6 @@ Item {
                                                                 : 0)
     property bool loading: model.loading
     property string graph
-//    property alias validator: model.validator
     function load() {
         model.request(container.graph)
     }
