@@ -56,7 +56,7 @@ Page {
             clip: true
             model: friendListModel
             delegate: FriendEntry {
-                facebookId: model.data.id
+                facebookId: model.data.facebookId
                 name: model.data.name
                 opacity: listView.opacityValue
             }
