@@ -45,7 +45,6 @@ Page {
             id: friendListModel
             queryManager: QUERY_MANAGER
             autoLoadNext: true
-            onLoadingChanged: console.debug(friendListModel.loading)
         }
 
         ListView {

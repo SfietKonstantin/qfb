@@ -29,10 +29,7 @@
 #include "typereply.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QThreadPool>
 #include <QtNetwork/QNetworkAccessManager>
-
-static const int TOTAL_TASKS = 2;
 
 namespace QFB
 {
