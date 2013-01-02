@@ -27,13 +27,13 @@ void PageManagementBridge::pop()
     emit popRequested();
 }
 
-void PageManagementBridge::addUserPage(const QString &userInfo)
+void PageManagementBridge::resolveType(const QString &facebookId, const QString &name)
 {
-    QStringList splittedUserInfo = userInfo.split("-");
-    addUserPage(splittedUserInfo[0], splittedUserInfo[1]);
+    emit resolveTypeRequested(facebookId, name);
 }
 
 void PageManagementBridge::addUserPage(const QString &facebookId, const QString &name)
 {
     emit addUserPageRequested(facebookId, name);
 }
+

@@ -14,57 +14,31 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHREPLY_P_H
-#define QFB_ABSTRACTGRAPHREPLY_P_H
+#ifndef QFB_TYPELOADER_H
+#define QFB_TYPELOADER_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "abstractgraphloader.h"
+#include "namedobject.h"
 
-/**
- * @internal
- * @file abstractgraphreply_p.h
- * @brief Definition of QFB::AbstractGraphReplyPrivate
- */
-
-#include "abstractreply_p.h"
-
-class QNetworkAccessManager;
 namespace QFB
 {
 
-class AbstractGraphReply;
-/**
- * @internal
- * @brief Private class for QFB::AbstractGraphReply
- */
-class AbstractGraphReplyPrivate: public AbstractReplyPrivate
+class TypeLoaderPrivate;
+class TypeLoader : public AbstractGraphLoader
 {
+    Q_OBJECT
+    Q_PROPERTY(QFB::Object * object READ object NOTIFY objectChanged)
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    AbstractGraphReplyPrivate(AbstractGraphReply *q);
-    /**
-     * @internal
-     * @brief Graph
-     */
-    QString graph;
-    /**
-     * @internal
-     * @brief Arguments
-     */
-    QList<ArgumentPair> arguments;
-    QString token;
+    explicit TypeLoader(QObject *parent = 0);
+    Object * object() const;
+Q_SIGNALS:
+    void objectChanged();
+protected:
+    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
 private:
-    Q_DECLARE_PUBLIC(AbstractGraphReply)
+    Q_DECLARE_PRIVATE(TypeLoader)
 };
 
 }
 
-#endif // QFB_ABSTRACTGRAPHREPLY_P_H
+#endif // TYPELOADER_H

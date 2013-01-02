@@ -70,14 +70,14 @@ void AbstractReplyPrivate::slotFinished()
                    q, SLOT(slotError(QNetworkReply::NetworkError)));
         return;
     }
-    running = false;
+    loading = false;
 
 
     if (q->processData(reply)) {
-        emit q->finished();
+        emit q->loadingFinished();
         return;
     } else {
-        emit q->failed();
+        emit q->loadingFailed();
         return;
     }
 }
@@ -85,46 +85,48 @@ void AbstractReplyPrivate::slotFinished()
 void AbstractReplyPrivate::slotError(QNetworkReply::NetworkError error)
 {
     Q_Q(AbstractReply);
-    running = false;
+    loading = false;
     isError = true;
     q->setError(QString("Network error %1").arg(error));
-    emit q->failed();
+    emit q->loadingFailed();
 }
 
 ////// End of private class //////
 
 AbstractReply::AbstractReply(QObject *parent):
-    QObject(parent), d_ptr(new AbstractReplyPrivate(this))
+    QThread(parent), d_ptr(new AbstractReplyPrivate(this))
 {
     Q_D(AbstractReply);
     d->networkAccessManager = 0;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractReply::AbstractReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    QObject(parent), d_ptr(new AbstractReplyPrivate(this))
+    QThread(parent), d_ptr(new AbstractReplyPrivate(this))
 {
     Q_D(AbstractReply);
     d->networkAccessManager = networkAccessManager;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractReply::AbstractReply(AbstractReplyPrivate &dd, QObject *parent):
-    QObject(parent), d_ptr(&dd)
+    QThread(parent), d_ptr(&dd)
 {
     Q_D(AbstractReply);
     d->networkAccessManager = 0;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractReply::~AbstractReply()
 {
+    quit();
+    wait(1000);
 }
 
-bool AbstractReply::isRunning() const
+bool AbstractReply::isLoading() const
 {
     Q_D(const AbstractReply);
-    return d->running;
+    return d->loading;
 }
 
 QString AbstractReply::error() const
@@ -151,7 +153,7 @@ void AbstractReply::get(const QUrl &url)
     }
     qDebug() << "Request url: " << url;
 
-    d->running = true;
+    d->loading = true;
     d->reply = d->networkAccessManager->get(QNetworkRequest(url));
     connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
     connect(d->reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -167,7 +169,7 @@ QUrl AbstractReply::url() const
 bool AbstractReply::event(QEvent *event)
 {
     if (event->type() == QEvent::User) {
-        emit finished();
+        emit loadingFinished();
         return true;
     }
     return QObject::event(event);

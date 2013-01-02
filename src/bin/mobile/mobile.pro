@@ -56,6 +56,7 @@ OTHER_FILES +=  qml/main.qml \
                 qml/UserPage.qml \
                 qml/FriendEntry.qml \
                 qml/FriendListPage.qml \
+    qml/TypePage.qml
 
 # Deployment
 contains(CONFIG, optify) {

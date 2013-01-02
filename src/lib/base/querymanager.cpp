@@ -19,14 +19,20 @@
  * @brief Implementation of QFB::QueryManager
  */
 
+
 #include "querymanager.h"
 #include "imagereply.h"
 #include "friendlistreply.h"
 #include "picturereply.h"
 #include "userreply.h"
 #include "feedreply.h"
+#include "typereply.h"
 
+#include <QtCore/QDebug>
+#include <QtCore/QThreadPool>
 #include <QtNetwork/QNetworkAccessManager>
+
+static const int TOTAL_TASKS = 2;
 
 namespace QFB
 {
@@ -38,6 +44,7 @@ namespace QFB
 class QueryManagerPrivate
 {
 public:
+    explicit QueryManagerPrivate(QueryManager *q);
     /**
      * @internal
      * @brief Network access manager
@@ -48,12 +55,21 @@ public:
      * @brief Token
      */
     QString token;
+    QList<AbstractReply *> replyQueue;
+private:
+    QueryManager * const q_ptr;
+    Q_DECLARE_PUBLIC(QueryManager)
 };
+
+QueryManagerPrivate::QueryManagerPrivate(QueryManager *q):
+    q_ptr(q)
+{
+}
 
 ////// End or private class //////
 
 QueryManager::QueryManager(QObject *parent) :
-    QObject(parent), d_ptr(new QueryManagerPrivate())
+    QObject(parent), d_ptr(new QueryManagerPrivate(this))
 {
     Q_D(QueryManager);
     d->networkAccessManager = new QNetworkAccessManager(this);
@@ -125,6 +141,18 @@ FeedReply * QueryManager::queryFeed(const QString &graph, const QString &argumen
     return reply;
 }
 
+TypeReply * QueryManager::queryType(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    if (d->token.isEmpty()) {
+        return 0;
+    }
+
+    TypeReply *reply = new TypeReply(d->networkAccessManager, this);
+    reply->request(graph, d->token, arguments);
+    return reply;
+}
+
 void QueryManager::setToken(const QString &token)
 {
     Q_D(QueryManager);
@@ -135,3 +163,5 @@ void QueryManager::setToken(const QString &token)
 }
 
 }
+
+#include "moc_querymanager.cpp"

@@ -46,7 +46,7 @@ AbstractGraphReply::AbstractGraphReply(QObject *parent):
 {
     Q_D(AbstractGraphReply);
     d->networkAccessManager = 0;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractGraphReply::AbstractGraphReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
@@ -54,7 +54,7 @@ AbstractGraphReply::AbstractGraphReply(QNetworkAccessManager *networkAccessManag
 {
     Q_D(AbstractGraphReply);
     d->networkAccessManager = networkAccessManager;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractGraphReply::AbstractGraphReply(AbstractGraphReplyPrivate &dd, QObject *parent):

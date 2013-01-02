@@ -101,8 +101,8 @@ void LoaderBase::handleReply(AbstractReply *reply)
     }
 
     d->reply = reply;
-    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    connect(d->reply, SIGNAL(loadingFinished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(loadingFailed()), this, SLOT(slotFailed()));
     d->loading = true;
     emit loadingChanged();
 }

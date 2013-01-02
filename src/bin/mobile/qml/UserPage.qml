@@ -87,8 +87,8 @@ Page {
         Rectangle {
             id: portraitContainer
             opacity: 0
-            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            anchors.bottom: banner.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.top: banner.top; anchors.topMargin: Ui.MARGIN_DEFAULT
             width: portrait.width + Ui.MARGIN_SMALL
             height: portrait.height + Ui.MARGIN_SMALL
             color: "white"

@@ -25,6 +25,7 @@ HEADERS +=      abstractloadablemodel.h \
                 abstractgraphloader.h \
                 pictureloader.h \
                 userloader.h \
+    typeloader.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
@@ -39,6 +40,7 @@ SOURCES +=      base_plugin.cpp \
                 abstractgraphloader.cpp \
                 pictureloader.cpp \
                 userloader.cpp \
+    typeloader.cpp
 
 OTHER_FILES =   qmldir \
 

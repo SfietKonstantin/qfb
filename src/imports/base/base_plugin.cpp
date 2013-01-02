@@ -36,6 +36,7 @@
 #include "language.h"
 #include "post.h"
 #include "querymanager.h"
+#include "typeloader.h"
 #include "imageloader.h"
 #include "friendlistmodel.h"
 #include "pictureloader.h"
@@ -67,8 +68,8 @@ void BasePlugin5::registerTypes(const char *uri)
     // @uri org.SfietKonstantin.qfb
     qmlRegisterUncreatableType<QFB::Object>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBObject",
                                             "QFBObject cannot be created");
-    qmlRegisterUncreatableType<QFB::NamedObject>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserBase",
-                                              "QFBUserBase cannot be created");
+    qmlRegisterUncreatableType<QFB::NamedObject>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBNamedObject",
+                                              "QFBNamedObject cannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
                                           "QFBUser cannot be created");
     qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
@@ -78,6 +79,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
                                           "QFBPostcannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
+    qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
     qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");

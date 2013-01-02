@@ -47,26 +47,24 @@ Rectangle {
             facebookId: from.facebookId
         }
 
-        Item {
+        Column {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
             anchors.right: parent.right
-            height: Ui.FONT_SIZE_DEFAULT + Ui.MARGIN_DEFAULT + Ui.FONT_SIZE_SMALL
 
             Label {
                 id: name
-                anchors.top: parent.top
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
                 text: header
-                elide: Text.ElideRight
-                wrapMode: Text.NoWrap
-                onLinkActivated: PAGE_MANAGEMENT_BRIDGE.addUserPage(link)
+                onLinkActivated: {
+                    var strings = link.split("-")
+                    PAGE_MANAGEMENT_BRIDGE.resolveType(strings[0], strings[1])
+                }
             }
 
             Label {
                 id: date
-                anchors.bottom: parent.bottom
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_SMALL
                 color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY

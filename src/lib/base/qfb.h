@@ -33,6 +33,7 @@ enum Property {
      * @short The entry's Facebook ID
      */
     IdProperty,
+    ObjectTypeProperty,
     /**
      * @short The last time the entry was updated.
      *

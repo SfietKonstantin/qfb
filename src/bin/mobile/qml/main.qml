@@ -17,6 +17,7 @@
 import QtQuick 1.1
 import QtWebKit 1.0
 import com.nokia.meego 1.0
+import com.nokia.extras 1.1
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.login 4.0
 
@@ -89,6 +90,10 @@ PageStackWindow {
                                                 {"facebookId": facebookId, "name": name})
             newPage.load()
         }
+        onResolveTypeRequested: {
+            currentResolvingTypeObject.name = name
+            typeResolver.request(facebookId)
+        }
     }
 
 
@@ -96,7 +101,11 @@ PageStackWindow {
         id: me
         property string name
         property string coverUrl
+    }
 
+    QtObject {
+        id: currentResolvingTypeObject
+        property string name
     }
 
     QFBUserLoader {
@@ -117,12 +126,35 @@ PageStackWindow {
         }
     }
 
+    QFBTypeLoader {
+        id: typeResolver
+        queryManager: QUERY_MANAGER
+        onLoadingChanged: {
+            if (!loading) {
+                var facebookId = typeResolver.object.facebookId
+                var type = typeResolver.object.objectType
+                if (type == QFBObject.User) {
+                    PAGE_MANAGEMENT_BRIDGE.addUserPage(facebookId, currentResolvingTypeObject.name)
+                } else {
+                    unsupportedInfoBanner.show()
+                }
+                currentResolvingTypeObject.name = ""
+            }
+        }
+
+    }
+
     LoginSheet {
         id: loginSheet
     }
 
     MainPage {
         id: mainPage
+
     }
 
+    InfoBanner {
+        id: unsupportedInfoBanner
+        text: qsTr("Loading this page is not supported yet")
+    }
 }

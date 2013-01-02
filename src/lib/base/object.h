@@ -59,11 +59,42 @@ class ObjectPrivate;
 class QFBBASE_EXPORT Object : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(ObjectType)
     /**
      * @short The object's Facebook ID
      */
     Q_PROPERTY(QString facebookId READ facebookId CONSTANT)
+    Q_PROPERTY(ObjectType objectType READ objectType CONSTANT)
 public:
+    enum ObjectType {
+        Invalid,
+        Achievement,
+        Album,
+        Application,
+        Checkin,
+        Comment,
+        Domain,
+        Event,
+        FriendList,
+        Group,
+        Insights,
+        Link,
+        Message,
+        Note,
+        Offer,
+        Order,
+        Page,
+        Photo,
+        Post,
+        Question,
+        /// @todo this entry is tricky
+        QuestionOption,
+        Review,
+        Status,
+        Thread,
+        User,
+        Video
+    };
     /**
      * @brief Invalid constructor
      * @param parent parent object.
@@ -84,6 +115,7 @@ public:
      * @return facebook identifier.
      */
     QString facebookId() const;
+    ObjectType objectType() const;
 protected:
     /**
      * @brief D-pointer constructor

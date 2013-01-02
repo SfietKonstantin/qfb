@@ -14,57 +14,69 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHREPLY_P_H
-#define QFB_ABSTRACTGRAPHREPLY_P_H
+#include "typeloader.h"
+#include "loaderbase_p.h"
+#include "typereply.h"
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "querymanager.h"
 
-/**
- * @internal
- * @file abstractgraphreply_p.h
- * @brief Definition of QFB::AbstractGraphReplyPrivate
- */
-
-#include "abstractreply_p.h"
-
-class QNetworkAccessManager;
 namespace QFB
 {
 
-class AbstractGraphReply;
-/**
- * @internal
- * @brief Private class for QFB::AbstractGraphReply
- */
-class AbstractGraphReplyPrivate: public AbstractReplyPrivate
+class TypeLoaderPrivate: public LoaderBasePrivate
 {
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    AbstractGraphReplyPrivate(AbstractGraphReply *q);
-    /**
-     * @internal
-     * @brief Graph
-     */
-    QString graph;
-    /**
-     * @internal
-     * @brief Arguments
-     */
-    QList<ArgumentPair> arguments;
-    QString token;
+    TypeLoaderPrivate(TypeLoader *q);
+    bool checkReply(const AbstractReply *reply);
+    void processReply(const AbstractReply *reply);
+    Object * object;
 private:
-    Q_DECLARE_PUBLIC(AbstractGraphReply)
+    Q_DECLARE_PUBLIC(TypeLoader)
 };
 
+TypeLoaderPrivate::TypeLoaderPrivate(TypeLoader *q):
+    LoaderBasePrivate(q)
+{
+    object = 0;
 }
 
-#endif // QFB_ABSTRACTGRAPHREPLY_P_H
+bool TypeLoaderPrivate::checkReply(const AbstractReply *reply)
+{
+        return qobject_cast<const TypeReply *>(reply);
+}
+
+void TypeLoaderPrivate::processReply(const AbstractReply *reply)
+{
+    Q_Q(TypeLoader);
+    if (object) {
+        object->deleteLater();
+        object = 0;
+    }
+
+    const TypeReply *typeReply = qobject_cast<const TypeReply *>(reply);
+    Object *newObject = typeReply->object();
+
+    object = newObject;
+    object->setParent(q);
+    emit q->objectChanged();
+}
+
+////// End of private class //////
+
+TypeLoader::TypeLoader(QObject *parent) :
+    AbstractGraphLoader(*(new TypeLoaderPrivate(this)), parent)
+{
+}
+
+Object * TypeLoader::object() const
+{
+    Q_D(const TypeLoader);
+    return d->object;
+}
+
+AbstractGraphReply * TypeLoader::createReply(const QString &graph, const QString &arguments)
+{
+    return queryManager()->queryType(graph, arguments);
+}
+
+}

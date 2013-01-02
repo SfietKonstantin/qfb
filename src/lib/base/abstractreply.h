@@ -23,7 +23,7 @@
  */
 
 #include "base_global.h"
-#include <QtCore/QObject>
+#include <QtCore/QThread>
 
 class QIODevice;
 class QUrl;
@@ -57,7 +57,7 @@ class AbstractReplyPrivate;
  * Warning: deleting this class should be done manually as, by
  * default, it stays in memory.
  */
-class QFBBASE_EXPORT AbstractReply : public QObject
+class QFBBASE_EXPORT AbstractReply : public QThread
 {
     Q_OBJECT
 public:
@@ -80,7 +80,7 @@ public:
      * @brief If the reply process is running
      * @return if the reply process is running.
      */
-    bool isRunning() const;
+    bool isLoading() const;
     /**
      * @brief Error
      * @return error.
@@ -93,13 +93,13 @@ Q_SIGNALS:
      * This signal is emitted when the loading failed, or when
      * the returned data is not correct.
      */
-    void failed();
+    void loadingFailed();
     /**
      * @brief Finished
      *
      * This signal is emitted when the loading is a success.
      */
-    void finished();
+    void loadingFinished();
 protected:
     /**
      * @brief D-pointer constructor

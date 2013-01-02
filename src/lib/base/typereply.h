@@ -14,57 +14,35 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHREPLY_P_H
-#define QFB_ABSTRACTGRAPHREPLY_P_H
+#ifndef QFB_TYPEREPLY_H
+#define QFB_TYPEREPLY_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "abstractgraphreply.h"
+#include "object.h"
 
-/**
- * @internal
- * @file abstractgraphreply_p.h
- * @brief Definition of QFB::AbstractGraphReplyPrivate
- */
-
-#include "abstractreply_p.h"
-
-class QNetworkAccessManager;
 namespace QFB
 {
 
-class AbstractGraphReply;
-/**
- * @internal
- * @brief Private class for QFB::AbstractGraphReply
- */
-class AbstractGraphReplyPrivate: public AbstractReplyPrivate
+class TypeReplyPrivate;
+class QFBBASE_EXPORT TypeReply : public AbstractGraphReply
 {
+    Q_OBJECT
 public:
+    explicit TypeReply(QObject *parent = 0);
+    explicit TypeReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
+    Object * object() const;
+protected:
+    QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
     /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
+     * @brief Implementation of AbstractReply::processData()
+     * @param dataSource data source.
+     * @return if the process is successful.
      */
-    AbstractGraphReplyPrivate(AbstractGraphReply *q);
-    /**
-     * @internal
-     * @brief Graph
-     */
-    QString graph;
-    /**
-     * @internal
-     * @brief Arguments
-     */
-    QList<ArgumentPair> arguments;
-    QString token;
+    bool processData(QIODevice *dataSource);
 private:
-    Q_DECLARE_PUBLIC(AbstractGraphReply)
+    Q_DECLARE_PRIVATE(TypeReply)
 };
 
 }
 
-#endif // QFB_ABSTRACTGRAPHREPLY_P_H
+#endif // TYPEREPLY_H

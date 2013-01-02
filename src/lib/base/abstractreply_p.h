@@ -90,7 +90,7 @@ public:
      * @internal
      * @brief If the reply is running
      */
-    bool running;
+    bool loading;
     /**
      * @internal
      * @brief If the reply is an error

@@ -42,7 +42,7 @@ AbstractGraphPagingReply::AbstractGraphPagingReply(QObject *parent):
 {
     Q_D(AbstractGraphPagingReply);
     d->networkAccessManager = 0;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractGraphPagingReply
@@ -51,7 +51,7 @@ AbstractGraphPagingReply
 {
     Q_D(AbstractGraphPagingReply);
     d->networkAccessManager = networkAccessManager;
-    d->running = false;
+    d->loading = false;
 }
 
 AbstractGraphPagingReply::AbstractGraphPagingReply(AbstractGraphReplyPrivate &dd, QObject *parent):

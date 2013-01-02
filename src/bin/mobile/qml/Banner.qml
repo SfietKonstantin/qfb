@@ -41,6 +41,7 @@ Item {
         Text {
             id: nameText
             anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
             anchors.bottom: parent.bottom
             anchors.bottomMargin: !container.large ? (container.height - nameText.height) / 2
                                                    : Ui.MARGIN_DEFAULT
@@ -48,6 +49,7 @@ Item {
             style: Text.Sunken
             styleColor: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
             opacity: 0
+            elide: Text.ElideRight
             font.pixelSize: Ui.FONT_SIZE_XXLARGE
             states: [
                 State {

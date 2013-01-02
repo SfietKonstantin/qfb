@@ -27,11 +27,13 @@ public:
 
 signals:
     void popRequested();
+    void resolveTypeRequested(const QString &facebookId, const QString &name);
     void addUserPageRequested(const QString &facebookId, const QString &name);
 public slots:
     void pop();
-    void addUserPage(const QString &userInfo);
+    void resolveType(const QString &facebookId, const QString &name);
     void addUserPage(const QString &facebookId, const QString &name);
+
 };
 
 #endif // PAGEMANAGEMENTBRIDGE_H

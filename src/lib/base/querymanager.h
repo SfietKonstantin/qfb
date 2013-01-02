@@ -35,6 +35,7 @@ class FriendListReply;
 class PictureReply;
 class UserReply;
 class FeedReply;
+class TypeReply;
 class QueryManagerPrivate;
 
 /**
@@ -100,6 +101,7 @@ public:
      * @return a feed reply.
      */
     FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
+    TypeReply * queryType(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token
@@ -118,6 +120,7 @@ protected:
     QScopedPointer<QueryManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(QueryManager)
+//    Q_PRIVATE_SLOT(d_func(), void slotReplyFinished())
 };
 
 }

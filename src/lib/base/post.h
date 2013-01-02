@@ -153,7 +153,7 @@ class QFBBASE_EXPORT Post: public Object
     Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
     /// @todo include_hidden
 public:
-    enum Type {
+    enum ObjectType {
 //        Checkin,
 
     };

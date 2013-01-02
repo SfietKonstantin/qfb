@@ -172,8 +172,8 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
         d->loading = true;
         emit loadingChanged();
     }
-    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    connect(d->reply, SIGNAL(loadingFinished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(loadingFailed()), this, SLOT(slotFailed()));
 }
 
 void AbstractLoadableModel::loadNext()
@@ -195,8 +195,8 @@ void AbstractLoadableModel::loadNext()
         d->loading = true;
         emit loadingChanged();
     }
-    connect(d->reply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(failed()), this, SLOT(slotFailed()));
+    connect(d->reply, SIGNAL(loadingFinished()), this, SLOT(slotFinished()));
+    connect(d->reply, SIGNAL(loadingFailed()), this, SLOT(slotFailed()));
 }
 
 }

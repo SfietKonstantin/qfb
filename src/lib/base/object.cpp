@@ -42,6 +42,9 @@ Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
 {
     Q_D(Object);
     d->propertiesMap = propertiesMap;
+    if (!propertiesMap.contains(ObjectTypeProperty)) {
+        d->propertiesMap.insert(ObjectTypeProperty, Object::Invalid);
+    }
 }
 
 Object::Object(ObjectPrivate &dd, QObject *parent):
@@ -57,6 +60,12 @@ QString Object::facebookId() const
 {
     Q_D(const Object);
     return d->propertiesMap.value(IdProperty).toString();
+}
+
+Object::ObjectType Object::objectType() const
+{
+    Q_D(const Object);
+    return (Object::ObjectType) d->propertiesMap.value(ObjectTypeProperty).toInt();
 }
 
 }
