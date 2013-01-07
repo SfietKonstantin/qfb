@@ -336,6 +336,16 @@ enum Property {
     OffsetYProperty
 };
 
+enum RequestType {
+    NoRequest,
+    TypeRequest,
+    UserRequest,
+    PictureRequest
+
+};
+
+void qfbRegisterMetatype();
+
 }
 
 #endif // QFB_QFB_H

@@ -14,63 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_REQUEST_H
+#define QFB_REQUEST_H
 
-#include <QtCore/QtGlobal>
-#include "request.h"
+#include <QtCore/QMetaType>
+#include <QtCore/QSharedData>
+#include <QtCore/QExplicitlySharedDataPointer>
+#include "qfb.h"
 
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+struct RequestPrivate: public QSharedData
+{
+    int id;
+    RequestType type;
+};
+
+class Request
 {
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
-protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
+    explicit Request();
+    explicit Request(int id, RequestType type);
+    Request(const Request &other);
+    virtual ~Request();
+    bool operator==(const Request &other) const;
+    bool operator!=(const Request &other) const;
+    bool isValid() const;
+    int id() const;
+    RequestType type() const;
+    void setId(int id);
+    void setType(RequestType type);
 private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Request)
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+Q_DECLARE_METATYPE(QFB::Request)
+
+#endif // QFB_REQUEST_H

@@ -14,33 +14,36 @@ INCLUDEPATH += ../../lib/baseimport
 LIBS +=         -L ../../lib/base/ -l$${NAME}
 LIBS += -L../../lib/baseimport -l$${NAME}import
 
-HEADERS +=      abstractloadablemodel.h \
-                abstractloadablemodel_p.h \
-                friendlistmodel.h \
-                feedmodel.h \
-                loaderbase.h \
-                loaderbase_p.h \
-                abstractloader.h \
-                imageloader.h \
+#HEADERS +=      abstractloadablemodel.h \
+#                abstractloadablemodel_p.h \
+#                friendlistmodel.h \
+#                feedmodel.h \
+#HEADERS += loaderbase.h \
+#                loaderbase.h \
+#                loaderbase_p.h \
+HEADERS += abstractloader.h \
+#                abstractloader.h \
+#                imageloader.h \
                 abstractgraphloader.h \
-                pictureloader.h \
+#                pictureloader.h \
                 userloader.h \
-    typeloader.h
+#    typeloader.h
+    abstractloader_p.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
 
 SOURCES +=      base_plugin.cpp \
-                abstractloadablemodel.cpp \
-                friendlistmodel.cpp \
-                feedmodel.cpp \
-                loaderbase.cpp \
+#                abstractloadablemodel.cpp \
+#                friendlistmodel.cpp \
+#                feedmodel.cpp \
+#                loaderbase.cpp \
                 abstractloader.cpp \
-                imageloader.cpp \
+#                imageloader.cpp \
                 abstractgraphloader.cpp \
-                pictureloader.cpp \
+#                pictureloader.cpp \
                 userloader.cpp \
-    typeloader.cpp
+#    typeloader.cpp
 
 OTHER_FILES =   qmldir \
 

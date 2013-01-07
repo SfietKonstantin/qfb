@@ -119,8 +119,6 @@ AbstractReply::AbstractReply(AbstractReplyPrivate &dd, QObject *parent):
 
 AbstractReply::~AbstractReply()
 {
-    quit();
-    wait(1000);
 }
 
 bool AbstractReply::isLoading() const

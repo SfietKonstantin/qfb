@@ -14,63 +14,25 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_ABSTRACTPROCESSOR_P_H
+#define QFB_ABSTRACTPROCESSOR_P_H
 
-#include <QtCore/QtGlobal>
 #include "request.h"
 
+class QIODevice;
+class QString;
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class AbstractProcessorPrivate
 {
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
-protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
-private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
+    explicit AbstractProcessorPrivate();
     Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    QIODevice *dataSource;
+    QString error;
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_ABSTRACTPROCESSOR_P_H

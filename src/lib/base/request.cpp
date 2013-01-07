@@ -14,63 +14,74 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
-
-#include <QtCore/QtGlobal>
 #include "request.h"
 
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+Request::Request():
+    d_ptr(new RequestPrivate)
 {
-public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
-protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
-private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
-};
-
+    setId(-1);
+    setType(NoRequest);
 }
 
-#endif // QFB_LOADERBASE_P_H
+Request::Request(int id, RequestType type):
+    d_ptr(new RequestPrivate)
+{
+    setId(id);
+    setType(type);
+}
+
+Request::Request(const Request &other):
+    d_ptr(other.d_ptr)
+{
+}
+
+Request::~Request()
+{
+}
+
+bool Request::operator==(const Request &other) const
+{
+    Q_D(const Request);
+    return (d->id == other.id() && d->type == other.type());
+}
+
+bool Request::operator !=(const Request &other) const
+{
+    Q_D(const Request);
+    return (d->id != other.id() || d->type != other.type());
+}
+
+bool Request::isValid() const
+{
+    Q_D(const Request);
+    return (d->id != -1 && d->type != NoRequest);
+}
+
+int Request::id() const
+{
+    Q_D(const Request);
+    return d->id;
+}
+
+RequestType Request::type() const
+{
+    Q_D(const Request);
+    return d->type;
+}
+
+void Request::setId(int id)
+{
+    Q_D(Request);
+    d->id = id;
+}
+
+void Request::setType(RequestType type)
+{
+    Q_D(Request);
+    d->type = type;
+}
+
+}

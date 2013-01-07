@@ -14,63 +14,36 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_NETWORKREQUESTHANDLER_P_H
+#define QFB_NETWORKREQUESTHANDLER_P_H
 
-#include <QtCore/QtGlobal>
-#include "request.h"
+#include <QtCore/QObject>
 
+class QIODevice;
+class QUrl;
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class Request;
+class NetworkRequestHandlerPrivate;
+/// @todo create a queue of requests
+class NetworkRequestHandler : public QObject
 {
+    Q_OBJECT
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
+    explicit NetworkRequestHandler(QObject *parent = 0);
+    virtual ~NetworkRequestHandler();
+    void get(const Request &request, const QUrl &url);
+Q_SIGNALS:
+    void error(const QFB::Request &request);
+    void finished(const QFB::Request &request, QIODevice *dataSource);
 protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
+    QScopedPointer<NetworkRequestHandlerPrivate> d_ptr;
 private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    Q_DECLARE_PRIVATE(NetworkRequestHandler)
+    Q_PRIVATE_SLOT(d_func(), void slotFinished())
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_NETWORKREQUESTHANDLER_P_H

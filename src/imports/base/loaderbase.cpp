@@ -28,7 +28,6 @@ LoaderBasePrivate::LoaderBasePrivate(LoaderBase *q):
     q_ptr(q)
 {
     queryManager = 0;
-    reply = 0;
     loading = false;
 }
 
@@ -48,7 +47,7 @@ void LoaderBasePrivate::slotFinished()
     emit q->loadingChanged();
 }
 
-void LoaderBasePrivate::slotFailed()
+void LoaderBasePrivate::slotError()
 {
     Q_Q(LoaderBase);
     qDebug() << reply->error();

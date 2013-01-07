@@ -17,11 +17,18 @@
 #include "abstractgraphloader.h"
 #include "abstractgraphreply.h"
 
+#include "request.h"
+
 namespace QFB
 {
 
-AbstractGraphLoader::AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent):
-    LoaderBase(dd, parent)
+AbstractGraphLoader::AbstractGraphLoader(QObject *parent):
+    AbstractLoader(parent)
+{
+}
+
+AbstractGraphLoader::AbstractGraphLoader(AbstractLoaderPrivate &dd, QObject *parent):
+    AbstractLoader(dd, parent)
 {
 }
 
@@ -31,9 +38,9 @@ void AbstractGraphLoader::request(const QString &graph, const QString &arguments
         return;
     }
 
-    AbstractReply *reply = createReply(graph, arguments);
-    if (reply) {
-        handleReply(reply);
+    Request createdRequest = createRequest(graph, arguments);
+    if (createdRequest.isValid()) {
+        handleRequest(createdRequest);
     }
 }
 

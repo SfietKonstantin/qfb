@@ -160,7 +160,8 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
 AbstractGraphPagingReply *FriendListModel::createReply(const QString &graph,
                                                        const QString &arguments)
 {
-    return queryManager()->queryFriendList(graph, arguments);
+//    return queryManager()->queryFriendList(graph, arguments);
+    return 0;
 }
 
 QHash<int, QByteArray> FriendListModel::roleNames() const

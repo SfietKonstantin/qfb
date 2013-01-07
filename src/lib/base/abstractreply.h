@@ -25,39 +25,13 @@
 #include "base_global.h"
 #include <QtCore/QThread>
 
-class QIODevice;
 class QUrl;
 class QNetworkAccessManager;
 namespace QFB
 {
 
 class AbstractReplyPrivate;
-
-/**
- * @brief Base for a reply
- *
- * This class contains base methods that are used for managing
- * a network query and getting the reply. It do not contain
- * any way to get the result, and only provides a pure virtual
- * method, processData(), that should be implemented in order to
- * parse the retrived data.
- *
- * Retrived data can be stored in a subclass of this class, and
- * returned through a specific getter. Signals that informs that
- * data is ready do not need to be emitted, as they are emitted
- * automatically.
- *
- * This class also provides preprocessRequest(), that can be used
- * to handle caching, and get(), that is the method that perform
- * the network operation.
- *
- * Note that these replies objects only stores one reply. In order
- * to perform another request, you must create a new one.
- *
- * Warning: deleting this class should be done manually as, by
- * default, it stays in memory.
- */
-class QFBBASE_EXPORT AbstractReply : public QThread
+class QFBBASE_EXPORT AbstractReply : public QObject
 {
     Q_OBJECT
 public:
@@ -86,6 +60,13 @@ public:
      * @return error.
      */
     QString error() const;
+public Q_SLOTS:
+    /**
+     * @brief Set error
+     * @param error error to set.
+     */
+    void setError(const QString &error);
+    void setFinished(bool ok);
 Q_SIGNALS:
     /**
      * @brief Error
@@ -115,20 +96,6 @@ protected:
      */
     bool event(QEvent *event);
     /**
-     * @brief Preprocess request
-     *
-     * This method is used to do a preprocessing step before perfomring
-     * the request. It can be used, for example, to check a cache, before
-     * downloading resources.
-     *
-     * It should return false if the request should be performed, or true
-     * if the request should not. If it returns true, a finished() signal
-     * will be emitted.
-     *
-     * @return if the process should be performed.
-     */
-    virtual bool preprocesssRequest();
-    /**
      * @brief Perform the network operation
      *
      * This method is used to perform the network operation, by passing
@@ -143,21 +110,7 @@ protected:
      * @return url.
      */
     QUrl url() const;
-    /**
-     * @brief Process data
-     *
-     * This method should be implemented in order to process the
-     * data that is retrived.
-     *
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    virtual bool processData(QIODevice *dataSource) = 0;
-    /**
-     * @brief Set error
-     * @param error error to set.
-     */
-    void setError(const QString &error);
+
     /**
      * @brief D-pointer
      */

@@ -168,7 +168,8 @@ void FeedModel::setValidator(PostValidator *validator)
 
 AbstractGraphPagingReply * FeedModel::createReply(const QString &graph, const QString &arguments)
 {
-    return queryManager()->queryFeed(graph, arguments);
+//    return queryManager()->queryFeed(graph, arguments);
+    return 0;
 }
 
 QHash<int, QByteArray> FeedModel::roleNames() const

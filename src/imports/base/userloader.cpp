@@ -15,55 +15,29 @@
  ****************************************************************************************/
 
 #include "userloader.h"
-#include "loaderbase_p.h"
+#include "abstractloader_p.h"
 
 #include "user.h"
-#include "userreply.h"
+#include "userprocessor.h"
 #include "querymanager.h"
-
-#include <QtCore/QDebug>
 
 namespace QFB
 {
 
-class UserLoaderPrivate: public LoaderBasePrivate
+class UserLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
     UserLoaderPrivate(UserLoader *q);
     User *user;
-    bool checkReply(const AbstractReply *reply);
-    void processReply(const AbstractReply *reply);
 private:
     Q_DECLARE_PUBLIC(UserLoader)
 };
 
 UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
-    LoaderBasePrivate(q)
+    AbstractLoaderPrivate(q)
 {
     user = 0;
 }
-
-bool UserLoaderPrivate::checkReply(const AbstractReply *reply)
-{
-    return qobject_cast<const UserReply *>(reply);
-}
-
-void UserLoaderPrivate::processReply(const AbstractReply *reply)
-{
-    Q_Q(UserLoader);
-    if (user) {
-        user->deleteLater();
-        user = 0;
-    }
-
-    const UserReply *userReply = qobject_cast<const UserReply *>(reply);
-    User *newUser = userReply->user();
-
-    user = newUser;
-    user->setParent(q);
-    emit q->userChanged();
-}
-
 
 ////// End of private class //////
 
@@ -78,12 +52,26 @@ User * UserLoader::user() const
     return d->user;
 }
 
-AbstractGraphReply * UserLoader::createReply(const QString &graph, const QString &arguments)
+Request UserLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryUser(graph, arguments);
     }
-    return 0;
+    return Request();
+}
+
+void UserLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(UserLoader);
+    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
+    if (d->user) {
+        d->user->deleteLater();
+    }
+
+    d->user = userProcessor->user();
+    emit userChanged();
+
+    processor->deleteLater();
 }
 
 }

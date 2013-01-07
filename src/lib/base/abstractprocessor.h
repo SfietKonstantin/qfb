@@ -14,63 +14,41 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_ABSTRACTPROCESSOR_H
+#define QFB_ABSTRACTPROCESSOR_H
 
-#include <QtCore/QtGlobal>
-#include "request.h"
+#include <QtCore/QObject>
+#include <QtCore/QRunnable>
 
+class QIODevice;
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class Request;
+class AbstractProcessorPrivate;
+class AbstractProcessor : public QObject, public QRunnable
 {
+    Q_OBJECT
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
+    explicit AbstractProcessor(QObject *parent = 0);
+    virtual ~AbstractProcessor();
+    Request request() const;
+    void setRequest(const Request &request);
+    void setDataSource(QIODevice *dataSource);
+    QString errorString() const;
+    void run();
+Q_SIGNALS:
+    void error();
+    void finished();
 protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
+    explicit AbstractProcessor(AbstractProcessorPrivate &dd, QObject *parent);
+    virtual bool processDataSource(QIODevice *dataSource) = 0;
+    void setError(const QString &error);
+    QScopedPointer<AbstractProcessorPrivate> d_ptr;
 private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    Q_DECLARE_PRIVATE(AbstractProcessor)
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_ABSTRACTPROCESSOR_H

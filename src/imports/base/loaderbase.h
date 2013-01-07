@@ -24,7 +24,7 @@ namespace QFB
 {
 
 class QueryManager;
-class AbstractReply;
+class Request;
 class LoaderBasePrivate;
 /**
  * @brief Base class for a loader
@@ -65,6 +65,7 @@ Q_SIGNALS:
      */
     void queryManagerChanged();
     void loadingChanged();
+    void loaded();
 protected:
     /**
      * @brief D-pointer constructor
@@ -81,7 +82,7 @@ protected:
      *
      * @param reply reply to handle.
      */
-    void handleReply(AbstractReply *reply);
+    virtualvoid handleReply(AbstractReply *reply);
     /**
      * @short D-pointer
      */
@@ -89,8 +90,10 @@ protected:
 private:
     Q_DECLARE_PRIVATE(LoaderBase)
     /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotFailed())
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
+                                               AbstractProcessor *processor))
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Request &request,
+                                            const QString &errorString))
     /// @endcond
 };
 

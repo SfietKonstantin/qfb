@@ -21,15 +21,13 @@
 
 
 #include "querymanager.h"
-#include "imagereply.h"
-#include "friendlistreply.h"
-#include "picturereply.h"
-#include "userreply.h"
-#include "feedreply.h"
-#include "typereply.h"
-
 #include <QtCore/QDebug>
-#include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QMetaType>
+#include <QtCore/QThreadPool>
+#include "networkrequesthandler_p.h"
+#include "helper_p.h"
+#include "request.h"
+#include "userprocessor.h"
 
 namespace QFB
 {
@@ -42,17 +40,19 @@ class QueryManagerPrivate
 {
 public:
     explicit QueryManagerPrivate(QueryManager *q);
-    /**
-     * @internal
-     * @brief Network access manager
-     */
-    QNetworkAccessManager *networkAccessManager;
+    Request createRequest(RequestType type);
+    void createProcessor(const Request & request, QIODevice *dataSource);
+    void slotNetworkError(const QFB::Request &request);
+    void slotProcessFinished();
+    void slotProcessError();
+    NetworkRequestHandler *networkRequestHandler;
+    QThreadPool *processThreadPoll;
     /**
      * @internal
      * @brief Token
      */
     QString token;
-    QList<AbstractReply *> replyQueue;
+    int id;
 private:
     QueryManager * const q_ptr;
     Q_DECLARE_PUBLIC(QueryManager)
@@ -61,6 +61,67 @@ private:
 QueryManagerPrivate::QueryManagerPrivate(QueryManager *q):
     q_ptr(q)
 {
+    id = 0;
+}
+
+Request QueryManagerPrivate::createRequest(RequestType type)
+{
+    Request request (id, type);
+    id ++;
+    return request;
+}
+
+void QueryManagerPrivate::createProcessor(const Request &request, QIODevice *dataSource)
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = 0;
+    switch (request.type()) {
+    case UserRequest:
+        processor = new UserProcessor(q);
+        break;
+    default:
+        break;
+    }
+
+    if (processor) {
+        processor->setAutoDelete(false);
+        processor->setRequest(request);
+        processor->setDataSource(dataSource);
+        QObject::connect(processor, SIGNAL(finished()), q, SLOT(slotProcessFinished()));
+        QObject::connect(processor, SIGNAL(error()), q, SLOT(slotProcessError()));
+        processThreadPoll->start(processor, QThread::LowPriority);
+    }
+}
+
+void QueryManagerPrivate::slotNetworkError(const Request &request)
+{
+    Q_Q(QueryManager);
+    emit q->error(request, QObject::tr("A network error happened"));
+}
+
+void QueryManagerPrivate::slotProcessFinished()
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
+    if (!processor) {
+        return;
+    }
+
+    Request request = processor->request();
+    emit q->finished(request, processor);
+}
+
+void QueryManagerPrivate::slotProcessError()
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
+    if (!processor) {
+        return;
+    }
+
+    Request request = processor->request();
+    emit q->error(request, processor->errorString());
+    processor->deleteLater();
 }
 
 ////// End or private class //////
@@ -69,11 +130,16 @@ QueryManager::QueryManager(QObject *parent) :
     QObject(parent), d_ptr(new QueryManagerPrivate(this))
 {
     Q_D(QueryManager);
-    d->networkAccessManager = new QNetworkAccessManager(this);
+    d->networkRequestHandler = new NetworkRequestHandler(this);
+    d->processThreadPoll = new QThreadPool(this);
+
+    qRegisterMetaType<QFB::Request>();
 }
 
 QueryManager::~QueryManager()
 {
+    Q_D(QueryManager);
+    d->networkRequestHandler->deleteLater();
 }
 
 QString QueryManager::token() const
@@ -82,73 +148,77 @@ QString QueryManager::token() const
     return d->token;
 }
 
-ImageReply * QueryManager::queryImage(const QUrl &url)
-{
-    Q_D(QueryManager);
-    ImageReply *reply = new ImageReply(d->networkAccessManager, this);
-    reply->request(url);
-    return reply;
-}
+//ImageReply * QueryManager::queryImage(const QUrl &url)
+//{
+//    Q_D(QueryManager);
+//    ImageReply *reply = new ImageReply(d->networkAccessManager, this);
+//    reply->request(url);
+//    return reply;
+//}
 
-FriendListReply * QueryManager::queryFriendList(const QString &graph, const QString &arguments)
+//FriendListReply * QueryManager::queryFriendList(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    if (d->token.isEmpty()) {
+//        return 0;
+//    }
+
+//    FriendListReply *reply = new FriendListReply(d->networkAccessManager, this);
+//    reply->request(graph, d->token, arguments);
+//    return reply;
+//}
+
+//PictureReply * QueryManager::queryPicture(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    if (d->token.isEmpty()) {
+//        return 0;
+//    }
+
+//    PictureReply *reply = new PictureReply(d->networkAccessManager, this);
+//    reply->request(graph, d->token, arguments);
+//    return reply;
+//}
+
+Request QueryManager::queryUser(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
+    Request request;
     if (d->token.isEmpty()) {
-        return 0;
+        return request;
     }
-
-    FriendListReply *reply = new FriendListReply(d->networkAccessManager, this);
-    reply->request(graph, d->token, arguments);
-    return reply;
+    request = d->createRequest(UserRequest);
+    d->networkRequestHandler->get(request, graphUrl(graph, d->token, createArguments(arguments)));
+    connect(d->networkRequestHandler, SIGNAL(finished(QFB::Request,QIODevice*)),
+            this, SLOT(createProcessor(QFB::Request,QIODevice*)));
+    connect(d->networkRequestHandler, SIGNAL(error(QFB::Request)),
+            this, SLOT(slotNetworkError(QFB::Request)));
+    return request;
 }
 
-PictureReply * QueryManager::queryPicture(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    if (d->token.isEmpty()) {
-        return 0;
-    }
+//FeedReply * QueryManager::queryFeed(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    if (d->token.isEmpty()) {
+//        return 0;
+//    }
 
-    PictureReply *reply = new PictureReply(d->networkAccessManager, this);
-    reply->request(graph, d->token, arguments);
-    return reply;
-}
+//    FeedReply *reply = new FeedReply(d->networkAccessManager, this);
+//    reply->request(graph, d->token, arguments);
+//    return reply;
+//}
 
-UserReply * QueryManager::queryUser(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    if (d->token.isEmpty()) {
-        return 0;
-    }
+//TypeReply * QueryManager::queryType(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    if (d->token.isEmpty()) {
+//        return 0;
+//    }
 
-    UserReply *reply = new UserReply(d->networkAccessManager, this);
-    reply->request(graph, d->token, arguments);
-    return reply;
-}
-
-FeedReply * QueryManager::queryFeed(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    if (d->token.isEmpty()) {
-        return 0;
-    }
-
-    FeedReply *reply = new FeedReply(d->networkAccessManager, this);
-    reply->request(graph, d->token, arguments);
-    return reply;
-}
-
-TypeReply * QueryManager::queryType(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    if (d->token.isEmpty()) {
-        return 0;
-    }
-
-    TypeReply *reply = new TypeReply(d->networkAccessManager, this);
-    reply->request(graph, d->token, arguments);
-    return reply;
-}
+//    TypeReply *reply = new TypeReply(d->networkAccessManager, this);
+//    reply->request(graph, d->token, arguments);
+//    return reply;
+//}
 
 void QueryManager::setToken(const QString &token)
 {

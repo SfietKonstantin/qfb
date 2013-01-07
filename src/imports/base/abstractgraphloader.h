@@ -17,17 +17,17 @@
 #ifndef QFB_ABSTRACTGRAPHLOADER_H
 #define QFB_ABSTRACTGRAPHLOADER_H
 
-#include "loaderbase.h"
+#include "abstractloader.h"
 
 namespace QFB
 {
 
-class QueryManager;
-class AbstractGraphReply;
-class LoaderBasePrivate;
-class AbstractGraphLoader : public LoaderBase
+class AbstractLoaderPrivate;
+class AbstractGraphLoader : public AbstractLoader
 {
     Q_OBJECT
+public:
+    explicit AbstractGraphLoader(QObject *parent = 0);
 public Q_SLOTS:
     /**
      * @brief Perform a request
@@ -41,7 +41,7 @@ protected:
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit AbstractGraphLoader(LoaderBasePrivate &dd, QObject *parent = 0);
+    explicit AbstractGraphLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
     /**
      * @brief Create a reply used in the request
      *
@@ -52,8 +52,7 @@ protected:
      * @param arguments arguments.
      * @return a reply.
      */
-    virtual AbstractGraphReply * createReply(const QString &graph,
-                                             const QString &arguments = QString()) = 0;
+    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
 };
 
 }

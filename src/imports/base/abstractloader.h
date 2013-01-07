@@ -17,32 +17,71 @@
 #ifndef QFB_ABSTRACTLOADER_H
 #define QFB_ABSTRACTLOADER_H
 
-#include "loaderbase.h"
+#include <QtCore/QObject>
 
 namespace QFB
 {
 
+class AbstractProcessor;
 class QueryManager;
-class AbstractReply;
-class LoaderBasePrivate;
-class AbstractLoader : public LoaderBase
+class Request;
+class AbstractLoaderPrivate;
+class AbstractLoader: public QObject
 {
     Q_OBJECT
+    /**
+     * @short Query manager
+     */
+    Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
+               NOTIFY queryManagerChanged)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+public:
+    explicit AbstractLoader(QObject *parent = 0);
+    virtual ~AbstractLoader();
+    /**
+     * @brief Query manager
+     * @return query manager.
+     */
+    QueryManager * queryManager() const;
+    bool loading() const;
+    QString error() const;
 public Q_SLOTS:
     /**
-     * @brief Perform a request
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
+     * @brief Set the query manager
+     * @param queryManager query manager to set.
      */
-    void request(const QUrl &url);
+    void setQueryManager(QueryManager *queryManager);
+Q_SIGNALS:
+    /**
+     * @brief Query manager changed
+     */
+    void queryManagerChanged();
+    void loadingChanged();
+    void loaded();
+    void errorChanged();
 protected:
     /**
      * @brief D-pointer constructor
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit AbstractLoader(LoaderBasePrivate &dd, QObject *parent = 0);
-    virtual AbstractReply * createReply(const QUrl &url) = 0;
+    explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
+    void setLoading(bool loading);
+    void handleRequest(const Request &request);
+    virtual void handleReply(AbstractProcessor *processor) = 0;
+    /**
+     * @short D-pointer
+     */
+    const QScopedPointer<AbstractLoaderPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(AbstractLoader)
+    /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
+                                               AbstractProcessor *processor))
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Request &request,
+                                            const QString &errorString))
+    /// @endcond
 };
 
 }

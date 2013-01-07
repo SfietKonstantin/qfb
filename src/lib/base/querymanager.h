@@ -30,12 +30,8 @@ class QNetworkAccessManager;
 class QNetworkReply;
 namespace QFB
 {
-class ImageReply;
-class FriendListReply;
-class PictureReply;
-class UserReply;
-class FeedReply;
-class TypeReply;
+class Request;
+class AbstractProcessor;
 class QueryManagerPrivate;
 
 /**
@@ -72,36 +68,36 @@ public:
      * @param url url to the image.
      * @return an image reply.
      */
-    ImageReply * queryImage(const QUrl &url);
+//    ImageReply * queryImage(const QUrl &url);
     /**
      * @brief Query a friend list
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      * @return a friend list reply.
      */
-    FriendListReply * queryFriendList(const QString &graph, const QString &arguments = QString());
+//    FriendListReply * queryFriendList(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a picture
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      * @return a picture reply.
      */
-    PictureReply * queryPicture(const QString &graph, const QString &arguments = QString());
+//    PictureReply * queryPicture(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query an user
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      * @return a user reply.
      */
-    UserReply * queryUser(const QString &graph, const QString &arguments = QString());
+    Request queryUser(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a feed
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      * @return a feed reply.
      */
-    FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
-    TypeReply * queryType(const QString &graph, const QString &arguments = QString());
+//    FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
+//    TypeReply * queryType(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token
@@ -113,6 +109,8 @@ signals:
      * @brief Access token changed
      */
     void tokenChanged();
+    void error(const QFB::Request &request, const QString &errorString);
+    void finished(const QFB::Request &request, AbstractProcessor *processor);
 protected:
     /**
      * @brief D-pointer
@@ -120,7 +118,13 @@ protected:
     QScopedPointer<QueryManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(QueryManager)
-//    Q_PRIVATE_SLOT(d_func(), void slotReplyFinished())
+    /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(),
+                   void createProcessor(const QFB::Request &request, QIODevice *dataSource))
+    Q_PRIVATE_SLOT(d_func(), void slotNetworkError(const QFB::Request &request))
+    Q_PRIVATE_SLOT(d_func(), void slotProcessFinished())
+    Q_PRIVATE_SLOT(d_func(), void slotProcessError())
+    /// @endcond
 };
 
 }

@@ -15,6 +15,7 @@ HEADERS +=  base_global.h \
             qfb.h \
             helper_p.h \
             jsonhelper_p.h \
+            picture_p.h \
             object.h \
             object_p.h \
             namedobject.h \
@@ -22,20 +23,24 @@ HEADERS +=  base_global.h \
             language.h \
             cover.h \
             post.h \
-            abstractreply.h \
-            abstractreply_p.h \
-            imagereply.h \
-            abstractgraphreply.h \
-            abstractgraphreply_p.h \
-            friendlistreply.h \
+    networkrequesthandler_p.h \
+    abstractprocessor.h \
+    request.h \
+#            abstractreply.h \
+#            abstractreply_p.h \
+#            imagereply.h \
+#            abstractgraphreply.h \
+#            abstractgraphreply_p.h \
+#            friendlistreply.h \
             querymanager.h \
-            picture_p.h \
-            picturereply.h \
-            userreply.h \
-            feedreply.h \
-    abstractgraphpagingreply.h \
-    abstractgraphpagingreply_p.h \
-    typereply.h
+#            picturereply.h \
+#            userreply.h \
+#            feedreply.h \
+#    abstractgraphpagingreply.h \
+#    abstractgraphpagingreply_p.h \
+#    typereply.h
+    userprocessor.h \
+    abstractprocessor_p.h
 
 SOURCES +=  object.cpp \
             namedobject.cpp \
@@ -43,16 +48,20 @@ SOURCES +=  object.cpp \
             language.cpp \
             cover.cpp \
             post.cpp \
-            abstractreply.cpp \
-            imagereply.cpp \
-            abstractgraphreply.cpp \
-            friendlistreply.cpp \
+#            abstractreply.cpp \
+#            imagereply.cpp \
+#            abstractgraphreply.cpp \
+#            friendlistreply.cpp \
             querymanager.cpp \
-            picturereply.cpp \
-            userreply.cpp \
-            feedreply.cpp \
-    abstractgraphpagingreply.cpp \
-    typereply.cpp
+#            picturereply.cpp \
+#            userreply.cpp \
+#            feedreply.cpp \
+#    abstractgraphpagingreply.cpp \
+#    typereply.cpp
+    networkrequesthandler_p.cpp \
+    abstractprocessor.cpp \
+    request.cpp \
+    userprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

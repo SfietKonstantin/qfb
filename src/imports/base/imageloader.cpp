@@ -17,7 +17,7 @@
 #include "imageloader.h"
 #include "loaderbase_p.h"
 
-#include "imagereply.h"
+//#include "imagereply.h"
 #include "querymanager.h"
 
 namespace QFB
@@ -71,7 +71,7 @@ QString ImageLoader::imagePath() const
 AbstractReply * ImageLoader::createReply(const QUrl &url)
 {
     if (queryManager()) {
-        return queryManager()->queryImage(url);
+//        return queryManager()->queryImage(url);
     }
     return 0;
 }

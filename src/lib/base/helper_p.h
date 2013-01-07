@@ -40,6 +40,7 @@
 namespace QFB
 {
 
+typedef QPair<QString, QString> ArgumentPair;
 /**
  * @internal
  * @brief FB_GRAPH_QUERY_URL
@@ -54,6 +55,22 @@ static const char *FB_GRAPH_QUERY_URL = "https://graph.facebook.com/";
  * Used by graphUrl()
  */
 static const char *FB_GRAPH_QUERY_TOKEN_KEY = "access_token";
+
+inline QList<ArgumentPair> createArguments(const QString &arguments)
+{
+    QStringList argumentList = arguments.split(",");
+    QList<ArgumentPair> trueArguments;
+    foreach (QString argument, argumentList) {
+        QStringList argumentEntriesList = argument.split("=");
+        if (argumentEntriesList.count() == 2) {
+            ArgumentPair argumentPair;
+            argumentPair.first = argumentEntriesList.at(0).trimmed();
+            argumentPair.second = argumentEntriesList.at(1).trimmed();
+            trueArguments.append(argumentPair);
+        }
+    }
+    return trueArguments;
+}
 
 /**
  * @internal

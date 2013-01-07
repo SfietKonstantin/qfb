@@ -14,19 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_ABSTRACTLOADER_P_H
+#define QFB_ABSTRACTLOADER_P_H
 
 #include <QtCore/QtGlobal>
 #include "request.h"
 
+class QString;
 namespace QFB
 {
 
 class QueryManager;
 class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class AbstractLoader;
+class AbstractLoaderPrivate
 {
 public:
     /**
@@ -34,29 +35,29 @@ public:
      * @brief Default constructor
      * @param q Q-pointer
      */
-    LoaderBasePrivate(LoaderBase *q);
+    AbstractLoaderPrivate(AbstractLoader *q);
     /**
      * @internal
      * @brief Destructor
      */
-    virtual ~LoaderBasePrivate();
+    virtual ~AbstractLoaderPrivate();
 protected:
     /**
      * @internal
      * @brief Q-pointer
      */
-    LoaderBase * const q_ptr;
+    AbstractLoader * const q_ptr;
 private:
     /**
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished();
+    void slotFinished(const QFB::Request &currentRequest, QFB::AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotError();
+    void slotError(const QFB::Request &currentRequest, const QString &errorString);
     /**
      * @internal
      * @brief Query manager
@@ -66,11 +67,13 @@ private:
      * @internal
      * @brief Reply
      */
-    Request request;
+    Request currentRequest;
     bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    QString error;
+    Q_DECLARE_PUBLIC(AbstractLoader)
 };
+
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_ABSTRACTLOADER_P_H

@@ -23,7 +23,6 @@ namespace QFB
 {
 
 class User;
-class QueryManager;
 class UserLoaderPrivate;
 class UserLoader : public AbstractGraphLoader
 {
@@ -35,7 +34,8 @@ public:
 Q_SIGNALS:
     void userChanged();
 protected:
-    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
+    Request createRequest(const QString &graph, const QString &arguments);
+    void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(UserLoader)
 };

@@ -14,63 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_USERPROCESSOR_H
+#define QFB_USERPROCESSOR_H
 
-#include <QtCore/QtGlobal>
-#include "request.h"
+#include "abstractprocessor.h"
 
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class User;
+class UserProcessorPrivate;
+class UserProcessor: public AbstractProcessor
 {
+    Q_OBJECT
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    LoaderBasePrivate(LoaderBase *q);
-    /**
-     * @internal
-     * @brief Destructor
-     */
-    virtual ~LoaderBasePrivate();
+    explicit UserProcessor(QObject *parent = 0);
+    User * user() const;
 protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
+    bool processDataSource(QIODevice *dataSource);
 private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    Q_DECLARE_PRIVATE(UserProcessor)
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_USERPROCESSOR_H
