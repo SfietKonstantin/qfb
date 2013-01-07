@@ -38,7 +38,7 @@
 #include "querymanager.h"
 //#include "typeloader.h"
 //#include "imageloader.h"
-//#include "friendlistmodel.h"
+#include "friendlistmodel.h"
 //#include "pictureloader.h"
 #include "userloader.h"
 //#include "feedmodel.h"
@@ -81,7 +81,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
 //    qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
 //    qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
-//    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
+    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
 //    qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
 //    qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");

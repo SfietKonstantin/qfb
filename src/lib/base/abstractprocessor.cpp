@@ -82,12 +82,13 @@ void AbstractProcessor::run()
         return;
     }
 
-    if (processDataSource(d->dataSource)) {
+    bool ok = processDataSource(d->dataSource);
+    d->dataSource->deleteLater();
+    if (ok) {
         emit finished();
     } else {
         emit error();
     }
-    d->dataSource->deleteLater();
 }
 
 void AbstractProcessor::setError(const QString &error)

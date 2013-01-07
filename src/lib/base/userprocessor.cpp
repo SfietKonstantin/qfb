@@ -16,7 +16,7 @@
 
 #include "userprocessor.h"
 #include "abstractprocessor_p.h"
-
+#include <QtCore/QCoreApplication>
 #include "helper_p.h"
 #include "user.h"
 #include "language.h"
@@ -302,6 +302,7 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
     propertiesMap.insert(WebsiteProperty, parseUrl(rootObject.value(WEBSITE_KEY).toString()));
 
     d->user = new User(propertiesMap);
+    d->user->moveToThread(QCoreApplication::instance()->thread());
 
     return true;
 }

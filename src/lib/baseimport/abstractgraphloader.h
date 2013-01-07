@@ -14,64 +14,47 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "userloader.h"
-#include "abstractloader_p.h"
+#ifndef QFB_ABSTRACTGRAPHLOADER_H
+#define QFB_ABSTRACTGRAPHLOADER_H
 
-#include "user.h"
-#include "userprocessor.h"
-#include "querymanager.h"
+#include "abstractloader.h"
 
 namespace QFB
 {
 
-class UserLoaderPrivate: public AbstractLoaderPrivate
+class AbstractLoaderPrivate;
+class QFBBASEIMPORT_EXPORT AbstractGraphLoader : public AbstractLoader
 {
+    Q_OBJECT
 public:
-    UserLoaderPrivate(UserLoader *q);
-    User *user;
-private:
-    Q_DECLARE_PUBLIC(UserLoader)
+    explicit AbstractGraphLoader(QObject *parent = 0);
+public Q_SLOTS:
+    /**
+     * @brief Perform a request
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     */
+    void request(const QString &graph, const QString &arguments = QString());
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
+     * @param parent parent object.
+     */
+    explicit AbstractGraphLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
+    /**
+     * @brief Create a reply used in the request
+     *
+     * You can use the query manager to create replies you
+     * are interested in.
+     *
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     * @return a reply.
+     */
+    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
 };
 
-UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
-    AbstractLoaderPrivate(q)
-{
-    user = 0;
 }
 
-////// End of private class //////
-
-UserLoader::UserLoader(QObject *parent) :
-    AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
-{
-}
-
-User * UserLoader::user() const
-{
-    Q_D(const UserLoader);
-    return d->user;
-}
-
-Request UserLoader::createRequest(const QString &graph, const QString &arguments)
-{
-    if (queryManager()) {
-        return queryManager()->queryUser(graph, arguments);
-    }
-    return Request();
-}
-
-void UserLoader::handleReply(AbstractProcessor *processor)
-{
-    Q_D(UserLoader);
-    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
-    if (d->user) {
-        d->user->deleteLater();
-    }
-
-    d->user = userProcessor->user();
-    emit userChanged();
-
-    processor->deleteLater();
-}
-
-}
+#endif // QFB_ABSTRACTGRAPHLOADER_H

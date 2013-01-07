@@ -14,47 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHLOADER_H
-#define QFB_ABSTRACTGRAPHLOADER_H
+#ifndef QFB_FRIENDLISTPROCESSOR_H
+#define QFB_FRIENDLISTPROCESSOR_H
 
-#include "abstractloader.h"
+#include "abstractpagingprocessor.h"
 
 namespace QFB
 {
 
-class AbstractLoaderPrivate;
-class AbstractGraphLoader : public AbstractLoader
+class NamedObject;
+class FriendListProcessorPrivate;
+class QFBBASE_EXPORT FriendListProcessor: public AbstractPagingProcessor
 {
     Q_OBJECT
 public:
-    explicit AbstractGraphLoader(QObject *parent = 0);
-public Q_SLOTS:
-    /**
-     * @brief Perform a request
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     */
-    void request(const QString &graph, const QString &arguments = QString());
+    explicit FriendListProcessor(QObject *parent = 0);
+    QList<NamedObject *> friendList() const;
 protected:
-    /**
-     * @brief D-pointer constructor
-     * @param dd d-pointer.
-     * @param parent parent object.
-     */
-    explicit AbstractGraphLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
-    /**
-     * @brief Create a reply used in the request
-     *
-     * You can use the query manager to create replies you
-     * are interested in.
-     *
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     * @return a reply.
-     */
-    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(FriendListProcessor)
 };
 
 }
 
-#endif // QFB_ABSTRACTGRAPHLOADER_H
+#endif // QFB_FRIENDLISTPROCESSOR_H

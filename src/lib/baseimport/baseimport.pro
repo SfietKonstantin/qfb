@@ -12,9 +12,20 @@ DEFINES += QFBBASEIMPORT_LIBRARY
 INCLUDEPATH += ../base/
 
 HEADERS +=  baseimport_global.h \
+            abstractloader.h \
+            abstractloader_p.h \
+            abstractgraphloader.h \
+            abstractloadablemodel.h \
+            userloader.h \
+            friendlistmodel.h \
             postvalidator.h
 
-SOURCES +=  postvalidator.cpp
+SOURCES +=  abstractloader.cpp \
+            abstractgraphloader.cpp \
+            abstractloadablemodel.cpp \
+            userloader.cpp \
+            friendlistmodel.cpp \
+            postvalidator.cpp
 
 # Deployment
 target.path = $${LIBDIR}

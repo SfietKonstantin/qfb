@@ -49,7 +49,7 @@ Item {
             } else {
                 queryManager.token = BRIDGE.token
                 webView.visible = false
-//                friendListModel.request("me/friends")
+                friendListModel.request("me/friends")
             }
         }
 
@@ -57,7 +57,7 @@ Item {
             BRIDGE.token = token
             queryManager.token = token
             webView.visible = false
-//            friendListModel.request("me/friends")
+            friendListModel.request("me/friends")
         }
     }
 
@@ -66,10 +66,11 @@ Item {
     }
 
 
-//    QFBFriendListModel {
-//        id: friendListModel
-//        queryManager: queryManager
-//    }
+    QFBFriendListModel {
+        id: friendListModel
+        queryManager: queryManager
+        autoLoadNext: true
+    }
 
 //    QFBFeedModel {
 //        id: feedModel
@@ -101,17 +102,17 @@ Item {
         }
     }
 
-//    Item {
-//        anchors.top: parent.top; anchors.left: parent.left; anchors.right: parent.right
-//        anchors.bottom: toolbar.top
+    Item {
+        anchors.top: parent.top; anchors.left: parent.left; anchors.right: parent.right
+        anchors.bottom: toolbar.top
 
-//        ListView {
-//            id: friendsView
-//            anchors.fill: parent
-//            model: friendListModel
-//            delegate: Item {
-//                width: friendsView.width
-//                height: 60
+        ListView {
+            id: friendsView
+            anchors.fill: parent
+            model: friendListModel
+            delegate: Item {
+                width: friendsView.width
+                height: 60
 
 //                Image {
 //                    width: 40
@@ -128,19 +129,19 @@ Item {
 //                    }
 //                }
 
-//                Text {
-//                    anchors.centerIn: parent
-//                    font.pixelSize: 20
-//                    text: model.data.name
-//                }
+                Text {
+                    anchors.centerIn: parent
+                    font.pixelSize: 20
+                    text: model.data.name
+                }
 
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: userLoader.request(model.data.id)
-//                }
-//            }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: userLoader.request(model.data.facebookId)
+                }
+            }
 
-//        }
+        }
 //        ListView {
 //            id: feedView
 //            anchors.fill: parent
@@ -218,43 +219,43 @@ Item {
 
 //            }
 //        }
-//    }
+    }
 
-//    Rectangle {
-//        id: toolbar
-//        anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right
-//        height: 40
+    Rectangle {
+        id: toolbar
+        anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right
+        height: 40
 
-//        Rectangle {
-//            height: 40
-//            width: toolbar.width / 2
-//            color: "red"
+        Rectangle {
+            height: 40
+            width: toolbar.width / 2
+            color: "red"
 
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    friendsView.visible = true
-//                    feedView.visible = false
-//                }
-//            }
-//        }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    friendsView.visible = true
+                    feedView.visible = false
+                }
+            }
+        }
 
-//        Rectangle {
-//            height: 40
-//            width: toolbar.width / 2
-//            color: "blue"
-//            anchors.right: parent.right
+        Rectangle {
+            height: 40
+            width: toolbar.width / 2
+            color: "blue"
+            anchors.right: parent.right
 
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    friendsView.visible = false
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    friendsView.visible = false
 //                    feedView.visible = true
 //                    feedModel.request("me/home")
-//                }
-//            }
-//        }
-//    }
+                }
+            }
+        }
+    }
 
 
     WebView {

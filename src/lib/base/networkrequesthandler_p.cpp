@@ -88,7 +88,6 @@ void NetworkRequestHandlerPrivate::slotFinished()
         return;
     }
 
-    qDebug() << reply->url();
     emit q->finished(request, reply);
 }
 

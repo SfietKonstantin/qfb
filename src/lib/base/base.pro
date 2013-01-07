@@ -23,24 +23,24 @@ HEADERS +=  base_global.h \
             language.h \
             cover.h \
             post.h \
-    networkrequesthandler_p.h \
-    abstractprocessor.h \
-    request.h \
-#            abstractreply.h \
-#            abstractreply_p.h \
-#            imagereply.h \
-#            abstractgraphreply.h \
-#            abstractgraphreply_p.h \
-#            friendlistreply.h \
+            networkrequesthandler_p.h \
+            abstractprocessor.h \
+            abstractprocessor_p.h \
+            abstractpagingprocessor.h \
+            abstractpagingprocessor_p.h \
+            request.h \
             querymanager.h \
+            userprocessor.h \
+            friendlistprocessor.h \
+#            imagereply.h \
+#            friendlistreply.h \
 #            picturereply.h \
 #            userreply.h \
 #            feedreply.h \
 #    abstractgraphpagingreply.h \
 #    abstractgraphpagingreply_p.h \
 #    typereply.h
-    userprocessor.h \
-    abstractprocessor_p.h
+
 
 SOURCES +=  object.cpp \
             namedobject.cpp \
@@ -48,20 +48,20 @@ SOURCES +=  object.cpp \
             language.cpp \
             cover.cpp \
             post.cpp \
-#            abstractreply.cpp \
-#            imagereply.cpp \
-#            abstractgraphreply.cpp \
-#            friendlistreply.cpp \
+            networkrequesthandler_p.cpp \
+            abstractprocessor.cpp \
+            abstractpagingprocessor.cpp \
+            request.cpp \
             querymanager.cpp \
+            userprocessor.cpp \
+            friendlistprocessor.cpp \
+#            imagereply.cpp \
+#            friendlistreply.cpp \
 #            picturereply.cpp \
 #            userreply.cpp \
 #            feedreply.cpp \
 #    abstractgraphpagingreply.cpp \
 #    typereply.cpp
-    networkrequesthandler_p.cpp \
-    abstractprocessor.cpp \
-    request.cpp \
-    userprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

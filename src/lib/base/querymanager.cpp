@@ -27,6 +27,7 @@
 #include "networkrequesthandler_p.h"
 #include "helper_p.h"
 #include "request.h"
+#include "friendlistprocessor.h"
 #include "userprocessor.h"
 
 namespace QFB
@@ -76,6 +77,9 @@ void QueryManagerPrivate::createProcessor(const Request &request, QIODevice *dat
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
     switch (request.type()) {
+    case FriendListRequest:
+        processor = new FriendListProcessor(q);
+        break;
     case UserRequest:
         processor = new UserProcessor(q);
         break;
@@ -134,6 +138,10 @@ QueryManager::QueryManager(QObject *parent) :
     d->processThreadPoll = new QThreadPool(this);
 
     qRegisterMetaType<QFB::Request>();
+    connect(d->networkRequestHandler, SIGNAL(finished(QFB::Request,QIODevice*)),
+            this, SLOT(createProcessor(QFB::Request,QIODevice*)));
+    connect(d->networkRequestHandler, SIGNAL(error(QFB::Request)),
+            this, SLOT(slotNetworkError(QFB::Request)));
 }
 
 QueryManager::~QueryManager()
@@ -156,17 +164,17 @@ QString QueryManager::token() const
 //    return reply;
 //}
 
-//FriendListReply * QueryManager::queryFriendList(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    if (d->token.isEmpty()) {
-//        return 0;
-//    }
-
-//    FriendListReply *reply = new FriendListReply(d->networkAccessManager, this);
-//    reply->request(graph, d->token, arguments);
-//    return reply;
-//}
+Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    Request request;
+    if (d->token.isEmpty()) {
+        return request;
+    }
+    request = d->createRequest(FriendListRequest);
+    d->networkRequestHandler->get(request, graphUrl(graph, d->token, createArguments(arguments)));
+    return request;
+}
 
 //PictureReply * QueryManager::queryPicture(const QString &graph, const QString &arguments)
 //{
@@ -189,10 +197,6 @@ Request QueryManager::queryUser(const QString &graph, const QString &arguments)
     }
     request = d->createRequest(UserRequest);
     d->networkRequestHandler->get(request, graphUrl(graph, d->token, createArguments(arguments)));
-    connect(d->networkRequestHandler, SIGNAL(finished(QFB::Request,QIODevice*)),
-            this, SLOT(createProcessor(QFB::Request,QIODevice*)));
-    connect(d->networkRequestHandler, SIGNAL(error(QFB::Request)),
-            this, SLOT(slotNetworkError(QFB::Request)));
     return request;
 }
 

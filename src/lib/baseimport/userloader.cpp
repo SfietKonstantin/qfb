@@ -14,28 +14,62 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERPROCESSOR_H
-#define QFB_USERPROCESSOR_H
+#include "userloader.h"
+#include "abstractloader_p.h"
 
-#include "abstractprocessor.h"
+#include "user.h"
+#include "userprocessor.h"
+#include "querymanager.h"
 
 namespace QFB
 {
 
-class User;
-class UserProcessorPrivate;
-class QFBBASE_EXPORT UserProcessor: public AbstractProcessor
+class UserLoaderPrivate: public AbstractLoaderPrivate
 {
-    Q_OBJECT
 public:
-    explicit UserProcessor(QObject *parent = 0);
-    User * user() const;
-protected:
-    bool processDataSource(QIODevice *dataSource);
+    UserLoaderPrivate(UserLoader *q);
+    User *user;
 private:
-    Q_DECLARE_PRIVATE(UserProcessor)
+    Q_DECLARE_PUBLIC(UserLoader)
 };
 
+UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
+    AbstractLoaderPrivate(q)
+{
+    user = 0;
 }
 
-#endif // QFB_USERPROCESSOR_H
+////// End of private class //////
+
+UserLoader::UserLoader(QObject *parent) :
+    AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
+{
+}
+
+User * UserLoader::user() const
+{
+    Q_D(const UserLoader);
+    return d->user;
+}
+
+Request UserLoader::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryUser(graph, arguments);
+    }
+    return Request();
+}
+
+void UserLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(UserLoader);
+    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
+    if (d->user) {
+        d->user->deleteLater();
+    }
+
+    d->user = userProcessor->user();
+    d->user->setParent(this);
+    emit userChanged();}
+
+}

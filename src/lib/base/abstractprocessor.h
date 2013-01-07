@@ -17,6 +17,7 @@
 #ifndef QFB_ABSTRACTPROCESSOR_H
 #define QFB_ABSTRACTPROCESSOR_H
 
+#include "base_global.h"
 #include <QtCore/QObject>
 #include <QtCore/QRunnable>
 
@@ -26,7 +27,7 @@ namespace QFB
 
 class Request;
 class AbstractProcessorPrivate;
-class AbstractProcessor : public QObject, public QRunnable
+class QFBBASE_EXPORT AbstractProcessor : public QObject, public QRunnable
 {
     Q_OBJECT
 public:

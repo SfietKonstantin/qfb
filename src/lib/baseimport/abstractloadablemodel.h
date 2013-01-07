@@ -14,31 +14,63 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTLOADER_H
-#define QFB_ABSTRACTLOADER_H
+#ifndef QFB_ABSTRACTLOADABLEMODEL_H
+#define QFB_ABSTRACTLOADABLEMODEL_H
 
-#include <QtCore/QObject>
+/**
+ * @file abstractloadablemodel.h
+ * @brief Definition of QFB::AbstractLoadableModel
+ */
+
+#include "baseimport_global.h"
+#include <QtCore/QAbstractListModel>
+#include "request.h"
 
 namespace QFB
 {
 
-class AbstractProcessor;
+class AbstractPagingProcessor;
 class QueryManager;
-class Request;
-class AbstractLoaderPrivate;
-class AbstractLoader: public QObject
+class AbstractLoadableModelPrivate;
+/**
+ * @brief Base class for all models that are based on loadable content
+ *
+ * This model is a base class for models that have to load content
+ * from Facebook. It provides a query manager, that should be set and
+ * accessed with the queryManager() property, as well as some
+ * preimplemented methods, such as request().
+ *
+ * In order to implement a subclass, createReply() should be
+ * implemented, in order to create replies, and both QAbstractListModel::rowCount()
+ * and QAbstractListModel::data() should be implemented as well. Methods from the private
+ * class, QFB::AbstractLoadableModelPrivate should also be implemented.
+ */
+class QFBBASEIMPORT_EXPORT AbstractLoadableModel : public QAbstractListModel
 {
     Q_OBJECT
+    /**
+     * @short Count
+     */
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
     /**
      * @short Query manager
      */
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
-    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+    Q_PROPERTY(bool haveNext READ haveNext NOTIFY haveNextChanged)
+    Q_PROPERTY(bool autoLoadNext READ autoLoadNext WRITE setAutoLoadNext
+               NOTIFY autoLoadNextChanged)
 public:
-    explicit AbstractLoader(QObject *parent = 0);
-    virtual ~AbstractLoader();
+    /**
+     * @brief Destructor
+     */
+    virtual ~AbstractLoadableModel();
+    /**
+     * @short Count
+     * @return number of rows in this model.
+     */
+    int count() const;
     /**
      * @brief Query manager
      * @return query manager.
@@ -46,13 +78,27 @@ public:
     QueryManager * queryManager() const;
     bool loading() const;
     QString error() const;
+    bool haveNext() const;
+    bool autoLoadNext() const;
 public Q_SLOTS:
     /**
      * @brief Set the query manager
      * @param queryManager query manager to set.
      */
     void setQueryManager(QueryManager *queryManager);
+    void setAutoLoadNext(bool autoLoadNext);
+    void loadNext();
+    /**
+     * @brief Perform a request
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     */
+    void request(const QString &graph, const QString &arguments = QString());
 Q_SIGNALS:
+    /**
+     * @short Count changed
+     */
+    void countChanged();
     /**
      * @brief Query manager changed
      */
@@ -60,22 +106,34 @@ Q_SIGNALS:
     void loadingChanged();
     void loaded();
     void errorChanged();
+    void haveNextChanged();
+    void autoLoadNextChanged();
 protected:
     /**
      * @brief D-pointer constructor
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
-    void setLoading(bool loading);
+    explicit AbstractLoadableModel(AbstractLoadableModelPrivate &dd, QObject *parent = 0);
     void handleRequest(const Request &request);
-    virtual void handleReply(AbstractProcessor *processor) = 0;
+    void setLoading(bool loading);
+    void setDoNotHaveNext();
+    virtual void handleReply(AbstractPagingProcessor *processor) = 0;
+    virtual void clear() = 0;
+    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    /**
+     * @brief Role names
+     * @return role names.
+     */
+    virtual QHash<int, QByteArray> roleNames() const = 0;
+#endif
     /**
      * @short D-pointer
      */
-    const QScopedPointer<AbstractLoaderPrivate> d_ptr;
+    const QScopedPointer<AbstractLoadableModelPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(AbstractLoader)
+    Q_DECLARE_PRIVATE(AbstractLoadableModel)
     /// @cond buggy-doxygen
     Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
                                                AbstractProcessor *processor))
@@ -86,4 +144,4 @@ private:
 
 }
 
-#endif // QFB_ABSTRACTLOADER_H
+#endif // QFB_ABSTRACTLOADABLEMODEL_H

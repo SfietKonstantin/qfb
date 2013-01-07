@@ -21,14 +21,15 @@ LIBS += -L../../lib/baseimport -l$${NAME}import
 #HEADERS += loaderbase.h \
 #                loaderbase.h \
 #                loaderbase_p.h \
-HEADERS += abstractloader.h \
+#HEADERS += abstractloader.h \
 #                abstractloader.h \
 #                imageloader.h \
-                abstractgraphloader.h \
+#                abstractgraphloader.h \
 #                pictureloader.h \
-                userloader.h \
+#                userloader.h \
 #    typeloader.h
-    abstractloader_p.h
+#    abstractloader_p.h
+#HEADERS += friendlistmodel.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
@@ -38,11 +39,11 @@ SOURCES +=      base_plugin.cpp \
 #                friendlistmodel.cpp \
 #                feedmodel.cpp \
 #                loaderbase.cpp \
-                abstractloader.cpp \
+#                abstractloader.cpp \
 #                imageloader.cpp \
-                abstractgraphloader.cpp \
+#                abstractgraphloader.cpp \
 #                pictureloader.cpp \
-                userloader.cpp \
+#                userloader.cpp \
 #    typeloader.cpp
 
 OTHER_FILES =   qmldir \

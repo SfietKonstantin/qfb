@@ -17,6 +17,7 @@
 #ifndef QFB_REQUEST_H
 #define QFB_REQUEST_H
 
+#include "base_global.h"
 #include <QtCore/QMetaType>
 #include <QtCore/QSharedData>
 #include <QtCore/QExplicitlySharedDataPointer>
@@ -31,7 +32,7 @@ struct RequestPrivate: public QSharedData
     RequestType type;
 };
 
-class Request
+class QFBBASE_EXPORT Request
 {
 public:
     explicit Request();

@@ -21,12 +21,10 @@
 
 #include "friendlistmodel.h"
 #include "abstractloadablemodel_p.h"
-
 #include <QtCore/QDebug>
-
 #include "querymanager.h"
 #include "namedobject.h"
-#include "friendlistreply.h"
+#include "friendlistprocessor.h"
 
 namespace QFB
 {
@@ -56,14 +54,6 @@ public:
      * @param q Q-pointer
      */
     FriendListModelPrivate(FriendListModel *q);
-    /**
-     * @internal
-     * @brief Implementation of AbstractLoadableModelPrivate::processReply()
-     * @param reply reply to be processed.
-     * @return if the process is successful.
-     */
-    bool processReply(const AbstractGraphPagingReply *reply);
-    virtual void clear();
     QList<NamedObject *> temporaryData;
     /**
      * @internal
@@ -79,46 +69,46 @@ FriendListModelPrivate::FriendListModelPrivate(FriendListModel *q):
 {
 }
 
-bool FriendListModelPrivate::processReply(const AbstractGraphPagingReply *reply)
-{
-    Q_Q(FriendListModel);
+//bool FriendListModelPrivate::processReply(const AbstractGraphPagingReply *reply)
+//{
+//    Q_Q(FriendListModel);
 
-    const FriendListReply *friendListReply = qobject_cast<const FriendListReply *>(reply);
-    if (!friendListReply) {
-        return false;
-    }
+//    const FriendListReply *friendListReply = qobject_cast<const FriendListReply *>(reply);
+//    if (!friendListReply) {
+//        return false;
+//    }
 
-    QList<NamedObject *> friendList = friendListReply->friendList();
-    if (friendList.isEmpty()) {
-        setDoNotHaveNext();
-        qSort(temporaryData.begin(), temporaryData.end(), nameSortLesser);
-        q->beginInsertRows(QModelIndex(), q->rowCount(), temporaryData.count() - 1);
-        data = temporaryData;
-        temporaryData.clear();
-        emit q->countChanged();
-        q->endInsertRows();
-        return true;
-    }
+//    QList<NamedObject *> friendList = friendListReply->friendList();
+//    if (friendList.isEmpty()) {
+//        setDoNotHaveNext();
+//        qSort(temporaryData.begin(), temporaryData.end(), nameSortLesser);
+//        q->beginInsertRows(QModelIndex(), q->rowCount(), temporaryData.count() - 1);
+//        data = temporaryData;
+//        temporaryData.clear();
+//        emit q->countChanged();
+//        q->endInsertRows();
+//        return true;
+//    }
 
-    foreach (NamedObject *user, friendList) {
-        user->setParent(q);
-    }
+//    foreach (NamedObject *user, friendList) {
+//        user->setParent(q);
+//    }
 
-    temporaryData.append(friendList);
+//    temporaryData.append(friendList);
 
-    return true;
-}
+//    return true;
+//}
 
-void FriendListModelPrivate::clear()
-{
-    Q_Q(FriendListModel);
-    if (!data.isEmpty()) {
-        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
-        qDeleteAll(data);
-        data.clear();
-        q->endRemoveRows();
-    }
-}
+//void FriendListModelPrivate::clear()
+//{
+//    Q_Q(FriendListModel);
+//    if (!data.isEmpty()) {
+//        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
+//        qDeleteAll(data);
+//        data.clear();
+//        q->endRemoveRows();
+//    }
+//}
 
 ////// End of private class //////
 
@@ -157,11 +147,48 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-AbstractGraphPagingReply *FriendListModel::createReply(const QString &graph,
-                                                       const QString &arguments)
+void FriendListModel::handleReply(AbstractPagingProcessor *processor)
 {
-//    return queryManager()->queryFriendList(graph, arguments);
-    return 0;
+    Q_D(FriendListModel);
+    FriendListProcessor *friendListProcessor = qobject_cast<FriendListProcessor *>(processor);
+    if (!friendListProcessor) {
+        return;
+    }
+
+    QList<NamedObject *> friendList = friendListProcessor->friendList();
+    if (friendList.isEmpty()) {
+        setDoNotHaveNext();
+        qSort(d->temporaryData.begin(), d->temporaryData.end(), nameSortLesser);
+        beginInsertRows(QModelIndex(), 0, d->temporaryData.count() - 1);
+        d->data = d->temporaryData;
+        d->temporaryData.clear();
+        emit countChanged();
+        endInsertRows();
+        return;
+    }
+
+    foreach (NamedObject *user, friendList) {
+        user->setParent(this);
+    }
+
+    d->temporaryData.append(friendList);
+}
+
+void FriendListModel::clear()
+{
+    Q_D(FriendListModel);
+    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+    qDeleteAll(d->data);
+    emit countChanged();
+    endRemoveRows();
+}
+
+Request FriendListModel::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryFriendList(graph, arguments);
+    }
+    return Request();
 }
 
 QHash<int, QByteArray> FriendListModel::roleNames() const

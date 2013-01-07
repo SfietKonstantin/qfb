@@ -14,29 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_H
-#define QFB_LOADERBASE_H
+#ifndef QFB_ABSTRACTLOADER_H
+#define QFB_ABSTRACTLOADER_H
 
 #include <QtCore/QObject>
+#include "baseimport_global.h"
 
-class QUrl;
 namespace QFB
 {
 
+class AbstractProcessor;
 class QueryManager;
 class Request;
-class LoaderBasePrivate;
-/**
- * @brief Base class for a loader
- *
- * This class provides base properties and methods for a
- * loader, that have to create and interact with replies
- * and provide results.
- *
- * In order to create replies, a query manager can be set
- * with the queryManager() property.
- */
-class LoaderBase : public QObject
+class AbstractLoaderPrivate;
+class QFBBASEIMPORT_EXPORT AbstractLoader: public QObject
 {
     Q_OBJECT
     /**
@@ -45,14 +36,17 @@ class LoaderBase : public QObject
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
 public:
-    virtual ~LoaderBase();
+    explicit AbstractLoader(QObject *parent = 0);
+    virtual ~AbstractLoader();
     /**
      * @brief Query manager
      * @return query manager.
      */
     QueryManager * queryManager() const;
     bool loading() const;
+    QString error() const;
 public Q_SLOTS:
     /**
      * @brief Set the query manager
@@ -66,29 +60,23 @@ Q_SIGNALS:
     void queryManagerChanged();
     void loadingChanged();
     void loaded();
+    void errorChanged();
 protected:
     /**
      * @brief D-pointer constructor
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit LoaderBase(LoaderBasePrivate &dd, QObject *parent = 0);
-    /**
-     * @brief Handle the reply
-     *
-     * This method is used to handle the reply, it perform
-     * the different connections and perform it's lifecycle
-     * management.
-     *
-     * @param reply reply to handle.
-     */
-    virtualvoid handleReply(AbstractReply *reply);
+    explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
+    void setLoading(bool loading);
+    void handleRequest(const Request &request);
+    virtual void handleReply(AbstractProcessor *processor) = 0;
     /**
      * @short D-pointer
      */
-    const QScopedPointer<LoaderBasePrivate> d_ptr;
+    const QScopedPointer<AbstractLoaderPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(LoaderBase)
+    Q_DECLARE_PRIVATE(AbstractLoader)
     /// @cond buggy-doxygen
     Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
                                                AbstractProcessor *processor))
@@ -99,4 +87,4 @@ private:
 
 }
 
-#endif // QFB_LOADERBASE_H
+#endif // QFB_ABSTRACTLOADER_H

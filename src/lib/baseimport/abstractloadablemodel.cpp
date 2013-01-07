@@ -21,10 +21,8 @@
 
 #include "abstractloadablemodel.h"
 #include "abstractloadablemodel_p.h"
-
-#include <QtCore/QDebug>
-
-#include "abstractgraphpagingreply.h"
+#include "abstractpagingprocessor.h"
+#include "querymanager.h"
 
 namespace QFB
 {
@@ -33,7 +31,6 @@ AbstractLoadableModelPrivate::AbstractLoadableModelPrivate(AbstractLoadableModel
     q_ptr(q)
 {
     queryManager = 0;
-    reply = 0;
     loading = false;
     autoLoadNext = false;
     haveNext = false;
@@ -43,56 +40,54 @@ AbstractLoadableModelPrivate::~AbstractLoadableModelPrivate()
 {
 }
 
-void AbstractLoadableModelPrivate::setDoNotHaveNext()
+void AbstractLoadableModelPrivate::slotFinished(const QFB::Request &request,
+                                                AbstractProcessor *processor)
 {
     Q_Q(AbstractLoadableModel);
-    haveNext = false;
-    emit q->haveNextChanged();
-
-    if (loading) {
-        loading = false;
-        emit q->loadingChanged();
+    if (request != currentRequest) {
+        return;
     }
-}
 
-void AbstractLoadableModelPrivate::slotFinished()
-{
-    Q_Q(AbstractLoadableModel);
-    bool ok = processReply(reply);
+    AbstractPagingProcessor *pagingProcessor = qobject_cast<AbstractPagingProcessor *>(processor);
+    if (!pagingProcessor) {
+        return;
+    }
+
+    q->handleReply(pagingProcessor);
+    pagingProcessor->deleteLater();
+
     nextPageGraph = QString();
     nextPageArguments = QString();
-    if (ok) {
-        nextPageGraph = reply->nextPageGraph();
-        nextPageArguments = reply->nextPageArguments();
-    }
-    reply->deleteLater();
-    reply = 0;
 
-    if (!ok) {
-        loading = false;
-        emit q->loadingChanged();
-        return;
-    }
+    if (haveNext) {
+        nextPageGraph = pagingProcessor->nextPageGraph();
+        nextPageArguments = pagingProcessor->nextPageArguments();
 
-    if (autoLoadNext) {
-        q->loadNext();
-        return;
-    }
+        if (autoLoadNext) {
+            q->loadNext();
+        } else {
+            q->setLoading(false);
+        }
 
-    loading = false;
-    emit q->loadingChanged();
+    } else {
+        q->setLoading(false);
+    }
 }
 
-void AbstractLoadableModelPrivate::slotFailed()
+void AbstractLoadableModelPrivate::slotError(const QFB::Request &request,
+                                             const QString &errorString)
 {
     Q_Q(AbstractLoadableModel);
+    if (request != currentRequest) {
+        return;
+    }
 
-    qDebug() << reply->error();
-    reply->deleteLater();
-    reply = 0;
+    if (error != errorString) {
+        error = errorString;
+        emit q->errorChanged();
+    }
 
-    loading = false;
-    emit q->loadingChanged();
+    q->setLoading(false);
 }
 
 ////// End of private class //////
@@ -123,6 +118,12 @@ bool AbstractLoadableModel::loading() const
     return d->loading;
 }
 
+QString AbstractLoadableModel::error() const
+{
+    Q_D(const AbstractLoadableModel);
+    return d->error;
+}
+
 bool AbstractLoadableModel::haveNext() const
 {
     Q_D(const AbstractLoadableModel);
@@ -139,7 +140,16 @@ void AbstractLoadableModel::setQueryManager(QueryManager *queryManager)
 {
     Q_D(AbstractLoadableModel);
     if (d->queryManager != queryManager) {
+        // Disconnect before
+        if (d->queryManager) {
+            disconnect(d->queryManager, 0, this, 0);
+        }
+
         d->queryManager = queryManager;
+        connect(d->queryManager, SIGNAL(finished(QFB::Request,AbstractProcessor*)),
+                this, SLOT(slotFinished(QFB::Request,AbstractProcessor*)));
+        connect(d->queryManager, SIGNAL(error(QFB::Request,QString)),
+                this, SLOT(slotError(QFB::Request,QString)));
         emit queryManagerChanged();
     }
 }
@@ -156,24 +166,21 @@ void AbstractLoadableModel::setAutoLoadNext(bool autoLoadNext)
 void AbstractLoadableModel::request(const QString &graph, const QString &arguments)
 {
     Q_D(AbstractLoadableModel);
-    if (!d->queryManager) {
+    if (!queryManager()) {
         return;
     }
-    if (d->reply) {
+    if (loading()) {
         return;
     }
 
-    d->clear();
+    clear();
     d->haveNext = true;
     emit haveNextChanged();
-    d->reply = createReply(graph, arguments);
 
-    if (!d->loading) {
-        d->loading = true;
-        emit loadingChanged();
+    Request request = createRequest(graph, arguments);
+    if (request.isValid()) {
+        handleRequest(request);
     }
-    connect(d->reply, SIGNAL(loadingFinished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(loadingFailed()), this, SLOT(slotFailed()));
 }
 
 void AbstractLoadableModel::loadNext()
@@ -182,21 +189,47 @@ void AbstractLoadableModel::loadNext()
     if (!d->queryManager) {
         return;
     }
-    if (d->reply) {
-        return;
-    }
-
     if (!d->haveNext) {
         return;
     }
 
-    d->reply = createReply(d->nextPageGraph, d->nextPageArguments);
-    if (!d->loading) {
-        d->loading = true;
-        emit loadingChanged();
+    Request request = createRequest(d->nextPageGraph, d->nextPageArguments);
+    if (request.isValid()) {
+        handleRequest(request);
     }
-    connect(d->reply, SIGNAL(loadingFinished()), this, SLOT(slotFinished()));
-    connect(d->reply, SIGNAL(loadingFailed()), this, SLOT(slotFailed()));
+}
+
+void AbstractLoadableModel::handleRequest(const Request &request)
+{
+    Q_D(AbstractLoadableModel);
+    d->currentRequest = request;
+    if (!d->error.isEmpty()) {
+        d->error.clear();
+        emit errorChanged();
+    }
+
+    setLoading(true);
+}
+
+void AbstractLoadableModel::setLoading(bool loading)
+{
+    Q_D(AbstractLoadableModel);
+    if (d->loading != loading) {
+        d->loading = loading;
+        emit loadingChanged();
+
+        if (!d->loading) {
+            emit loaded();
+        }
+    }
+}
+
+void AbstractLoadableModel::setDoNotHaveNext()
+{
+    Q_D(AbstractLoadableModel);
+    d->haveNext = false;
+    emit haveNextChanged();
+
 }
 
 }

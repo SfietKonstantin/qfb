@@ -75,7 +75,7 @@ public:
      * @param arguments arguments.
      * @return a friend list reply.
      */
-//    FriendListReply * queryFriendList(const QString &graph, const QString &arguments = QString());
+    Request queryFriendList(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a picture
      * @param graph graph entry of the Facebook graph API.

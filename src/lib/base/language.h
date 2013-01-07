@@ -22,7 +22,6 @@
  * @brief Definition of QFB::Language
  */
 
-#include "base_global.h"
 #include "object.h"
 
 namespace QFB

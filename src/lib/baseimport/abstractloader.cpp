@@ -17,6 +17,7 @@
 #include "abstractloader.h"
 #include "abstractloader_p.h"
 
+#include "abstractprocessor.h"
 #include "querymanager.h"
 
 namespace QFB
@@ -41,6 +42,7 @@ void AbstractLoaderPrivate::slotFinished(const QFB::Request &request, AbstractPr
     }
 
     q->handleReply(processor);
+    processor->deleteLater();
     q->setLoading(false);
 }
 
@@ -128,6 +130,10 @@ void AbstractLoader::handleRequest(const Request &request)
 {
     Q_D(AbstractLoader);
     d->currentRequest = request;
+    if (!d->error.isEmpty()) {
+        d->error.clear();
+        emit errorChanged();
+    }
 
     setLoading(true);
 }

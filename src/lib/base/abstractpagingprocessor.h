@@ -14,57 +14,47 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHREPLY_P_H
-#define QFB_ABSTRACTGRAPHREPLY_P_H
+#ifndef QFB_ABSTRACTPAGINGPROCESSOR_H
+#define QFB_ABSTRACTPAGINGPROCESSOR_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "abstractprocessor.h"
+#include <QtCore/QUrl>
 
-/**
- * @internal
- * @file abstractgraphreply_p.h
- * @brief Definition of QFB::AbstractGraphReplyPrivate
- */
-
-#include "abstractreply_p.h"
-
-class QNetworkAccessManager;
 namespace QFB
 {
 
-class AbstractGraphReply;
-/**
- * @internal
- * @brief Private class for QFB::AbstractGraphReply
- */
-class AbstractGraphReplyPrivate: public AbstractReplyPrivate
+class AbstractPagingProcessorPrivate;
+class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractProcessor
 {
+    Q_OBJECT
 public:
+    explicit AbstractPagingProcessor(QObject *parent = 0);
     /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
+     * @brief Graph used to get the next page
+     * @return graph used to get the next page.
      */
-    AbstractGraphReplyPrivate(AbstractGraphReply *q);
+    QString nextPageGraph() const;
     /**
-     * @internal
-     * @brief Graph
+     * @brief Arguments used to get the next page
+     * @return arguments used to get the next page.
      */
-    QString graph;
+    QString nextPageArguments() const;
+protected:
     /**
-     * @internal
-     * @brief Arguments
+     * @brief D-pointer constructor
+     * @param dd D-pointer.
+     * @param parent parent object.
      */
-    QList<ArgumentPair> arguments;
-    QString token;
+    explicit AbstractPagingProcessor(AbstractPagingProcessorPrivate &dd, QObject *parent = 0);
+    /**
+     * @brief Set the url used to get the next page
+     * @param url url used to get the next page.
+     */
+    void setNextPageUrl(const QUrl &url);
 private:
-    Q_DECLARE_PUBLIC(AbstractGraphReply)
+    Q_DECLARE_PRIVATE(AbstractPagingProcessor)
 };
 
 }
 
-#endif // QFB_ABSTRACTGRAPHREPLY_P_H
+#endif // QFB_ABSTRACTPAGINGPROCESSOR_H

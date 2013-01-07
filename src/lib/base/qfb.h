@@ -339,6 +339,7 @@ enum Property {
 enum RequestType {
     NoRequest,
     TypeRequest,
+    FriendListRequest,
     UserRequest,
     PictureRequest
 

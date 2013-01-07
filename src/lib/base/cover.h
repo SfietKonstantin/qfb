@@ -22,7 +22,6 @@
  * @brief Definition of QFB::Cover
  */
 
-#include "base_global.h"
 #include "object.h"
 
 #include <QtCore/QUrl>

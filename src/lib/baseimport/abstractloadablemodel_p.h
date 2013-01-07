@@ -24,11 +24,12 @@
  */
 
 #include <QtCore/QtGlobal>
+#include "request.h"
 
 namespace QFB
 {
 
-class AbstractGraphReply;
+class AbstractProcessor;
 class QueryManager;
 class AbstractLoadableModel;
 /**
@@ -53,19 +54,6 @@ public:
      * @brief Destructor
      */
     virtual ~AbstractLoadableModelPrivate();
-    /**
-     * @internal
-     * @brief Process reply
-     *
-     * This method is used to process a reply from Facebook.
-     * It should be implemented in order to fill the model.
-     *
-     * @param reply reply to be processed.
-     * @return if the process is successful.
-     */
-    virtual bool processReply(const AbstractGraphPagingReply *reply) = 0;
-    virtual void clear() = 0;
-    void setDoNotHaveNext();
 protected:
     /**
      * @internal
@@ -77,22 +65,19 @@ private:
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished();
+    void slotFinished(const QFB::Request &request, AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotFailed();
+    void slotError(const QFB::Request &request, const QString &errorString);
     /**
      * @internal
      * @brief Query manager
      */
     QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    AbstractGraphPagingReply *reply;
+    Request currentRequest;
+    QString error;
     QString nextPageGraph;
     QString nextPageArguments;
     bool haveNext;

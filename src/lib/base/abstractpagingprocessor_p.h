@@ -14,63 +14,30 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LOADERBASE_P_H
-#define QFB_LOADERBASE_P_H
+#ifndef QFB_ABSTRACTPAGINGPROCESSOR_P_H
+#define QFB_ABSTRACTPAGINGPROCESSOR_P_H
 
-#include <QtCore/QtGlobal>
-#include "request.h"
+#include "abstractprocessor_p.h"
 
 namespace QFB
 {
 
-class QueryManager;
-class AbstractReply;
-class LoaderBase;
-class LoaderBasePrivate
+class AbstractPagingProcessorPrivate: public AbstractProcessorPrivate
 {
 public:
+    explicit AbstractPagingProcessorPrivate();
     /**
      * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
+     * @brief Graph used to get the next page
      */
-    LoaderBasePrivate(LoaderBase *q);
+    QString nextPageGraph;
     /**
      * @internal
-     * @brief Destructor
+     * @brief Arguments used to get the next page
      */
-    virtual ~LoaderBasePrivate();
-protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    LoaderBase * const q_ptr;
-private:
-    /**
-     * @internal
-     * @brief Slot when the request is finished
-     */
-    void slotFinished();
-    /**
-     * @internal
-     * @brief Slot when the request failed
-     */
-    void slotError();
-    /**
-     * @internal
-     * @brief Query manager
-     */
-    QueryManager *queryManager;
-    /**
-     * @internal
-     * @brief Reply
-     */
-    Request request;
-    bool loading;
-    Q_DECLARE_PUBLIC(LoaderBase)
+    QString nextPageArguments;
 };
 
 }
 
-#endif // QFB_LOADERBASE_P_H
+#endif // QFB_ABSTRACTPAGINGPROCESSOR_P_H

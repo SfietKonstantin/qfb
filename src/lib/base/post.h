@@ -22,7 +22,6 @@
  * @brief Definition of QFB::Post
  */
 
-#include "base_global.h"
 #include "object.h"
 
 #include <QtCore/QDateTime>
