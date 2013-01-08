@@ -28,6 +28,7 @@
 #include "helper_p.h"
 #include "request.h"
 #include "friendlistprocessor.h"
+#include "pictureprocessor.h"
 #include "userprocessor.h"
 
 namespace QFB
@@ -42,10 +43,17 @@ class QueryManagerPrivate
 public:
     explicit QueryManagerPrivate(QueryManager *q);
     Request createRequest(RequestType type);
-    void createProcessor(const Request & request, QIODevice *dataSource);
+    AbstractProcessor * createProcessor(const Request &request);
+    void preparePreprocessor(AbstractProcessor *processor, const Request &request);
+    Request createGraphPreprocessor(RequestType type, const QString &graph,
+                                    const QString &arguments);
+    /// @todo clean mess in processor
+    void slotPreprocessFinished(bool needLoading);
+    void slotPreprocessError();
+    void createPostprocessor(const Request &request, QIODevice *dataSource);
     void slotNetworkError(const QFB::Request &request);
-    void slotProcessFinished();
-    void slotProcessError();
+    void slotPostprocessFinished();
+    void slotPostprocessError();
     NetworkRequestHandler *networkRequestHandler;
     QThreadPool *processThreadPoll;
     /**
@@ -72,13 +80,16 @@ Request QueryManagerPrivate::createRequest(RequestType type)
     return request;
 }
 
-void QueryManagerPrivate::createProcessor(const Request &request, QIODevice *dataSource)
+AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
     switch (request.type()) {
     case FriendListRequest:
         processor = new FriendListProcessor(q);
+        break;
+    case PictureRequest:
+        processor = new PictureProcessor(q);
         break;
     case UserRequest:
         processor = new UserProcessor(q);
@@ -89,10 +100,86 @@ void QueryManagerPrivate::createProcessor(const Request &request, QIODevice *dat
 
     if (processor) {
         processor->setAutoDelete(false);
+    }
+
+    return processor;
+}
+
+void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, const Request &request)
+{
+    Q_Q(QueryManager);
+    processor->setRequest(request);
+    processor->setProcessingType(AbstractProcessor::Preprocessing);
+    QObject::connect(processor, SIGNAL(preprocessingFinished(bool)),
+                     q, SLOT(slotPreprocessFinished(bool)));
+    QObject::connect(processor, SIGNAL(error()), q, SLOT(slotPreprocessError()));
+}
+
+Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, const QString &graph,
+                                                     const QString &arguments)
+{
+    if (token.isEmpty()) {
+        return Request();
+    }
+
+    Request request = createRequest(type);
+    AbstractGraphProcessor *processor
+            = qobject_cast<AbstractGraphProcessor *>(createProcessor(request));
+    if (!processor) {
+        return Request();
+    }
+
+    request.setGraph(graph);
+    request.setArguments(arguments);
+    preparePreprocessor(processor, request);
+    processor->setToken(token);
+    processThreadPoll->start(processor, QThread::LowPriority);
+
+    return request;
+}
+
+void QueryManagerPrivate::slotPreprocessFinished(bool needLoading)
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
+    if (!processor) {
+        return;
+    }
+    Request request = processor->request();
+
+    if (needLoading) {
+        processor->deleteLater();
+        networkRequestHandler->get(request);
+    } else {
+        emit q->finished(request, processor);
+    }
+}
+
+void QueryManagerPrivate::slotPreprocessError()
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
+    if (!processor) {
+        return;
+    }
+
+    QString errorString = processor->errorString();
+    processor->deleteLater();
+    emit q->error(processor->request(), errorString);
+}
+
+void QueryManagerPrivate::createPostprocessor(const Request &request, QIODevice *dataSource)
+{
+    Q_Q(QueryManager);
+    AbstractProcessor *processor = createProcessor(request);
+
+    if (processor) {
         processor->setRequest(request);
+        processor->setProcessingType(AbstractProcessor::PostProcessing);
         processor->setDataSource(dataSource);
-        QObject::connect(processor, SIGNAL(finished()), q, SLOT(slotProcessFinished()));
-        QObject::connect(processor, SIGNAL(error()), q, SLOT(slotProcessError()));
+        QObject::connect(processor, SIGNAL(postProcessingFinished()),
+                         q, SLOT(slotPostprocessFinished()));
+        QObject::connect(processor, SIGNAL(error()), q, SLOT(slotPostprocessError()));
         processThreadPoll->start(processor, QThread::LowPriority);
     }
 }
@@ -103,7 +190,7 @@ void QueryManagerPrivate::slotNetworkError(const Request &request)
     emit q->error(request, QObject::tr("A network error happened"));
 }
 
-void QueryManagerPrivate::slotProcessFinished()
+void QueryManagerPrivate::slotPostprocessFinished()
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
@@ -115,7 +202,7 @@ void QueryManagerPrivate::slotProcessFinished()
     emit q->finished(request, processor);
 }
 
-void QueryManagerPrivate::slotProcessError()
+void QueryManagerPrivate::slotPostprocessError()
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = qobject_cast<AbstractProcessor *>(q->sender());
@@ -139,7 +226,7 @@ QueryManager::QueryManager(QObject *parent) :
 
     qRegisterMetaType<QFB::Request>();
     connect(d->networkRequestHandler, SIGNAL(finished(QFB::Request,QIODevice*)),
-            this, SLOT(createProcessor(QFB::Request,QIODevice*)));
+            this, SLOT(createPostprocessor(QFB::Request,QIODevice*)));
     connect(d->networkRequestHandler, SIGNAL(error(QFB::Request)),
             this, SLOT(slotNetworkError(QFB::Request)));
 }
@@ -167,37 +254,19 @@ QString QueryManager::token() const
 Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    Request request;
-    if (d->token.isEmpty()) {
-        return request;
-    }
-    request = d->createRequest(FriendListRequest);
-    d->networkRequestHandler->get(request, graphUrl(graph, d->token, createArguments(arguments)));
-    return request;
+    return d->createGraphPreprocessor(FriendListRequest, graph, arguments);
 }
 
-//PictureReply * QueryManager::queryPicture(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    if (d->token.isEmpty()) {
-//        return 0;
-//    }
-
-//    PictureReply *reply = new PictureReply(d->networkAccessManager, this);
-//    reply->request(graph, d->token, arguments);
-//    return reply;
-//}
+Request QueryManager::queryPicture(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(PictureRequest, graph, arguments);
+}
 
 Request QueryManager::queryUser(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    Request request;
-    if (d->token.isEmpty()) {
-        return request;
-    }
-    request = d->createRequest(UserRequest);
-    d->networkRequestHandler->get(request, graphUrl(graph, d->token, createArguments(arguments)));
-    return request;
+    return d->createGraphPreprocessor(UserRequest, graph, arguments);
 }
 
 //FeedReply * QueryManager::queryFeed(const QString &graph, const QString &arguments)

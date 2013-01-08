@@ -14,28 +14,72 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPROCESSOR_P_H
-#define QFB_ABSTRACTPROCESSOR_P_H
+#include "abstractpreprocessor.h"
+#include "abstractpreprocessor_p.h"
+#include "helper_p.h"
 
-#include "abstractprocessor.h"
-#include "request.h"
-
-class QIODevice;
-class QString;
 namespace QFB
 {
 
-class AbstractProcessorPrivate
+AbstractPreprocessorPrivate::AbstractPreprocessorPrivate()
 {
-public:
-    explicit AbstractProcessorPrivate();
-    Request request;
-    AbstractProcessor::ProcessingType processingType;
-    bool needLoading;
-    QIODevice *dataSource;
-    QString error;
-};
-
 }
 
-#endif // QFB_ABSTRACTPROCESSOR_P_H
+////// End of private class //////
+
+AbstractPreprocessor::AbstractPreprocessor(QObject *parent) :
+    QObject(parent), d_ptr(new AbstractPreprocessorPrivate())
+{
+}
+
+AbstractPreprocessor::AbstractPreprocessor(AbstractPreprocessorPrivate &dd, QObject *parent):
+    QObject(parent), d_ptr(&dd)
+{
+}
+
+AbstractPreprocessor::~AbstractPreprocessor()
+{
+}
+
+Request AbstractPreprocessor::request() const
+{
+    Q_D(const AbstractPreprocessor);
+    return d->request;
+}
+
+void AbstractPreprocessor::setRequest(const Request &request)
+{
+    Q_D(AbstractPreprocessor);
+    d->request = request;
+}
+
+void AbstractPreprocessor::setData(const QString &graph, const QString &arguments)
+{
+    Q_D(AbstractPreprocessor);
+    d->graph = graph;
+    d->arguments = createArguments(arguments);
+}
+
+QString AbstractPreprocessor::processedGraph() const
+{
+    Q_D(const AbstractPreprocessor);
+    return d->processedGraph;
+}
+
+QList<ArgumentPair> AbstractPreprocessor::processedArguments() const
+{
+    Q_D(const AbstractPreprocessor);
+    return d->processedArguments;
+}
+
+void AbstractPreprocessor::run()
+{
+    Q_D(AbstractPreprocessor);
+    if (processGraphAndArguments(d->graph, d->arguments)) {
+        emit finished();
+    } else {
+
+    }
+}
+
+}

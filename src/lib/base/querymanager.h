@@ -82,7 +82,7 @@ public:
      * @param arguments arguments.
      * @return a picture reply.
      */
-//    PictureReply * queryPicture(const QString &graph, const QString &arguments = QString());
+    Request queryPicture(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query an user
      * @param graph graph entry of the Facebook graph API.
@@ -119,11 +119,13 @@ protected:
 private:
     Q_DECLARE_PRIVATE(QueryManager)
     /// @cond buggy-doxygen
+    Q_PRIVATE_SLOT(d_func(), void slotPreprocessFinished(bool needLoading))
+    Q_PRIVATE_SLOT(d_func(), void slotPreprocessError())
     Q_PRIVATE_SLOT(d_func(),
-                   void createProcessor(const QFB::Request &request, QIODevice *dataSource))
+                   void createPostprocessor(const QFB::Request &request, QIODevice *dataSource))
     Q_PRIVATE_SLOT(d_func(), void slotNetworkError(const QFB::Request &request))
-    Q_PRIVATE_SLOT(d_func(), void slotProcessFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotProcessError())
+    Q_PRIVATE_SLOT(d_func(), void slotPostprocessFinished())
+    Q_PRIVATE_SLOT(d_func(), void slotPostprocessError())
     /// @endcond
 };
 

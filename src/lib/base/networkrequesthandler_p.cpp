@@ -25,14 +25,20 @@
 namespace QFB
 {
 
+static const int MAX_REPLIES = 3;
+
 class NetworkRequestHandlerPrivate
 {
 public:
     explicit NetworkRequestHandlerPrivate(NetworkRequestHandler *q);
     static QUrl redirectUrl(QNetworkReply *reply);
     void slotFinished();
+    void removeReply();
+    void scheduleReplies();
     QNetworkAccessManager *networkAccessManager;
     QMap<QNetworkReply *, Request> replies;
+    int runningReplies;
+    QList<Request> queue;
 private:
     NetworkRequestHandler * const q_ptr;
     Q_DECLARE_PUBLIC(NetworkRequestHandler)
@@ -42,6 +48,7 @@ NetworkRequestHandlerPrivate::NetworkRequestHandlerPrivate(NetworkRequestHandler
     q_ptr(q)
 {
     networkAccessManager = 0;
+    runningReplies = 0;
 }
 
 QUrl NetworkRequestHandlerPrivate::redirectUrl(QNetworkReply *reply)
@@ -79,16 +86,38 @@ void NetworkRequestHandlerPrivate::slotFinished()
         reply->deleteLater();
 
         emit q->error(request);
+        removeReply();
         return;
     }
 
     QUrl redirect = redirectUrl(reply);
     if (!redirect.isEmpty()) {
-        q->get(request, redirect);
+        request.setUrl(redirect);
+        q->get(request);
+        removeReply();
         return;
     }
 
     emit q->finished(request, reply);
+    removeReply();
+}
+
+void NetworkRequestHandlerPrivate::removeReply()
+{
+    runningReplies --;
+    scheduleReplies();
+}
+
+void NetworkRequestHandlerPrivate::scheduleReplies()
+{
+    Q_Q(NetworkRequestHandler);
+    while (runningReplies < MAX_REPLIES && !queue.isEmpty()) {
+        Request nextRequest = queue.takeFirst();
+        QNetworkReply *reply = networkAccessManager->get(QNetworkRequest(nextRequest.url()));
+        QObject::connect(reply, SIGNAL(finished()), q, SLOT(slotFinished()));
+        replies.insert(reply, nextRequest);
+        runningReplies ++;
+    }
 }
 
 ////// End of private class //////
@@ -106,12 +135,11 @@ NetworkRequestHandler::~NetworkRequestHandler()
     d->networkAccessManager->deleteLater();
 }
 
-void NetworkRequestHandler::get(const Request &request, const QUrl &url)
+void NetworkRequestHandler::get(const Request &request)
 {
     Q_D(NetworkRequestHandler);
-    QNetworkReply *reply = d->networkAccessManager->get(QNetworkRequest(url));
-    connect(reply, SIGNAL(finished()), this, SLOT(slotFinished()));
-    d->replies.insert(reply, request);
+    d->queue.append(request);
+    d->scheduleReplies();
 }
 
 }

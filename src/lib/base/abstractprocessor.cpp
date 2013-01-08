@@ -24,6 +24,8 @@ namespace QFB
 
 AbstractProcessorPrivate::AbstractProcessorPrivate()
 {
+    processingType = AbstractProcessor::NoProcessing;
+    needLoading = true;
     dataSource = 0;
 }
 
@@ -55,6 +57,12 @@ void AbstractProcessor::setRequest(const Request &request)
     d->request = request;
 }
 
+void AbstractProcessor::setProcessingType(ProcessingType processingType)
+{
+    Q_D(AbstractProcessor);
+    d->processingType = processingType;
+}
+
 void AbstractProcessor::setDataSource(QIODevice *dataSource)
 {
     Q_D(AbstractProcessor);
@@ -70,25 +78,50 @@ QString AbstractProcessor::errorString() const
 void AbstractProcessor::run()
 {
     Q_D(AbstractProcessor);
-    if (!d->dataSource) {
-        qWarning() << "Warning: no data source provided";
-        emit error();
-        return;
-    }
-
     if (!d->request.isValid()) {
         qWarning() << "Warning: the request is not valid";
+        setError(tr("The request is not valid"));
         emit error();
         return;
     }
 
-    bool ok = processDataSource(d->dataSource);
-    d->dataSource->deleteLater();
-    if (ok) {
-        emit finished();
-    } else {
+    bool ok = false;
+    switch (d->processingType) {
+    case Preprocessing:
+        ok = preprocess();
+        if (ok) {
+            emit preprocessingFinished(d->needLoading);
+        } else {
+            emit error();
+        }
+        break;
+    case PostProcessing:
+        if (!d->dataSource) {
+            qWarning() << "Warning: no data source provided";
+            setError(tr("No data source provided"));
+            emit error();
+            return;
+        }
+        ok = processDataSource(d->dataSource);
+        d->dataSource->deleteLater();
+        if (ok) {
+            emit postProcessingFinished();
+        } else {
+            emit error();
+        }
+        break;
+    default:
+        qWarning() << "Warning: no processing task set";
+        setError(tr("No processing task set"));
         emit error();
+        return;
     }
+}
+
+void AbstractProcessor::setNeedLoading(bool needLoading)
+{
+    Q_D(AbstractProcessor);
+    d->needLoading = needLoading;
 }
 
 void AbstractProcessor::setError(const QString &error)

@@ -14,68 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_USERREPLY_H
-#define QFB_USERREPLY_H
+#ifndef QFB_ABSTRACTPREPROCESSOR_H
+#define QFB_ABSTRACTPREPROCESSOR_H
 
-/**
- * @file userreply.h
- * @brief Definition of QFB::UserReply
- */
-
-#include "abstractgraphreply.h"
+#include "base_global.h"
+#include <QtCore/QObject>
+#include <QtCore/QRunnable>
+#include "argumentpair.h"
+#include "request.h"
 
 namespace QFB
 {
 
-class User;
-class UserReplyPrivate;
-/**
- * @brief Reply containing an user
- *
- * This class subclasses AbstractGraphReply, making it be able to get
- * users. This reply, when finished, will create an user that
- * have this reply as parent.
- *
- * You can choose the fields of the user you want using
- * the fields query parameter:
- *
- * @code
- * fields=id,name
- * @endcode
- *
- * @todo Allow the user not to have this reply as parent.
- */
-class QFBBASE_EXPORT UserReply : public AbstractGraphReply
+class AbstractPreprocessorPrivate;
+class AbstractPreprocessor : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit UserReply(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param networkAccessManager network access manager.
-     * @param parent parent object.
-     */
-    explicit UserReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    /**
-     * @brief User
-     * @return user.
-     */
-    User * user() const;
+    explicit AbstractPreprocessor(QObject *parent = 0);
+    virtual ~AbstractPreprocessor();
+    Request request() const;
+    void setRequest(const Request &request);
+    void setData(const QString &graph, const QString &arguments);
+    QString processedGraph() const;
+    QList<ArgumentPair> processedArguments() const;
+    void run();
+Q_SIGNALS:
+    void finished(bool preproce);
 protected:
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
+    explicit AbstractPreprocessor(AbstractPreprocessorPrivate &dd, QObject *parent);
+    virtual bool processGraphAndArguments(const QString &graph,
+                                          const QList<ArgumentPair> &arguments) = 0;
+    QScopedPointer<AbstractPreprocessorPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(UserReply)
+    Q_DECLARE_PRIVATE(AbstractPreprocessor)
 };
 
 }
 
-#endif // QFB_USERREPLY_H
+#endif // ABSTRACTPREPROCESSOR_H

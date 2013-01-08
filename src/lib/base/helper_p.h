@@ -36,11 +36,11 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore/QUrlQuery>
 #endif
+#include "argumentpair.h"
 
 namespace QFB
 {
 
-typedef QPair<QString, QString> ArgumentPair;
 /**
  * @internal
  * @brief FB_GRAPH_QUERY_URL

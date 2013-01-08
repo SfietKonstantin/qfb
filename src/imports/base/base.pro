@@ -30,6 +30,7 @@ LIBS += -L../../lib/baseimport -l$${NAME}import
 #    typeloader.h
 #    abstractloader_p.h
 #HEADERS += friendlistmodel.h
+#HEADERS += pictureloader.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h

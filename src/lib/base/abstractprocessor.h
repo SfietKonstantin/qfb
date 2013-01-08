@@ -20,6 +20,7 @@
 #include "base_global.h"
 #include <QtCore/QObject>
 #include <QtCore/QRunnable>
+#include "argumentpair.h"
 
 class QIODevice;
 namespace QFB
@@ -31,19 +32,28 @@ class QFBBASE_EXPORT AbstractProcessor : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
+    enum ProcessingType {
+        NoProcessing,
+        Preprocessing,
+        PostProcessing
+    };
     explicit AbstractProcessor(QObject *parent = 0);
     virtual ~AbstractProcessor();
     Request request() const;
     void setRequest(const Request &request);
+    void setProcessingType(ProcessingType processingType);
     void setDataSource(QIODevice *dataSource);
     QString errorString() const;
     void run();
 Q_SIGNALS:
     void error();
-    void finished();
+    void preprocessingFinished(bool needLoading);
+    void postProcessingFinished();
 protected:
     explicit AbstractProcessor(AbstractProcessorPrivate &dd, QObject *parent);
+    virtual bool preprocess() = 0;
     virtual bool processDataSource(QIODevice *dataSource) = 0;
+    void setNeedLoading(bool needLoading = true);
     void setError(const QString &error);
     QScopedPointer<AbstractProcessorPrivate> d_ptr;
 private:

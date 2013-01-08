@@ -24,20 +24,20 @@ namespace QFB
 {
 
 AbstractPagingProcessorPrivate::AbstractPagingProcessorPrivate():
-    AbstractProcessorPrivate()
+    AbstractGraphProcessorPrivate()
 {
 }
 
 ////// End of private class //////
 
 AbstractPagingProcessor::AbstractPagingProcessor(QObject *parent):
-    AbstractProcessor(*(new AbstractPagingProcessorPrivate), parent)
+    AbstractGraphProcessor(*(new AbstractPagingProcessorPrivate), parent)
 {
 }
 
 AbstractPagingProcessor::AbstractPagingProcessor(AbstractPagingProcessorPrivate &dd,
                                                  QObject *parent):
-    AbstractProcessor(dd, parent)
+    AbstractGraphProcessor(dd, parent)
 {
 }
 

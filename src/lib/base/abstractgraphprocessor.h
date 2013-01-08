@@ -14,57 +14,31 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_REQUEST_H
-#define QFB_REQUEST_H
+#ifndef QFB_ABSTRACTGRAPHPROCESSOR_H
+#define QFB_ABSTRACTGRAPHPROCESSOR_H
 
-#include "base_global.h"
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedData>
-#include <QtCore/QUrl>
-#include "qfb.h"
-#include "argumentpair.h"
+#include "abstractprocessor.h"
 
 namespace QFB
 {
 
-struct RequestPrivate: public QSharedData
+class AbstractGraphProcessorPrivate;
+class QFBBASE_EXPORT AbstractGraphProcessor: public AbstractProcessor
 {
-    int id;
-    QUrl url;
-    QString graph;
-    QList<ArgumentPair> arguments;
-    RequestType type;
-};
-
-class QFBBASE_EXPORT Request
-{
+    Q_OBJECT
 public:
-    explicit Request();
-    explicit Request(int id, RequestType type);
-    Request(const Request &other);
-    virtual ~Request();
-    bool operator==(const Request &other) const;
-    bool operator!=(const Request &other) const;
-    bool isValid() const;
-    int id() const;
-    QUrl url() const;
-    QString graph() const;
-    QList<ArgumentPair> arguments() const;
-    RequestType type() const;
-    void setId(int id);
-    void setUrl(const QUrl &url);
-    void setGraph(const QString &graph);
-    void setArguments(const QString &arguments);
-    void setArguments(const QList<ArgumentPair> &arguments);
-    void setType(RequestType type);
+    explicit AbstractGraphProcessor(QObject *parent = 0);
+    void setToken(const QString &token);
+protected:
+    explicit AbstractGraphProcessor(AbstractGraphProcessorPrivate &dd, QObject *parent);
+    virtual bool processGraphAndArguments(const QString &graph,
+                                          const QList<ArgumentPair> &arguments);
+    void setPreprocessedData(const QString &graph, const QList<ArgumentPair> &arguments);
 private:
-    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Request)
+    virtual bool preprocess();
+    Q_DECLARE_PRIVATE(AbstractGraphProcessor)
 };
 
 }
 
-Q_DECLARE_METATYPE(QFB::Request)
-
-#endif // QFB_REQUEST_H
+#endif // QFB_ABSTRACTGRAPHPROCESSOR_H

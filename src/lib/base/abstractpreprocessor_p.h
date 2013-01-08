@@ -14,55 +14,26 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTGRAPHPAGINATEDREPLY_P_H
-#define QFB_ABSTRACTGRAPHPAGINATEDREPLY_P_H
+#ifndef QFB_ABSTRACTPREPROCESSOR_P_H
+#define QFB_ABSTRACTPREPROCESSOR_P_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
-
-/**
- * @internal
- * @file abstractgraphpagingreply_p.h
- * @brief Definition of QFB::AbstractGraphPagingReplyPrivate
- */
-
-#include "abstractgraphreply_p.h"
+#include "argumentpair.h"
+#include "request.h"
 
 namespace QFB
 {
 
-class AbstractGraphPagingReply;
-/**
- * @internal
- * @brief Private class for QFB::AbstractGraphPagingReply
- */
-class AbstractGraphPagingReplyPrivate: public AbstractGraphReplyPrivate
+class AbstractPreprocessorPrivate
 {
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    AbstractGraphPagingReplyPrivate(AbstractGraphPagingReply *q);
-    /**
-     * @internal
-     * @brief Graph used to get the next page
-     */
-    QString nextPageGraph;
-    /**
-     * @internal
-     * @brief Arguments used to get the next page
-     */
-    QString nextPageArguments;
-private:
-    Q_DECLARE_PUBLIC(AbstractGraphPagingReply)
+    explicit AbstractPreprocessorPrivate();
+    Request request;
+    QString graph;
+    QList<ArgumentPair> arguments;
+    QString processedGraph;
+    QList<ArgumentPair> processedArguments;
 };
 
 }
 
-#endif // QFB_ABSTRACTGRAPHPAGINATEDREPLY_P_H
+#endif // QFB_ABSTRACTPREPROCESSOR_P_H

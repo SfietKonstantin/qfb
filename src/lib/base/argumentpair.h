@@ -14,41 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PICTURELOADER_H
-#define QFB_PICTURELOADER_H
+#ifndef QFB_ARGUMENTPAIR_H
+#define QFB_ARGUMENTPAIR_H
 
-#include "abstractgraphloader.h"
+#include <QtCore/QString>
+#include <QtCore/QPair>
 
 namespace QFB
 {
-class PictureLoaderPrivate;
-class PictureLoader : public AbstractGraphLoader
-{
-    Q_OBJECT
-    Q_ENUMS(Type)
-    Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QString picturePath READ picturePath NOTIFY picturePathChanged)
-public:
-    enum Type {
-        Square,
-        Small,
-        Normal,
-        Large
-    };
-    explicit PictureLoader(QObject *parent = 0);
-    Type type() const;
-    QString picturePath() const;
-public Q_SLOTS:
-    void setType(Type type);
-Q_SIGNALS:
-    void typeChanged();
-    void picturePathChanged();
-protected:
-    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
-private:
-    Q_DECLARE_PRIVATE(PictureLoader)
-};
+
+typedef QPair<QString, QString> ArgumentPair;
 
 }
 
-#endif // QFB_PICTURELOADER_H
+#endif // QFB_ARGUMENTPAIR_H

@@ -14,57 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_REQUEST_H
-#define QFB_REQUEST_H
+#ifndef QFB_ABSTRACTGRAPHPROCESSOR_P_H
+#define QFB_ABSTRACTGRAPHPROCESSOR_P_H
 
-#include "base_global.h"
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedData>
-#include <QtCore/QUrl>
-#include "qfb.h"
-#include "argumentpair.h"
+#include "abstractprocessor_p.h"
 
 namespace QFB
 {
 
-struct RequestPrivate: public QSharedData
-{
-    int id;
-    QUrl url;
-    QString graph;
-    QList<ArgumentPair> arguments;
-    RequestType type;
-};
-
-class QFBBASE_EXPORT Request
+class AbstractGraphProcessorPrivate: public AbstractProcessorPrivate
 {
 public:
-    explicit Request();
-    explicit Request(int id, RequestType type);
-    Request(const Request &other);
-    virtual ~Request();
-    bool operator==(const Request &other) const;
-    bool operator!=(const Request &other) const;
-    bool isValid() const;
-    int id() const;
-    QUrl url() const;
-    QString graph() const;
-    QList<ArgumentPair> arguments() const;
-    RequestType type() const;
-    void setId(int id);
-    void setUrl(const QUrl &url);
-    void setGraph(const QString &graph);
-    void setArguments(const QString &arguments);
-    void setArguments(const QList<ArgumentPair> &arguments);
-    void setType(RequestType type);
-private:
-    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Request)
+    explicit AbstractGraphProcessorPrivate();
+    QString token;
 };
 
 }
 
-Q_DECLARE_METATYPE(QFB::Request)
-
-#endif // QFB_REQUEST_H
+#endif // QFB_ABSTRACTGRAPHPROCESSOR_P_H

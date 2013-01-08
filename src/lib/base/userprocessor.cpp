@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "userprocessor.h"
-#include "abstractprocessor_p.h"
+#include "abstractgraphprocessor_p.h"
 #include <QtCore/QCoreApplication>
 #include "helper_p.h"
 #include "user.h"
@@ -194,7 +194,7 @@ static const char *GENDER_FEMALE = "female";
 namespace QFB
 {
 
-class UserProcessorPrivate: public AbstractProcessorPrivate
+class UserProcessorPrivate: public AbstractGraphProcessorPrivate
 {
 public:
     explicit UserProcessorPrivate();
@@ -202,7 +202,7 @@ public:
 };
 
 UserProcessorPrivate::UserProcessorPrivate():
-    AbstractProcessorPrivate()
+    AbstractGraphProcessorPrivate()
 {
     user = 0;
 }
@@ -210,7 +210,7 @@ UserProcessorPrivate::UserProcessorPrivate():
 ////// End of private class //////
 
 UserProcessor::UserProcessor(QObject *parent):
-    AbstractProcessor(*(new UserProcessorPrivate), parent)
+    AbstractGraphProcessor(*(new UserProcessorPrivate), parent)
 {
 }
 

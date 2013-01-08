@@ -14,57 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_REQUEST_H
-#define QFB_REQUEST_H
+#ifndef QFB_PICTURELOADER_H
+#define QFB_PICTURELOADER_H
 
-#include "base_global.h"
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedData>
-#include <QtCore/QUrl>
-#include "qfb.h"
-#include "argumentpair.h"
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
-
-struct RequestPrivate: public QSharedData
+class PictureLoaderPrivate;
+class QFBBASEIMPORT_EXPORT PictureLoader : public AbstractGraphLoader
 {
-    int id;
-    QUrl url;
-    QString graph;
-    QList<ArgumentPair> arguments;
-    RequestType type;
-};
-
-class QFBBASE_EXPORT Request
-{
+    Q_OBJECT
+    Q_ENUMS(Type)
+    Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(QString picturePath READ picturePath NOTIFY picturePathChanged)
 public:
-    explicit Request();
-    explicit Request(int id, RequestType type);
-    Request(const Request &other);
-    virtual ~Request();
-    bool operator==(const Request &other) const;
-    bool operator!=(const Request &other) const;
-    bool isValid() const;
-    int id() const;
-    QUrl url() const;
-    QString graph() const;
-    QList<ArgumentPair> arguments() const;
-    RequestType type() const;
-    void setId(int id);
-    void setUrl(const QUrl &url);
-    void setGraph(const QString &graph);
-    void setArguments(const QString &arguments);
-    void setArguments(const QList<ArgumentPair> &arguments);
-    void setType(RequestType type);
+    enum Type {
+        Square,
+        Small,
+        Normal,
+        Large
+    };
+    explicit PictureLoader(QObject *parent = 0);
+    Type type() const;
+    QString picturePath() const;
+public Q_SLOTS:
+    void setType(Type type);
+Q_SIGNALS:
+    void typeChanged();
+    void picturePathChanged();
+protected:
+    Request createRequest(const QString &graph, const QString &arguments);
+    void handleReply(AbstractProcessor *processor);
 private:
-    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Request)
+    Q_DECLARE_PRIVATE(PictureLoader)
 };
 
 }
 
-Q_DECLARE_METATYPE(QFB::Request)
-
-#endif // QFB_REQUEST_H
+#endif // QFB_PICTURELOADER_H

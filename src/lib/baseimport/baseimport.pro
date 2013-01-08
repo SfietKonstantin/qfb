@@ -16,6 +16,7 @@ HEADERS +=  baseimport_global.h \
             abstractloader_p.h \
             abstractgraphloader.h \
             abstractloadablemodel.h \
+            pictureloader.h \
             userloader.h \
             friendlistmodel.h \
             postvalidator.h
@@ -23,6 +24,7 @@ HEADERS +=  baseimport_global.h \
 SOURCES +=  abstractloader.cpp \
             abstractgraphloader.cpp \
             abstractloadablemodel.cpp \
+            pictureloader.cpp \
             userloader.cpp \
             friendlistmodel.cpp \
             postvalidator.cpp

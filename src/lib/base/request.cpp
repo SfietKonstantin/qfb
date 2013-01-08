@@ -15,6 +15,7 @@
  ****************************************************************************************/
 
 #include "request.h"
+#include "helper_p.h"
 
 namespace QFB
 {
@@ -66,6 +67,24 @@ int Request::id() const
     return d->id;
 }
 
+QUrl Request::url() const
+{
+    Q_D(const Request);
+    return d->url;
+}
+
+QString Request::graph() const
+{
+    Q_D(const Request);
+    return d->graph;
+}
+
+QList<ArgumentPair> Request::arguments() const
+{
+    Q_D(const Request);
+    return d->arguments;
+}
+
 RequestType Request::type() const
 {
     Q_D(const Request);
@@ -76,6 +95,29 @@ void Request::setId(int id)
 {
     Q_D(Request);
     d->id = id;
+}
+
+void Request::setUrl(const QUrl &url)
+{
+    Q_D(Request);
+    d->url = url;
+}
+
+void Request::setGraph(const QString &graph)
+{
+    Q_D(Request);
+    d->graph = graph;
+}
+
+void Request::setArguments(const QString &arguments)
+{
+    setArguments(createArguments(arguments));
+}
+
+void Request::setArguments(const QList<ArgumentPair> &arguments)
+{
+    Q_D(Request);
+    d->arguments = arguments;
 }
 
 void Request::setType(RequestType type)

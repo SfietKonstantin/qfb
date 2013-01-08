@@ -17,14 +17,14 @@
 #ifndef QFB_ABSTRACTPAGINGPROCESSOR_H
 #define QFB_ABSTRACTPAGINGPROCESSOR_H
 
-#include "abstractprocessor.h"
+#include "abstractgraphprocessor.h"
 #include <QtCore/QUrl>
 
 namespace QFB
 {
 
 class AbstractPagingProcessorPrivate;
-class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractProcessor
+class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:

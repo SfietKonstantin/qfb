@@ -15,21 +15,19 @@
  ****************************************************************************************/
 
 #include "pictureloader.h"
-#include "loaderbase_p.h"
+#include "abstractloader_p.h"
 
-#include "querymanager.h"
-#include "picturereply.h"
 #include "picture_p.h"
+#include "pictureprocessor.h"
+#include "querymanager.h"
 
 namespace QFB
 {
 
-class PictureLoaderPrivate: public LoaderBasePrivate
+class PictureLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
     PictureLoaderPrivate(PictureLoader *q);
-    bool checkReply(const AbstractReply *reply);
-    void processReply(const AbstractReply *reply);
     static QString pictureString(PictureLoader::Type type);
     PictureLoader::Type type;
     QString picturePath;
@@ -38,24 +36,9 @@ private:
 };
 
 PictureLoaderPrivate::PictureLoaderPrivate(PictureLoader *q):
-    LoaderBasePrivate(q)
+    AbstractLoaderPrivate(q)
 {
     type = PictureLoader::Square;
-}
-
-bool PictureLoaderPrivate::checkReply(const AbstractReply *reply)
-{
-        return qobject_cast<const PictureReply *>(reply);
-}
-
-void PictureLoaderPrivate::processReply(const AbstractReply *reply)
-{
-    Q_Q(PictureLoader);
-    const PictureReply *pictureReply = qobject_cast<const PictureReply *>(reply);
-    if (picturePath != pictureReply->picturePath()) {
-        picturePath = pictureReply->picturePath();
-        emit q->picturePathChanged();
-    }
 }
 
 QString PictureLoaderPrivate::pictureString(PictureLoader::Type type)
@@ -107,17 +90,29 @@ void PictureLoader::setType(Type type)
     }
 }
 
-AbstractGraphReply * PictureLoader::createReply(const QString &graph, const QString &arguments)
+
+Request PictureLoader::createRequest(const QString &graph, const QString &arguments)
 {
     Q_D(PictureLoader);
-    QString finalArguments = arguments;
-    QString newArguments = QString("%1=%2").arg(PICTURE_TYPE_KEY, d->pictureString(d->type));
-    if (!arguments.isEmpty()) {
-        finalArguments.append(",");
-    }
-    finalArguments.append(newArguments);
+    if (queryManager()) {
+        QString finalArguments = arguments;
+        QString newArguments = QString("%1=%2").arg(PICTURE_TYPE_KEY, d->pictureString(d->type));
+        if (!arguments.isEmpty()) {
+            finalArguments.append(",");
+        }
+        finalArguments.append(newArguments);
 
-    return queryManager()->queryPicture(graph, finalArguments);
+        return queryManager()->queryPicture(graph, finalArguments);
+    }
+    return Request();
+}
+
+void PictureLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(PictureLoader);
+    PictureProcessor *pictureProcessor = qobject_cast<PictureProcessor *>(processor);
+    d->picturePath = pictureProcessor->picturePath();
+    emit picturePathChanged();
 }
 
 }

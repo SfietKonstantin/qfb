@@ -114,20 +114,20 @@ Item {
                 width: friendsView.width
                 height: 60
 
-//                Image {
-//                    width: 40
-//                    height: 40
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    anchors.left: parent.left; anchors.leftMargin: 20
-//                    source: pictureLoader.picturePath
-//                    asynchronous: true
+                Image {
+                    width: 40
+                    height: 40
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left; anchors.leftMargin: 20
+                    source: pictureLoader.picturePath
+                    asynchronous: true
 
-//                    QFBPictureLoader {
-//                        id: pictureLoader
-//                        queryManager: container.queryManager
-//                        Component.onCompleted: request(model.data.id + "/picture")
-//                    }
-//                }
+                    QFBPictureLoader {
+                        id: pictureLoader
+                        queryManager: container.queryManager
+                        Component.onCompleted: request(model.data.facebookId + "/picture")
+                    }
+                }
 
                 Text {
                     anchors.centerIn: parent

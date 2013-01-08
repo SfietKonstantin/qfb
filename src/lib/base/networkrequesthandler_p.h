@@ -26,14 +26,13 @@ namespace QFB
 
 class Request;
 class NetworkRequestHandlerPrivate;
-/// @todo create a queue of requests
 class NetworkRequestHandler : public QObject
 {
     Q_OBJECT
 public:
     explicit NetworkRequestHandler(QObject *parent = 0);
     virtual ~NetworkRequestHandler();
-    void get(const Request &request, const QUrl &url);
+    void get(const Request &request);
 Q_SIGNALS:
     void error(const QFB::Request &request);
     void finished(const QFB::Request &request, QIODevice *dataSource);

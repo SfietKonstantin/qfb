@@ -17,14 +17,14 @@
 #ifndef QFB_USERPROCESSOR_H
 #define QFB_USERPROCESSOR_H
 
-#include "abstractprocessor.h"
+#include "abstractgraphprocessor.h"
 
 namespace QFB
 {
 
 class User;
 class UserProcessorPrivate;
-class QFBBASE_EXPORT UserProcessor: public AbstractProcessor
+class QFBBASE_EXPORT UserProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:

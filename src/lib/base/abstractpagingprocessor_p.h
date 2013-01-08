@@ -17,12 +17,12 @@
 #ifndef QFB_ABSTRACTPAGINGPROCESSOR_P_H
 #define QFB_ABSTRACTPAGINGPROCESSOR_P_H
 
-#include "abstractprocessor_p.h"
+#include "abstractgraphprocessor_p.h"
 
 namespace QFB
 {
 
-class AbstractPagingProcessorPrivate: public AbstractProcessorPrivate
+class AbstractPagingProcessorPrivate: public AbstractGraphProcessorPrivate
 {
 public:
     explicit AbstractPagingProcessorPrivate();
