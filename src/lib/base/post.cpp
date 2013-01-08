@@ -20,7 +20,7 @@
  */
 
 #include "post.h"
-#include "object_p.h"
+#include "objectbase_p.h"
 #include <QtCore/QDebug>
 #include "namedobject.h"
 #include "post_keys_p.h"
@@ -36,7 +36,7 @@ Post::Post(QObject *parent) :
 Post::Post(const PropertiesMap propertiesMap, QObject *parent):
     NamedObject(propertiesMap, parent)
 {
-    Q_D(Object);
+    Q_D(ObjectBase);
     // Reparent from
     QObject *fromObject = d->propertiesMap.value(POST_FROM_KEY).value<NamedObject *>();
     if (fromObject) {
@@ -54,19 +54,19 @@ Post::Post(const PropertiesMap propertiesMap, QObject *parent):
 
 NamedObject * Post::from() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_FROM_KEY).value<NamedObject *>();
 }
 
 QVariantList Post::toVariant() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_TO_KEY).toList();
 }
 
 QList<NamedObject *> Post::to() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     QVariantList toVariantList = d->propertiesMap.value(POST_TO_KEY).toList();
     QList<NamedObject *> returned;
     foreach (QVariant toVariant, toVariantList) {
@@ -77,73 +77,73 @@ QList<NamedObject *> Post::to() const
 
 QString Post::message() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_MESSAGE_KEY).toString();
 }
 
 QUrl Post::picture() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_PICTURE_KEY).toUrl();
 }
 
 QUrl Post::link() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_LINK_KEY).toUrl();
 }
 
 QString Post::caption() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_CAPTION_KEY).toString();
 }
 
 QString Post::description() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_DESCRIPTION_KEY).toString();
 }
 
 QUrl Post::source() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_SOURCE_KEY).toUrl();
 }
 
 QUrl Post::icon() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_ICON_KEY).toUrl();
 }
 
 QString Post::type() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_TYPE_KEY).toString();
 }
 
 QString Post::story() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_STORY_KEY).toString();
 }
 
 QString Post::objectId() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_OBJECT_ID_KEY).toString();
 }
 
 QDateTime Post::createdTime() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_CREATED_TIME_KEY).toDateTime();
 }
 
 QDateTime Post::updatedTime() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(POST_UPDATED_TIME_KEY).toDateTime();
 }
 

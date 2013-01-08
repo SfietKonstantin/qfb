@@ -27,6 +27,15 @@
 
 namespace QFB
 {
+/**
+ * @brief Properties map
+ *
+ * This typedef defines a mapping between a proprety name,
+ * defined in the QFB::Property enumeration, and the
+ * value of that property.
+ *
+ * @todo obsolete doc
+ */
 
 typedef QMap<QString, QVariant> PropertiesMap;
 

@@ -72,7 +72,7 @@ public:
      */
     double offsetY() const;
 private:
-    Q_DECLARE_PRIVATE(Object)
+    Q_DECLARE_PRIVATE(ObjectBase)
 };
 
 }

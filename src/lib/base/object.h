@@ -23,26 +23,12 @@
  */
 
 #include "base_global.h"
+#include "objectbase.h"
 #include "qfb.h"
-
-#include <QtCore/QMetaType>
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
 
 namespace QFB
 {
 
-/**
- * @brief Properties map
- *
- * This typedef defines a mapping between a proprety name,
- * defined in the QFB::Property enumeration, and the
- * value of that property.
- *
- * @todo obsolete doc
- */
-class ObjectPrivate;
 /**
  * @brief An object in Facebook
  *
@@ -56,7 +42,7 @@ class ObjectPrivate;
  * The properties of a Facebook entity is passed as a
  * mapping between a property and the corresponding value.
  */
-class QFBBASE_EXPORT Object : public QObject
+class QFBBASE_EXPORT Object : public ObjectBase
 {
     Q_OBJECT
     Q_ENUMS(ObjectType)
@@ -67,7 +53,6 @@ class QFBBASE_EXPORT Object : public QObject
     Q_PROPERTY(ObjectType objectType READ objectType CONSTANT)
 public:
     enum ObjectType {
-        Invalid,
         Unknown,
         Achievement,
         Album,
@@ -123,13 +108,9 @@ protected:
      * @param dd d-pointer.
      * @param parent parent object.
      */
-    explicit Object(ObjectPrivate &dd, QObject *parent = 0);
-    /**
-     * @brief D-pointer
-     */
-    QScopedPointer<ObjectPrivate> d_ptr;
+    explicit Object(ObjectBasePrivate &dd, QObject *parent = 0);
 private:
-    Q_DECLARE_PRIVATE(Object)
+    Q_DECLARE_PRIVATE(ObjectBase)
 };
 
 }

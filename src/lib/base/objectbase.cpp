@@ -14,58 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_OBJECT_P_H
-#define QFB_OBJECT_P_H
-
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
-
-/**
- * @internal
- * @file object_p.h
- * @short Definition of QFB::ObjectPrivate
- */
-
-#include "qfb.h"
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "objectbase.h"
+#include "objectbase_p.h"
 
 namespace QFB
 {
 
-class Object;
-/**
- * @internal
- * @brief Private class for QFB::Object
- */
-class ObjectPrivate
+ObjectBasePrivate::ObjectBasePrivate()
 {
-public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    ObjectPrivate(Object *q);
-    /**
-     * @internal
-     * @brief Properties
-     */
-    PropertiesMap propertiesMap;
-protected:
-    /**
-     * @internal
-     * @brief Q-pointer
-     */
-    Object * const q_ptr;
-private:
-    Q_DECLARE_PUBLIC(Object)
-};
-
 }
 
-#endif // QFB_OBJECT_P_H
+////// End of private class ///////
+
+ObjectBase::ObjectBase(QObject *parent) :
+    QObject(parent), d_ptr(new ObjectBasePrivate())
+{
+}
+
+ObjectBase::ObjectBase(const PropertiesMap &propertiesMap, QObject *parent):
+    QObject(parent), d_ptr(new ObjectBasePrivate())
+{
+    Q_D(ObjectBase);
+    d->propertiesMap = propertiesMap;
+}
+
+ObjectBase::ObjectBase(ObjectBasePrivate &dd, QObject *parent):
+    QObject(parent), d_ptr(&dd)
+{
+}
+
+ObjectBase::~ObjectBase()
+{
+}
+
+}

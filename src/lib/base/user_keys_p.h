@@ -62,6 +62,16 @@ static const char *USER_LINK_KEY = "link";
 static const char *USER_USERNAME_KEY = "username";
 /**
  * @internal
+ * @brief USER_TIMEZONE_KEY
+ */
+static const char *USER_TIMEZONE_KEY = "timezone";
+/**
+ * @internal
+ * @brief USER_UPDATED_TIME_KEY
+ */
+static const char *USER_UPDATED_TIME_KEY = "updated_time";
+/**
+ * @internal
  * @brief USER_BIO_KEY
  */
 static const char *USER_BIO_KEY = "bio";
@@ -80,6 +90,16 @@ static const char *USER_COVER_KEY = "cover";
  * @brief USER_EMAIL_KEY
  */
 static const char *USER_EMAIL_KEY = "email";
+/**
+ * @internal
+ * @brief USER_HOMETOWN_KEY
+ */
+static const char *USER_HOMETOWN_KEY = "hometown";
+/**
+ * @internal
+ * @brief USER_LOCATION_KEY
+ */
+static const char *USER_LOCATION_KEY = "location";
 /**
  * @internal
  * @brief USER_POLITICAL_KEY

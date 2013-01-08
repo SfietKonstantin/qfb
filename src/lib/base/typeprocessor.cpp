@@ -281,7 +281,7 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
 
     JsonObject metadata = QFB_JSON_GET_OBJECT(rootObject.value(METADATA_KEY));
     QString type = metadata.value(METADATA_TYPE_VALUE).toString();
-    Object::ObjectType trueType = Object::Invalid;
+    Object::ObjectType trueType = Object::Unknown;
     if (type == ACHIEVEMENT) {
         trueType = Object::Achievement;
     } else if (type == ALBUM) {
@@ -331,7 +331,7 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
     } else if (type == VIDEO) {
         trueType = Object::Video;
     } else {
-        trueType = Object::Invalid;
+        trueType = Object::Unknown;
     }
 
     propertiesMap.insert(OBJECT_TYPE_KEY, trueType);

@@ -14,53 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file object.cpp
- * @brief Implementation of QFB::Object
- */
+#ifndef QFB_OBJECTBASE_H
+#define QFB_OBJECTBASE_H
 
-#include "object.h"
-#include "objectbase_p.h"
-#include "object_keys_p.h"
-#include "object_type_keys_p.h"
+#include "base_global.h"
+#include <QtCore/QMetaType>
+#include <QtCore/QObject>
+#include "qfb.h"
 
 namespace QFB
 {
 
-Object::Object(QObject *parent):
-    ObjectBase(parent)
+class ObjectBasePrivate;
+class QFBBASE_EXPORT ObjectBase : public QObject
 {
-}
-
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
-    ObjectBase(propertiesMap, parent)
-{
-    Q_D(ObjectBase);
-    d->propertiesMap = propertiesMap;
-    if (!propertiesMap.contains(OBJECT_TYPE_KEY)) {
-        d->propertiesMap.insert(OBJECT_TYPE_KEY, Object::Unknown);
-    }
-}
-
-Object::Object(ObjectBasePrivate &dd, QObject *parent):
-    ObjectBase(dd, parent)
-{
-}
-
-Object::~Object()
-{
-}
-
-QString Object::facebookId() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
-}
-
-Object::ObjectType Object::objectType() const
-{
-    Q_D(const ObjectBase);
-    return (Object::ObjectType) d->propertiesMap.value(OBJECT_TYPE_KEY).toInt();
-}
+    Q_OBJECT
+public:
+    explicit ObjectBase(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param propertiesMap properties map.
+     * @param parent parent object.
+     */
+    explicit ObjectBase(const PropertiesMap &propertiesMap, QObject *parent = 0);
+    virtual ~ObjectBase();
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
+     * @param parent parent object.
+     */
+    explicit ObjectBase(ObjectBasePrivate &dd, QObject *parent = 0);
+    /**
+     * @brief D-pointer
+     */
+    QScopedPointer<ObjectBasePrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(ObjectBase)
+};
 
 }
+
+#endif // QFB_OBJECTBASE_H

@@ -244,7 +244,7 @@ public:
      */
     QDateTime updatedTime() const;
 private:
-    Q_DECLARE_PRIVATE(Object)
+    Q_DECLARE_PRIVATE(ObjectBase)
 };
 
 }

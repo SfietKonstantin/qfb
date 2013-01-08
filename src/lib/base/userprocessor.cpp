@@ -118,6 +118,10 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
     propertiesMap.insert(USER_LANGUAGES_KEY, languagesVariant);
     propertiesMap.insert(USER_LINK_KEY, parseUrl(rootObject.value(USER_LINK_KEY).toString()));
     propertiesMap.insert(USER_USERNAME_KEY, rootObject.value(USER_USERNAME_KEY).toString());
+    propertiesMap.insert(USER_TIMEZONE_KEY, rootObject.value(USER_TIMEZONE_KEY).toInt());
+    QDateTime updateTime = QDateTime::fromString(rootObject.value(USER_UPDATED_TIME_KEY).toString(),
+                                                 Qt::ISODate);
+    propertiesMap.insert(USER_UPDATED_TIME_KEY, updateTime);
     propertiesMap.insert(USER_BIO_KEY, rootObject.value(USER_BIO_KEY).toString());
 
     QString birthdayString = rootObject.value(USER_BIRTHDAY_KEY).toString();
@@ -138,6 +142,23 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
 
 
     propertiesMap.insert(USER_EMAIL_KEY, rootObject.value(USER_EMAIL_KEY).toString());
+
+    JsonObject hometown = QFB_JSON_GET_OBJECT(rootObject.value(USER_HOMETOWN_KEY));
+    PropertiesMap hometownPropertiesMap;
+    hometownPropertiesMap.insert(OBJECT_ID_KEY, hometown.value(OBJECT_ID_KEY).toString());
+    hometownPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
+                                 hometown.value(NAMEDOBJECT_NAME_KEY).toString());
+    NamedObject *hometownObject = new NamedObject(hometownPropertiesMap);
+    propertiesMap.insert(USER_HOMETOWN_KEY, QVariant::fromValue(hometownObject));
+
+    JsonObject location = QFB_JSON_GET_OBJECT(rootObject.value(USER_LOCATION_KEY));
+    PropertiesMap locationPropertiesMap;
+    locationPropertiesMap.insert(OBJECT_ID_KEY, location.value(OBJECT_ID_KEY).toString());
+    locationPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
+                                 location.value(NAMEDOBJECT_NAME_KEY).toString());
+    NamedObject *locationObject = new NamedObject(locationPropertiesMap);
+    propertiesMap.insert(USER_LOCATION_KEY, QVariant::fromValue(locationObject));
+
     propertiesMap.insert(USER_POLITICAL_KEY, rootObject.value(USER_POLITICAL_KEY).toString());
     propertiesMap.insert(USER_QUOTES_KEY, rootObject.value(USER_QUOTES_KEY).toString());
     propertiesMap.insert(USER_RELATIONSHIP_STATUS_KEY,

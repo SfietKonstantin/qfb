@@ -14,53 +14,49 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef QFB_OBJECTBASE_P_H
+#define QFB_OBJECTBASE_P_H
+
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
 /**
- * @file object.cpp
- * @brief Implementation of QFB::Object
+ * @internal
+ * @file object_p.h
+ * @short Definition of QFB::ObjectPrivate
  */
 
-#include "object.h"
-#include "objectbase_p.h"
-#include "object_keys_p.h"
-#include "object_type_keys_p.h"
+#include "qfb.h"
 
 namespace QFB
 {
 
-Object::Object(QObject *parent):
-    ObjectBase(parent)
+class Object;
+/**
+ * @internal
+ * @brief Private class for QFB::ObjectBase
+ */
+class ObjectBasePrivate
 {
-}
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
+    ObjectBasePrivate();
+    /**
+     * @internal
+     * @brief Properties
+     */
+    PropertiesMap propertiesMap;
 
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
-    ObjectBase(propertiesMap, parent)
-{
-    Q_D(ObjectBase);
-    d->propertiesMap = propertiesMap;
-    if (!propertiesMap.contains(OBJECT_TYPE_KEY)) {
-        d->propertiesMap.insert(OBJECT_TYPE_KEY, Object::Unknown);
-    }
-}
-
-Object::Object(ObjectBasePrivate &dd, QObject *parent):
-    ObjectBase(dd, parent)
-{
-}
-
-Object::~Object()
-{
-}
-
-QString Object::facebookId() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
-}
-
-Object::ObjectType Object::objectType() const
-{
-    Q_D(const ObjectBase);
-    return (Object::ObjectType) d->propertiesMap.value(OBJECT_TYPE_KEY).toInt();
-}
+};
 
 }
+
+#endif // QFB_OBJECTBASE_P_H

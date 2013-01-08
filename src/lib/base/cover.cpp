@@ -20,7 +20,7 @@
  */
 
 #include "cover.h"
-#include "object_p.h"
+#include "objectbase_p.h"
 #include "cover_keys_p.h"
 
 namespace QFB
@@ -38,13 +38,13 @@ Cover::Cover(const PropertiesMap propertiesMap, QObject *parent):
 
 QUrl Cover::source() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(COVER_SOURCE_KEY).toUrl();
 }
 
 double Cover::offsetY() const
 {
-    Q_D(const Object);
+    Q_D(const ObjectBase);
     return d->propertiesMap.value(COVER_OFFSET_Y_KEY).toDouble();
 }
 

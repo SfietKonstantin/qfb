@@ -45,9 +45,14 @@ namespace QFB
  * - languages()
  * - link()
  * - username()
+ * - timezone()
+ * - updatedTime()
  * - bio()
  * - birthday()
+ * - cover()
  * - email()
+ * - hometown()
+ * - location()
  * - political()
  * - quotes()
  * - relationshipStatus()
@@ -71,9 +76,8 @@ namespace QFB
  *
  * @section missing Missing properties
  *
- * Some fields such as timezone, updated_time, cover,
- * currency, devices, education, hometown, interested_in,
- * location, payment_pricepoints,
+ * Some fields such as currency, devices, education,
+ * interested_in, payment_pricepoints,
  * picture, video_upload_limits and work
  * are not yet implemented.
  *
@@ -123,8 +127,20 @@ class QFBBASE_EXPORT User : public NamedObject
     Q_PROPERTY(QString username READ username CONSTANT)
     /// @todo no third_party_id
     /// @todo no installed
-    /// @todo timezone
-    /// @todo updated_time
+    /**
+     * @short The user's timezone offset from UTC
+     *
+     * Available only for the current user.
+     */
+    Q_PROPERTY(int timezone READ timezone CONSTANT)
+    /**
+     * @short The last time the user's profile was updated.
+     *
+     * Changes to the languages, link, timezone, verified, interested_in,
+     * favorite_athletes, favorite_teams, and video_upload_limits are not
+     * not reflected in this value.
+     */
+    Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
     /// @todo no verified
     /**
      * @short The user's biography
@@ -143,23 +159,29 @@ class QFBBASE_EXPORT User : public NamedObject
      * (must be explicitly requested using fields=cover parameter)
      */
     Q_PROPERTY(QFB::Cover * cover READ cover CONSTANT)
-    /// @todo currency
-    /// @todo devices
+    /// @todo currency (low priority)
+    /// @todo devices (low priority)
     /// @todo education
     /**
      * @short The proxied or contact email address granted by the user
      */
     Q_PROPERTY(QString email READ email CONSTANT)
-    /// @todo hometown
+    /**
+     * @short The user's hometown
+     */
+    Q_PROPERTY(QFB::NamedObject * hometown READ hometown CONSTANT)
     /// @todo interested_in
-    /// @todo location
+    /**
+     * @short The user's current city
+     */
+    Q_PROPERTY(QFB::NamedObject * location READ location CONSTANT)
     /**
      * @short The user's political view
      */
     Q_PROPERTY(QString political READ political CONSTANT)
-    /// @todo payment_pricepoints
-    /// @todo favorite_athletes
-    /// @todo favorite_teams
+    /// @todo payment_pricepoints (low priority)
+    /// @todo favorite_athletes is deprecated
+    /// @todo favorite_teams is deprecated
     /**
      * @short The URL of the user's profile pic
      *
@@ -187,7 +209,7 @@ class QFBBASE_EXPORT User : public NamedObject
      * @short The user's significant other
      */
     Q_PROPERTY(QFB::NamedObject * significantOther READ significantOther CONSTANT)
-    /// @todo video_upload_limits
+    /// @todo video_upload_limits (low priority)
     /**
      * @short The URL of the user's personal website
      */
@@ -274,6 +296,16 @@ public:
      */
     QString username() const;
     /**
+     * @brief Timezone
+     * @return timezone.
+     */
+    int timezone() const;
+    /**
+     * @brief Updated time
+     * @return updated time.
+     */
+    QDateTime updatedTime() const;
+    /**
      * @brief Bio
      * @return bio.
      */
@@ -293,6 +325,16 @@ public:
      * @return email.
      */
     QString email() const;
+    /**
+     * @brief Hometown
+     * @return hometown.
+     */
+    NamedObject * hometown() const;
+    /**
+     * @brief Location
+     * @return location.
+     */
+    NamedObject * location() const;
     /**
      * @brief Political view
      * @return political view.
@@ -330,7 +372,7 @@ public:
     QUrl website() const;
 
 private:
-    Q_DECLARE_PRIVATE(Object)
+    Q_DECLARE_PRIVATE(ObjectBase)
 };
 
 }
