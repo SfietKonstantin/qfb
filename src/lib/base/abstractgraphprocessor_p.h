@@ -17,6 +17,13 @@
 #ifndef QFB_ABSTRACTGRAPHPROCESSOR_P_H
 #define QFB_ABSTRACTGRAPHPROCESSOR_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
 #include "abstractprocessor_p.h"
 
 namespace QFB

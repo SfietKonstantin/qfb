@@ -14,35 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPROCESSOR_P_H
-#define QFB_ABSTRACTPROCESSOR_P_H
+#include "albumloader.h"
+#include "abstractloader_p.h"
+#include "querymanager.h"
+#include "album.h"
+#include "albumprocessor.h"
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
-
-#include "abstractprocessor.h"
-#include "request.h"
-
-class QIODevice;
-class QString;
 namespace QFB
 {
 
-class AbstractProcessorPrivate
+class AlbumLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    explicit AbstractProcessorPrivate();
-    Request request;
-    AbstractProcessor::ProcessingType processingType;
-    bool needLoading;
-    QIODevice *dataSource;
-    QString error;
+    AlbumLoaderPrivate(AlbumLoader *q);
+    Album *album;
 };
 
+AlbumLoaderPrivate::AlbumLoaderPrivate(AlbumLoader *q):
+    AbstractLoaderPrivate(q)
+{
+    album = 0;
 }
 
-#endif // QFB_ABSTRACTPROCESSOR_P_H
+////// End of private class //////
+
+AlbumLoader::AlbumLoader(QObject *parent) :
+    AbstractGraphLoader(*(new AlbumLoaderPrivate(this)), parent)
+{
+}
+
+Album * AlbumLoader::album() const
+{
+    Q_D(const AlbumLoader);
+    return d->album;
+}
+
+Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryAlbum(graph, arguments);
+    }
+    return Request();
+}
+
+void AlbumLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(AlbumLoader);
+    AlbumProcessor *albumProcessor = qobject_cast<AlbumProcessor *>(processor);
+    if (d->album) {
+        d->album->deleteLater();
+    }
+
+    d->album = albumProcessor->album();
+    d->album->setParent(this);
+    emit albumChanged();
+}
+
+}

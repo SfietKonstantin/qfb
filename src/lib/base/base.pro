@@ -48,6 +48,10 @@ HEADERS +=  base_global.h \
             userprocessor.h \
             friendlistprocessor.h \
             feedprocessor.h \
+    album.h \
+    album_keys_p.h \
+    albumprocessor.h \
+    albumprocessor_p.h
 
 
 SOURCES +=  objectbase.cpp \
@@ -68,6 +72,8 @@ SOURCES +=  objectbase.cpp \
             userprocessor.cpp \
             friendlistprocessor.cpp \
             feedprocessor.cpp \
+    album.cpp \
+    albumprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

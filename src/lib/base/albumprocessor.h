@@ -14,35 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPROCESSOR_P_H
-#define QFB_ABSTRACTPROCESSOR_P_H
+#ifndef QFB_ALBUMPROCESSOR_H
+#define QFB_ALBUMPROCESSOR_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "abstractgraphprocessor.h"
 
-#include "abstractprocessor.h"
-#include "request.h"
-
-class QIODevice;
-class QString;
 namespace QFB
 {
 
-class AbstractProcessorPrivate
+class Album;
+class AlbumProcessorPrivate;
+class QFBBASE_EXPORT AlbumProcessor: public AbstractGraphProcessor
 {
+    Q_OBJECT
 public:
-    explicit AbstractProcessorPrivate();
-    Request request;
-    AbstractProcessor::ProcessingType processingType;
-    bool needLoading;
-    QIODevice *dataSource;
-    QString error;
+    explicit AlbumProcessor(QObject *parent = 0);
+    Album * album() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(AlbumProcessor)
 };
 
 }
 
-#endif // QFB_ABSTRACTPROCESSOR_P_H
+#endif // QFB_ALBUMPROCESSOR_H

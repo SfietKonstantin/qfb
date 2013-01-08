@@ -23,6 +23,7 @@ HEADERS +=  baseimport_global.h \
             friendlistmodel.h \
             postvalidator.h \
             feedmodel.h \
+    albumloader.h
 
 SOURCES +=  abstractloader.cpp \
             abstractgraphloader.cpp \
@@ -33,7 +34,8 @@ SOURCES +=  abstractloader.cpp \
             userloader.cpp \
             friendlistmodel.cpp \
             postvalidator.cpp \
-            feedmodel.cpp
+            feedmodel.cpp \
+    albumloader.cpp
 
 # Deployment
 target.path = $${LIBDIR}

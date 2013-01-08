@@ -35,12 +35,14 @@ Item {
                          + QFBLoginManager.UserRelationshipDetails
                          + QFBLoginManager.UserReligionPolitics
                          + QFBLoginManager.UserRelationships
+                         + QFBLoginManager.UserPhotos
         friendsPermissions: QFBLoginManager.FriendsBirthday
                             + QFBLoginManager.FriendsAboutMe + QFBLoginManager.FriendsLikes
                             + QFBLoginManager.FriendsEducationHistory
                             + QFBLoginManager.FriendsRelationshipDetails
                             + QFBLoginManager.FriendsReligionPolitics
                             + QFBLoginManager.FriendsRelationships
+                            + QFBLoginManager.FriendsPhotos
         uiType: QFBLoginManager.Mobile
         onUrlRequested: webView.url = url
         Component.onCompleted: {
@@ -143,7 +145,9 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: userLoader.request(model.data.facebookId)
+                    onClicked: {
+                        userLoader.request(model.data.facebookId)
+                    }
                 }
             }
 
@@ -256,8 +260,8 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     friendsView.visible = false
-//                    feedView.visible = true
-//                    feedModel.request("me/home")
+                    feedView.visible = true
+                    feedModel.request("me/home")
                 }
             }
         }

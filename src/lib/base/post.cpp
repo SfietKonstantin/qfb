@@ -22,7 +22,6 @@
 #include "post.h"
 #include "objectbase_p.h"
 #include <QtCore/QDebug>
-#include "namedobject.h"
 #include "post_keys_p.h"
 
 namespace QFB
