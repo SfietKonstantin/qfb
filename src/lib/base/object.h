@@ -40,8 +40,8 @@ namespace QFB
  * defined in the QFB::Property enumeration, and the
  * value of that property.
  *
+ * @todo obsolete doc
  */
-typedef QMap<Property, QVariant> PropertiesMap;
 class ObjectPrivate;
 /**
  * @brief An object in Facebook
@@ -68,6 +68,7 @@ class QFBBASE_EXPORT Object : public QObject
 public:
     enum ObjectType {
         Invalid,
+        Unknown,
         Achievement,
         Album,
         Application,

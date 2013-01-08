@@ -50,6 +50,7 @@ Item {
             styleColor: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
             opacity: 0
             elide: Text.ElideRight
+            wrapMode: Text.NoWrap
             font.pixelSize: Ui.FONT_SIZE_XXLARGE
             states: [
                 State {

@@ -22,7 +22,6 @@ HEADERS +=  base_global.h \
             object_p.h \
             namedobject.h \
             user.h \
-            language.h \
             cover.h \
             post.h \
             networkrequesthandler_p.h \
@@ -39,13 +38,20 @@ HEADERS +=  base_global.h \
             pictureprocessor.h \
             userprocessor.h \
             friendlistprocessor.h \
-            feedprocessor.h
+            feedprocessor.h \
+    user_keys_p.h \
+    language_keys_p.h \
+    cover_keys_p.h \
+    object_keys_p.h \
+    namedobject_keys_p.h \
+    post_keys_p.h \
+    object_type_keys_p.h \
+    paging_keys_p.h
 
 
 SOURCES +=  object.cpp \
             namedobject.cpp \
             user.cpp \
-            language.cpp \
             cover.cpp \
             post.cpp \
             networkrequesthandler_p.cpp \

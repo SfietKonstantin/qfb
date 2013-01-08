@@ -14,60 +14,23 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file object.cpp
- * @brief Implementation of QFB::Object
- */
-
-#include "object.h"
-#include "object_p.h"
-#include "object_keys_p.h"
-#include "object_type_keys_p.h"
+#ifndef QFB_COVER_KEYS_P_H
+#define QFB_COVER_KEYS_P_H
 
 namespace QFB
 {
 
-ObjectPrivate::ObjectPrivate(Object *q):
-    q_ptr(q)
-{
-}
-
-////// End of private class //////
-
-Object::Object(QObject *parent):
-    QObject(parent), d_ptr(new ObjectPrivate(this))
-{
-}
-
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
-    QObject(parent), d_ptr(new ObjectPrivate(this))
-{
-    Q_D(Object);
-    d->propertiesMap = propertiesMap;
-    if (!propertiesMap.contains(OBJECT_TYPE_KEY)) {
-        d->propertiesMap.insert(OBJECT_TYPE_KEY, Object::Invalid);
-    }
-}
-
-Object::Object(ObjectPrivate &dd, QObject *parent):
-    QObject(parent), d_ptr(&dd)
-{
-}
-
-Object::~Object()
-{
-}
-
-QString Object::facebookId() const
-{
-    Q_D(const Object);
-    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
-}
-
-Object::ObjectType Object::objectType() const
-{
-    Q_D(const Object);
-    return (Object::ObjectType) d->propertiesMap.value(OBJECT_TYPE_KEY).toInt();
-}
+/**
+ * @internal
+ * @brief COVER_SOURCE_KEY
+ */
+static const char *COVER_SOURCE_KEY = "source";
+/**
+ * @internal
+ * @brief COVER_SOURCE_KEY
+ */
+static const char *COVER_OFFSET_Y_KEY = "offset_y";
 
 }
+
+#endif // QFB_COVER_KEYS_P_H

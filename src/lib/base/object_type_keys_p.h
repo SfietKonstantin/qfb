@@ -14,31 +14,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file language.cpp
- * @brief Implementation of QFB::Language
- */
-
-#include "language.h"
-#include "object_p.h"
+#ifndef QFB_OBJECT_TYPE_KEYS_P_H
+#define QFB_OBJECT_TYPE_KEYS_P_H
 
 namespace QFB
 {
 
-Language::Language(QObject *parent):
-    Object(parent)
-{
-}
-
-Language::Language(const PropertiesMap propertiesMap, QObject *parent):
-    Object(propertiesMap, parent)
-{
-}
-
-QString Language::name() const
-{
-    Q_D(const Object);
-    return d->propertiesMap.value(NameProperty).toString();
-}
+/**
+ * @internal
+ * @brief OBJECT_TYPE_KEY
+ */
+static const char *OBJECT_TYPE_KEY = "__qfb__object_type__";
 
 }
+
+#endif // QFB_OBJECT_TYPE_KEYS_P_H

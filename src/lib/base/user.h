@@ -24,12 +24,9 @@
 
 
 #include "namedobject.h"
-
 #include <QtCore/QDate>
 #include <QtCore/QUrl>
-
 #include "cover.h"
-#include "language.h"
 
 namespace QFB
 {
@@ -112,7 +109,6 @@ class QFBBASE_EXPORT User : public NamedObject
      * ISO Country Code.
      */
     Q_PROPERTY(QString locale READ locale CONSTANT)
-    /// @todo languages (improve QML bridge)
     /**
      * @short The user's languages
      */
@@ -256,7 +252,7 @@ public:
      * @brief Languages
      * @return languages.
      */
-    QList<Language *> languages() const;
+    QList<NamedObject *> languages() const;
     /**
      * @brief Languages as a variant
      *

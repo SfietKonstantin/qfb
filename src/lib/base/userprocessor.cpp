@@ -17,165 +17,14 @@
 #include "userprocessor.h"
 #include "abstractgraphprocessor_p.h"
 #include <QtCore/QCoreApplication>
+#include "cover_keys_p.h"
 #include "helper_p.h"
 #include "jsonhelper_p.h"
-#include "language.h"
+#include "namedobject_keys_p.h"
+#include "object_keys_p.h"
 #include "user.h"
+#include "user_keys_p.h"
 
-/**
- * @internal
- * @brief ID_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *ID_KEY = "id";
-/**
- * @internal
- * @brief NAME_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *NAME_KEY = "name";
-/**
- * @internal
- * @brief FIRST_NAME_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *FIRST_NAME_KEY = "first_name";
-/**
- * @internal
- * @brief MIDDLE_NAME_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *MIDDLE_NAME_KEY = "middle_name";
-/**
- * @internal
- * @brief LAST_NAME_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *LAST_NAME_KEY = "last_name";
-/**
- * @internal
- * @brief GENDER_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *GENDER_KEY = "gender";
-/**
- * @internal
- * @brief LOCALE_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *LOCALE_KEY = "locale";
-/**
- * @internal
- * @brief LANGUAGES_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *LANGUAGES_KEY = "languages";
-/**
- * @internal
- * @brief LINK_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *LINK_KEY = "link";
-/**
- * @internal
- * @brief USERNAME_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *USERNAME_KEY = "username";
-/**
- * @internal
- * @brief BIO_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *BIO_KEY = "bio";
-/**
- * @internal
- * @brief BIRTHDAY_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *BIRTHDAY_KEY = "birthday";
-/**
- * @internal
- * @brief COVER_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *COVER_KEY = "cover";
-/**
- * @internal
- * @brief SOURCE_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *SOURCE_KEY = "source";
-/**
- * @internal
- * @brief OFFSET_Y_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *OFFSET_Y_KEY = "offset_y";
-/**
- * @internal
- * @brief EMAIL_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *EMAIL_KEY = "email";
-/**
- * @internal
- * @brief POLITICAL_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *POLITICAL_KEY = "political";
-/**
- * @internal
- * @brief QUOTES_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *QUOTES_KEY = "quotes";
-/**
- * @internal
- * @brief RELATIONSHIP_STATUS_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *RELATIONSHIP_STATUS_KEY = "relationship_status";
-/**
- * @internal
- * @brief RELIGION_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *RELIGION_KEY = "religion";
-/**
- * @internal
- * @brief SIGNIFICANT_OTHER_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *SIGNIFICANT_OTHER_KEY = "significant_other";
-/**
- * @internal
- * @brief WEBSITE_KEY
- *
- * Used in QFB::UserProcessor
- */
-static const char *WEBSITE_KEY = "website";
 /**
  * @internal
  * @brief GENDER_MALE
@@ -232,74 +81,80 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
     QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);
 
     PropertiesMap propertiesMap;
-    propertiesMap.insert(IdProperty, rootObject.value(ID_KEY).toString());
-    propertiesMap.insert(NameProperty, rootObject.value(NAME_KEY).toString());
-    propertiesMap.insert(FirstNameProperty, rootObject.value(FIRST_NAME_KEY).toString());
-    propertiesMap.insert(MiddleNameProperty, rootObject.value(MIDDLE_NAME_KEY).toString());
-    propertiesMap.insert(LastNameProperty, rootObject.value(LAST_NAME_KEY).toString());
+    propertiesMap.insert(OBJECT_ID_KEY, rootObject.value(OBJECT_ID_KEY).toString());
+    propertiesMap.insert(NAMEDOBJECT_NAME_KEY, rootObject.value(NAMEDOBJECT_NAME_KEY).toString());
+    propertiesMap.insert(USER_FIRST_NAME_KEY, rootObject.value(USER_FIRST_NAME_KEY).toString());
+    propertiesMap.insert(USER_MIDDLE_NAME_KEY, rootObject.value(USER_MIDDLE_NAME_KEY).toString());
+    propertiesMap.insert(USER_LAST_NAME_KEY, rootObject.value(USER_LAST_NAME_KEY).toString());
 
-    QString genderString = rootObject.value(GENDER_KEY).toString();
+    QString genderString = rootObject.value(USER_GENDER_KEY).toString();
     if (genderString == GENDER_MALE) {
-        propertiesMap.insert(GenderProperty, (int) User::Male);
+        propertiesMap.insert(USER_GENDER_KEY, (int) User::Male);
     } else if (genderString == GENDER_FEMALE) {
-        propertiesMap.insert(GenderProperty, (int) User::Female);
+        propertiesMap.insert(USER_GENDER_KEY, (int) User::Female);
     } else {
-        propertiesMap.insert(GenderProperty, (int) User::Unknown);
+        propertiesMap.insert(USER_GENDER_KEY, (int) User::Unknown);
     }
 
-    propertiesMap.insert(LocaleProperty, rootObject.value(LOCALE_KEY).toString());
+    propertiesMap.insert(USER_LOCALE_KEY, rootObject.value(USER_LOCALE_KEY).toString());
 
-    JsonArray languages = QFB_JSON_GET_ARRAY(rootObject.value(LANGUAGES_KEY));
+    JsonArray languages = QFB_JSON_GET_ARRAY(rootObject.value(USER_LANGUAGES_KEY));
     QVariantList languagesVariant;
     foreach (JsonValue language, languages) {
         if (QFB_JSON_IS_OBJECT(language)) {
             JsonObject languageObject = QFB_JSON_GET_OBJECT(language);
-            if (languageObject.contains(ID_KEY) && languageObject.contains(NAME_KEY)) {
+            if (languageObject.contains(OBJECT_ID_KEY)
+                && languageObject.contains(NAMEDOBJECT_NAME_KEY)) {
                 PropertiesMap languagePropertiesMap;
-                languagePropertiesMap.insert(IdProperty, languageObject.value(ID_KEY).toString());
-                languagePropertiesMap.insert(NameProperty,
-                                             languageObject.value(NAME_KEY).toString());
-                Language *language = new Language(languagePropertiesMap);
+                languagePropertiesMap.insert(OBJECT_ID_KEY,
+                                             languageObject.value(OBJECT_ID_KEY).toString());
+                languagePropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
+                                             languageObject.value(NAMEDOBJECT_NAME_KEY).toString());
+                NamedObject *language = new NamedObject(languagePropertiesMap);
                 languagesVariant.append(QVariant::fromValue(language));
             }
         }
     }
-    propertiesMap.insert(LanguagesProperty, languagesVariant);
-    propertiesMap.insert(LinkProperty, parseUrl(rootObject.value(LINK_KEY).toString()));
-    propertiesMap.insert(UsernameProperty, rootObject.value(USERNAME_KEY).toString());
-    propertiesMap.insert(BioProperty, rootObject.value(BIO_KEY).toString());
+    propertiesMap.insert(USER_LANGUAGES_KEY, languagesVariant);
+    propertiesMap.insert(USER_LINK_KEY, parseUrl(rootObject.value(USER_LINK_KEY).toString()));
+    propertiesMap.insert(USER_USERNAME_KEY, rootObject.value(USER_USERNAME_KEY).toString());
+    propertiesMap.insert(USER_BIO_KEY, rootObject.value(USER_BIO_KEY).toString());
 
-    QString birthdayString = rootObject.value(BIRTHDAY_KEY).toString();
+    QString birthdayString = rootObject.value(USER_BIRTHDAY_KEY).toString();
     QDate birthday1 = QDate::fromString(birthdayString, "MM/dd");
     QDate birthday2 = QDate::fromString(birthdayString, "MM/dd/yyyy");
     if (birthday1.isValid()) {
-        propertiesMap.insert(BirthdayProperty, birthday1);
+        propertiesMap.insert(USER_BIRTHDAY_KEY, birthday1);
     } else if (birthday2.isValid()) {
-        propertiesMap.insert(BirthdayProperty, birthday2);
+        propertiesMap.insert(USER_BIRTHDAY_KEY, birthday2);
     }
 
-    JsonObject cover = QFB_JSON_GET_OBJECT(rootObject.value(COVER_KEY));
+    JsonObject cover = QFB_JSON_GET_OBJECT(rootObject.value(USER_COVER_KEY));
     PropertiesMap coverPropertiesMap;
-    coverPropertiesMap.insert(IdProperty, cover.value(ID_KEY).toString());
-    coverPropertiesMap.insert(SourceProperty, parseUrl(cover.value(SOURCE_KEY).toString()));
-    coverPropertiesMap.insert(OffsetYProperty, cover.value(OFFSET_Y_KEY).toDouble());
-    propertiesMap.insert(CoverProperty, QVariant::fromValue(new Cover(coverPropertiesMap)));
+    coverPropertiesMap.insert(OBJECT_ID_KEY, cover.value(OBJECT_ID_KEY).toString());
+    coverPropertiesMap.insert(COVER_SOURCE_KEY, parseUrl(cover.value(COVER_SOURCE_KEY).toString()));
+    coverPropertiesMap.insert(COVER_OFFSET_Y_KEY, cover.value(COVER_OFFSET_Y_KEY).toDouble());
+    propertiesMap.insert(USER_COVER_KEY, QVariant::fromValue(new Cover(coverPropertiesMap)));
 
 
-    propertiesMap.insert(EmailProperty, rootObject.value(EMAIL_KEY).toString());
-    propertiesMap.insert(PoliticalProperty, rootObject.value(POLITICAL_KEY).toString());
-    propertiesMap.insert(QuotesProperty, rootObject.value(QUOTES_KEY).toString());
-    propertiesMap.insert(RelationshipStatusProperty,
-                         rootObject.value(RELATIONSHIP_STATUS_KEY).toString());
-    propertiesMap.insert(ReligionProperty, rootObject.value(RELIGION_KEY).toString());
+    propertiesMap.insert(USER_EMAIL_KEY, rootObject.value(USER_EMAIL_KEY).toString());
+    propertiesMap.insert(USER_POLITICAL_KEY, rootObject.value(USER_POLITICAL_KEY).toString());
+    propertiesMap.insert(USER_QUOTES_KEY, rootObject.value(USER_QUOTES_KEY).toString());
+    propertiesMap.insert(USER_RELATIONSHIP_STATUS_KEY,
+                         rootObject.value(USER_RELATIONSHIP_STATUS_KEY).toString());
+    propertiesMap.insert(USER_RELIGION_KEY, rootObject.value(USER_RELIGION_KEY).toString());
 
-    JsonObject significantOther = QFB_JSON_GET_OBJECT(rootObject.value(SIGNIFICANT_OTHER_KEY));
+    JsonObject significantOther = QFB_JSON_GET_OBJECT(rootObject.value(USER_SIGNIFICANT_OTHER_KEY));
     PropertiesMap significantOtherPropertiesMap;
-    significantOtherPropertiesMap.insert(IdProperty, significantOther.value(ID_KEY).toString());
-    significantOtherPropertiesMap.insert(NameProperty, significantOther.value(NAME_KEY).toString());
+    significantOtherPropertiesMap.insert(OBJECT_ID_KEY,
+                                         significantOther.value(OBJECT_ID_KEY).toString());
+    significantOtherPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
+                                         significantOther.value(NAMEDOBJECT_NAME_KEY).toString());
     NamedObject *significantOtherUser = new NamedObject(significantOtherPropertiesMap);
-    propertiesMap.insert(SignificantOtherProperty, QVariant::fromValue(significantOtherUser));
-    propertiesMap.insert(WebsiteProperty, parseUrl(rootObject.value(WEBSITE_KEY).toString()));
+    propertiesMap.insert(USER_SIGNIFICANT_OTHER_KEY, QVariant::fromValue(significantOtherUser));
+    propertiesMap.insert(USER_WEBSITE_KEY, parseUrl(rootObject.value(USER_WEBSITE_KEY).toString()));
+
+
 
     d->user = new User(propertiesMap);
     d->user->moveToThread(QCoreApplication::instance()->thread());

@@ -15,7 +15,6 @@
  ****************************************************************************************/
 
 #include "userinfohelper.h"
-#include "language.h"
 
 #include <QtCore/QStringList>
 
@@ -98,7 +97,7 @@ void UserInfoHelper::createText()
     // Add languages
     if (!m_user->languages().isEmpty()) {
         QStringList languagesList;
-        foreach (QFB::Language * language, m_user->languages()) {
+        foreach (QFB::NamedObject * language, m_user->languages()) {
             languagesList.append(language->name());
         }
         QString languageString = languagesList.join(", ");

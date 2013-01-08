@@ -20,6 +20,9 @@
 #include "helper_p.h"
 #include "jsonhelper_p.h"
 #include "namedobject.h"
+#include "namedobject_keys_p.h"
+#include "object_keys_p.h"
+#include "paging_keys_p.h"
 
 namespace QFB
 {
@@ -31,34 +34,6 @@ namespace QFB
  * Used in QFB::FriendListReply.
  */
 static const char *DATA_KEY = "data";
-/**
- * @internal
- * @brief NAME_KEY
- *
- * Used in QFB::FriendListReply.
- */
-static const char *NAME_KEY = "name";
-/**
- * @internal
- * @brief ID_KEY
- *
- * Used in QFB::FriendListReply.
- */
-static const char *ID_KEY = "id";
-/**
- * @internal
- * @brief PAGING_KEY
- *
- * Used in QFB::FriendListReply.
- */
-static const char *PAGING_KEY = "paging";
-/**
- * @internal
- * @brief PAGING_NEXT_KEY
- *
- * Used in QFB::FriendListReply.
- */
-static const char *PAGING_NEXT_KEY = "next";
 
 class FriendListProcessorPrivate: public AbstractPagingProcessorPrivate
 {
@@ -110,12 +85,12 @@ bool FriendListProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue value, dataArray) {
         if (QFB_JSON_IS_OBJECT(value)) {
             JsonObject object = QFB_JSON_GET_OBJECT(value);
-            if (object.contains(ID_KEY) && object.contains(NAME_KEY)) {
-                QString id = object.value(ID_KEY).toString();
-                QString name = object.value(NAME_KEY).toString();
+            if (object.contains(OBJECT_ID_KEY) && object.contains(NAMEDOBJECT_NAME_KEY)) {
+                QString id = object.value(OBJECT_ID_KEY).toString();
+                QString name = object.value(NAMEDOBJECT_NAME_KEY).toString();
                 PropertiesMap propertiesMap;
-                propertiesMap.insert(IdProperty, id);
-                propertiesMap.insert(NameProperty, name);
+                propertiesMap.insert(OBJECT_ID_KEY, id);
+                propertiesMap.insert(NAMEDOBJECT_NAME_KEY, name);
                 NamedObject *userBase = new NamedObject(propertiesMap);
                 userBase->moveToThread(QCoreApplication::instance()->thread());
                 d->friendList.append(userBase);

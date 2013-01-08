@@ -33,7 +33,6 @@
 #include "namedobject.h"
 #include "user.h"
 #include "cover.h"
-#include "language.h"
 #include "post.h"
 #include "querymanager.h"
 #include "typeloader.h"
@@ -74,8 +73,6 @@ void BasePlugin5::registerTypes(const char *uri)
                                           "QFBUser cannot be created");
     qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
                                            "QFBCover cannot be created");
-    qmlRegisterUncreatableType<QFB::Language>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLanguage",
-                                              "QFBLanguage cannot be created");
     qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
                                           "QFBPostcannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");

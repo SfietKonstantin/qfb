@@ -21,6 +21,8 @@
 #include "helper_p.h"
 #include "jsonhelper_p.h"
 #include "object.h"
+#include "object_keys_p.h"
+#include "object_type_keys_p.h"
 
 namespace QFB
 {
@@ -46,13 +48,6 @@ static const char *METADATA_REQUEST_VALUE = "1";
  * Used in QFB::TypeProcessor.
  */
 static const char *FIELDS_KEY = "fields";
-/**
- * @internal
- * @brief ID_KEY
- *
- * Used in QFB::TypeProcessor.
- */
-static const char *ID_KEY = "id";
 /**
  * @internal
  * @brief METADATA_TYPE_VALUE
@@ -261,7 +256,7 @@ bool TypeProcessor::processGraphAndArguments(const QString &graph,
     Q_UNUSED(arguments)
     QList<ArgumentPair> trueArguments;
     trueArguments.append(ArgumentPair(METADATA_KEY, METADATA_REQUEST_VALUE));
-    trueArguments.append(ArgumentPair(FIELDS_KEY, ID_KEY));
+    trueArguments.append(ArgumentPair(FIELDS_KEY, OBJECT_ID_KEY));
     setPreprocessedData(graph, trueArguments);
     return true;
 }
@@ -282,7 +277,7 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
 
     PropertiesMap propertiesMap;
 
-    propertiesMap.insert(IdProperty, rootObject.value(ID_KEY).toString());
+    propertiesMap.insert(OBJECT_ID_KEY, rootObject.value(OBJECT_ID_KEY).toString());
 
     JsonObject metadata = QFB_JSON_GET_OBJECT(rootObject.value(METADATA_KEY));
     QString type = metadata.value(METADATA_TYPE_VALUE).toString();
@@ -339,7 +334,7 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
         trueType = Object::Invalid;
     }
 
-    propertiesMap.insert(ObjectTypeProperty, trueType);
+    propertiesMap.insert(OBJECT_TYPE_KEY, trueType);
     d->object = new Object(propertiesMap);
     d->object->moveToThread(QCoreApplication::instance()->thread());
 

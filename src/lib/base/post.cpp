@@ -21,30 +21,30 @@
 
 #include "post.h"
 #include "object_p.h"
-
-#include "namedobject.h"
 #include <QtCore/QDebug>
+#include "namedobject.h"
+#include "post_keys_p.h"
 
 namespace QFB
 {
 
 Post::Post(QObject *parent) :
-    Object(parent)
+    NamedObject(parent)
 {
 }
 
 Post::Post(const PropertiesMap propertiesMap, QObject *parent):
-    Object(propertiesMap, parent)
+    NamedObject(propertiesMap, parent)
 {
     Q_D(Object);
     // Reparent from
-    QObject *fromObject = d->propertiesMap.value(FromProperty).value<NamedObject *>();
+    QObject *fromObject = d->propertiesMap.value(POST_FROM_KEY).value<NamedObject *>();
     if (fromObject) {
         fromObject->setParent(this);
     }
 
     // Reparent to
-    QVariantList toVariantList = d->propertiesMap.value(ToProperty).toList();
+    QVariantList toVariantList = d->propertiesMap.value(POST_TO_KEY).toList();
     foreach (QVariant toVariant, toVariantList) {
         QObject *to = toVariant.value<NamedObject *>();
         to->setParent(this);
@@ -55,19 +55,19 @@ Post::Post(const PropertiesMap propertiesMap, QObject *parent):
 NamedObject * Post::from() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(FromProperty).value<NamedObject *>();
+    return d->propertiesMap.value(POST_FROM_KEY).value<NamedObject *>();
 }
 
 QVariantList Post::toVariant() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(ToProperty).toList();
+    return d->propertiesMap.value(POST_TO_KEY).toList();
 }
 
 QList<NamedObject *> Post::to() const
 {
     Q_D(const Object);
-    QVariantList toVariantList = d->propertiesMap.value(ToProperty).toList();
+    QVariantList toVariantList = d->propertiesMap.value(POST_TO_KEY).toList();
     QList<NamedObject *> returned;
     foreach (QVariant toVariant, toVariantList) {
         returned.append(toVariant.value<NamedObject *>());
@@ -78,79 +78,73 @@ QList<NamedObject *> Post::to() const
 QString Post::message() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(MessageProperty).toString();
+    return d->propertiesMap.value(POST_MESSAGE_KEY).toString();
 }
 
 QUrl Post::picture() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(PictureProperty).toUrl();
+    return d->propertiesMap.value(POST_PICTURE_KEY).toUrl();
 }
 
 QUrl Post::link() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LinkProperty).toUrl();
-}
-
-QString Post::name() const
-{
-    Q_D(const Object);
-    return d->propertiesMap.value(NameProperty).toString();
+    return d->propertiesMap.value(POST_LINK_KEY).toUrl();
 }
 
 QString Post::caption() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(CaptionProperty).toString();
+    return d->propertiesMap.value(POST_CAPTION_KEY).toString();
 }
 
 QString Post::description() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(DescriptionProperty).toString();
+    return d->propertiesMap.value(POST_DESCRIPTION_KEY).toString();
 }
 
 QUrl Post::source() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(SourceProperty).toUrl();
+    return d->propertiesMap.value(POST_SOURCE_KEY).toUrl();
 }
 
 QUrl Post::icon() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(IconProperty).toUrl();
+    return d->propertiesMap.value(POST_ICON_KEY).toUrl();
 }
 
 QString Post::type() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(TypeProperty).toString();
+    return d->propertiesMap.value(POST_TYPE_KEY).toString();
 }
 
 QString Post::story() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(StoryProperty).toString();
+    return d->propertiesMap.value(POST_STORY_KEY).toString();
 }
 
 QString Post::objectId() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(ObjectIdProperty).toString();
+    return d->propertiesMap.value(POST_OBJECT_ID_KEY).toString();
 }
 
 QDateTime Post::createdTime() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(CreatedTimeProperty).toDateTime();
+    return d->propertiesMap.value(POST_CREATED_TIME_KEY).toDateTime();
 }
 
 QDateTime Post::updatedTime() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(UpdatedTimeProperty).toDateTime();
+    return d->propertiesMap.value(POST_UPDATED_TIME_KEY).toDateTime();
 }
 
 }

@@ -21,6 +21,7 @@
 
 #include "namedobject.h"
 #include "object_p.h"
+#include "namedobject_keys_p.h"
 
 namespace QFB
 {
@@ -38,7 +39,7 @@ NamedObject::NamedObject(const PropertiesMap propertiesMap, QObject *parent):
 QString NamedObject::name() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(NameProperty).toString();
+    return d->propertiesMap.value(NAMEDOBJECT_NAME_KEY).toString();
 }
 
 }

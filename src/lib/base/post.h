@@ -22,7 +22,7 @@
  * @brief Definition of QFB::Post
  */
 
-#include "object.h"
+#include "namedobject.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QUrl>
@@ -30,9 +30,8 @@
 namespace QFB
 {
 
-class NamedObject;
 /**
- * @brief An user
+ * @brief A post
  *
  * This class represents an post in Facebook.
  * Extending QFB::Object, it contains a lot of properties
@@ -66,7 +65,7 @@ class NamedObject;
  *
  * @see QFB::Property
  */
-class QFBBASE_EXPORT Post: public Object
+class QFBBASE_EXPORT Post: public NamedObject
 {
     Q_OBJECT
     /**
@@ -91,10 +90,6 @@ class QFBBASE_EXPORT Post: public Object
      * @short The link attached to this post
      */
     Q_PROPERTY(QUrl link READ link CONSTANT)
-    /**
-     * @short The name of the link
-     */
-    Q_PROPERTY(QString name READ name CONSTANT)
     /**
      * @short The caption of the link
      *
@@ -152,11 +147,6 @@ class QFBBASE_EXPORT Post: public Object
     Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
     /// @todo include_hidden
 public:
-    enum ObjectType {
-//        Checkin,
-
-    };
-
     /**
      * @brief Invalid constructor
      * @param parent parent object.

@@ -21,8 +21,7 @@
 
 #include "user.h"
 #include "object_p.h"
-
-#include <QtCore/QDebug>
+#include "user_keys_p.h"
 
 namespace QFB
 {
@@ -38,14 +37,14 @@ User::User(const PropertiesMap propertiesMap, QObject *parent):
     Q_D(Object);
 
     // Reparent languages
-    QVariantList languagesVariant = d->propertiesMap.value(LanguagesProperty).toList();
+    QVariantList languagesVariant = d->propertiesMap.value(USER_LANGUAGES_KEY).toList();
     foreach (QVariant languageVariant, languagesVariant) {
-        QObject *language = languageVariant.value<Language *>();
+        QObject *language = languageVariant.value<NamedObject *>();
         language->setParent(this);
     }
 
     // Reparent cover
-    QObject *coverObject = d->propertiesMap.value(CoverProperty).value<Cover *>();
+    QObject *coverObject = d->propertiesMap.value(USER_COVER_KEY).value<Cover *>();
     if (coverObject) {
         coverObject->setParent(this);
     }
@@ -53,7 +52,7 @@ User::User(const PropertiesMap propertiesMap, QObject *parent):
 
     // Reparent significant other
     QObject *significantOtherObject
-            = d->propertiesMap.value(SignificantOtherProperty).value<NamedObject *>();
+            = d->propertiesMap.value(USER_SIGNIFICANT_OTHER_KEY).value<NamedObject *>();
     if (significantOtherObject) {
         significantOtherObject->setParent(this);
     }
@@ -63,25 +62,25 @@ User::User(const PropertiesMap propertiesMap, QObject *parent):
 QString User::firstName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(FirstNameProperty).toString();
+    return d->propertiesMap.value(USER_FIRST_NAME_KEY).toString();
 }
 
 QString User::middleName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(MiddleNameProperty).toString();
+    return d->propertiesMap.value(USER_MIDDLE_NAME_KEY).toString();
 }
 
 QString User::lastName() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LastNameProperty).toString();
+    return d->propertiesMap.value(USER_LAST_NAME_KEY).toString();
 }
 
 User::Gender User::gender() const
 {
     Q_D(const Object);
-    int genderInt = d->propertiesMap.value(GenderProperty).toInt();
+    int genderInt = d->propertiesMap.value(USER_GENDER_KEY).toInt();
     Gender gender = (Gender) genderInt;
     return gender;
 }
@@ -89,16 +88,16 @@ User::Gender User::gender() const
 QString User::locale() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LocaleProperty).toString();
+    return d->propertiesMap.value(USER_LOCALE_KEY).toString();
 }
 
-QList<Language *> User::languages() const
+QList<NamedObject *> User::languages() const
 {
     Q_D(const Object);
-    QVariantList languagesVariant = d->propertiesMap.value(LanguagesProperty).toList();
-    QList<Language *> returnedLanguages;
+    QVariantList languagesVariant = d->propertiesMap.value(USER_LANGUAGES_KEY).toList();
+    QList<NamedObject *> returnedLanguages;
     foreach (QVariant languageVariant, languagesVariant) {
-        returnedLanguages.append(languageVariant.value<Language *>());
+        returnedLanguages.append(languageVariant.value<NamedObject *>());
     }
     return returnedLanguages;
 }
@@ -106,85 +105,87 @@ QList<Language *> User::languages() const
 QVariantList User::languagesVariant() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LanguagesProperty).toList();
+    return d->propertiesMap.value(USER_LANGUAGES_KEY).toList();
 }
 
 QUrl User::link() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(LinkProperty).toUrl();
+    return d->propertiesMap.value(USER_LINK_KEY).toUrl();
 }
 
 QString User::username() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(UsernameProperty).toString();
+    return d->propertiesMap.value(USER_USERNAME_KEY).toString();
 }
 
 QString User::bio() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(BioProperty).toString();
+    return d->propertiesMap.value(USER_BIO_KEY).toString();
 }
 
 QDate User::birthday() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(BirthdayProperty).toDate();
+    return d->propertiesMap.value(USER_BIRTHDAY_KEY).toDate();
 }
 
 Cover * User::cover() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(CoverProperty).value<Cover *>();
+    return d->propertiesMap.value(USER_COVER_KEY).value<Cover *>();
 }
 
 QString User::email() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(EmailProperty).toString();
+    return d->propertiesMap.value(USER_EMAIL_KEY).toString();
 }
 
 QString User::political() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(PoliticalProperty).toString();
+    return d->propertiesMap.value(USER_POLITICAL_KEY).toString();
 }
 
 QString User::picture() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(PictureProperty).toString();
+    /// @todo WTF ???
+    return QString();
+//    return d->propertiesMap.value(user_pic).toString();
 }
 
 QString User::quotes() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(QuotesProperty).toString();
+    return d->propertiesMap.value(USER_QUOTES_KEY).toString();
 }
 
 QString User::relationshipStatus() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(RelationshipStatusProperty).toString();
+    return d->propertiesMap.value(USER_RELATIONSHIP_STATUS_KEY).toString();
 }
 
 QString User::religion() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(ReligionProperty).toString();
+    return d->propertiesMap.value(USER_RELIGION_KEY).toString();
 }
 
 NamedObject * User::significantOther() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(SignificantOtherProperty).value<NamedObject *>();
+    return d->propertiesMap.value(USER_SIGNIFICANT_OTHER_KEY).value<NamedObject *>();
 }
 
 QUrl User::website() const
 {
     Q_D(const Object);
-    return d->propertiesMap.value(WebsiteProperty).toUrl();
+    return d->propertiesMap.value(USER_WEBSITE_KEY).toUrl();
 }
 
 

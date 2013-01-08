@@ -14,57 +14,83 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_LANGUAGE_H
-#define QFB_LANGUAGE_H
-
-/**
- * @file language.h
- * @brief Definition of QFB::Language
- */
-
-#include "object.h"
+#ifndef QFB_POST_KEYS_P_H
+#define QFB_POST_KEYS_P_H
 
 namespace QFB
 {
 
 /**
- * @brief A language used by a user
- *
- * This class represents a language used by a user.
- * Extending QFB::Object, it contains the name of that
- * language, that can be accessed through the name()
- * property.
+ * @internal
+ * @brief FROM_KEY
  */
-class QFBBASE_EXPORT Language: public Object
-{
-    Q_OBJECT
-    /**
-     * @short Name
-     */
-    Q_PROPERTY(QString name READ name CONSTANT)
-public:
-    /**
-     * @brief Invalid constructor
-     * @param parent parent object.
-     */
-    explicit Language(QObject *parent = 0);
-    /**
-     * @brief Default constructor
-     * @param propertiesMap properties.
-     * @param parent parent object.
-     */
-    explicit Language(const PropertiesMap propertiesMap, QObject *parent = 0);
-    /**
-     * @brief Name
-     * @return name.
-     */
-    QString name() const;
-private:
-    Q_DECLARE_PRIVATE(Object)
-};
+static const char *POST_FROM_KEY = "from";
+/**
+ * @internal
+ * @brief TO_KEY
+ */
+static const char *POST_TO_KEY = "to";
+/**
+ * @internal
+ * @brief MESSAGE_KEY
+ */
+static const char *POST_MESSAGE_KEY = "message";
+/**
+ * @internal
+ * @brief PICTURE_KEY
+ */
+static const char *POST_PICTURE_KEY = "picture";
+/**
+ * @internal
+ * @brief LINK_KEY
+ */
+static const char *POST_LINK_KEY = "link";
+/**
+ * @internal
+ * @brief CAPTION_KEY
+ */
+static const char *POST_CAPTION_KEY = "caption";
+/**
+ * @internal
+ * @brief DESCRIPTION_KEY
+ */
+static const char *POST_DESCRIPTION_KEY = "description";
+/**
+ * @internal
+ * @brief SOURCE_KEY
+ */
+static const char *POST_SOURCE_KEY = "source";
+/**
+ * @internal
+ * @brief ICON_KEY
+ */
+static const char *POST_ICON_KEY = "icon";
+/**
+ * @internal
+ * @brief TYPE_KEY
+ */
+static const char *POST_TYPE_KEY = "type";
+/**
+ * @internal
+ * @brief STORY_KEY
+ */
+static const char *POST_STORY_KEY = "story";
+/**
+ * @internal
+ * @brief OBJECT_ID_KEY
+ */
+static const char *POST_OBJECT_ID_KEY = "object_id";
+/**
+ * @internal
+ * @brief CREATED_TIME_KEY
+ */
+static const char *POST_CREATED_TIME_KEY = "created_time";
+/**
+ * @internal
+ * @brief UPDATED_TIME_KEY
+ */
+static const char *POST_UPDATED_TIME_KEY = "updated_time";
 
 }
 
-Q_DECLARE_METATYPE(QFB::Language *)
-
-#endif // QFB_LANGUAGE_H
+#endif // QFB_POST_KEYS_P_H

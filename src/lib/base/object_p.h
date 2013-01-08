@@ -55,7 +55,7 @@ public:
      * @internal
      * @brief Properties
      */
-    QMap<Property, QVariant> propertiesMap;
+    PropertiesMap propertiesMap;
 protected:
     /**
      * @internal
