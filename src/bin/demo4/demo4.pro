@@ -17,13 +17,9 @@ LIBS += -L../../lib/base -l$${NAME}
 LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 HEADERS +=  bridge.h \
-    networkaccessmanagerfactory.h \
-    networkcookiejar.h
 
 SOURCES +=  main.cpp \
             bridge.cpp \
-    networkaccessmanagerfactory.cpp \
-    networkcookiejar.cpp
 
 
 OTHER_FILES +=  main.qml
