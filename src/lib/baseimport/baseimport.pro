@@ -32,8 +32,8 @@ SOURCES +=  abstractloader.cpp \
             pictureloader.cpp \
             userloader.cpp \
             friendlistmodel.cpp \
-            postvalidator.cpp
-            feedmodel.cpp \
+            postvalidator.cpp \
+            feedmodel.cpp
 
 # Deployment
 target.path = $${LIBDIR}
