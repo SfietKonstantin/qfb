@@ -30,7 +30,9 @@ LIBS += -L../../lib/baseimport -l$${NAME}import
 #    typeloader.h
 #    abstractloader_p.h
 #HEADERS += friendlistmodel.h
-#HEADERS += pictureloader.h
+#HEADERS += imageloader.h
+#HEADERS += typeloader.h
+HEADERS += feedmodel.h
 
 isEqual(QT_MAJOR_VERSION, 4): HEADERS += base_plugin4.h
 isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
@@ -38,7 +40,7 @@ isEqual(QT_MAJOR_VERSION, 5): HEADERS += base_plugin5.h
 SOURCES +=      base_plugin.cpp \
 #                abstractloadablemodel.cpp \
 #                friendlistmodel.cpp \
-#                feedmodel.cpp \
+                feedmodel.cpp \
 #                loaderbase.cpp \
 #                abstractloader.cpp \
 #                imageloader.cpp \

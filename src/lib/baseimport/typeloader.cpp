@@ -14,26 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPREPROCESSOR_P_H
-#define QFB_ABSTRACTPREPROCESSOR_P_H
-
-#include "argumentpair.h"
-#include "request.h"
+#include "typeloader.h"
+#include "abstractloader_p.h"
+#include "object.h"
+#include "querymanager.h"
+#include "typeprocessor.h"
 
 namespace QFB
 {
 
-class AbstractPreprocessorPrivate
+class TypeLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    explicit AbstractPreprocessorPrivate();
-    Request request;
-    QString graph;
-    QList<ArgumentPair> arguments;
-    QString processedGraph;
-    QList<ArgumentPair> processedArguments;
+    TypeLoaderPrivate(TypeLoader *q);
+    Object * object;
 };
 
+TypeLoaderPrivate::TypeLoaderPrivate(TypeLoader *q):
+    AbstractLoaderPrivate(q)
+{
+    object = 0;
 }
 
-#endif // QFB_ABSTRACTPREPROCESSOR_P_H
+////// End of private class //////
+
+TypeLoader::TypeLoader(QObject *parent) :
+    AbstractGraphLoader(*(new TypeLoaderPrivate(this)), parent)
+{
+}
+
+Object * TypeLoader::object() const
+{
+    Q_D(const TypeLoader);
+    return d->object;
+}
+
+Request TypeLoader::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryType(graph, arguments);
+    }
+    return Request();
+}
+
+void TypeLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(TypeLoader);
+    TypeProcessor *typeProcessor = qobject_cast<TypeProcessor *>(processor);
+    if (d->object) {
+        d->object->deleteLater();
+    }
+
+    d->object = typeProcessor->object();
+    d->object->setParent(this);
+    emit objectChanged();
+}
+
+}

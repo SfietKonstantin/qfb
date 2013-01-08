@@ -60,55 +60,12 @@ public:
      * @brief Data
      */
     QList<NamedObject *> data;
-private:
-    Q_DECLARE_PUBLIC(FriendListModel)
 };
 
 FriendListModelPrivate::FriendListModelPrivate(FriendListModel *q):
     AbstractLoadableModelPrivate(q)
 {
 }
-
-//bool FriendListModelPrivate::processReply(const AbstractGraphPagingReply *reply)
-//{
-//    Q_Q(FriendListModel);
-
-//    const FriendListReply *friendListReply = qobject_cast<const FriendListReply *>(reply);
-//    if (!friendListReply) {
-//        return false;
-//    }
-
-//    QList<NamedObject *> friendList = friendListReply->friendList();
-//    if (friendList.isEmpty()) {
-//        setDoNotHaveNext();
-//        qSort(temporaryData.begin(), temporaryData.end(), nameSortLesser);
-//        q->beginInsertRows(QModelIndex(), q->rowCount(), temporaryData.count() - 1);
-//        data = temporaryData;
-//        temporaryData.clear();
-//        emit q->countChanged();
-//        q->endInsertRows();
-//        return true;
-//    }
-
-//    foreach (NamedObject *user, friendList) {
-//        user->setParent(q);
-//    }
-
-//    temporaryData.append(friendList);
-
-//    return true;
-//}
-
-//void FriendListModelPrivate::clear()
-//{
-//    Q_Q(FriendListModel);
-//    if (!data.isEmpty()) {
-//        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
-//        qDeleteAll(data);
-//        data.clear();
-//        q->endRemoveRows();
-//    }
-//}
 
 ////// End of private class //////
 

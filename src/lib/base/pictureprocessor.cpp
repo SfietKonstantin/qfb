@@ -104,7 +104,7 @@ bool PictureProcessor::processDataSource(QIODevice *dataSource)
     // Find the path to the cache
     QString path = cacheFolderPath();
     QDir::root().mkpath(path);
-    QDir dir (path);
+    QDir dir = QDir(path);
     QString fileName = d->pictureName(request().graph(), request().arguments());
 
     QImage image;

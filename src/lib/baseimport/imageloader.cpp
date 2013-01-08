@@ -14,69 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "typeloader.h"
-#include "loaderbase_p.h"
-#include "typereply.h"
-
+#include "imageloader.h"
+#include "abstractloader_p.h"
+#include "imageprocessor.h"
 #include "querymanager.h"
 
 namespace QFB
 {
 
-class TypeLoaderPrivate: public LoaderBasePrivate
+class ImageLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    TypeLoaderPrivate(TypeLoader *q);
-    bool checkReply(const AbstractReply *reply);
-    void processReply(const AbstractReply *reply);
-    Object * object;
-private:
-    Q_DECLARE_PUBLIC(TypeLoader)
+    ImageLoaderPrivate(ImageLoader *q);
+    QString imagePath;
 };
 
-TypeLoaderPrivate::TypeLoaderPrivate(TypeLoader *q):
-    LoaderBasePrivate(q)
+ImageLoaderPrivate::ImageLoaderPrivate(ImageLoader *q):
+    AbstractLoaderPrivate(q)
 {
-    object = 0;
-}
-
-bool TypeLoaderPrivate::checkReply(const AbstractReply *reply)
-{
-        return qobject_cast<const TypeReply *>(reply);
-}
-
-void TypeLoaderPrivate::processReply(const AbstractReply *reply)
-{
-    Q_Q(TypeLoader);
-    if (object) {
-        object->deleteLater();
-        object = 0;
-    }
-
-    const TypeReply *typeReply = qobject_cast<const TypeReply *>(reply);
-    Object *newObject = typeReply->object();
-
-    object = newObject;
-    object->setParent(q);
-    emit q->objectChanged();
 }
 
 ////// End of private class //////
 
-TypeLoader::TypeLoader(QObject *parent) :
-    AbstractGraphLoader(*(new TypeLoaderPrivate(this)), parent)
+ImageLoader::ImageLoader(QObject *parent) :
+    AbstractLoader(*(new ImageLoaderPrivate(this)), parent)
 {
 }
 
-Object * TypeLoader::object() const
+QString ImageLoader::imagePath() const
 {
-    Q_D(const TypeLoader);
-    return d->object;
+    Q_D(const ImageLoader);
+    return d->imagePath;
 }
 
-AbstractGraphReply * TypeLoader::createReply(const QString &graph, const QString &arguments)
+void ImageLoader::request(const QUrl &url)
 {
-    return queryManager()->queryType(graph, arguments);
+    Request createdRequest = createRequest(url);
+    if (createdRequest.isValid()) {
+        handleRequest(createdRequest);
+    }
 }
+
+Request ImageLoader::createRequest(const QUrl &url)
+{
+    if (queryManager()) {
+        return queryManager()->queryImage(url);
+    }
+    return Request();
+}
+
+void ImageLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(ImageLoader);
+    ImageProcessor *imageProcessor = qobject_cast<ImageProcessor *>(processor);
+    QString imagePath = imageProcessor->imagePath();
+    if (d->imagePath != imagePath) {
+        d->imagePath = imagePath;
+        emit imagePathChanged();
+    }
+}
+
 
 }

@@ -62,8 +62,8 @@ Page {
                         }
 
                     } else if (model.action == "showFriends") {
-                        friendListPage.load()
-                        window.pageStack.push(friendListPage)
+                        var newPage = window.pageStack.push(Qt.resolvedUrl("FriendListPage.qml"))
+                        newPage.load()
                     }
                 }
             }
@@ -74,9 +74,5 @@ Page {
     NewsPage {
         id: newsPage
         name: me.name
-    }
-
-    FriendListPage {
-        id: friendListPage
     }
 }

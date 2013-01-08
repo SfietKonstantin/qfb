@@ -136,6 +136,7 @@ PageStackWindow {
                 if (type == QFBObject.User) {
                     PAGE_MANAGEMENT_BRIDGE.addUserPage(facebookId, currentResolvingTypeObject.name)
                 } else {
+                    unsupportedInfoBanner.parent = window.pageStack.currentPage
                     unsupportedInfoBanner.show()
                 }
                 currentResolvingTypeObject.name = ""

@@ -31,8 +31,6 @@ public:
     static QString pictureString(PictureLoader::Type type);
     PictureLoader::Type type;
     QString picturePath;
-private:
-    Q_DECLARE_PUBLIC(PictureLoader)
 };
 
 PictureLoaderPrivate::PictureLoaderPrivate(PictureLoader *q):
@@ -111,8 +109,11 @@ void PictureLoader::handleReply(AbstractProcessor *processor)
 {
     Q_D(PictureLoader);
     PictureProcessor *pictureProcessor = qobject_cast<PictureProcessor *>(processor);
-    d->picturePath = pictureProcessor->picturePath();
-    emit picturePathChanged();
+    QString picturePath = pictureProcessor->picturePath();
+    if (d->picturePath != picturePath) {
+        d->picturePath = picturePath;
+        emit picturePathChanged();
+    }
 }
 
 }

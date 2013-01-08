@@ -14,31 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_TYPELOADER_H
-#define QFB_TYPELOADER_H
+#ifndef QFB_IMAGELOADER_H
+#define QFB_IMAGELOADER_H
 
-#include "abstractgraphloader.h"
-#include "namedobject.h"
+#include "abstractloader.h"
+#include <QtCore/QUrl>
 
 namespace QFB
 {
 
-class TypeLoaderPrivate;
-class TypeLoader : public AbstractGraphLoader
+class ImageLoaderPrivate;
+class ImageLoader: public AbstractLoader
 {
     Q_OBJECT
-    Q_PROPERTY(QFB::Object * object READ object NOTIFY objectChanged)
+    Q_PROPERTY(QString imagePath READ imagePath NOTIFY imagePathChanged)
 public:
-    explicit TypeLoader(QObject *parent = 0);
-    Object * object() const;
+    explicit ImageLoader(QObject *parent = 0);
+    QString imagePath() const;
+public Q_SLOTS:
+    void request(const QUrl &url);
 Q_SIGNALS:
-    void objectChanged();
+    void imagePathChanged();
 protected:
-    AbstractGraphReply * createReply(const QString &graph, const QString &arguments = QString());
+    Request createRequest(const QUrl &url);
+    void handleReply(AbstractProcessor *processor);
 private:
-    Q_DECLARE_PRIVATE(TypeLoader)
+    Q_DECLARE_PRIVATE(ImageLoader)
 };
 
 }
 
-#endif // TYPELOADER_H
+#endif // QFB_IMAGELOADER_H

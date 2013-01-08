@@ -14,22 +14,13 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file feedreply.cpp
- * @brief Implementation of QFB::FeedReply
- */
-
-#include "feedreply.h"
-#include "abstractgraphpagingreply_p.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
-
+#include "feedprocessor.h"
+#include "abstractpagingprocessor_p.h"
+#include <QtCore/QCoreApplication>
 #include "helper_p.h"
-#include "post.h"
-#include "namedobject.h"
 #include "jsonhelper_p.h"
-
+#include "namedobject.h"
+#include "post.h"
 
 namespace QFB
 {
@@ -175,54 +166,36 @@ static const char *PAGING_KEY = "paging";
  */
 static const char *PAGING_NEXT_KEY = "next";
 
-/**
- * @internal
- * @brief Private class for QFB::UserReply
- */
-class FeedReplyPrivate: public AbstractGraphPagingReplyPrivate
+class FeedProcessorPrivate: public AbstractPagingProcessorPrivate
 {
 public:
+    explicit FeedProcessorPrivate();
     /**
      * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    FeedReplyPrivate(FeedReply *q);
-    /**
-     * @internal
-     * @brief Feed
+     * @brief Friend list
      */
     QList<Post *> feed;
 };
 
-FeedReplyPrivate::FeedReplyPrivate(FeedReply *q):
-    AbstractGraphPagingReplyPrivate(q)
+FeedProcessorPrivate::FeedProcessorPrivate():
+    AbstractPagingProcessorPrivate()
 {
 }
 
-////// End of private class //////
-
-FeedReply::FeedReply(QObject *parent) :
-    AbstractGraphPagingReply(*(new FeedReplyPrivate(this)), parent)
+FeedProcessor::FeedProcessor(QObject *parent):
+    AbstractPagingProcessor(*(new FeedProcessorPrivate()), parent)
 {
 }
 
-FeedReply::FeedReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractGraphPagingReply(*(new FeedReplyPrivate(this)), parent)
+QList<Post *> FeedProcessor::feed() const
 {
-    Q_D(FeedReply);
-    d->networkAccessManager = networkAccessManager;
-}
-
-QList<Post *> FeedReply::feed() const
-{
-    Q_D(const FeedReply);
+    Q_D(const FeedProcessor);
     return d->feed;
 }
 
-bool FeedReply::processData(QIODevice *dataSource)
+bool FeedProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(FeedReply);
+    Q_D(FeedProcessor);
 
     QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
     if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
@@ -235,9 +208,6 @@ bool FeedReply::processData(QIODevice *dataSource)
         setError("Received data do not contains correct data.");
         return false;
     }
-
-    qDeleteAll(d->feed);
-    d->feed.clear();
 
     JsonArray dataArray = QFB_JSON_GET_ARRAY(rootObject.value(DATA_KEY));
 
@@ -253,7 +223,7 @@ bool FeedReply::processData(QIODevice *dataSource)
             fromPropertiesMap.insert(IdProperty, fromObject.value(ID_KEY).toString());
             fromPropertiesMap.insert(NameProperty, fromObject.value(NAME_KEY).toString());
             propertiesMap.insert(FromProperty,
-                                 QVariant::fromValue(new NamedObject(fromPropertiesMap, this)));
+                                 QVariant::fromValue(new NamedObject(fromPropertiesMap)));
 
             JsonObject toParentObject = QFB_JSON_GET_OBJECT(object.value(TO_KEY));
             JsonArray toArray = QFB_JSON_GET_ARRAY(toParentObject.value(TO_DATA_KEY));
@@ -285,20 +255,17 @@ bool FeedReply::processData(QIODevice *dataSource)
                                                           Qt::ISODate);
             propertiesMap.insert(UpdatedTimeProperty, updatedTime);
 
-
-
-            d->feed.append(new Post(propertiesMap, this));
+            Post *post = new Post(propertiesMap);
+            post->moveToThread(QCoreApplication::instance()->thread());
+            d->feed.append(post);
         }
     }
-
-    qDebug() << d->feed.size();
 
     JsonObject pagingObject = QFB_JSON_GET_OBJECT(rootObject.value(PAGING_KEY));
     QUrl nextPageUrl = parseUrl(pagingObject.value(PAGING_NEXT_KEY).toString());
     setNextPageUrl(nextPageUrl);
 
     return true;
-
 }
 
 }

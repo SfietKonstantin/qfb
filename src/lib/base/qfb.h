@@ -338,10 +338,12 @@ enum Property {
 
 enum RequestType {
     NoRequest,
+    ImageRequest,
     TypeRequest,
     FriendListRequest,
     UserRequest,
-    PictureRequest
+    PictureRequest,
+    FeedRequest
 
 };
 

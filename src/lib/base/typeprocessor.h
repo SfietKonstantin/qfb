@@ -14,42 +14,29 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPREPROCESSOR_H
-#define QFB_ABSTRACTPREPROCESSOR_H
+#ifndef QFB_TYPEPROCESSOR_H
+#define QFB_TYPEPROCESSOR_H
 
-#include "base_global.h"
-#include <QtCore/QObject>
-#include <QtCore/QRunnable>
-#include "argumentpair.h"
-#include "request.h"
+#include "abstractgraphprocessor.h"
 
 namespace QFB
 {
 
-class AbstractPreprocessorPrivate;
-class AbstractPreprocessor : public QObject, public QRunnable
+class Object;
+class TypeProcessorPrivate;
+class QFBBASE_EXPORT TypeProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:
-    explicit AbstractPreprocessor(QObject *parent = 0);
-    virtual ~AbstractPreprocessor();
-    Request request() const;
-    void setRequest(const Request &request);
-    void setData(const QString &graph, const QString &arguments);
-    QString processedGraph() const;
-    QList<ArgumentPair> processedArguments() const;
-    void run();
-Q_SIGNALS:
-    void finished(bool preproce);
+    explicit TypeProcessor(QObject *parent = 0);
+    Object * object() const;
 protected:
-    explicit AbstractPreprocessor(AbstractPreprocessorPrivate &dd, QObject *parent);
-    virtual bool processGraphAndArguments(const QString &graph,
-                                          const QList<ArgumentPair> &arguments) = 0;
-    QScopedPointer<AbstractPreprocessorPrivate> d_ptr;
+    bool processGraphAndArguments(const QString &graph, const QList<ArgumentPair> &arguments);
+    bool processDataSource(QIODevice *dataSource);
 private:
-    Q_DECLARE_PRIVATE(AbstractPreprocessor)
+    Q_DECLARE_PRIVATE(TypeProcessor)
 };
 
 }
 
-#endif // ABSTRACTPREPROCESSOR_H
+#endif // QFB_TYPEPROCESSOR_H

@@ -18,9 +18,9 @@
 #include "abstractgraphprocessor_p.h"
 #include <QtCore/QCoreApplication>
 #include "helper_p.h"
-#include "user.h"
-#include "language.h"
 #include "jsonhelper_p.h"
+#include "language.h"
+#include "user.h"
 
 /**
  * @internal

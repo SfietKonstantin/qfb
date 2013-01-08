@@ -27,9 +27,12 @@
 #include "networkrequesthandler_p.h"
 #include "helper_p.h"
 #include "request.h"
+#include "typeprocessor.h"
+#include "imageprocessor.h"
 #include "friendlistprocessor.h"
 #include "pictureprocessor.h"
 #include "userprocessor.h"
+#include "feedprocessor.h"
 
 namespace QFB
 {
@@ -46,7 +49,7 @@ public:
     AbstractProcessor * createProcessor(const Request &request);
     void preparePreprocessor(AbstractProcessor *processor, const Request &request);
     Request createGraphPreprocessor(RequestType type, const QString &graph,
-                                    const QString &arguments);
+                                    const QString &arguments, int priority = 0);
     /// @todo clean mess in processor
     void slotPreprocessFinished(bool needLoading);
     void slotPreprocessError();
@@ -85,6 +88,12 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
     switch (request.type()) {
+    case ImageRequest:
+        processor = new ImageProcessor(q);
+        break;
+    case TypeRequest:
+        processor = new TypeProcessor(q);
+        break;
     case FriendListRequest:
         processor = new FriendListProcessor(q);
         break;
@@ -94,7 +103,10 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     case UserRequest:
         processor = new UserProcessor(q);
         break;
-    default:
+    case FeedRequest:
+        processor = new FeedProcessor(q);
+        break;
+    case NoRequest:
         break;
     }
 
@@ -116,7 +128,7 @@ void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, cons
 }
 
 Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, const QString &graph,
-                                                     const QString &arguments)
+                                                     const QString &arguments, int priority)
 {
     if (token.isEmpty()) {
         return Request();
@@ -133,7 +145,7 @@ Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, const QSt
     request.setArguments(arguments);
     preparePreprocessor(processor, request);
     processor->setToken(token);
-    processThreadPoll->start(processor, QThread::LowPriority);
+    processThreadPoll->start(processor, priority);
 
     return request;
 }
@@ -243,18 +255,26 @@ QString QueryManager::token() const
     return d->token;
 }
 
-//ImageReply * QueryManager::queryImage(const QUrl &url)
-//{
-//    Q_D(QueryManager);
-//    ImageReply *reply = new ImageReply(d->networkAccessManager, this);
-//    reply->request(url);
-//    return reply;
-//}
+Request QueryManager::queryImage(const QUrl &url)
+{
+    Q_D(QueryManager);
+    Request request = d->createRequest(ImageRequest);
+    AbstractProcessor *processor = d->createProcessor(request);
+    if (!processor) {
+        return Request();
+    }
+
+    request.setUrl(url);
+    d->preparePreprocessor(processor, request);
+    d->processThreadPoll->start(processor, 0);
+
+    return request;
+}
 
 Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(FriendListRequest, graph, arguments);
+    return d->createGraphPreprocessor(FriendListRequest, graph, arguments, 1000);
 }
 
 Request QueryManager::queryPicture(const QString &graph, const QString &arguments)
@@ -266,32 +286,20 @@ Request QueryManager::queryPicture(const QString &graph, const QString &argument
 Request QueryManager::queryUser(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(UserRequest, graph, arguments);
+    return d->createGraphPreprocessor(UserRequest, graph, arguments, 1000);
 }
 
-//FeedReply * QueryManager::queryFeed(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    if (d->token.isEmpty()) {
-//        return 0;
-//    }
+Request QueryManager::queryFeed(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(FeedRequest, graph, arguments, 1000);
+}
 
-//    FeedReply *reply = new FeedReply(d->networkAccessManager, this);
-//    reply->request(graph, d->token, arguments);
-//    return reply;
-//}
-
-//TypeReply * QueryManager::queryType(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    if (d->token.isEmpty()) {
-//        return 0;
-//    }
-
-//    TypeReply *reply = new TypeReply(d->networkAccessManager, this);
-//    reply->request(graph, d->token, arguments);
-//    return reply;
-//}
+Request QueryManager::queryType(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(TypeRequest, graph, arguments, 10000);
+}
 
 void QueryManager::setToken(const QString &token)
 {

@@ -16,12 +16,10 @@
 
 #include "feedmodel.h"
 #include "abstractloadablemodel_p.h"
-
 #include <QtCore/QDebug>
-
 #include "querymanager.h"
+#include "feedprocessor.h"
 #include "post.h"
-#include "feedreply.h"
 #include "postvalidator.h"
 
 namespace QFB
@@ -42,14 +40,6 @@ public:
     FeedModelPrivate(FeedModel *q);
     /**
      * @internal
-     * @brief Implementation of AbstractLoadableModelPrivate::processReply()
-     * @param reply reply to be processed.
-     * @return if the process is successful.
-     */
-    bool processReply(const AbstractGraphPagingReply *reply);
-    void clear();
-    /**
-     * @internal
      * @brief Data
      */
     QList<Post *> data;
@@ -64,55 +54,43 @@ FeedModelPrivate::FeedModelPrivate(FeedModel *q):
     validator = 0;
 }
 
-bool FeedModelPrivate::processReply(const AbstractGraphPagingReply *reply)
-{
-    Q_Q(FeedModel);
-    const FeedReply *feedReply = qobject_cast<const FeedReply *>(reply);
-    if (!feedReply) {
-        return false;
-    }
+//bool FeedModelPrivate::processReply(const AbstractGraphPagingReply *reply)
+//{
+//    Q_Q(FeedModel);
+//    const FeedReply *feedReply = qobject_cast<const FeedReply *>(reply);
+//    if (!feedReply) {
+//        return false;
+//    }
 
-    QList<Post *> feed = feedReply->feed();
-    QList<Post *> finalFeed;
-    foreach (Post *post, feed) {
-        bool postOk = true;
-        if (validator) {
-            if (!validator->validate(post)) {
-                postOk = false;
-            }
-        }
+//    QList<Post *> feed = feedReply->feed();
+//    QList<Post *> finalFeed;
+//    foreach (Post *post, feed) {
+//        bool postOk = true;
+//        if (validator) {
+//            if (!validator->validate(post)) {
+//                postOk = false;
+//            }
+//        }
 
-        if (!postOk) {
-            post->deleteLater();
-        } else {
-            post->setParent(q);
-            finalFeed.append(post);
-        }
-    }
+//        if (!postOk) {
+//            post->deleteLater();
+//        } else {
+//            post->setParent(q);
+//            finalFeed.append(post);
+//        }
+//    }
 
-    if (feed.isEmpty()) {
-        setDoNotHaveNext();
-        return true;
-    }
+//    if (feed.isEmpty()) {
+//        setDoNotHaveNext();
+//        return true;
+//    }
 
-    q->beginInsertRows(QModelIndex(), data.count(), data.count() + finalFeed.count() - 1);
-    data.append(finalFeed);
-    emit q->countChanged();
-    q->endInsertRows();
-    return true;
-}
-
-void FeedModelPrivate::clear()
-{
-    Q_Q(FeedModel);
-    // Clean old data
-    if (!data.isEmpty()) {
-        q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
-        qDeleteAll(data);
-        data.clear();
-        q->endRemoveRows();
-    }
-}
+//    q->beginInsertRows(QModelIndex(), data.count(), data.count() + finalFeed.count() - 1);
+//    data.append(finalFeed);
+//    emit q->countChanged();
+//    q->endInsertRows();
+//    return true;
+//}
 
 ////// End of private class //////
 
@@ -166,10 +144,59 @@ void FeedModel::setValidator(PostValidator *validator)
     }
 }
 
-AbstractGraphPagingReply * FeedModel::createReply(const QString &graph, const QString &arguments)
+void FeedModel::handleReply(AbstractPagingProcessor *processor)
 {
-//    return queryManager()->queryFeed(graph, arguments);
-    return 0;
+    Q_D(FeedModel);
+    FeedProcessor *feedProcessor = qobject_cast<FeedProcessor *>(processor);
+    if (!feedProcessor) {
+        return;
+    }
+
+    QList<Post *> feed = feedProcessor->feed();
+
+    QList<Post *> finalFeed;
+    foreach (Post *post, feed) {
+        bool postOk = true;
+        if (d->validator) {
+            if (!d->validator->validate(post)) {
+                postOk = false;
+            }
+        }
+
+        if (!postOk) {
+            post->deleteLater();
+        } else {
+            post->setParent(this);
+            finalFeed.append(post);
+        }
+    }
+
+    if (feed.isEmpty()) {
+        setDoNotHaveNext();
+        return;
+    }
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + finalFeed.count() - 1);
+    d->data.append(finalFeed);
+    emit countChanged();
+    endInsertRows();
+}
+
+void FeedModel::clear()
+{
+    Q_D(FeedModel);
+    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+    qDeleteAll(d->data);
+    emit countChanged();
+    endRemoveRows();
+}
+
+Request FeedModel::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryFeed(graph, arguments);
+    }
+    return Request();
 }
 
 QHash<int, QByteArray> FeedModel::roleNames() const

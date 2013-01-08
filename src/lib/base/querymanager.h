@@ -68,7 +68,7 @@ public:
      * @param url url to the image.
      * @return an image reply.
      */
-//    ImageReply * queryImage(const QUrl &url);
+    Request queryImage(const QUrl &url);
     /**
      * @brief Query a friend list
      * @param graph graph entry of the Facebook graph API.
@@ -96,8 +96,8 @@ public:
      * @param arguments arguments.
      * @return a feed reply.
      */
-//    FeedReply * queryFeed(const QString &graph, const QString &arguments = QString());
-//    TypeReply * queryType(const QString &graph, const QString &arguments = QString());
+    Request queryFeed(const QString &graph, const QString &arguments = QString());
+    Request queryType(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token

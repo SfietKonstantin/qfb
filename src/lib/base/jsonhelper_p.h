@@ -130,6 +130,8 @@
 
 // Includes
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QVariantMap>
+#include <QtCore/QVariantList>
 #include "parser.h"
 #else
 #include <QtCore/QJsonDocument>

@@ -18,8 +18,8 @@
 #include "abstractpagingprocessor_p.h"
 #include <QtCore/QCoreApplication>
 #include "helper_p.h"
-#include "namedobject.h"
 #include "jsonhelper_p.h"
+#include "namedobject.h"
 
 namespace QFB
 {

@@ -14,76 +14,30 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file imagereply.cpp
- * @brief Implementation of QFB::ImageReply
- */
-
-#include "imagereply.h"
-#include "abstractreply_p.h"
-
+#include "imageprocessor.h"
+#include "abstractprocessor_p.h"
 #include <QtCore/QCryptographicHash>
-#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtGui/QImage>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#include <QtGui/QDesktopServices>
-#else
-#include <QtCore/QStandardPaths>
-#endif
+#include "cachehelper_p.h"
 
 namespace QFB
 {
 
-
-/**
- * @internal
- * @brief Private class for QFB::ImageReply
- */
-class ImageReplyPrivate: public AbstractReplyPrivate
+class ImageProcessorPrivate: public AbstractProcessorPrivate
 {
 public:
-    /**
-     * @internal
-     * @brief Default constructor
-     * @param q Q-pointer
-     */
-    ImageReplyPrivate(ImageReply *q);
-    /**
-     * @internal
-     * @brief Path to the cache folder
-     * @return path to the cache folder.
-     */
-    static QString cacheFolderPath();
-    /**
-     * @internal
-     * @brief Image name
-     * @param url image url.
-     * @return an image name based on the given url.
-     */
+    explicit ImageProcessorPrivate();
     static QString imageName(const QUrl &url);
-    /**
-     * @internal
-     * @brief Path to the image
-     */
     QString imagePath;
 };
 
-ImageReplyPrivate::ImageReplyPrivate(ImageReply *q):
-    AbstractReplyPrivate(q)
+ImageProcessorPrivate::ImageProcessorPrivate():
+    AbstractProcessorPrivate()
 {
 }
 
-QString ImageReplyPrivate::cacheFolderPath()
-{
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    return QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
-#else
-    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-#endif
-}
-
-QString ImageReplyPrivate::imageName(const QUrl &url)
+QString ImageProcessorPrivate::imageName(const QUrl &url)
 {
     QByteArray asciiUrl = url.toString().toLocal8Bit();
     QByteArray encodedUrl = QCryptographicHash::hash(asciiUrl, QCryptographicHash::Md5);
@@ -92,56 +46,45 @@ QString ImageReplyPrivate::imageName(const QUrl &url)
 
 ////// End of private class //////
 
-ImageReply::ImageReply(QObject *parent):
-    AbstractReply(*(new ImageReplyPrivate(this)), parent)
+ImageProcessor::ImageProcessor(QObject *parent):
+    AbstractProcessor(*(new ImageProcessorPrivate), parent)
 {
 }
 
-ImageReply::ImageReply(QNetworkAccessManager *networkAccessManager, QObject *parent):
-    AbstractReply(*(new ImageReplyPrivate(this)), parent)
+QString ImageProcessor::imagePath() const
 {
-    Q_D(ImageReply);
-    d->networkAccessManager = networkAccessManager;
-}
-
-QString ImageReply::imagePath() const
-{
-    Q_D(const ImageReply);
+    Q_D(const ImageProcessor);
     return d->imagePath;
 }
 
-void ImageReply::request(const QUrl &url)
+bool ImageProcessor::preprocess()
 {
-    get(url);
-}
-
-bool ImageReply::preprocesssRequest()
-{
-    Q_D(ImageReply);
-
-    if (url().isEmpty()) {
-        return true;
+    Q_D(ImageProcessor);
+    bool needLoading = true;
+    if (request().url().isEmpty()) {
+        needLoading = false;
+        return false;
     }
 
-    QDir dir (d->cacheFolderPath());
-    QString fileName = d->imageName(url());
+    QDir dir (cacheFolderPath());
+    QString fileName = d->imageName(request().url());
 
     if (dir.exists(fileName)) {
         d->imagePath = dir.absoluteFilePath(fileName);
-        return true;
+        needLoading = false;
     }
-    return false;
+    setNeedLoading(needLoading);
+    return true;
 }
 
-bool ImageReply::processData(QIODevice *dataSource)
+bool ImageProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(ImageReply);
-
+    Q_D(ImageProcessor);
     // Find the path to the cache
-    QString path = d->cacheFolderPath();
+    QString path = cacheFolderPath();
     QDir::root().mkpath(path);
-    QDir dir (path);
-    QString fileName = d->imageName(url());
+    QDir dir = QDir(path);
+    QString fileName = d->imageName(request().url());
 
     QImage image;
     bool ok = false;

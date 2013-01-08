@@ -34,16 +34,12 @@ HEADERS +=  base_global.h \
             abstractpagingprocessor_p.h \
             request.h \
             querymanager.h \
+            imageprocessor.h \
+            typeprocessor.h \
+            pictureprocessor.h \
             userprocessor.h \
             friendlistprocessor.h \
-#            imagereply.h \
-#            friendlistreply.h \
-#            picturereply.h \
-#            feedreply.h \
-#    typereply.h
-#    abstractpreprocessor.h \
-#    abstractpreprocessor_p.h
-    pictureprocessor.h \
+            feedprocessor.h
 
 
 SOURCES +=  object.cpp \
@@ -58,15 +54,12 @@ SOURCES +=  object.cpp \
             abstractpagingprocessor.cpp \
             request.cpp \
             querymanager.cpp \
+            imageprocessor.cpp \
+            typeprocessor.cpp \
+            pictureprocessor.cpp \
             userprocessor.cpp \
             friendlistprocessor.cpp \
-#            imagereply.cpp \
-#            friendlistreply.cpp \
-#            picturereply.cpp \
-#            feedreply.cpp \
-#    typereply.cpp
-#    abstractpreprocessor.cpp
-    pictureprocessor.cpp
+            feedprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

@@ -16,10 +16,9 @@
 
 #include "userloader.h"
 #include "abstractloader_p.h"
-
+#include "querymanager.h"
 #include "user.h"
 #include "userprocessor.h"
-#include "querymanager.h"
 
 namespace QFB
 {
@@ -29,8 +28,6 @@ class UserLoaderPrivate: public AbstractLoaderPrivate
 public:
     UserLoaderPrivate(UserLoader *q);
     User *user;
-private:
-    Q_DECLARE_PUBLIC(UserLoader)
 };
 
 UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
@@ -70,6 +67,7 @@ void UserLoader::handleReply(AbstractProcessor *processor)
 
     d->user = userProcessor->user();
     d->user->setParent(this);
-    emit userChanged();}
+    emit userChanged();
+}
 
 }

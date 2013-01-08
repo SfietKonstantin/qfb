@@ -14,35 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_TYPEREPLY_H
-#define QFB_TYPEREPLY_H
+#ifndef QFB_IMAGEPROCESSOR_H
+#define QFB_IMAGEPROCESSOR_H
 
-#include "abstractgraphreply.h"
-#include "object.h"
+#include "abstractprocessor.h"
 
 namespace QFB
 {
 
-class TypeReplyPrivate;
-class QFBBASE_EXPORT TypeReply : public AbstractGraphReply
+class ImageProcessorPrivate;
+class ImageProcessor: public AbstractProcessor
 {
     Q_OBJECT
 public:
-    explicit TypeReply(QObject *parent = 0);
-    explicit TypeReply(QNetworkAccessManager *networkAccessManager, QObject *parent = 0);
-    Object * object() const;
+    explicit ImageProcessor(QObject *parent = 0);
+    QString imagePath() const;
 protected:
-    QList<ArgumentPair> processArguments(const QList<ArgumentPair> &arguments);
-    /**
-     * @brief Implementation of AbstractReply::processData()
-     * @param dataSource data source.
-     * @return if the process is successful.
-     */
-    bool processData(QIODevice *dataSource);
+    bool preprocess();
+    bool processDataSource(QIODevice *dataSource);
 private:
-    Q_DECLARE_PRIVATE(TypeReply)
+    Q_DECLARE_PRIVATE(ImageProcessor)
 };
 
 }
 
-#endif // TYPEREPLY_H
+#endif // QFB_IMAGEPROCESSOR_H

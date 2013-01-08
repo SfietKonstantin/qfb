@@ -14,66 +14,32 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "imageloader.h"
-#include "loaderbase_p.h"
+#ifndef QFB_TYPELOADER_H
+#define QFB_TYPELOADER_H
 
-//#include "imagereply.h"
-#include "querymanager.h"
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
 
-class ImageLoaderPrivate: public LoaderBasePrivate
+class Object;
+class TypeLoaderPrivate;
+class TypeLoader : public AbstractGraphLoader
 {
+    Q_OBJECT
+    Q_PROPERTY(QFB::Object * object READ object NOTIFY objectChanged)
 public:
-    ImageLoaderPrivate(ImageLoader *q);
-    QString imagePath;
-    bool checkReply(const AbstractReply *reply);
-    void processReply(const AbstractReply *reply);
+    explicit TypeLoader(QObject *parent = 0);
+    Object * object() const;
+Q_SIGNALS:
+    void objectChanged();
+protected:
+    Request createRequest(const QString &graph, const QString &arguments);
+    void handleReply(AbstractProcessor *processor);
 private:
-    Q_DECLARE_PUBLIC(ImageLoader)
+    Q_DECLARE_PRIVATE(TypeLoader)
 };
 
-ImageLoaderPrivate::ImageLoaderPrivate(ImageLoader *q):
-    LoaderBasePrivate(q)
-{
 }
 
-bool ImageLoaderPrivate::checkReply(const AbstractReply *reply)
-{
-    return qobject_cast<const ImageReply *>(reply);
-}
-
-void ImageLoaderPrivate::processReply(const AbstractReply *reply)
-{
-    Q_Q(ImageLoader);
-    const ImageReply *imageReply = qobject_cast<const ImageReply *>(reply);
-    if (imagePath != imageReply->imagePath()) {
-        imagePath = imageReply->imagePath();
-        emit q->imagePathChanged();
-    }
-}
-
-
-////// End of private class //////
-
-ImageLoader::ImageLoader(QObject *parent) :
-    AbstractLoader(*(new ImageLoaderPrivate(this)), parent)
-{
-}
-
-QString ImageLoader::imagePath() const
-{
-    Q_D(const ImageLoader);
-    return d->imagePath;
-}
-
-AbstractReply * ImageLoader::createReply(const QUrl &url)
-{
-    if (queryManager()) {
-//        return queryManager()->queryImage(url);
-    }
-    return 0;
-}
-
-}
+#endif // TYPELOADER_H
