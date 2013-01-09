@@ -44,6 +44,7 @@
 #include "feedmodel.h"
 #include "postvalidator.h"
 #include "albumloader.h"
+#include "albumlistmodel.h"
 
 namespace QFB
 {
@@ -87,6 +88,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
     qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
+    qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
     qmlRegisterType<QFB::PostValidator>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostValidator");
 }
 

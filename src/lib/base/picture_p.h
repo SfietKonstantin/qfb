@@ -58,6 +58,16 @@ static const char *PICTURE_TYPE_NORMAL = "normal";
  * @brief PICTURE_TYPE_LARGE
  */
 static const char *PICTURE_TYPE_LARGE = "large";
+/**
+ * @internal
+ * @brief PICTURE_TYPE_THUMBNAIL
+ */
+static const char *PICTURE_TYPE_THUMBNAIL = "thumbnail";
+/**
+ * @internal
+ * @brief PICTURE_TYPE_ALBUM
+ */
+static const char *PICTURE_TYPE_ALBUM = "album";
 
 }
 

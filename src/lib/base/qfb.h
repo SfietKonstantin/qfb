@@ -47,7 +47,8 @@ enum RequestType {
     UserRequest,
     PictureRequest,
     FeedRequest,
-    AlbumRequest
+    AlbumRequest,
+    AlbumListRequest
 
 };
 

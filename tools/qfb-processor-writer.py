@@ -36,9 +36,6 @@ copyright = """/****************************************************************
  ****************************************************************************************/
 """
 
-def lowerCamelCase(name):
-    return name[0].lower() + name[1:]
-
 
 def generate(input, templateOnly):
     parserData = qfbparser.parse(input)
@@ -80,7 +77,8 @@ def createHeader(className, includes, baseClass, variables):
     header += "     * @brief " + className + "\n"
     header += "     * @return " + className.lower() + ".\n"
     header += "     */\n"
-    header += "    " + className + " * " + lowerCamelCase(className) + "() const;\n"
+    header += "    " + className + " * " + qfbtools.lowerCamelCase(className)
+    header += "() const;\n"
     header += "protected:\n"
     header += "    bool processDataSource(QIODevice *dataSource);\n"
     header += "private:\n"
@@ -94,8 +92,9 @@ def createHeader(className, includes, baseClass, variables):
     headerFile.close()
 
 def createPrivateClass(className, templateOnly):
+    privateClass = ""
     if not templateOnly:
-        privateClass = "class " + className + ";\n"
+        privateClass += "class " + className + ";\n"
     privateClass += "/**\n"
     privateClass += " * @internal\n"
     privateClass += " * @brief Private class for QFB::" + className +"Processor\n"
@@ -122,7 +121,7 @@ def createPrivateClass(className, templateOnly):
     privateClass += "     * @internal\n"
     privateClass += "     * @brief " + className + "\n"
     privateClass += "     */\n"
-    privateClass += "    " + className + " * " + lowerCamelCase(className) + ";\n"
+    privateClass += "    " + className + " * " + qfbtools.lowerCamelCase(className) + ";\n"
     privateClass += "};\n\n"
     return privateClass
 
@@ -212,7 +211,7 @@ def createSource(className, includes, baseClass, variables, templateOnly):
     source += className + "ProcessorPrivate::" + className + "ProcessorPrivate():\n"
     source += "    AbstractGraphProcessorPrivate()\n"
     source += "{\n"
-    source += "    " + lowerCamelCase(className) + " = 0;\n"
+    source += "    " + qfbtools.lowerCamelCase(className) + " = 0;\n"
     source += "}\n\n"
 
     if not templateOnly:
@@ -232,11 +231,11 @@ def createSource(className, includes, baseClass, variables, templateOnly):
                 source += createProperty(qfbtools.camelCase(splittedName), key, variable["type"])
 
 
-        source += "    " + className + " *" + lowerCamelCase(className) + " = new " + className
-        source += "(propertiesMap);\n"
-        source += "    " + lowerCamelCase(className)
+        source += "    " + className + " *" + qfbtools.lowerCamelCase(className)
+        source += " = new " + className + "(propertiesMap);\n"
+        source += "    " + qfbtools.lowerCamelCase(className)
         source += "->moveToThread(QCoreApplication::instance()->thread());\n"
-        source += "    return " + lowerCamelCase(className) + ";\n"
+        source += "    return " + qfbtools.lowerCamelCase(className) + ";\n"
         source += "}\n"
 
 
@@ -247,11 +246,11 @@ def createSource(className, includes, baseClass, variables, templateOnly):
     source += "{\n"
     source += "}\n\n"
 
-    source += className + " * " + className + "Processor::" + lowerCamelCase(className)
+    source += className + " * " + className + "Processor::" + qfbtools.lowerCamelCase(className)
     source += "() const\n"
     source += "{\n"
     source += "    Q_D(const " + className + "Processor);\n"
-    source += "    return d->" + lowerCamelCase(className) + ";\n"
+    source += "    return d->" + qfbtools.lowerCamelCase(className) + ";\n"
     source += "}\n\n"
 
     source += "bool " + className + "Processor::processDataSource(QIODevice *dataSource)\n"
@@ -266,9 +265,9 @@ def createSource(className, includes, baseClass, variables, templateOnly):
         source += "        return false;\n"
         source += "    }\n"
         source += "    QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);\n"
-        source += "    d->" + lowerCamelCase(className) + " = d->create" + className
+        source += "    d->" + qfbtools.lowerCamelCase(className) + " = d->create" + className
         source += "(rootObject);\n"
-        source += "    if (d->" + lowerCamelCase(className) + ") {\n"
+        source += "    if (d->" + qfbtools.lowerCamelCase(className) + ") {\n"
         source += "        return true;\n"
         source += "    } else {\n"
         source += "        return false;\n"
@@ -284,7 +283,7 @@ def createSource(className, includes, baseClass, variables, templateOnly):
 
 # Main
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='QFB object writer')
+    parser = argparse.ArgumentParser(description='QFB processor writer')
     parser.add_argument('input', metavar='input', type=str,
                         help="""Input file""")
     parser.add_argument('templateOnly', metavar='templateOnly', type=str,

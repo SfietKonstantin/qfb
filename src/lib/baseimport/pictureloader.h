@@ -33,7 +33,9 @@ public:
         Square,
         Small,
         Normal,
-        Large
+        Large,
+        Thumbnail,
+        Album
     };
     explicit PictureLoader(QObject *parent = 0);
     Type type() const;

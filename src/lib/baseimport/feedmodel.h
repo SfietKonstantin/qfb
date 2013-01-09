@@ -36,7 +36,7 @@ class PostValidator;
  * After setting a query manager, calling request()
  * to get a the list of friends.
  */
-class FeedModel: public AbstractLoadableModel
+class QFBBASEIMPORT_EXPORT FeedModel: public AbstractLoadableModel
 {
     Q_OBJECT
     Q_PROPERTY(QFB::PostValidator * validator READ validator WRITE setValidator

@@ -24,7 +24,7 @@ namespace QFB
 {
 
 class ImageLoaderPrivate;
-class ImageLoader: public AbstractLoader
+class QFBBASEIMPORT_EXPORT ImageLoader: public AbstractLoader
 {
     Q_OBJECT
     Q_PROPERTY(QString imagePath READ imagePath NOTIFY imagePathChanged)

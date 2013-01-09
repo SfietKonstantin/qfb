@@ -24,7 +24,7 @@ namespace QFB
 
 class Object;
 class TypeLoaderPrivate;
-class TypeLoader : public AbstractGraphLoader
+class QFBBASEIMPORT_EXPORT TypeLoader : public AbstractGraphLoader
 {
     Q_OBJECT
     Q_PROPERTY(QFB::Object * object READ object NOTIFY objectChanged)

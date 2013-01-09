@@ -16,7 +16,6 @@
 
 #include "pictureloader.h"
 #include "abstractloader_p.h"
-
 #include "picture_p.h"
 #include "pictureprocessor.h"
 #include "querymanager.h"
@@ -53,6 +52,12 @@ QString PictureLoaderPrivate::pictureString(PictureLoader::Type type)
         break;
     case PictureLoader::Large:
         return PICTURE_TYPE_LARGE;
+        break;
+    case PictureLoader::Thumbnail:
+        return PICTURE_TYPE_THUMBNAIL;
+        break;
+    case PictureLoader::Album:
+        return PICTURE_TYPE_ALBUM;
         break;
     default:
         return QString();

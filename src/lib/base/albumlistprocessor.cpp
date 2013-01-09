@@ -15,16 +15,18 @@
  ****************************************************************************************/
 
 /**
- * @file albumsprocessor.cpp
- * @brief Implementation of QFB::AlbumsProcessor
+ * @file albumlistprocessor.cpp
+ * @brief Implementation of QFB::AlbumListProcessor
  */
 
-#include "albumsprocessor.h"
+#include "albumlistprocessor.h"
 #include <QtCore/QCoreApplication>
+#include "abstractpagingprocessor_p.h"
 #include "album.h"
 #include "albumprocessor_p.h"
 #include "helper_p.h"
 #include "jsonhelper_p.h"
+#include "paging_keys_p.h"
 
 namespace QFB
 {
@@ -39,16 +41,16 @@ static const char *DATA_KEY = "data";
 
 /**
  * @internal
- * @brief Private class for QFB::AlbumsProcessor
+ * @brief Private class for QFB::AlbumListProcessor
  */
-class AlbumsProcessorPrivate: public AbstractGraphProcessorPrivate
+class AlbumListProcessorPrivate: public AbstractPagingProcessorPrivate
 {
 public:
     /**
      * @internal
      * @brief Default constructor
      */
-    explicit AlbumsProcessorPrivate();
+    explicit AlbumListProcessorPrivate();
     /**
      * @internal
      * @brief Albums
@@ -56,27 +58,27 @@ public:
     QList<Album *> albums;
 };
 
-AlbumsProcessorPrivate::AlbumsProcessorPrivate():
-    AbstractGraphProcessorPrivate()
+AlbumListProcessorPrivate::AlbumListProcessorPrivate():
+    AbstractPagingProcessorPrivate()
 {
 }
 
 ////// End of private class //////
 
-AlbumsProcessor::AlbumsProcessor(QObject *parent):
-    AbstractGraphProcessor(*(new AlbumsProcessorPrivate), parent)
+AlbumListProcessor::AlbumListProcessor(QObject *parent):
+    AbstractPagingProcessor(*(new AlbumListProcessorPrivate), parent)
 {
 }
 
-QList<Album *> AlbumsProcessor::albums() const
+QList<Album *> AlbumListProcessor::albumList() const
 {
-    Q_D(const AlbumsProcessor);
+    Q_D(const AlbumListProcessor);
     return d->albums;
 }
 
-bool AlbumsProcessor::processDataSource(QIODevice *dataSource)
+bool AlbumListProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(AlbumsProcessor);
+    Q_D(AlbumListProcessor);
     QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
     if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
@@ -100,6 +102,11 @@ bool AlbumsProcessor::processDataSource(QIODevice *dataSource)
             }
         }
     }
+
+    JsonObject pagingObject = QFB_JSON_GET_OBJECT(rootObject.value(PAGING_KEY));
+    QUrl nextPageUrl = parseUrl(pagingObject.value(PAGING_NEXT_KEY).toString());
+    setNextPageUrl(nextPageUrl);
+
     return true;
 }
 

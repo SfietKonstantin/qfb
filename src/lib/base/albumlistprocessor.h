@@ -14,65 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef QFB_ALBUMLISTPROCESSOR_H
+#define QFB_ALBUMLISTPROCESSOR_H
+
 /**
- * @file albumloader.cpp
- * @brief Implementation of QFB::AlbumLoader
+ * @file albumlistprocessor.h
+ * @brief Definition of QFB::AlbumListProcessor
  */
 
-#include "albumloader.h"
-#include "abstractloader_p.h"
-#include "querymanager.h"
-#include "album.h"
-#include "albumprocessor.h"
+#include "abstractpagingprocessor.h"
 
 namespace QFB
 {
 
-class AlbumLoaderPrivate: public AbstractLoaderPrivate
+class Album;
+class AlbumListProcessorPrivate;
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASE_EXPORT AlbumListProcessor: public AbstractPagingProcessor
 {
+    Q_OBJECT
 public:
-    AlbumLoaderPrivate(AlbumLoader *q);
-    Album *album;
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit AlbumListProcessor(QObject *parent = 0);
+    /**
+     * @brief Album list
+     * @return album list.
+     */
+    QList<Album *> albumList() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(AlbumListProcessor)
 };
 
-AlbumLoaderPrivate::AlbumLoaderPrivate(AlbumLoader *q):
-    AbstractLoaderPrivate(q)
-{
-    album = 0;
 }
 
-////// End of private class //////
-
-AlbumLoader::AlbumLoader(QObject *parent):
-    AbstractGraphLoader(*(new AlbumLoaderPrivate(this)), parent)
-{
-}
-
-Album * AlbumLoader::album() const
-{
-    Q_D(const AlbumLoader);
-    return d->album;
-}
-
-Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
-{
-    if (queryManager()) {
-        return queryManager()->queryAlbum(graph, arguments);
-    }
-    return Request();
-}
-
-void AlbumLoader::handleReply(AbstractProcessor *processor)
-{
-    Q_D(AlbumLoader);
-    AlbumProcessor *albumProcessor = qobject_cast<AlbumProcessor *>(processor);
-    if (d->album) {
-        d->album->deleteLater();
-    }
-
-    d->album = albumProcessor->album();
-    d->album->setParent(this);
-    emit albumChanged();
-}
-
-}
+#endif // QFB_ALBUMLISTPROCESSOR_H

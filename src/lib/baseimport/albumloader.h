@@ -17,6 +17,11 @@
 #ifndef QFB_ALBUMLOADER_H
 #define QFB_ALBUMLOADER_H
 
+/**
+ * @file albumloader.h
+ * @brief Definition of QFB::AlbumLoader
+ */
+
 #include "abstractgraphloader.h"
 
 namespace QFB
@@ -24,18 +29,45 @@ namespace QFB
 
 class Album;
 class AlbumLoaderPrivate;
-class AlbumLoader : public AbstractGraphLoader
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASEIMPORT_EXPORT AlbumLoader: public AbstractGraphLoader
 {
     Q_OBJECT
+    /**
+     * @brief Album
+     */
     Q_PROPERTY(QFB::Album * album READ album NOTIFY albumChanged)
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit AlbumLoader(QObject *parent = 0);
+    /**
+     * @brief Album
+     * @return album.
+     */
     Album * album() const;
 Q_SIGNALS:
+    /**
+     * @brief Album changed
+     */
     void albumChanged();
 protected:
-    Request createRequest(const QString &graph, const QString &arguments);
-    void handleReply(AbstractProcessor *processor);
+    /**
+     * @brief Implementation of AbstractGraphLoader::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
+     */
+     Request createRequest(const QString &graph, const QString &arguments);
+    /**
+     * @brief Implementation of AbstractLoader::handleReply()
+     * @param processor Processor to handle.
+     */
+     void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(AlbumLoader)
 };

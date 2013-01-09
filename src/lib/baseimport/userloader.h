@@ -24,7 +24,7 @@ namespace QFB
 
 class User;
 class UserLoaderPrivate;
-class UserLoader : public AbstractGraphLoader
+class QFBBASEIMPORT_EXPORT UserLoader : public AbstractGraphLoader
 {
     Q_OBJECT
     Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)

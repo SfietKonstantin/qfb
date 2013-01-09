@@ -96,6 +96,12 @@ PageStackWindow {
                                                  "coverUrl": coverUrl})
             newPage.load()
         }
+        onAddUserAlbumsPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("UserAlbumsPage.qml"),
+                                                {"facebookId": facebookId, "name": name,
+                                                 "coverUrl": coverUrl})
+            newPage.load()
+        }
 
         onResolveTypeRequested: {
             currentResolvingTypeObject.name = name

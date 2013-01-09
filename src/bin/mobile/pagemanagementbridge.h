@@ -31,11 +31,14 @@ signals:
     void addUserPageRequested(const QString &facebookId, const QString &name);
     void addUserInfoPageRequested(const QString &facebookId, const QString &name,
                                   const QString &coverUrl);
+    void addUserAlbumsPageRequested(const QString &facebookId, const QString &name,
+                                    const QString &coverUrl);
 public slots:
     void pop();
     void resolveType(const QString &facebookId, const QString &name);
     void addUserPage(const QString &facebookId, const QString &name);
     void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
+    void addUserAlbumsPage(const QString &facebookId, const QString &name, const QString &coverUrl);
 
 };
 

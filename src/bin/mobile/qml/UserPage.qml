@@ -139,6 +139,8 @@ Page {
 
                 Button {
                     text: qsTr("Albums")
+                    onClicked: PAGE_MANAGEMENT_BRIDGE.addUserAlbumsPage(facebookId, name,
+                                                                        banner.coverUrl)
                 }
 
                 Button {

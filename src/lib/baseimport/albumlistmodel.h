@@ -14,12 +14,13 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FRIENDLISTMODEL_H
-#define QFB_FRIENDLISTMODEL_H
+
+#ifndef QFB_ALBUMLISTMODEL_H
+#define QFB_ALBUMLISTMODEL_H
 
 /**
- * @file friendlistmodel.h
- * @brief Definition of QFB::FriendListModel
+ * @file albumlistmodel.h
+ * @brief Definition of QFB::AlbumListModel
  */
 
 #include "abstractloadablemodel.h"
@@ -28,36 +29,29 @@ namespace QFB
 {
 
 class QueryManager;
-class FriendListModelPrivate;
+class AlbumListModelPrivate;
 
 /**
- * @brief Model for a list of friends
- *
- * This model is used to present a list of friends. It uses a
- * QFB::QueryManager to perform operations, and
- * stores the retrived informations in a model.
- *
- * After setting a query manager, calling request()
- * to get a the list of friends.
+ * @short WRITE DOCUMENTATION HERE
  */
-class QFBBASEIMPORT_EXPORT FriendListModel: public AbstractLoadableModel
+class QFBBASEIMPORT_EXPORT AlbumListModel: public AbstractLoadableModel
 {
     Q_OBJECT
 public:
     /**
      * @short Model roles
      */
-    enum FriendListModelRole {
+    enum AlbumListModelRole {
         /**
-         * @short Data role
-         */
+        * @short Data role
+        */
         DataRole = Qt::UserRole + 1
     };
     /**
      * @brief Default constructor
      * @param parent parent object.
      */
-    explicit FriendListModel(QObject *parent = 0);
+    explicit AlbumListModel(QObject *parent = 0);
     /**
      * @short Reimplementation of rowCount
      *
@@ -74,18 +68,31 @@ public:
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 protected:
-    void handleReply(AbstractPagingProcessor *processor);
+    /**
+     * @brief Implementation of AbstractLoadableModel::clear()
+     */
     void clear();
+    /**
+     * @brief Reimplementation of AbstractLoadableModel::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
+     */
     Request createRequest(const QString &graph, const QString &arguments);
+    /**
+     * @brief Implementation of AbstractLoadableModel::handleReply()
+     * @param processor Processor to handle.
+     */
+    void handleReply(AbstractPagingProcessor *processor);
     /**
      * @brief Role names
      * @return role names.
      */
     QHash<int, QByteArray> roleNames() const;
 private:
-    Q_DECLARE_PRIVATE(FriendListModel)
+    Q_DECLARE_PRIVATE(AlbumListModel)
 };
 
 }
 
-#endif // QFB_FRIENDLISTMODEL_H
+#endif // ALBUMLISTMODEL_H

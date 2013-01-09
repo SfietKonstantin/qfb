@@ -14,44 +14,50 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ALBUMSPROCESSOR_H
-#define QFB_ALBUMSPROCESSOR_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
+import "UiConstants.js" as Ui
 
-/**
- * @file albumsprocessor.h
- * @brief Definition of QFB::AlbumsProcessor
- */
+Page {
+    // TODO load next
+    id: container
+    property string facebookId
+    property string name
+    property string coverUrl
+    function load() {
+        model.request(facebookId + "/albums")
+    }
 
-#include "abstractgraphprocessor.h"
+    tools: ToolBarLayout {
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+        }
+    }
 
-namespace QFB
-{
 
-class Album;
-class AlbumsProcessorPrivate;
-/**
- * @short WRITE DOCUMENTATION HERE
- */
-class QFBBASE_EXPORT AlbumsProcessor: public AbstractGraphProcessor
-{
-    Q_OBJECT
-public:
-    /**
-     * @brief Default constructor
-     * @param parent parent object.
-     */
-    explicit AlbumsProcessor(QObject *parent = 0);
-    /**
-     * @brief Albums
-     * @return albums.
-     */
-    QList<Album *> albums() const;
-protected:
-    bool processDataSource(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(AlbumsProcessor)
-};
+    Banner {
+        id: banner
+        name: container.name
+        coverUrl: container.coverUrl
+    }
 
+    ScrollDecorator { flickableItem: albumListView }
+    ListView {
+        id: albumListView
+        clip: true
+        anchors.top: banner.bottom; anchors.bottom: parent.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        model: QFBAlbumListModel {
+            id: model
+            queryManager: QUERY_MANAGER
+            onLoaded: console.debug(model.count)
+        }
+        delegate: AlbumEntry {
+            facebookId: model.data.facebookId
+            name: model.data.name
+        }
+    }
 }
-
-#endif // QFB_ALBUMSPROCESSOR_H

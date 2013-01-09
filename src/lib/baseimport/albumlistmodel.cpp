@@ -14,22 +14,25 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "feedmodel.h"
+
+/**
+ * @file albumlistmodel.cpp
+ * @brief Implementation of QFB::AlbumListModel
+ */
+
+#include "albumlistmodel.h"
 #include "abstractloadablemodel_p.h"
-#include <QtCore/QDebug>
 #include "querymanager.h"
-#include "feedprocessor.h"
-#include "post.h"
-#include "postvalidator.h"
+#include "album.h"
+#include "albumlistprocessor.h"
 
 namespace QFB
 {
-
 /**
  * @internal
- * @brief Private class for QFB::FeedModel
+ * @brief Private class for QFB::AlbumListModel
  */
-class FeedModelPrivate: public AbstractLoadableModelPrivate
+class AlbumListModelPrivate: public AbstractLoadableModelPrivate
 {
 public:
     /**
@@ -37,49 +40,45 @@ public:
      * @brief Default constructor
      * @param q Q-pointer
      */
-    FeedModelPrivate(FeedModel *q);
+    AlbumListModelPrivate(AlbumListModel *q);
     /**
      * @internal
      * @brief Data
      */
-    QList<Post *> data;
-    PostValidator *validator;
-private:
-    Q_DECLARE_PUBLIC(FeedModel)
+    QList<Album *> data;
 };
 
-FeedModelPrivate::FeedModelPrivate(FeedModel *q):
+AlbumListModelPrivate::AlbumListModelPrivate(AlbumListModel *q):
     AbstractLoadableModelPrivate(q)
 {
-    validator = 0;
 }
 
 ////// End of private class //////
 
-FeedModel::FeedModel(QObject *parent):
-    AbstractLoadableModel(*(new FeedModelPrivate(this)), parent)
+AlbumListModel::AlbumListModel(QObject *parent):
+    AbstractLoadableModel(*(new AlbumListModelPrivate(this)), parent)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     setRoleNames(roleNames());
 #endif
 }
 
-int FeedModel::rowCount(const QModelIndex &parent) const
+int AlbumListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    Q_D(const FeedModel);
+    Q_D(const AlbumListModel);
     return d->data.count();
 }
 
-QVariant FeedModel::data(const QModelIndex &index, int role) const
+QVariant AlbumListModel::data(const QModelIndex &index, int role) const
 {
-    Q_D(const FeedModel);
+    Q_D(const AlbumListModel);
     int row = index.row();
     if (row < 0 || row >= rowCount()) {
         return QVariant();
     }
 
-    Post *item = d->data.at(row);
+    Album *item = d->data.at(row);
 
     switch (role) {
     case DataRole:
@@ -91,62 +90,17 @@ QVariant FeedModel::data(const QModelIndex &index, int role) const
     }
 }
 
-PostValidator * FeedModel::validator() const
+Request AlbumListModel::createRequest(const QString &graph, const QString &arguments)
 {
-    Q_D(const FeedModel);
-    return d->validator;
+    if (queryManager()) {
+        return queryManager()->queryAlbumList(graph, arguments);
+    }
+    return Request();
 }
 
-void FeedModel::setValidator(PostValidator *validator)
+void AlbumListModel::clear()
 {
-    Q_D(FeedModel);
-    if (d->validator != validator) {
-        d->validator = validator;
-        emit validatorChanged();
-    }
-}
-
-void FeedModel::handleReply(AbstractPagingProcessor *processor)
-{
-    Q_D(FeedModel);
-    FeedProcessor *feedProcessor = qobject_cast<FeedProcessor *>(processor);
-    if (!feedProcessor) {
-        return;
-    }
-
-    QList<Post *> feed = feedProcessor->feed();
-
-    QList<Post *> finalFeed;
-    foreach (Post *post, feed) {
-        bool postOk = true;
-        if (d->validator) {
-            if (!d->validator->validate(post)) {
-                postOk = false;
-            }
-        }
-
-        if (!postOk) {
-            post->deleteLater();
-        } else {
-            post->setParent(this);
-            finalFeed.append(post);
-        }
-    }
-
-    if (feed.isEmpty()) {
-        setDoNotHaveNext();
-        return;
-    }
-
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + finalFeed.count() - 1);
-    d->data.append(finalFeed);
-    emit countChanged();
-    endInsertRows();
-}
-
-void FeedModel::clear()
-{
-    Q_D(FeedModel);
+    Q_D(AlbumListModel);
     beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
     qDeleteAll(d->data);
     d->data.clear();
@@ -154,15 +108,29 @@ void FeedModel::clear()
     endRemoveRows();
 }
 
-Request FeedModel::createRequest(const QString &graph, const QString &arguments)
+void AlbumListModel::handleReply(AbstractPagingProcessor *processor)
 {
-    if (queryManager()) {
-        return queryManager()->queryFeed(graph, arguments);
+    Q_D(AlbumListModel);
+    AlbumListProcessor *albumListProcessor = qobject_cast<AlbumListProcessor *>(processor);
+    if (!albumListProcessor) {
+        return;
     }
-    return Request();
+
+    // TODO: adapt this code if needed
+    QList<Album *> albumlist = albumListProcessor->albumList();
+
+    if (albumlist.isEmpty()) {
+        setDoNotHaveNext();
+        return;
+    }
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + albumlist.count() - 1);
+    d->data.append(albumlist);
+    emit countChanged();
+    endInsertRows();
 }
 
-QHash<int, QByteArray> FeedModel::roleNames() const
+QHash<int, QByteArray> AlbumListModel::roleNames() const
 {
     QHash <int, QByteArray> roles;
     roles.insert(DataRole, "data");

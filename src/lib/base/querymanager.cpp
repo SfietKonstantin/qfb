@@ -34,6 +34,7 @@
 #include "userprocessor.h"
 #include "feedprocessor.h"
 #include "albumprocessor.h"
+#include "albumlistprocessor.h"
 
 namespace QFB
 {
@@ -109,6 +110,9 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
         break;
     case AlbumRequest:
         processor = new AlbumProcessor(q);
+        break;
+    case AlbumListRequest:
+        processor = new AlbumListProcessor(q);
         break;
     case NoRequest:
         break;
@@ -309,6 +313,12 @@ Request QueryManager::queryAlbum(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
     return d->createGraphPreprocessor(AlbumRequest, graph, arguments, 1000);
+}
+
+Request QueryManager::queryAlbumList(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(AlbumListRequest, graph, arguments, 1000);
 }
 
 void QueryManager::setToken(const QString &token)

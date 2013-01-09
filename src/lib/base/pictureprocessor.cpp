@@ -72,7 +72,9 @@ bool PictureProcessor::processGraphAndArguments(const QString &graph,
             if (argument.second == PICTURE_TYPE_SQUARE
                 || argument.second == PICTURE_TYPE_SMALL
                 || argument.second == PICTURE_TYPE_NORMAL
-                || argument.second == PICTURE_TYPE_LARGE) {
+                || argument.second == PICTURE_TYPE_LARGE
+                || argument.second == PICTURE_TYPE_THUMBNAIL
+                || argument.second == PICTURE_TYPE_ALBUM) {
                 type = argument.second;
             }
         }

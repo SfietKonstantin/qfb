@@ -14,36 +14,59 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-
 import QtQuick 1.1
+import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
-Image {
-    id: picture
+Item
+{
+    id: container
+    signal clicked
     property string facebookId
-    property alias pictureType: pictureLoader.type
-    onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
-    width: Ui.ICON_SIZE_DEFAULT
-    height: Ui.ICON_SIZE_DEFAULT
-    smooth: true
-    source: pictureLoader.picturePath
-    asynchronous: true
-    opacity: 0
-    states: State {
-        name: "visible"; when: picture.status == Image.Ready
-        PropertyChanges {
-            target: picture
-            opacity: 1
-        }
-    }
-    Behavior on opacity {
-        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
+    property alias name: text.text
+
+    height: Ui.LIST_ITEM_HEIGHT_DEFAULT
+    width: parent.width
+
+    BorderImage {
+        id: background
+        anchors.fill: parent
+        visible: mouseArea.pressed
+        source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
+                "-background-pressed-center"
     }
 
-    QFBPictureLoader {
-        id: pictureLoader
-        queryManager: QUERY_MANAGER
-        Component.onCompleted: request(picture.facebookId + "/picture")
+    FacebookPicture {
+        id: picture
+        clip: true
+        pictureType: QFBPictureLoader.Thumbnail
+        fillMode: Image.PreserveAspectCrop
+        facebookId: container.facebookId
+        anchors.left: parent.left;
+        anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.verticalCenter: parent.verticalCenter
     }
+
+    Label {
+        id: text
+        anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: indicator.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        anchors.verticalCenter: parent.verticalCenter
+        elide: Text.ElideRight
+    }
+
+    Image {
+        id: indicator
+        source: "image://theme/icon-m-common-drilldown-arrow" + (theme.inverted ? "-inverse" : "")
+        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: container
+        onClicked: container.clicked()
+    }
+
 }

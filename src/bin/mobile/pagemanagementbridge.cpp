@@ -42,3 +42,9 @@ void PageManagementBridge::addUserInfoPage(const QString &facebookId, const QStr
 {
     emit addUserInfoPageRequested(facebookId, name, coverUrl);
 }
+
+void PageManagementBridge::addUserAlbumsPage(const QString &facebookId, const QString &name,
+                                             const QString &coverUrl)
+{
+    emit addUserAlbumsPageRequested(facebookId, name, coverUrl);
+}

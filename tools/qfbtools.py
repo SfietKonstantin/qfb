@@ -1,3 +1,6 @@
+def lowerCamelCase(name):
+    return name[0].lower() + name[1:]
+
 def isPointer(name):
     if name.strip()[-1:] == "*":
         return True
