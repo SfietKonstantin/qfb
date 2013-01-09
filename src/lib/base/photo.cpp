@@ -23,6 +23,10 @@
 #include "objectbase_p.h"
 #include "photo_keys_p.h"
 
+#include "namedobject_keys_p.h"
+
+#include "object_keys_p.h"
+
 namespace QFB
 {
 
@@ -36,9 +40,6 @@ Photo::Photo(const PropertiesMap propertiesMap, QObject *parent):
 {
     Q_D(ObjectBase);
 
-    // TODO: check reparenting
-    // It was done automatically by a script
-
     // Reparent from
     QObject *fromObject = d->propertiesMap.value(PHOTO_FROM_KEY).value<NamedObject *>();
     if (fromObject) {
@@ -49,7 +50,7 @@ Photo::Photo(const PropertiesMap propertiesMap, QObject *parent):
 QString Photo::id() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_ID_KEY).toString();
+    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
 }
 
 NamedObject * Photo::from() const
@@ -61,7 +62,7 @@ NamedObject * Photo::from() const
 QString Photo::name() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_NAME_KEY).toString();
+    return d->propertiesMap.value(NAMEDOBJECT_NAME_KEY).toString();
 }
 
 QString Photo::icon() const

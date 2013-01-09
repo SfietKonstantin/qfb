@@ -25,7 +25,6 @@ HEADERS +=  base_global.h \
             object_type_keys_p.h \
             namedobject.h \
             namedobject_keys_p.h \
-            language_keys_p.h \
             user.h \
             user_keys_p.h \
             cover.h \
@@ -54,6 +53,9 @@ HEADERS +=  base_global.h \
     albumprocessor_p.h \
             photo.h \
             photo_keys_p.h \
+            photoprocessor.h \
+            photoprocessor_p.h \
+    processorhelper_p.h
 
 
 SOURCES +=  objectbase.cpp \
@@ -76,7 +78,8 @@ SOURCES +=  objectbase.cpp \
             feedprocessor.cpp \
     album.cpp \
     albumprocessor.cpp \
-            photo.cpp
+            photo.cpp \
+            photoprocessor.cpp \
 
 # Deployment
 target.path = $${LIBDIR}

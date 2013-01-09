@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PHOTOKEYS_P_H
-#define QFB_PHOTOKEYS_P_H
+#ifndef QFB_PHOTOPROCESSOR_P_H
+#define QFB_PHOTOPROCESSOR_P_H
 
 // Warning
 //
@@ -26,49 +26,43 @@
 
 /**
  * @internal
- * @file photo_keys_p.h
- * @brief Definition of internal keys associated to QFB::Photo
+ * @file photoprocessor_p.h
+ * @brief Definition of QFB::PhotoProcessorPrivate
  */
+
+#include "abstractgraphprocessor_p.h"
+#include "jsonhelper_p.h"
 
 namespace QFB
 {
 
+class Photo;
 /**
  * @internal
- * @brief PHOTO_FROM_KEY
+ * @brief Private class for QFB::PhotoProcessor
  */
-static const char *PHOTO_FROM_KEY = "from";
-/**
- * @internal
- * @brief PHOTO_ICON_KEY
- */
-static const char *PHOTO_ICON_KEY = "icon";
-/**
- * @internal
- * @brief PHOTO_PICTURE_KEY
- */
-static const char *PHOTO_PICTURE_KEY = "picture";
-/**
- * @internal
- * @brief PHOTO_SOURCE_KEY
- */
-static const char *PHOTO_SOURCE_KEY = "source";
-/**
- * @internal
- * @brief PHOTO_HEIGHT_KEY
- */
-static const char *PHOTO_HEIGHT_KEY = "height";
-/**
- * @internal
- * @brief PHOTO_WIDTH_KEY
- */
-static const char *PHOTO_WIDTH_KEY = "width";
-/**
- * @internal
- * @brief PHOTO_LINK_KEY
- */
-static const char *PHOTO_LINK_KEY = "link";
+class PhotoProcessorPrivate: public AbstractGraphProcessorPrivate
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit PhotoProcessorPrivate();
+    /**
+     * @internal
+     * @brief Create a Photo
+     * @param jsonObject JSON object used to create the Photo.
+     * @return created Photo.
+     */
+    static Photo * createPhoto(const JsonObject &jsonObject);
+    /**
+     * @internal
+     * @brief Photo
+     */
+    Photo * photo;
+};
 
 }
 
-#endif // QFB_PHOTOKEYS_P_H
+#endif // QFB_PHOTOPROCESSOR_P_H

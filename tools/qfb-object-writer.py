@@ -36,6 +36,8 @@
 import argparse
 import string
 import re
+import qfbparser
+import qfbtools
 
 copyright = """/****************************************************************************************
  * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
@@ -56,112 +58,15 @@ copyright = """/****************************************************************
 
 knownTypes = {"int": "toInt", "QString": "toString", "QDateTime": "toDateTime", "QUrl": "toUrl"}
 
-def isPointer(name):
-    if name.strip()[-1:] == "*":
-        return True
-    else:
-        return False
-
-def split(name):
-    return name.split("_")
-
-def camelCase(splitted):
-    newSplitted = []
-    for splittedWord in splitted:
-        splittedWord = splittedWord.lower()
-        splittedWord = splittedWord[0].upper() + splittedWord[1:]
-        newSplitted.append(splittedWord)
-    camelCase = "".join(newSplitted)
-    camelCase = camelCase[0].lower() + camelCase[1:]
-    return camelCase
-
-def staticKey(splitted, className):
-    newSplitted = []
-    newSplitted.append(className.upper())
-    for splittedWord in splitted:
-        newSplitted.append(splittedWord.upper())
-    newSplitted.append("KEY")
-    staticKey = "_".join(newSplitted)
-    return staticKey
-
-def createGroup(groupData):
-    splittedGroupData = groupData.strip().split("\n")
-    group = {}
-
-    # Check if it is a todo
-    if len(splittedGroupData) == 1:
-        group["name"] = splittedGroupData[0].strip()
-        if group["name"] != "":
-            group["type"] = "TODO"
-        else:
-            group["type"] = ""
-        group["doc"] = ""
-        return group
-
-
-    # Extract the line containing name and type
-    nameAndType = splittedGroupData[-1]
-    splittedGroupData = splittedGroupData[:-1]
-    splittedNameAndType = nameAndType.split(" ")
-
-    group["name"] = splittedNameAndType[-1].strip()
-    splittedNameAndType = splittedNameAndType[:-1]
-    group["type"] = " ".join(splittedNameAndType).strip()
-    group["doc"] = "\n".join(splittedGroupData).strip()
-    return group
-
-
 def generate(input):
+    parserData = qfbparser.parse(input)
 
-    # Open the file and get data
-    f = open(input)
-    data = ""
-    for line in f:
-        data += line
-
-    splittedData = data.strip().split("---")
-
-    if len(splittedData) < 2:
-        print """Error: the file is malformatted.
-The main groups are missing."""
-        return
-
-    # Parse the first group (class name and includes)
-    firstGroup = splittedData[0]
-    del splittedData[0]
-
-    splittedFirstGroup = firstGroup.strip().split("\n")
-    if len(splittedFirstGroup) == 0:
-        print """Error: the file is malformatted
-The first group should have at least the name of the class"""
-
-    className = splittedFirstGroup[0]
-    includes = []
-    for splittedFirstGroupItem in splittedFirstGroup:
-        strippedSplittedFirstGroupItem = splittedFirstGroupItem.strip()
-        if strippedSplittedFirstGroupItem != className and strippedSplittedFirstGroupItem != "":
-            includes.append(splittedFirstGroupItem)
-
-    variables = []
-    for groupData in splittedData:
-        variables.append(createGroup(groupData))
-
-    baseClass = "ObjectBase"
-    haveId = False
-    haveName = False
-    for variable in variables:
-        if variable["name"] == "id" and variable["type"] == "QString":
-            haveId = True
-        if variable["name"] == "name" and variable["type"] == "QString":
-            haveName = True
-
-    if haveId and haveName:
-        baseClass = "NamedObject"
-    elif haveId:
-        baseClass = "Object"
-    createHeader(className, includes, baseClass, variables)
-    createSource(className, includes, baseClass, variables)
-    createKeys(className, includes, baseClass, variables)
+    createHeader(parserData.className, parserData.includes, parserData.baseClass,
+                 parserData.variables)
+    createSource(parserData.className, parserData.includes, parserData.baseClass,
+                 parserData.variables)
+    createKeys(parserData.className, parserData.includes, parserData.baseClass,
+               parserData.variables)
 
 def createHeader(className, includes, baseClass, variables):
     header = copyright
@@ -196,8 +101,9 @@ def createHeader(className, includes, baseClass, variables):
             header += "    /// @todo " + variable["name"] + "\n"
         elif variable["type"] != "":
             header += "    Q_PROPERTY(" + variable["type"] + " "
-            header += camelCase(split(variable["name"]))
-            header += " READ " + camelCase(split(variable["name"])) + " CONSTANT)\n"
+            header += qfbtools.camelCase(qfbtools.split(variable["name"]))
+            header += " READ " + qfbtools.camelCase(qfbtools.split(variable["name"]))
+            header += " CONSTANT)\n"
     header += "public:\n"
     header += "    /**\n"
     header += "     * @brief Invalid constructor\n"
@@ -213,21 +119,22 @@ def createHeader(className, includes, baseClass, variables):
     header += "QObject *parent = 0);\n"
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "":
-            splittedName = split(variable["name"])
+            splittedName = qfbtools.split(variable["name"])
             readableName = " ".join(splittedName)
             upperReadableName = readableName[0].upper() + readableName[1:]
             header += "    /**\n"
             header += "     * @brief " + upperReadableName + "\n"
             header += "     * @return " + readableName + ".\n"
             header += "     */\n"
-            header += "    " + variable["type"] + " " + camelCase(splittedName) + "() const;\n"
+            header += "    " + variable["type"] + " " + qfbtools.camelCase(splittedName)
+            header += "() const;\n"
 
     header += "private:\n"
     header += "    Q_DECLARE_PRIVATE(ObjectBase)\n"
     header += "};\n\n"
     header += "}\n\n"
     header += "Q_DECLARE_METATYPE(QFB::" + className + " *)\n\n"
-    header += "#endif // QFB_" + className + "_H\n"
+    header += "#endif // QFB_" + className.upper() + "_H\n"
 
     headerFile = open(className.lower() + ".h", "w")
     headerFile.write(header)
@@ -243,6 +150,10 @@ def createSource(className, includes, baseClass, variables):
     source += "#include \"" + className.lower() + ".h\"\n"
     source += "#include \"objectbase_p.h\"\n"
     source += "#include \"" + className.lower() + "_keys_p.h\"\n\n"
+    if baseClass == "NamedObject" :
+        source += "#include \"namedobject_keys_p.h\"\n\n"
+    if baseClass == "Object" or baseClass == "NamedObject" :
+        source += "#include \"object_keys_p.h\"\n\n"
 
     source += "namespace QFB\n"
     source += "{\n\n"
@@ -259,26 +170,32 @@ def createSource(className, includes, baseClass, variables):
     source += "    // TODO: check reparenting\n"
     source += "    // It was done automatically by a script\n\n"
     for variable in variables:
-        if isPointer(variable["type"]):
-            splittedName = split(variable["name"])
-            source += "    // Reparent " + camelCase(splittedName) + "\n"
-            source += "    QObject *" + camelCase(splittedName) + "Object = "
-            source += "d->propertiesMap.value(" + staticKey(splittedName, className) + ")"
+        if qfbtools.isPointer(variable["type"]):
+            splittedName = qfbtools.split(variable["name"])
+            source += "    // Reparent " + qfbtools.camelCase(splittedName) + "\n"
+            source += "    QObject *" + qfbtools.camelCase(splittedName) + "Object = "
+            source += "d->propertiesMap.value(" + qfbtools.staticKey(splittedName, className) + ")"
             source += ".value<" + variable["type"] + ">();\n"
-            source += "    if (" + camelCase(splittedName) + "Object) {\n"
-            source += "        " + camelCase(splittedName) + "Object->setParent(this);\n"
+            source += "    if (" + qfbtools.camelCase(splittedName) + "Object) {\n"
+            source += "        " + qfbtools.camelCase(splittedName) + "Object->setParent(this);\n"
             source += "    }\n\n"
 
     source += "}\n"
 
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "":
-            splittedName = split(variable["name"])
-            source += variable["type"] + " " + className + "::" + camelCase(splittedName)
+            splittedName = qfbtools.split(variable["name"])
+            source += variable["type"] + " " + className + "::" + qfbtools.camelCase(splittedName)
             source += "() const\n"
             source += "{\n"
             source += "    Q_D(const ObjectBase);\n"
-            source += "    return d->propertiesMap.value(" + staticKey(splittedName, className)
+            source += "    return d->propertiesMap.value("
+            key = qfbtools.staticKey(splittedName, className)
+            if variable["name"] == "id":
+                key = "OBJECT_ID_KEY"
+            elif variable["name"] == "name":
+                key = "NAMEDOBJECT_NAME_KEY"
+            source += key
             source += ")."
             if variable["type"] in knownTypes:
                 source += knownTypes[variable["type"]] + "()"
@@ -318,13 +235,14 @@ def createKeys(className, includes, baseClass, variables):
 
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "":
-            splittedName = split(variable["name"])
-            keys += "/**\n"
-            keys += " * @internal\n"
-            keys += " * @brief " + staticKey(splittedName, className) + "\n"
-            keys += " */\n"
-            keys += "static const char *" + staticKey(splittedName, className) + " = "
-            keys +="\"" + variable["name"] + "\";\n"
+            if variable["name"] != "id" and variable["name"] != "name":
+                splittedName = qfbtools.split(variable["name"])
+                keys += "/**\n"
+                keys += " * @internal\n"
+                keys += " * @brief " + qfbtools.staticKey(splittedName, className) + "\n"
+                keys += " */\n"
+                keys += "static const char *" + qfbtools.staticKey(splittedName, className) + " = "
+                keys +="\"" + variable["name"] + "\";\n"
 
     keys += "\n}\n\n"
 

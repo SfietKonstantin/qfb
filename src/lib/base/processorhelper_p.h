@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PHOTOKEYS_P_H
-#define QFB_PHOTOKEYS_P_H
+#ifndef QFB_PROCESSORHELPER_P_H
+#define QFB_PROCESSORHELPER_P_H
 
 // Warning
 //
@@ -24,51 +24,24 @@
 // This header file may change from version
 // to version without notice or even be removed.
 
-/**
- * @internal
- * @file photo_keys_p.h
- * @brief Definition of internal keys associated to QFB::Photo
- */
+
+#include "jsonhelper_p.h"
+#include "object_keys_p.h"
+#include "namedobject.h"
+#include "namedobject_keys_p.h"
 
 namespace QFB
 {
 
-/**
- * @internal
- * @brief PHOTO_FROM_KEY
- */
-static const char *PHOTO_FROM_KEY = "from";
-/**
- * @internal
- * @brief PHOTO_ICON_KEY
- */
-static const char *PHOTO_ICON_KEY = "icon";
-/**
- * @internal
- * @brief PHOTO_PICTURE_KEY
- */
-static const char *PHOTO_PICTURE_KEY = "picture";
-/**
- * @internal
- * @brief PHOTO_SOURCE_KEY
- */
-static const char *PHOTO_SOURCE_KEY = "source";
-/**
- * @internal
- * @brief PHOTO_HEIGHT_KEY
- */
-static const char *PHOTO_HEIGHT_KEY = "height";
-/**
- * @internal
- * @brief PHOTO_WIDTH_KEY
- */
-static const char *PHOTO_WIDTH_KEY = "width";
-/**
- * @internal
- * @brief PHOTO_LINK_KEY
- */
-static const char *PHOTO_LINK_KEY = "link";
+inline QVariant createNamedObject(const JsonObject &jsonObject)
+{
+    PropertiesMap namedObjectPropertiesMap;
+    namedObjectPropertiesMap.insert(OBJECT_ID_KEY, jsonObject.value(OBJECT_ID_KEY).toString());
+    namedObjectPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
+                                    jsonObject.value(NAMEDOBJECT_NAME_KEY).toString());
+    return QVariant::fromValue(new NamedObject(namedObjectPropertiesMap));
+}
 
 }
 
-#endif // QFB_PHOTOKEYS_P_H
+#endif // QFB_PROCESSORHELPER_P_H

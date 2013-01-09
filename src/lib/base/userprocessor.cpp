@@ -24,6 +24,7 @@
 #include "object_keys_p.h"
 #include "user.h"
 #include "user_keys_p.h"
+#include "processorhelper_p.h"
 
 /**
  * @internal
@@ -165,14 +166,8 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
                          rootObject.value(USER_RELATIONSHIP_STATUS_KEY).toString());
     propertiesMap.insert(USER_RELIGION_KEY, rootObject.value(USER_RELIGION_KEY).toString());
 
-    JsonObject significantOther = QFB_JSON_GET_OBJECT(rootObject.value(USER_SIGNIFICANT_OTHER_KEY));
-    PropertiesMap significantOtherPropertiesMap;
-    significantOtherPropertiesMap.insert(OBJECT_ID_KEY,
-                                         significantOther.value(OBJECT_ID_KEY).toString());
-    significantOtherPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                         significantOther.value(NAMEDOBJECT_NAME_KEY).toString());
-    NamedObject *significantOtherUser = new NamedObject(significantOtherPropertiesMap);
-    propertiesMap.insert(USER_SIGNIFICANT_OTHER_KEY, QVariant::fromValue(significantOtherUser));
+    propertiesMap.insert(USER_SIGNIFICANT_OTHER_KEY,
+              createNamedObject(QFB_JSON_GET_OBJECT(rootObject.value(USER_SIGNIFICANT_OTHER_KEY))));
     propertiesMap.insert(USER_WEBSITE_KEY, parseUrl(rootObject.value(USER_WEBSITE_KEY).toString()));
 
 

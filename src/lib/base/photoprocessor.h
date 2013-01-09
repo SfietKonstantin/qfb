@@ -14,61 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PHOTOKEYS_P_H
-#define QFB_PHOTOKEYS_P_H
-
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#ifndef QFB_PHOTOPROCESSOR_H
+#define QFB_PHOTOPROCESSOR_H
 
 /**
- * @internal
- * @file photo_keys_p.h
- * @brief Definition of internal keys associated to QFB::Photo
+ * @file photoprocessor.h
+ * @brief Definition of QFB::PhotoProcessor
  */
+
+#include "abstractgraphprocessor.h"
 
 namespace QFB
 {
 
+class Photo;
+class PhotoProcessorPrivate;
 /**
- * @internal
- * @brief PHOTO_FROM_KEY
+ * @short WRITE DOCUMENTATION HERE
  */
-static const char *PHOTO_FROM_KEY = "from";
-/**
- * @internal
- * @brief PHOTO_ICON_KEY
- */
-static const char *PHOTO_ICON_KEY = "icon";
-/**
- * @internal
- * @brief PHOTO_PICTURE_KEY
- */
-static const char *PHOTO_PICTURE_KEY = "picture";
-/**
- * @internal
- * @brief PHOTO_SOURCE_KEY
- */
-static const char *PHOTO_SOURCE_KEY = "source";
-/**
- * @internal
- * @brief PHOTO_HEIGHT_KEY
- */
-static const char *PHOTO_HEIGHT_KEY = "height";
-/**
- * @internal
- * @brief PHOTO_WIDTH_KEY
- */
-static const char *PHOTO_WIDTH_KEY = "width";
-/**
- * @internal
- * @brief PHOTO_LINK_KEY
- */
-static const char *PHOTO_LINK_KEY = "link";
+class QFBBASE_EXPORT PhotoProcessor: public AbstractGraphProcessor
+{
+    Q_OBJECT
+public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit PhotoProcessor(QObject *parent = 0);
+    /**
+     * @brief Photo
+     * @return photo.
+     */
+    Photo * photo() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(PhotoProcessor)
+};
 
 }
 
-#endif // QFB_PHOTOKEYS_P_H
+#endif // QFB_PHOTOPROCESSOR_H

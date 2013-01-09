@@ -25,6 +25,7 @@
 #include "paging_keys_p.h"
 #include "post.h"
 #include "post_keys_p.h"
+#include "processorhelper_p.h"
 
 namespace QFB
 {
@@ -93,14 +94,8 @@ bool FeedProcessor::processDataSource(QIODevice *dataSource)
             PropertiesMap propertiesMap;
 
             propertiesMap.insert(OBJECT_ID_KEY, object.value(OBJECT_ID_KEY).toString());
-
-            PropertiesMap fromPropertiesMap;
-            JsonObject fromObject = QFB_JSON_GET_OBJECT(object.value(POST_FROM_KEY));
-            fromPropertiesMap.insert(OBJECT_ID_KEY, fromObject.value(OBJECT_ID_KEY).toString());
-            fromPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                     fromObject.value(NAMEDOBJECT_NAME_KEY).toString());
             propertiesMap.insert(POST_FROM_KEY,
-                                 QVariant::fromValue(new NamedObject(fromPropertiesMap)));
+                               createNamedObject(QFB_JSON_GET_OBJECT(object.value(POST_FROM_KEY))));
 
             JsonObject toParentObject = QFB_JSON_GET_OBJECT(object.value(POST_TO_KEY));
             JsonArray toArray = QFB_JSON_GET_ARRAY(toParentObject.value(TO_DATA_KEY));

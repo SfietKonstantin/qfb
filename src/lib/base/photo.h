@@ -143,4 +143,4 @@ private:
 
 Q_DECLARE_METATYPE(QFB::Photo *)
 
-#endif // QFB_Photo_H
+#endif // QFB_PHOTO_H
