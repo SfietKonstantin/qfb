@@ -56,9 +56,14 @@ QString AbstractPagingProcessor::nextPageArguments() const
 void AbstractPagingProcessor::setNextPageUrl(const QUrl &url)
 {
     Q_D(AbstractPagingProcessor);
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QListIterator<QPair<QString, QString> > queryItemsIterator =
             QListIterator<QPair<QString, QString> >(url.queryItems());
-
+#else
+    QUrlQuery urlQuery = QUrlQuery(url);
+    QListIterator<QPair<QString, QString> > queryItemsIterator =
+            QListIterator<QPair<QString, QString> >(urlQuery.queryItems());
+#endif
     QStringList parametersList;
 
     while (queryItemsIterator.hasNext()) {

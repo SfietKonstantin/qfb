@@ -49,7 +49,7 @@ Album * AlbumProcessorPrivate::createAlbum(const JsonObject &jsonObject)
     propertiesMap.insert(ALBUM_LOCATION_KEY, jsonObject.value(ALBUM_LOCATION_KEY).toString());
     propertiesMap.insert(ALBUM_LINK_KEY, parseUrl(jsonObject.value(ALBUM_LINK_KEY).toString()));
     propertiesMap.insert(ALBUM_COVER_PHOTO_KEY, jsonObject.value(ALBUM_COVER_PHOTO_KEY).toString());
-    propertiesMap.insert(ALBUM_COUNT_KEY, jsonObject.value(ALBUM_COUNT_KEY).toInt());
+    propertiesMap.insert(ALBUM_COUNT_KEY, (int) jsonObject.value(ALBUM_COUNT_KEY).toDouble());
     propertiesMap.insert(ALBUM_TYPE_KEY, jsonObject.value(ALBUM_TYPE_KEY).toString());
     QDateTime createdTime
             = QDateTime::fromString(jsonObject.value(ALBUM_CREATED_TIME_KEY).toString(),

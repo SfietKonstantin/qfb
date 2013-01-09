@@ -118,7 +118,7 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
     propertiesMap.insert(USER_LANGUAGES_KEY, languagesVariant);
     propertiesMap.insert(USER_LINK_KEY, parseUrl(rootObject.value(USER_LINK_KEY).toString()));
     propertiesMap.insert(USER_USERNAME_KEY, rootObject.value(USER_USERNAME_KEY).toString());
-    propertiesMap.insert(USER_TIMEZONE_KEY, rootObject.value(USER_TIMEZONE_KEY).toInt());
+    propertiesMap.insert(USER_TIMEZONE_KEY, (int) rootObject.value(USER_TIMEZONE_KEY).toDouble());
     QDateTime updateTime = QDateTime::fromString(rootObject.value(USER_UPDATED_TIME_KEY).toString(),
                                                  Qt::ISODate);
     propertiesMap.insert(USER_UPDATED_TIME_KEY, updateTime);
