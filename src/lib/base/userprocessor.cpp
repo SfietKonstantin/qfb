@@ -104,16 +104,7 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue language, languages) {
         if (QFB_JSON_IS_OBJECT(language)) {
             JsonObject languageObject = QFB_JSON_GET_OBJECT(language);
-            if (languageObject.contains(OBJECT_ID_KEY)
-                && languageObject.contains(NAMEDOBJECT_NAME_KEY)) {
-                PropertiesMap languagePropertiesMap;
-                languagePropertiesMap.insert(OBJECT_ID_KEY,
-                                             languageObject.value(OBJECT_ID_KEY).toString());
-                languagePropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                             languageObject.value(NAMEDOBJECT_NAME_KEY).toString());
-                NamedObject *language = new NamedObject(languagePropertiesMap);
-                languagesVariant.append(QVariant::fromValue(language));
-            }
+            languagesVariant.append(createNamedObject(languageObject));
         }
     }
     propertiesMap.insert(USER_LANGUAGES_KEY, languagesVariant);
@@ -143,22 +134,10 @@ bool UserProcessor::processDataSource(QIODevice *dataSource)
 
 
     propertiesMap.insert(USER_EMAIL_KEY, rootObject.value(USER_EMAIL_KEY).toString());
-
-    JsonObject hometown = QFB_JSON_GET_OBJECT(rootObject.value(USER_HOMETOWN_KEY));
-    PropertiesMap hometownPropertiesMap;
-    hometownPropertiesMap.insert(OBJECT_ID_KEY, hometown.value(OBJECT_ID_KEY).toString());
-    hometownPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                 hometown.value(NAMEDOBJECT_NAME_KEY).toString());
-    NamedObject *hometownObject = new NamedObject(hometownPropertiesMap);
-    propertiesMap.insert(USER_HOMETOWN_KEY, QVariant::fromValue(hometownObject));
-
-    JsonObject location = QFB_JSON_GET_OBJECT(rootObject.value(USER_LOCATION_KEY));
-    PropertiesMap locationPropertiesMap;
-    locationPropertiesMap.insert(OBJECT_ID_KEY, location.value(OBJECT_ID_KEY).toString());
-    locationPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                 location.value(NAMEDOBJECT_NAME_KEY).toString());
-    NamedObject *locationObject = new NamedObject(locationPropertiesMap);
-    propertiesMap.insert(USER_LOCATION_KEY, QVariant::fromValue(locationObject));
+    propertiesMap.insert(USER_HOMETOWN_KEY,
+                       createNamedObject(QFB_JSON_GET_OBJECT(rootObject.value(USER_HOMETOWN_KEY))));
+    propertiesMap.insert(USER_LOCATION_KEY,
+                       createNamedObject(QFB_JSON_GET_OBJECT(rootObject.value(USER_LOCATION_KEY))));
 
     propertiesMap.insert(USER_POLITICAL_KEY, rootObject.value(USER_POLITICAL_KEY).toString());
     propertiesMap.insert(USER_QUOTES_KEY, rootObject.value(USER_QUOTES_KEY).toString());

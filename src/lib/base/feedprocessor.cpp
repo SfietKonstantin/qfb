@@ -102,11 +102,7 @@ bool FeedProcessor::processDataSource(QIODevice *dataSource)
             QVariantList toList;
             foreach (JsonValue toValue, toArray) {
                 JsonObject toObject = QFB_JSON_GET_OBJECT(toValue);
-                PropertiesMap toPropertiesMap;
-                toPropertiesMap.insert(OBJECT_ID_KEY, toObject.value(OBJECT_ID_KEY).toString());
-                toPropertiesMap.insert(NAMEDOBJECT_NAME_KEY,
-                                       toObject.value(NAMEDOBJECT_NAME_KEY).toString());
-                toList.append(QVariant::fromValue(new NamedObject(toPropertiesMap)));
+                toList.append(createNamedObject(toObject));
             }
             propertiesMap.insert(POST_TO_KEY, toList);
 
