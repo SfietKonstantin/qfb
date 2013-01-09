@@ -10,6 +10,7 @@ QT = core
 DEFINES += QFBBASEIMPORT_LIBRARY
 
 INCLUDEPATH += ../base/
+LIBS += -L../base/ -lqfb
 
 HEADERS +=  baseimport_global.h \
             abstractloader.h \

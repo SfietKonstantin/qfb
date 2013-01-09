@@ -40,7 +40,7 @@
  * @short Library export or import
  */
 
-#if defined(QFBLOGIN_LIBRARY)
+#if defined(QFBBASE_LIBRARY)
 #  define QFBBASE_EXPORT Q_DECL_EXPORT
 #else
 #  define QFBBASE_EXPORT Q_DECL_IMPORT

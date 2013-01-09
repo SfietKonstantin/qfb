@@ -5,11 +5,13 @@ VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
 TARGET = $${NAME}
 
-QT = core network
+QT = core gui network
 
 DEFINES += QFBBASE_LIBRARY
 
 INCLUDEPATH += ../../3rdparty/qjson/src/
+contains(CONFIG, noqjson):LIBS += -L$${QJSON_PATH} -lqjson
+!contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 HEADERS +=  base_global.h \
             qfb.h \

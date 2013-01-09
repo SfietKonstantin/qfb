@@ -20,7 +20,7 @@ INCLUDEPATH += ../../lib/baseimport
 LIBS += -L../../lib/login -l$${NAME}login
 LIBS += -L../../lib/base -l$${NAME}
 LIBS += -L../../lib/baseimport -l$${NAME}import
-LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
+!contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 HEADERS +=      tokenmanager.h \
     networkaccessmanagerfactory.h \

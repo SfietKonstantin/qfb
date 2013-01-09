@@ -14,7 +14,7 @@ INCLUDEPATH += ../../lib/login
 INCLUDEPATH += ../../lib/base
 LIBS += -L../../lib/login -l$${NAME}login
 LIBS += -L../../lib/base -l$${NAME}
-LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
+!contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 HEADERS +=  bridge.h \
 
