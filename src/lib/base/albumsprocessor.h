@@ -14,29 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef PAGEMANAGEMENTBRIDGE_H
-#define PAGEMANAGEMENTBRIDGE_H
+#ifndef QFB_ALBUMSPROCESSOR_H
+#define QFB_ALBUMSPROCESSOR_H
 
-#include <QtCore/QObject>
+/**
+ * @file albumsprocessor.h
+ * @brief Definition of QFB::AlbumsProcessor
+ */
 
-class PageManagementBridge : public QObject
+#include "abstractgraphprocessor.h"
+
+namespace QFB
+{
+
+class Album;
+class AlbumsProcessorPrivate;
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASE_EXPORT AlbumsProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:
-    explicit PageManagementBridge(QObject *parent = 0);
-
-signals:
-    void popRequested();
-    void resolveTypeRequested(const QString &facebookId, const QString &name);
-    void addUserPageRequested(const QString &facebookId, const QString &name);
-    void addUserInfoPageRequested(const QString &facebookId, const QString &name,
-                                  const QString &coverUrl);
-public slots:
-    void pop();
-    void resolveType(const QString &facebookId, const QString &name);
-    void addUserPage(const QString &facebookId, const QString &name);
-    void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit AlbumsProcessor(QObject *parent = 0);
+    /**
+     * @brief Albums
+     * @return albums.
+     */
+    QList<Album *> albums() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(AlbumsProcessor)
 };
 
-#endif // PAGEMANAGEMENTBRIDGE_H
+}
+
+#endif // QFB_ALBUMSPROCESSOR_H

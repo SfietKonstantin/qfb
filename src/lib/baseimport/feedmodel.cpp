@@ -187,6 +187,7 @@ void FeedModel::clear()
     Q_D(FeedModel);
     beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
     qDeleteAll(d->data);
+    d->data.clear();
     emit countChanged();
     endRemoveRows();
 }

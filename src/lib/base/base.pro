@@ -55,7 +55,8 @@ HEADERS +=  base_global.h \
             photo_keys_p.h \
             photoprocessor.h \
             photoprocessor_p.h \
-    processorhelper_p.h
+    processorhelper_p.h \
+            albumsprocessor.h \
 
 
 SOURCES +=  objectbase.cpp \
@@ -80,6 +81,7 @@ SOURCES +=  objectbase.cpp \
     albumprocessor.cpp \
             photo.cpp \
             photoprocessor.cpp \
+            albumsprocessor.cpp \
 
 # Deployment
 target.path = $${LIBDIR}

@@ -25,7 +25,6 @@ Page {
     property string facebookId
     property string name
     function load() {
-        banner.loaded = false
         portraitLoader.request(facebookId + "/picture")
         userLoader.request(facebookId, "fields=cover")
         feedButton.checked = true
@@ -47,8 +46,8 @@ Page {
                 }
             }
             TabButton {
-                id: infoButton
-                text: qsTr("Informations")
+                id: miscButton
+                text: qsTr("Misc")
             }
         }
     }
@@ -56,30 +55,22 @@ Page {
     QFBUserLoader {
         id: userLoader
         queryManager: QUERY_MANAGER
-        onLoadingChanged: {
-            if (!loading) {
-                if (!banner.loaded) {
-                    banner.loaded = true
-                    banner.coverUrl = user.cover.source
-                    userLoader.request(facebookId)
-                }
-            }
+        onLoaded: {
+            banner.coverUrl = user.cover.source
         }
     }
 
     ScrollDecorator { flickableItem: flickable }
     Flickable {
         id: flickable
-        property bool displayFeed: true
         anchors.fill: parent
         contentWidth: width
-        contentHeight: banner.height + (feedButton.checked ? feed.height : userInfo.height)
+        contentHeight: banner.height + (feedButton.checked ? feed.height : userMisc.height)
                        + Ui.MARGIN_DEFAULT
 
 
         Banner {
             id: banner
-            property bool loaded: false
             name: container.name
             large: true
         }
@@ -126,11 +117,40 @@ Page {
             graph: container.facebookId + "/feed"
         }
 
-        UserInfo {
-            id: userInfo
-            visible: infoButton.checked
+        Item {
+            id: userMisc
+            visible: miscButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            user: userLoader.user
+            width: container.width
+
+            height: Math.max(2 * Ui.MARGIN_DEFAULT + buttonColumn.height,
+                             container.height - banner.height)
+
+            ButtonColumn {
+                exclusive: false
+                anchors.centerIn: parent
+                id: buttonColumn
+
+                Button {
+                    text: qsTr("Informations")
+                    onClicked: PAGE_MANAGEMENT_BRIDGE.addUserInfoPage(facebookId, name,
+                                                                      banner.coverUrl)
+                }
+
+                Button {
+                    text: qsTr("Albums")
+                }
+
+                Button {
+                    text: qsTr("Photos")
+                    enabled: false
+                }
+
+                Button {
+                    text: qsTr("Videos")
+                    enabled: false
+                }
+            }
         }
     }
 }

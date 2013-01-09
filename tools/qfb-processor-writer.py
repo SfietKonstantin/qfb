@@ -94,7 +94,8 @@ def createHeader(className, includes, baseClass, variables):
     headerFile.close()
 
 def createPrivateClass(className, templateOnly):
-    privateClass = "class " + className + ";\n"
+    if not templateOnly:
+        privateClass = "class " + className + ";\n"
     privateClass += "/**\n"
     privateClass += " * @internal\n"
     privateClass += " * @brief Private class for QFB::" + className +"Processor\n"

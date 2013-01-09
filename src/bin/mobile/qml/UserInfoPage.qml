@@ -14,29 +14,53 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef PAGEMANAGEMENTBRIDGE_H
-#define PAGEMANAGEMENTBRIDGE_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
+import "UiConstants.js" as Ui
 
-#include <QtCore/QObject>
+Page {
+    id: container
+    property string facebookId
+    property string name
+    property string coverUrl
+    function load() {
+        userLoader.request(facebookId)
+    }
 
-class PageManagementBridge : public QObject
-{
-    Q_OBJECT
-public:
-    explicit PageManagementBridge(QObject *parent = 0);
+    tools: ToolBarLayout {
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+        }
+    }
 
-signals:
-    void popRequested();
-    void resolveTypeRequested(const QString &facebookId, const QString &name);
-    void addUserPageRequested(const QString &facebookId, const QString &name);
-    void addUserInfoPageRequested(const QString &facebookId, const QString &name,
-                                  const QString &coverUrl);
-public slots:
-    void pop();
-    void resolveType(const QString &facebookId, const QString &name);
-    void addUserPage(const QString &facebookId, const QString &name);
-    void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
+    QFBUserLoader {
+        id: userLoader
+        queryManager: QUERY_MANAGER
+    }
 
-};
+    Banner {
+        id: banner
+        name: container.name
+        coverUrl: container.coverUrl
+    }
 
-#endif // PAGEMANAGEMENTBRIDGE_H
+    ScrollDecorator { flickableItem: flickable }
+    Flickable {
+        id: flickable
+        clip: true
+        anchors.top: banner.bottom; anchors.bottom: parent.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        contentWidth: width
+        contentHeight: userInfo.height + Ui.MARGIN_DEFAULT
+
+
+        UserInfo {
+            id: userInfo
+            user: userLoader.user
+            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+        }
+    }
+}

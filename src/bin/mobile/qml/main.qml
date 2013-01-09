@@ -90,6 +90,13 @@ PageStackWindow {
                                                 {"facebookId": facebookId, "name": name})
             newPage.load()
         }
+        onAddUserInfoPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"),
+                                                {"facebookId": facebookId, "name": name,
+                                                 "coverUrl": coverUrl})
+            newPage.load()
+        }
+
         onResolveTypeRequested: {
             currentResolvingTypeObject.name = name
             typeResolver.request(facebookId)
