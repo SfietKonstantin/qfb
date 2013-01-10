@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ALBUMKEYS_P_H
-#define QFB_ALBUMKEYS_P_H
+#ifndef QFB_ALBUM_KEYS_P_H
+#define QFB_ALBUM_KEYS_P_H
 
 // Warning
 //
@@ -86,4 +86,4 @@ static const char *ALBUM_CAN_UPLOAD_KEY = "can_upload";
 
 }
 
-#endif // QFB_ALBUMKEYS_P_H
+#endif // QFB_ALBUM_KEYS_P_H

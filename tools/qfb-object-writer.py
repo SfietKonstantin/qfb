@@ -252,8 +252,8 @@ def createSource(className, includes, baseClass, variables):
 def createKeys(className, includes, baseClass, variables):
     keys = copyright
     keys += "\n"
-    keys += "#ifndef QFB_" + className.upper() + "KEYS_P_H\n"
-    keys += "#define QFB_" + className.upper() + "KEYS_P_H\n\n"
+    keys += "#ifndef QFB_" + className.upper() + "_KEYS_P_H\n"
+    keys += "#define QFB_" + className.upper() + "_KEYS_P_H\n\n"
 
     keys += "// Warning\n"
     keys += "//\n"
@@ -284,7 +284,7 @@ def createKeys(className, includes, baseClass, variables):
 
     keys += "\n}\n\n"
 
-    keys += "#endif // QFB_" + className.upper() + "KEYS_P_H\n"
+    keys += "#endif // QFB_" + className.upper() + "_KEYS_P_H\n"
 
 
     keysFile = open(className.lower() + "_keys_p.h", "w")

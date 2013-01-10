@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PHOTOKEYS_P_H
-#define QFB_PHOTOKEYS_P_H
+#ifndef QFB_PHOTO_KEYS_P_H
+#define QFB_PHOTO_KEYS_P_H
 
 // Warning
 //
@@ -71,4 +71,4 @@ static const char *PHOTO_LINK_KEY = "link";
 
 }
 
-#endif // QFB_PHOTOKEYS_P_H
+#endif // QFB_PHOTO_KEYS_P_H
