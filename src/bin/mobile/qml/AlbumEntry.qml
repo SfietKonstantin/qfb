@@ -19,15 +19,16 @@ import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
-Item
-{
+Rectangle {
     id: container
     signal clicked
     property string facebookId
     property alias name: text.text
 
-    height: Ui.LIST_ITEM_HEIGHT_DEFAULT
-    width: parent.width
+    height: Ui.LIST_ITEM_HEIGHT_XXLARGE
+    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+    anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+    color: !theme.inverted ? "white" : "black"
 
     BorderImage {
         id: background
@@ -39,34 +40,27 @@ Item
 
     FacebookPicture {
         id: picture
+        anchors.top: parent.top; anchors.bottom: text.top; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.right: parent.right
         clip: true
-        pictureType: QFBPictureLoader.Thumbnail
+        pictureType: QFBPictureLoader.Album
         fillMode: Image.PreserveAspectCrop
         facebookId: container.facebookId
-        anchors.left: parent.left;
-        anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.verticalCenter: parent.verticalCenter
     }
 
     Label {
         id: text
-        anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: indicator.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        anchors.verticalCenter: parent.verticalCenter
-        elide: Text.ElideRight
-    }
-
-    Image {
-        id: indicator
-        source: "image://theme/icon-m-common-drilldown-arrow" + (theme.inverted ? "-inverse" : "")
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+        elide: Text.ElideRight
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: container
+        onPressed: picture.opacity = 0.6
+        onReleased: picture.opacity = 1
         onClicked: container.clicked()
     }
-
 }

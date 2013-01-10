@@ -59,7 +59,8 @@ OTHER_FILES +=  qml/main.qml \
     qml/TypePage.qml \
     qml/UserInfoPage.qml \
     qml/UserAlbumsPage.qml \
-    qml/AlbumEntry.qml
+    qml/AlbumEntry.qml \
+    qml/AlbumList.qml
 
 # Deployment
 contains(CONFIG, optify) {

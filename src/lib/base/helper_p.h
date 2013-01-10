@@ -58,28 +58,6 @@ static const char *FB_GRAPH_QUERY_TOKEN_KEY = "access_token";
 
 /**
  * @internal
- * @brief Create arguments
- * @param arguments arguments as a string.
- * @return arguments as a list of argument pair.
- */
-inline QList<ArgumentPair> createArguments(const QString &arguments)
-{
-    QStringList argumentList = arguments.split(",");
-    QList<ArgumentPair> trueArguments;
-    foreach (QString argument, argumentList) {
-        QStringList argumentEntriesList = argument.split("=");
-        if (argumentEntriesList.count() == 2) {
-            ArgumentPair argumentPair;
-            argumentPair.first = argumentEntriesList.at(0).trimmed();
-            argumentPair.second = argumentEntriesList.at(1).trimmed();
-            trueArguments.append(argumentPair);
-        }
-    }
-    return trueArguments;
-}
-
-/**
- * @internal
  * @brief Create a Facebook graph URL
  * @param graph graph.
  * @param token access token.

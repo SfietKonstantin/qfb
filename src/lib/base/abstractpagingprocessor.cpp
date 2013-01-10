@@ -16,7 +16,7 @@
 
 #include "abstractpagingprocessor.h"
 #include "abstractpagingprocessor_p.h"
-
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 #include "helper_p.h"
 

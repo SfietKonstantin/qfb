@@ -20,6 +20,29 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Create arguments
+ * @param arguments arguments as a string.
+ * @return arguments as a list of argument pair.
+ */
+inline QList<ArgumentPair> createArguments(const QString &arguments)
+{
+    QStringList argumentList = arguments.split(",");
+    QList<ArgumentPair> trueArguments;
+    foreach (QString argument, argumentList) {
+        int indexOfEqual = argument.indexOf("=");
+
+        ArgumentPair argumentPair;
+        argumentPair.first = argument.left(indexOfEqual);
+        argumentPair.second = argument.right(argument.size() - indexOfEqual - 1);
+        if (!argumentPair.first.isEmpty() && !argumentPair.second.isEmpty()) {
+            trueArguments.append(argumentPair);
+        }
+    }
+    return trueArguments;
+}
+
 Request::Request():
     d_ptr(new RequestPrivate)
 {
@@ -112,6 +135,7 @@ void Request::setGraph(const QString &graph)
 void Request::setArguments(const QString &arguments)
 {
     setArguments(createArguments(arguments));
+    Q_D(Request);
 }
 
 void Request::setArguments(const QList<ArgumentPair> &arguments)

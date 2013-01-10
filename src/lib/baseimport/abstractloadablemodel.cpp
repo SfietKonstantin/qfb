@@ -21,6 +21,7 @@
 
 #include "abstractloadablemodel.h"
 #include "abstractloadablemodel_p.h"
+#include <QtCore/QDebug>
 #include "abstractpagingprocessor.h"
 #include "querymanager.h"
 
@@ -87,6 +88,7 @@ void AbstractLoadableModelPrivate::slotError(const QFB::Request &request,
         emit q->errorChanged();
     }
 
+    q->setDoNotHaveNext();
     q->setLoading(false);
 }
 

@@ -20,43 +20,55 @@ import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
-Page {
-    // TODO load next
+Item {
     id: container
-    property string facebookId
-    property string name
-    property string coverUrl
+    width: parent.width
+    height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
+                                                                : 0)
+    property bool loading: model.loading
+    property string graph
     function load() {
-        albumList.load()
+        model.request(container.graph)
     }
 
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+    Column {
+        id: column
+        width: parent.width
+        spacing: Ui.MARGIN_DEFAULT
+
+        Repeater {
+            model: QFBAlbumListModel {
+                id: model
+                queryManager: QUERY_MANAGER
+            }
+
+            delegate: Item {
+                width: container.width
+                height: content.height
+
+                AlbumEntry {
+                    id: content
+                    facebookId: model.data.facebookId
+                    name: model.data.name
+                }
+            }
         }
     }
 
-
-    Banner {
-        id: banner
-        name: container.name
-        coverUrl: container.coverUrl
+    BusyIndicator {
+        anchors.verticalCenter: button.verticalCenter
+        anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        visible: model.loading
+        running: visible
     }
 
-    ScrollDecorator { flickableItem: flickable }
-    Flickable {
-        id: flickable
-        clip: true
-        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        contentWidth: container.width
-        contentHeight: albumList.height
-
-        AlbumList {
-            id: albumList
-            graph: facebookId + "/albums"
-        }
+    Button {
+        id: button
+        visible: (model.haveNext && model.count > 0) || model.loading
+        anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: !model.loading ? qsTr("Load more") : qsTr("Loading")
+        enabled: !model.loading
+        onClicked: model.loadNext()
     }
 }

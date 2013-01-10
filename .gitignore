@@ -5,8 +5,9 @@ MakeFile
 moc_*
 
 # User file
-*.pro.user
+*.pro.user*
 Doxyfile
+*.pyc
 
 
 # Folders

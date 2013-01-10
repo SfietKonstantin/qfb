@@ -37,9 +37,17 @@ Image {
             opacity: 1
         }
     }
-    Behavior on opacity {
-        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
-    }
+    transitions: [
+        Transition {
+            from: ""
+            to: "visible"
+            NumberAnimation {
+                target: picture
+                property: "opacity"
+                duration: Ui.ANIMATION_DURATION_FAST
+            }
+        }
+    ]
 
     QFBPictureLoader {
         id: pictureLoader

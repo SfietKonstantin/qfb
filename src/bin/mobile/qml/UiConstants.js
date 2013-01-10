@@ -41,6 +41,7 @@ var ICON_SIZE_DEFAULT           = 48
 var ICON_SIZE_SMALL             = 26
 
 // List
+var LIST_ITEM_HEIGHT_XXLARGE    = 250
 var LIST_ITEM_HEIGHT_DEFAULT    = 80
 
 //Font size
