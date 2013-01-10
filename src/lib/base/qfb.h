@@ -31,23 +31,50 @@ namespace QFB
  * @brief Properties map
  *
  * This typedef defines a mapping between a proprety name,
- * defined in the QFB::Property enumeration, and the
- * value of that property.
- *
- * @todo obsolete doc
+ * that is the string used in Facebook to identify a property,
+ * and the value of that property.
  */
-
 typedef QMap<QString, QVariant> PropertiesMap;
 
+/**
+ * @brief Enumeration describing the request type
+ */
 enum RequestType {
-    NoRequest,
+    /**
+     * @short An invalid request
+     */
+    InvalidRequest,
+    /**
+     * @short A request for an image
+     */
     ImageRequest,
+    /**
+     * @short A request to get the type of an object
+     */
     TypeRequest,
+    /**
+     * @short A request to get a list of friends
+     */
     FriendListRequest,
+    /**
+     * @short A request to get an user
+     */
     UserRequest,
+    /**
+     * @short A request to get a Facebook picture
+     */
     PictureRequest,
+    /**
+     * @short A request to get a feed
+     */
     FeedRequest,
+    /**
+     * @short A request to get an album
+     */
     AlbumRequest,
+    /**
+     * @short A request to get a list of albums
+     */
     AlbumListRequest
 
 };

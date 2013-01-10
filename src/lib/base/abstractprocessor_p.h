@@ -24,6 +24,12 @@
 // This header file may change from version
 // to version without notice or even be removed.
 
+/**
+ * @internal
+ * @file abstractprocessor_p.h
+ * @short Definition of QFB::AbstractProcessorPrivate
+ */
+
 #include "abstractprocessor.h"
 #include "request.h"
 
@@ -32,14 +38,42 @@ class QString;
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractProcessor
+ */
 class AbstractProcessorPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
     explicit AbstractProcessorPrivate();
+    /**
+     * @internal
+     * @brief Request
+     */
     Request request;
-    AbstractProcessor::ProcessingType processingType;
+    /**
+     * @internal
+     * @brief Processing task
+     */
+    AbstractProcessor::ProcessingTask processingTask;
+    /**
+     * @internal
+     * @brief If data loading from Facebook API is required
+     */
     bool needLoading;
+    /**
+     * @internal
+     * @brief Data source
+     */
     QIODevice *dataSource;
+    /**
+     * @internal
+     * @brief Error message
+     */
     QString error;
 };
 

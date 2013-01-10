@@ -47,10 +47,6 @@ Object::Object(ObjectBasePrivate &dd, QObject *parent):
 {
 }
 
-Object::~Object()
-{
-}
-
 QString Object::facebookId() const
 {
     Q_D(const ObjectBase);

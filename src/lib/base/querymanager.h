@@ -37,9 +37,47 @@ class QueryManagerPrivate;
 /**
  * @brief Query manager
  *
- * This class is used to manage queries and provide QFB::AbstractReply
- * based replies. It is a base class that makes the creation of these
- * replies easier, but might not be suited for higher level access.
+ * This class is the central class that manages queries to
+ * Facebook, queues tasks and send notifications when the
+ * tasks are finished.
+ *
+ * It first provides the token() property, that should
+ * be the access token that is used by the application.
+ * Nearly all requests to Facebook need that token to
+ * be successful.
+ *
+ * @todo do not force the use of token
+ * @todo get a better error management
+ *
+ * It then provides numorous methods that are used to get
+ * an object, or a collection of objects from Facebook.
+ * All these methods returns a Request object, that is
+ * used for other classes to track the status of the
+ * query.
+ *
+ * When a request is replied and terminated, the query
+ * manager send notifications by broadcasting the signal
+ * finished() or error(). These signals send the Request
+ * as first argument, so classes concerned by a specific
+ * request should compare the sent requests with the one
+ * they got when performing the query.
+ *
+ * The finished() signal also provides the processor
+ * that were used to parse the result. By casting the
+ * processor to the specific one, the class is able to
+ * retrieve the result that is hold by the processor.
+ *
+ * @section memoryManagement Memory management
+ *
+ * When a processor is returned through the finished()
+ * signal, it is not deleted and stays in memory. The
+ * class that is concerned by that reply should delete
+ * the processor afterwards. When an error occurs, the
+ * processor is deleted, since it is not useful anymore.
+ *
+ * @todo the name "query manager" do not fit with request
+ *
+ * @see AbstractProcessor
  */
 class QFBBASE_EXPORT QueryManager : public QObject
 {
@@ -111,7 +149,22 @@ signals:
      * @brief Access token changed
      */
     void tokenChanged();
+    /**
+     * @brief Error in a query
+     * @param request concerned request.
+     * @param errorString error message.
+     */
     void error(const QFB::Request &request, const QString &errorString);
+    /**
+     * @brief A query is terminated
+     *
+     * This signal provides the processor that was used to get the reply
+     * as an AbstractProcessor. In order to get the result, it should
+     * be cast to the correct form.
+     *
+     * @param request concerned request.
+     * @param processor processor used to process the reply.
+     */
     void finished(const QFB::Request &request, AbstractProcessor *processor);
 protected:
     /**

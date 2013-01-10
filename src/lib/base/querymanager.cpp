@@ -114,7 +114,7 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     case AlbumListRequest:
         processor = new AlbumListProcessor(q);
         break;
-    case NoRequest:
+    case InvalidRequest:
         break;
     }
 
@@ -129,7 +129,7 @@ void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, cons
 {
     Q_Q(QueryManager);
     processor->setRequest(request);
-    processor->setProcessingType(AbstractProcessor::Preprocessing);
+    processor->setProcessingTask(AbstractProcessor::Preprocessing);
     QObject::connect(processor, SIGNAL(preprocessingFinished(bool)),
                      q, SLOT(slotPreprocessFinished(bool)));
     QObject::connect(processor, SIGNAL(error()), q, SLOT(slotPreprocessError()));
@@ -195,7 +195,7 @@ void QueryManagerPrivate::createPostprocessor(const Request &request, QIODevice 
 
     if (processor) {
         processor->setRequest(request);
-        processor->setProcessingType(AbstractProcessor::PostProcessing);
+        processor->setProcessingTask(AbstractProcessor::PostProcessing);
         processor->setDataSource(dataSource);
         QObject::connect(processor, SIGNAL(postProcessingFinished()),
                          q, SLOT(slotPostprocessFinished()));

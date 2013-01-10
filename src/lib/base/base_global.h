@@ -27,7 +27,20 @@
 /**
  * \page base Base library
  *
- * \todo write this page
+ * The QFB base library provides a lot of components that are used to
+ * interface Facebook graph API with a Qt / C++ / QML API.
+ *
+ * This library consists of of a query manager, QFB::QueryManager, that
+ * is used to perform the requests to Facebook API, and manage the requests.
+ * It also provides a collection of objects, like QFB::Object, QFB::NamedObject
+ * or QFB::User that are used to expose the retrived data in a comprehensive
+ * form. Those objects are loaded using processors, that are derived from
+ * QRunnable, runs in a thread pool and are used to parse the retrived data.
+ *
+ * In order to use this library, you should instanciate a QFB::QueryManager,
+ * and perform requests using the numerous methods of that class.
+ *
+ * @see QFB::QueryManager
  */
 
 /**

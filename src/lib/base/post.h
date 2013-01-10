@@ -62,8 +62,6 @@ namespace QFB
  * actions, privacy, likes, place, story_tags,
  * with_tags, comments, application, include_hidden
  * are not yet implemented.
- *
- * @see QFB::Property
  */
 class QFBBASE_EXPORT Post: public NamedObject
 {

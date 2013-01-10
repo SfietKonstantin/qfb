@@ -56,7 +56,8 @@ copyright = """/****************************************************************
  ****************************************************************************************/
 """
 
-knownTypes = {"int": "toInt", "QString": "toString", "QDateTime": "toDateTime", "QUrl": "toUrl"}
+knownTypes = {"int": "toInt", "QString": "toString", "QDateTime": "toDateTime",
+              "QUrl": "toUrl", "bool": "toBool"}
 
 def generate(input):
     parserData = qfbparser.parse(input)
@@ -82,28 +83,70 @@ def createHeader(className, includes, baseClass, variables):
         if include != "\"" + baseClass.lower() + ".h\"":
             header += "#include " + include + "\n"
 
+    aOrAn = "a"
+    firstLetter = className[0].lower()
+    isA = firstLetter == "a"
+    isE = firstLetter == "e"
+    isI = firstLetter == "i"
+    isO = firstLetter == "o"
+    isU = firstLetter == "u"
+    if isA or isE or isI or isO or isU:
+        aOrAn = "an"
+
     header += "\nnamespace QFB\n{\n\n"
     header += "/**\n"
-    header += " * @short WRITE DOCUMENTATION HERE\n"
+    header += " * @short " + aOrAn[0].upper() + aOrAn[1:] + " " + className.lower() +  "\n"
+    header += " * \n"
+    header += " * This class represents " + aOrAn +  " " + className.lower() +  " in Facebook.\n"
+    header += " * Extending QFB::" + baseClass +  ", it contains a lot of properties\n"
+    header += " * that can be accessed through\n"
+    for variable in variables:
+        if variable["name"] != "id" and variable["name"] != "name":
+            if variable["type"] != "TODO" and variable["name"] != "":
+                header += " * - " + qfbtools.camelCase(qfbtools.split(variable["name"])) + "()\n"
+    header += "\n * Some of these fields might not be set, because of\n"
+    header += " * users hiding them in their settings, or because of\n"
+    header += " * missing permissions.\n"
+    header += " *\n"
+    header += " * You can choose the fields you want using the fields\n"
+    header += " * query parameter:\n"
+    header += " *\n"
+    header += " * @code\n"
+    header += " * fields=id,name\n"
+    header += " * @endcode\n"
+    header += " * These parameters should be add to the query that is used\n"
+    header += " * to get an user.\n"
+    missing = []
+    for variable in variables:
+            if variable["type"] == "TODO":
+                missing.append(qfbtools.camelCase(qfbtools.split(variable["name"])))
+    if len(missing) > 0:
+        header += " *\n"
+        header += " * @section missing Missing properties\n"
+        header += " *\n"
+        header += " * Some fields such as "
+        header += ",".join(missing)
+        header += "\n * are not yet implemented.\n"
     header += " */\n"
     header += "class QFBBASE_EXPORT " + className + ": public " + baseClass + "\n{\n"
     header += "    Q_OBJECT\n"
     for variable in variables:
-        if variable["doc"] != "":
-            splittedDoc = variable["doc"].split("\n")
-            header += "    /**\n"
-            header += "     * @short " + splittedDoc[0] + "\n"
-            del splittedDoc[0]
-            for docLine in splittedDoc:
-                header += "     * " + docLine + "\n"
-            header += "     */\n"
-        if variable["type"] == "TODO":
-            header += "    /// @todo " + variable["name"] + "\n"
-        elif variable["type"] != "":
-            header += "    Q_PROPERTY(" + variable["type"] + " "
-            header += qfbtools.camelCase(qfbtools.split(variable["name"]))
-            header += " READ " + qfbtools.camelCase(qfbtools.split(variable["name"]))
-            header += " CONSTANT)\n"
+        if variable["name"] != "id" and variable["name"] != "name":
+            if variable["doc"] != "":
+                splittedDoc = variable["doc"].split("\n")
+                header += "    /**\n"
+                header += "     * @short " + splittedDoc[0] + "\n"
+                del splittedDoc[0]
+                for docLine in splittedDoc:
+                    header += "     * " + docLine + "\n"
+                header += "     */\n"
+            if variable["type"] == "TODO":
+                header += "    /// @todo " + variable["name"] + "\n"
+            elif variable["type"] != "":
+                header += "    Q_PROPERTY(" + variable["type"] + " "
+                header += qfbtools.camelCase(qfbtools.split(variable["name"]))
+                header += " READ " + qfbtools.camelCase(qfbtools.split(variable["name"]))
+                header += " CONSTANT)\n"
     header += "public:\n"
     header += "    /**\n"
     header += "     * @brief Invalid constructor\n"
@@ -119,15 +162,16 @@ def createHeader(className, includes, baseClass, variables):
     header += "QObject *parent = 0);\n"
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "":
-            splittedName = qfbtools.split(variable["name"])
-            readableName = " ".join(splittedName)
-            upperReadableName = readableName[0].upper() + readableName[1:]
-            header += "    /**\n"
-            header += "     * @brief " + upperReadableName + "\n"
-            header += "     * @return " + readableName + ".\n"
-            header += "     */\n"
-            header += "    " + variable["type"] + " " + qfbtools.camelCase(splittedName)
-            header += "() const;\n"
+            if variable["name"] != "id" and variable["name"] != "name":
+                splittedName = qfbtools.split(variable["name"])
+                readableName = " ".join(splittedName)
+                upperReadableName = readableName[0].upper() + readableName[1:]
+                header += "    /**\n"
+                header += "     * @brief " + upperReadableName + "\n"
+                header += "     * @return " + readableName + ".\n"
+                header += "     */\n"
+                header += "    " + variable["type"] + " " + qfbtools.camelCase(splittedName)
+                header += "() const;\n"
 
     header += "private:\n"
     header += "    Q_DECLARE_PRIVATE(ObjectBase)\n"
@@ -149,11 +193,7 @@ def createSource(className, includes, baseClass, variables):
     source += " */\n\n"
     source += "#include \"" + className.lower() + ".h\"\n"
     source += "#include \"objectbase_p.h\"\n"
-    source += "#include \"" + className.lower() + "_keys_p.h\"\n\n"
-    if baseClass == "NamedObject" :
-        source += "#include \"namedobject_keys_p.h\"\n\n"
-    if baseClass == "Object" or baseClass == "NamedObject" :
-        source += "#include \"object_keys_p.h\"\n\n"
+    source += "#include \"" + className.lower() + "_keys_p.h\"\n"
 
     source += "namespace QFB\n"
     source += "{\n\n"
@@ -184,25 +224,23 @@ def createSource(className, includes, baseClass, variables):
 
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "":
-            splittedName = qfbtools.split(variable["name"])
-            source += variable["type"] + " " + className + "::" + qfbtools.camelCase(splittedName)
-            source += "() const\n"
-            source += "{\n"
-            source += "    Q_D(const ObjectBase);\n"
-            source += "    return d->propertiesMap.value("
-            key = qfbtools.staticKey(splittedName, className)
-            if variable["name"] == "id":
-                key = "OBJECT_ID_KEY"
-            elif variable["name"] == "name":
-                key = "NAMEDOBJECT_NAME_KEY"
-            source += key
-            source += ")."
-            if variable["type"] in knownTypes:
-                source += knownTypes[variable["type"]] + "()"
-            else:
-                source += "value<" + variable["type"] + ">()"
-            source += ";\n"
-            source += "}\n\n"
+            if variable["name"] != "id" and variable["name"] != "name":
+                splittedName = qfbtools.split(variable["name"])
+                source += variable["type"] + " " + className + "::"
+                source += qfbtools.camelCase(splittedName)
+                source += "() const\n"
+                source += "{\n"
+                source += "    Q_D(const ObjectBase);\n"
+                source += "    return d->propertiesMap.value("
+                key = qfbtools.staticKey(splittedName, className)
+                source += key
+                source += ")."
+                if variable["type"] in knownTypes:
+                    source += knownTypes[variable["type"]] + "()"
+                else:
+                    source += "value<" + variable["type"] + ">()"
+                source += ";\n"
+                source += "}\n\n"
 
     source += "}\n"
 

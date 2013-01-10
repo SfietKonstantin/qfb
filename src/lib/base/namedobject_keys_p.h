@@ -17,6 +17,20 @@
 #ifndef QFB_NAMEDOBJECT_KEYS_P_H
 #define QFB_NAMEDOBJECT_KEYS_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
+/**
+ * @internal
+ * @file namedobject_keys_p.h
+ * @brief Definition of internal keys associated to QFB::NamedObject
+ */
+
+
 namespace QFB
 {
 

@@ -29,26 +29,45 @@ namespace QFB
 {
 
 /**
- * @short WRITE DOCUMENTATION HERE
+ * @short A photo
+ * 
+ * This class represents a photo in Facebook.
+ * Extending QFB::NamedObject, it contains a lot of properties
+ * that can be accessed through
+ * - from()
+ * - icon()
+ * - picture()
+ * - source()
+ * - height()
+ * - width()
+ * - link()
+
+ * Some of these fields might not be set, because of
+ * users hiding them in their settings, or because of
+ * missing permissions.
+ *
+ * You can choose the fields you want using the fields
+ * query parameter:
+ *
+ * @code
+ * fields=id,name
+ * @endcode
+ * These parameters should be add to the query that is used
+ * to get an user.
+ *
+ * @section missing Missing properties
+ *
+ * Some fields such as tags,nameTags,images
+ * are not yet implemented.
  */
 class QFBBASE_EXPORT Photo: public NamedObject
 {
     Q_OBJECT
     /**
-     * @short The photo ID
-     */
-    Q_PROPERTY(QString id READ id CONSTANT)
-    /**
      * @short The profile (user or page) that posted this photo
      */
     Q_PROPERTY(NamedObject * from READ from CONSTANT)
     /// @todo tags
-    /**
-     * @short The user provided caption given to this photo
-     * 
-     * Do not include advertising in this field.
-     */
-    Q_PROPERTY(QString name READ name CONSTANT)
     /// @todo name_tags
     /**
      * @short The icon that Facebook displays when photos are published to the Feed
@@ -91,20 +110,10 @@ public:
      */
     explicit Photo(const PropertiesMap propertiesMap, QObject *parent = 0);
     /**
-     * @brief Id
-     * @return id.
-     */
-    QString id() const;
-    /**
      * @brief From
      * @return from.
      */
     NamedObject * from() const;
-    /**
-     * @brief Name
-     * @return name.
-     */
-    QString name() const;
     /**
      * @brief Icon
      * @return icon.

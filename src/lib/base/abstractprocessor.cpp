@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file abstractprocessor.cpp
+ * @brief Implementation of QFB::AbstractProcessor
+ */
+
 #include "abstractprocessor.h"
 #include "abstractprocessor_p.h"
 #include <QtCore/QDebug>
@@ -24,7 +29,7 @@ namespace QFB
 
 AbstractProcessorPrivate::AbstractProcessorPrivate()
 {
-    processingType = AbstractProcessor::NoProcessing;
+    processingTask = AbstractProcessor::NoProcessing;
     needLoading = true;
     dataSource = 0;
 }
@@ -51,24 +56,6 @@ Request AbstractProcessor::request() const
     return d->request;
 }
 
-void AbstractProcessor::setRequest(const Request &request)
-{
-    Q_D(AbstractProcessor);
-    d->request = request;
-}
-
-void AbstractProcessor::setProcessingType(ProcessingType processingType)
-{
-    Q_D(AbstractProcessor);
-    d->processingType = processingType;
-}
-
-void AbstractProcessor::setDataSource(QIODevice *dataSource)
-{
-    Q_D(AbstractProcessor);
-    d->dataSource = dataSource;
-}
-
 QString AbstractProcessor::errorString() const
 {
     Q_D(const AbstractProcessor);
@@ -86,7 +73,7 @@ void AbstractProcessor::run()
     }
 
     bool ok = false;
-    switch (d->processingType) {
+    switch (d->processingTask) {
     case Preprocessing:
         ok = preprocess();
         if (ok) {
@@ -116,6 +103,24 @@ void AbstractProcessor::run()
         emit error();
         return;
     }
+}
+
+void AbstractProcessor::setRequest(const Request &request)
+{
+    Q_D(AbstractProcessor);
+    d->request = request;
+}
+
+void AbstractProcessor::setProcessingTask(ProcessingTask processingTask)
+{
+    Q_D(AbstractProcessor);
+    d->processingTask = processingTask;
+}
+
+void AbstractProcessor::setDataSource(QIODevice *dataSource)
+{
+    Q_D(AbstractProcessor);
+    d->dataSource = dataSource;
 }
 
 void AbstractProcessor::setNeedLoading(bool needLoading)

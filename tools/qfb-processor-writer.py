@@ -165,8 +165,10 @@ def createProperty(name, key, type):
 
     if type == "QString":
         data += "jsonObject.value(" + key + ").toString()"
+    elif type == "bool":
+        data += "jsonObject.value(" + key + ").toBool()"
     elif type == "int":
-        data += "(int) jsonObject.value(" + key + ").toDouble()"
+        data += "jsonObject.value(" + key + ").toString().toInt()"
     elif type == "QDateTime":
         data2 = "    QDateTime " + name + " = QDateTime::fromString(jsonObject.value("
         data2 += key + ").toString(), Qt::ISODate);\n"

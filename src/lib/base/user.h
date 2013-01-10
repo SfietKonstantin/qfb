@@ -83,8 +83,6 @@ namespace QFB
  *
  * Other fields, such as third_party_id, installed and
  * verified are not implemented and might not be implemented.
- *
- * @see QFB::Property
  */
 class QFBBASE_EXPORT User : public NamedObject
 {

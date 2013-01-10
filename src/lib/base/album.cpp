@@ -14,14 +14,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file album.cpp
+ * @brief Implementation of QFB::Album
+ */
+
 #include "album.h"
 #include "objectbase_p.h"
 #include "album_keys_p.h"
-
 namespace QFB
 {
 
-Album::Album(QObject *parent) :
+Album::Album(QObject *parent):
     NamedObject(parent)
 {
 }
@@ -30,13 +34,17 @@ Album::Album(const PropertiesMap propertiesMap, QObject *parent):
     NamedObject(propertiesMap, parent)
 {
     Q_D(ObjectBase);
+
+    // TODO: check reparenting
+    // It was done automatically by a script
+
     // Reparent from
     QObject *fromObject = d->propertiesMap.value(ALBUM_FROM_KEY).value<NamedObject *>();
     if (fromObject) {
         fromObject->setParent(this);
     }
-}
 
+}
 NamedObject * Album::from() const
 {
     Q_D(const ObjectBase);

@@ -56,6 +56,12 @@ static const char *FB_GRAPH_QUERY_URL = "https://graph.facebook.com/";
  */
 static const char *FB_GRAPH_QUERY_TOKEN_KEY = "access_token";
 
+/**
+ * @internal
+ * @brief Create arguments
+ * @param arguments arguments as a string.
+ * @return arguments as a list of argument pair.
+ */
 inline QList<ArgumentPair> createArguments(const QString &arguments)
 {
     QStringList argumentList = arguments.split(",");

@@ -23,7 +23,7 @@ namespace QFB
 {
 
 class ImageProcessorPrivate;
-class ImageProcessor: public AbstractProcessor
+class QFBBASE_EXPORT ImageProcessor: public AbstractProcessor
 {
     Q_OBJECT
 public:

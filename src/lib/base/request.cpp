@@ -24,7 +24,7 @@ Request::Request():
     d_ptr(new RequestPrivate)
 {
     setId(-1);
-    setType(NoRequest);
+    setType(InvalidRequest);
 }
 
 Request::Request(int id, RequestType type):
@@ -58,7 +58,7 @@ bool Request::operator !=(const Request &other) const
 bool Request::isValid() const
 {
     Q_D(const Request);
-    return (d->id != -1 && d->type != NoRequest);
+    return (d->id != -1 && d->type != InvalidRequest);
 }
 
 int Request::id() const

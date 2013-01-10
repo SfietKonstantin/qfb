@@ -14,6 +14,12 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file objectbase.cpp
+ * @brief Implementation of QFB::ObjectBase
+ */
+
+
 #include "objectbase.h"
 #include "objectbase_p.h"
 
