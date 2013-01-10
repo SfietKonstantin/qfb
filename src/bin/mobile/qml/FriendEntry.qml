@@ -43,6 +43,7 @@ Item
         anchors.left: parent.left;
         anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.verticalCenter: parent.verticalCenter
+        pictureType: QFBPictureLoader.Square
     }
 
     Label {

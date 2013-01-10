@@ -21,7 +21,6 @@ import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
 Page {
-    // TODO load next
     id: container
     property string facebookId
     property string name
@@ -57,6 +56,8 @@ Page {
         AlbumList {
             id: albumList
             graph: facebookId + "/albums"
+            onShowAlbum: PAGE_MANAGEMENT_BRIDGE.addPhotoListPage(facebookId, container.name,
+                                                                 container.coverUrl)
         }
     }
 }

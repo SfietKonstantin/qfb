@@ -14,35 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef PAGEMANAGEMENTBRIDGE_H
-#define PAGEMANAGEMENTBRIDGE_H
+#ifndef QFB_PHOTOLISTPROCESSOR_H
+#define QFB_PHOTOLISTPROCESSOR_H
 
-#include <QtCore/QObject>
+/**
+ * @file photolistprocessor.h
+ * @brief Definition of QFB::PhotoListProcessor
+ */
 
-class PageManagementBridge : public QObject
+#include "abstractpagingprocessor.h"
+
+namespace QFB
+{
+
+class Photo;
+class PhotoListProcessorPrivate;
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASE_EXPORT PhotoListProcessor: public AbstractPagingProcessor
 {
     Q_OBJECT
 public:
-    explicit PageManagementBridge(QObject *parent = 0);
-
-signals:
-    void popRequested();
-    void resolveTypeRequested(const QString &facebookId, const QString &name);
-    void addUserPageRequested(const QString &facebookId, const QString &name);
-    void addUserInfoPageRequested(const QString &facebookId, const QString &name,
-                                  const QString &coverUrl);
-    void addAlbumListPageRequested(const QString &facebookId, const QString &name,
-                                   const QString &coverUrl);
-    void addPhotoListPageRequested(const QString &facebookId, const QString &name,
-                                   const QString &coverUrl);
-public slots:
-    void pop();
-    void resolveType(const QString &facebookId, const QString &name);
-    void addUserPage(const QString &facebookId, const QString &name);
-    void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-    void addAlbumListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-    void addPhotoListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit PhotoListProcessor(QObject *parent = 0);
+    /**
+     * @brief Photo list
+     * @return photo list.
+     */
+    QList<Photo *> photoList() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(PhotoListProcessor)
 };
 
-#endif // PAGEMANAGEMENTBRIDGE_H
+}
+
+#endif // QFB_PHOTOLISTPROCESSOR_H

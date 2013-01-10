@@ -23,54 +23,47 @@ import "UiConstants.js" as Ui
 Item {
     id: container
     width: parent.width
-    height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
-                                                                : 0)
+    height: grid.height + Ui.MARGIN_DEFAULT
     property bool loading: model.loading
     property string graph
-    signal showAlbum(string facebookId)
+    property int columns
     function load() {
         model.request(container.graph)
     }
 
-    Column {
-        id: column
+    Grid {
+        id: grid
         width: parent.width
+        columns: container.columns
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
         spacing: Ui.MARGIN_DEFAULT
 
         Repeater {
-            model: QFBAlbumListModel {
+            model: QFBPhotoListModel {
                 id: model
                 queryManager: QUERY_MANAGER
             }
 
-            delegate: Item {
-                width: container.width
-                height: content.height
+            delegate: Rectangle {
+                width: (container.width - (container.columns + 1) * Ui.MARGIN_DEFAULT)
+                       / container.columns
+                height: width
+                color: !theme.inverted ? "white" : "black"
 
-                AlbumEntry {
-                    id: content
+                FacebookPicture {
+                    clip: true
+                    pictureType: QFBPictureLoader.Normal
+                    fillMode: Image.PreserveAspectCrop
+                    anchors.fill: parent
                     facebookId: model.data.facebookId
-                    name: model.data.name
-                    onClicked: container.showAlbum(model.data.facebookId)
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: console.debug(model.data.facebookId)
                 }
             }
         }
-    }
-
-    BusyIndicator {
-        anchors.verticalCenter: button.verticalCenter
-        anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        visible: model.loading
-        running: visible
-    }
-
-    Button {
-        id: button
-        visible: (model.haveNext && model.count > 0) || model.loading
-        anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: !model.loading ? qsTr("Load more") : qsTr("Loading")
-        enabled: !model.loading
-        onClicked: model.loadNext()
     }
 }

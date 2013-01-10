@@ -35,7 +35,7 @@ public:
 PictureLoaderPrivate::PictureLoaderPrivate(PictureLoader *q):
     AbstractLoaderPrivate(q)
 {
-    type = PictureLoader::Square;
+    type = PictureLoader::Invalid;
 }
 
 QString PictureLoaderPrivate::pictureString(PictureLoader::Type type)
@@ -97,6 +97,10 @@ void PictureLoader::setType(Type type)
 Request PictureLoader::createRequest(const QString &graph, const QString &arguments)
 {
     Q_D(PictureLoader);
+    if (d->type == Invalid) {
+        return Request();
+    }
+
     if (queryManager()) {
         QString finalArguments = arguments;
         QString newArguments = QString("%1=%2").arg(PICTURE_TYPE_KEY, d->pictureString(d->type));

@@ -138,6 +138,7 @@ public:
     Request queryType(const QString &graph, const QString &arguments = QString());
     Request queryAlbum(const QString &graph, const QString &arguments = QString());
     Request queryAlbumList(const QString &graph, const QString &arguments = QString());
+    Request queryPhotoList(const QString &graph, const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token

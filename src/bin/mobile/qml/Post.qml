@@ -45,6 +45,7 @@ Rectangle {
             id: picture
             anchors.verticalCenter: parent.verticalCenter
             facebookId: from.facebookId
+            pictureType: QFBPictureLoader.Square
         }
 
         Column {

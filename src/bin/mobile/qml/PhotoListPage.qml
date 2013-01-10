@@ -14,35 +14,48 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef PAGEMANAGEMENTBRIDGE_H
-#define PAGEMANAGEMENTBRIDGE_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
+import "UiConstants.js" as Ui
 
-#include <QtCore/QObject>
+Page {
+    id: container
+    property string facebookId
+    property string name
+    property string coverUrl
+    function load() {
+        photoList.load()
+    }
 
-class PageManagementBridge : public QObject
-{
-    Q_OBJECT
-public:
-    explicit PageManagementBridge(QObject *parent = 0);
+    tools: ToolBarLayout {
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+        }
+    }
 
-signals:
-    void popRequested();
-    void resolveTypeRequested(const QString &facebookId, const QString &name);
-    void addUserPageRequested(const QString &facebookId, const QString &name);
-    void addUserInfoPageRequested(const QString &facebookId, const QString &name,
-                                  const QString &coverUrl);
-    void addAlbumListPageRequested(const QString &facebookId, const QString &name,
-                                   const QString &coverUrl);
-    void addPhotoListPageRequested(const QString &facebookId, const QString &name,
-                                   const QString &coverUrl);
-public slots:
-    void pop();
-    void resolveType(const QString &facebookId, const QString &name);
-    void addUserPage(const QString &facebookId, const QString &name);
-    void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-    void addAlbumListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
-    void addPhotoListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
+    Banner {
+        id: banner
+        name: container.name
+        coverUrl: container.coverUrl
+    }
 
-};
+    ScrollDecorator { flickableItem: flickable }
+    Flickable {
+        id: flickable
+        clip: true
+        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        contentWidth: container.width
+        contentHeight: photoList.height
 
-#endif // PAGEMANAGEMENTBRIDGE_H
+        PhotoList {
+            id: photoList
+            columns: 3
+            graph: facebookId + "/photos"
+        }
+    }
+}

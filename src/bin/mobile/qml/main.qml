@@ -96,8 +96,14 @@ PageStackWindow {
                                                  "coverUrl": coverUrl})
             newPage.load()
         }
-        onAddUserAlbumsPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("UserAlbumsPage.qml"),
+        onAddAlbumListPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("AlbumListPage.qml"),
+                                                {"facebookId": facebookId, "name": name,
+                                                 "coverUrl": coverUrl})
+            newPage.load()
+        }
+        onAddPhotoListPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoListPage.qml"),
                                                 {"facebookId": facebookId, "name": name,
                                                  "coverUrl": coverUrl})
             newPage.load()

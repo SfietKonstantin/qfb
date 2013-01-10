@@ -22,6 +22,10 @@
 namespace QFB
 {
 class PictureLoaderPrivate;
+/**
+ * @brief The PictureLoader class
+ * @todo warn about the fact that a type must be set
+ */
 class QFBBASEIMPORT_EXPORT PictureLoader : public AbstractGraphLoader
 {
     Q_OBJECT
@@ -30,6 +34,7 @@ class QFBBASEIMPORT_EXPORT PictureLoader : public AbstractGraphLoader
     Q_PROPERTY(QString picturePath READ picturePath NOTIFY picturePathChanged)
 public:
     enum Type {
+        Invalid,
         Square,
         Small,
         Normal,

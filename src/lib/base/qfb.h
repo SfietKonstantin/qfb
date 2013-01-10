@@ -75,7 +75,11 @@ enum RequestType {
     /**
      * @short A request to get a list of albums
      */
-    AlbumListRequest
+    AlbumListRequest,
+    /**
+     * @short A request to get a list of photos
+     */
+    PhotoListRequest
 
 };
 

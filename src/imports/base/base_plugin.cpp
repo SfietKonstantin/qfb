@@ -35,6 +35,7 @@
 #include "cover.h"
 #include "post.h"
 #include "album.h"
+#include "photo.h"
 #include "querymanager.h"
 #include "typeloader.h"
 #include "imageloader.h"
@@ -45,6 +46,7 @@
 #include "postvalidator.h"
 #include "albumloader.h"
 #include "albumlistmodel.h"
+#include "photolistmodel.h"
 
 namespace QFB
 {
@@ -80,6 +82,8 @@ void BasePlugin5::registerTypes(const char *uri)
                                           "QFBPostcannot be created");
     qmlRegisterUncreatableType<QFB::Album>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbum",
                                            "QFBAlbum be created");
+    qmlRegisterUncreatableType<QFB::Photo>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhoto",
+                                           "QFBPhoto be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
     qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
     qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
@@ -89,6 +93,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
     qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
+    qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
     qmlRegisterType<QFB::PostValidator>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostValidator");
 }
 

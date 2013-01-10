@@ -58,9 +58,11 @@ OTHER_FILES +=  qml/main.qml \
                 qml/FriendListPage.qml \
     qml/TypePage.qml \
     qml/UserInfoPage.qml \
-    qml/UserAlbumsPage.qml \
+    qml/AlbumListPage.qml \
+    qml/AlbumList.qml \
     qml/AlbumEntry.qml \
-    qml/AlbumList.qml
+    qml/PhotoListPage.qml \
+    qml/PhotoList.qml
 
 # Deployment
 contains(CONFIG, optify) {
