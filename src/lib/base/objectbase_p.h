@@ -26,8 +26,8 @@
 
 /**
  * @internal
- * @file object_p.h
- * @short Definition of QFB::ObjectPrivate
+ * @file objectbase_p.h
+ * @short Definition of QFB::ObjectBasePrivate
  */
 
 #include "qfb.h"

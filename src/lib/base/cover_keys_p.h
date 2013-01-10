@@ -17,6 +17,19 @@
 #ifndef QFB_COVER_KEYS_P_H
 #define QFB_COVER_KEYS_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
+/**
+ * @internal
+ * @file cover_keys_p.h
+ * @brief Definition of internal keys associated to QFB::Cover
+ */
+
 namespace QFB
 {
 
@@ -27,7 +40,7 @@ namespace QFB
 static const char *COVER_SOURCE_KEY = "source";
 /**
  * @internal
- * @brief COVER_SOURCE_KEY
+ * @brief COVER_OFFSET_Y_KEY
  */
 static const char *COVER_OFFSET_Y_KEY = "offset_y";
 

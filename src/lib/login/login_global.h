@@ -27,7 +27,7 @@
 /**
  * \page login Login library
  *
- * The QFB login library is used to perform a login to Facebook service.
+ * The %QFB login library is used to perform a login to Facebook service.
  * It needs a web view to display the login screen and other dialogs that
  * Facebook uses for the OAuth 2 authentification process. At the end of
  * the process, a token is retrieved, and should be used in Facebook API

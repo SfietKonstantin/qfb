@@ -17,6 +17,19 @@
 #ifndef QFB_CACHEHELPER_P_H
 #define QFB_CACHEHELPER_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
+/**
+ * @internal
+ * @file cachehelper_p.h
+ * @short Cache helper functions
+ */
+
 #include <QtCore/QString>
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtGui/QDesktopServices>
@@ -27,6 +40,11 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Path to the cache folder
+ * @return path to the cache folder.
+ */
 inline QString cacheFolderPath()
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)

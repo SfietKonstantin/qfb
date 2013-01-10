@@ -27,7 +27,7 @@
 /**
  * @internal
  * @file helper_p.h
- * @short Global helper methods functions
+ * @short Global helper functions
  */
 
 #include <QtCore/QPair>

@@ -24,15 +24,33 @@
 // This header file may change from version
 // to version without notice or even be removed.
 
+/**
+ * @internal
+ * @file abstractgraphprocessor_p.h
+ * @brief Definition of QFB::AbstractGraphProcessorPrivate
+ */
+
 #include "abstractprocessor_p.h"
 
 namespace QFB
 {
 
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractGraphProcessor
+ */
 class AbstractGraphProcessorPrivate: public AbstractProcessorPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
     explicit AbstractGraphProcessorPrivate();
+    /**
+     * @internal
+     * @brief Token
+     */
     QString token;
 };
 

@@ -25,6 +25,18 @@
 #include <QtCore/qglobal.h>
 
 /**
+ * @mainpage %QFB, a Qt Facebook library
+ *
+ * %QFB is a Qt Faceook library that is used to interface Qt and Facebook
+ * graph API. It is designed to be portable and smooth.
+ *
+ * %QFB is splitted into several libraries
+ * - \ref base "libqfb", the base library.
+ * - \ref login "libqfblogin", a simple library for performing Facebook OAuth2.
+ * - \ref import "libqfbimport", additional features, designed to be exposed through QML.
+ *
+ * %QFB is developed by Lucien XU (@@SfietKonstantin)
+ *
  * \page base Base library
  *
  * The QFB base library provides a lot of components that are used to

@@ -17,12 +17,25 @@
 #ifndef QFB_ARGUMENTPAIR_H
 #define QFB_ARGUMENTPAIR_H
 
+/**
+ * @file argumentpair.h
+ * @brief Definition of QFB::ArgumentPair
+ */
+
+
 #include <QtCore/QString>
 #include <QtCore/QPair>
 
 namespace QFB
 {
 
+/**
+ * @brief Arugment pair
+ *
+ * This typedef defines a mapping between a pair of strings,
+ * that used to identify the key and the value in an URL
+ * argument.
+ */
 typedef QPair<QString, QString> ArgumentPair;
 
 }

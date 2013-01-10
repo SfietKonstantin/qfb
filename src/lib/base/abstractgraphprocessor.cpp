@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file abstractgraphprocessor.cpp
+ * @brief Implementation of QFB::AbstractGraphProcessor
+ */
+
 #include "abstractgraphprocessor.h"
 #include "abstractgraphprocessor_p.h"
 #include <QtCore/QDebug>

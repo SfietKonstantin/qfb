@@ -81,7 +81,7 @@ public:
         PostProcessing
     };
     /**
-     * @brief Invalid constructor
+     * @brief Default constructor
      * @param parent parent object.
      */
     explicit AbstractProcessor(QObject *parent = 0);
