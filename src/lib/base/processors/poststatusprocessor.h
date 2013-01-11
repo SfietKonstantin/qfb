@@ -14,79 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_POSTSTATUSPROCESSOR_H
+#define QFB_POSTSTATUSPROCESSOR_H
 
 /**
- * @file qfb.h
- * @short Global enumerations used in qfb
+ * @file poststatusprocessor.h
+ * @brief Definition of QFB::PostStatusProcessor
  */
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "abstractgraphprocessor.h"
 
 namespace QFB
 {
-/**
- * @brief Properties map
- *
- * This typedef defines a mapping between a proprety name,
- * that is the string used in Facebook to identify a property,
- * and the value of that property.
- */
-typedef QMap<QString, QVariant> PropertiesMap;
 
+class Object;
+class PostStatusProcessorPrivate;
 /**
- * @brief Enumeration describing the request type
+ * @short WRITE DOCUMENTATION HERE
  */
-enum RequestType {
+class QFBBASE_EXPORT PostStatusProcessor: public AbstractGraphProcessor
+{
+    Q_OBJECT
+public:
     /**
-     * @short An invalid request
+     * @brief Default constructor
+     * @param parent parent object.
      */
-    InvalidRequest,
+    explicit PostStatusProcessor(QObject *parent = 0);
     /**
-     * @short A request for an image
+     * @brief PostStatus
+     * @return poststatus.
      */
-    ImageRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a list of friends
-     */
-    FriendListRequest,
-    /**
-     * @short A request to get an user
-     */
-    UserRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get a feed
-     */
-    FeedRequest,
-    /**
-     * @short A request to get an album
-     */
-    AlbumRequest,
-    /**
-     * @short A request to get a list of albums
-     */
-    AlbumListRequest,
-    /**
-     * @short A request to get a list of photos
-     */
-    PhotoListRequest,
-    PostStatusRequest
-};
-
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+    Object * reply() const;
+protected:
+    QByteArray processPostData(const QVariantMap &data);
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(PostStatusProcessor)
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_POSTSTATUSPROCESSOR_H

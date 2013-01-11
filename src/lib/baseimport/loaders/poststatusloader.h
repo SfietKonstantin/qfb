@@ -14,79 +14,70 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_POSTSTATUSLOADER_H
+#define QFB_POSTSTATUSLOADER_H
 
 /**
- * @file qfb.h
- * @short Global enumerations used in qfb
+ * @file poststatusloader.h
+ * @brief Definition of QFB::PostStatusLoader
  */
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "abstractgraphpostloader.h"
 
 namespace QFB
 {
-/**
- * @brief Properties map
- *
- * This typedef defines a mapping between a proprety name,
- * that is the string used in Facebook to identify a property,
- * and the value of that property.
- */
-typedef QMap<QString, QVariant> PropertiesMap;
 
+class Object;
+class PostStatusLoaderPrivate;
 /**
- * @brief Enumeration describing the request type
+ * @short WRITE DOCUMENTATION HERE
  */
-enum RequestType {
+class QFBBASEIMPORT_EXPORT PostStatusLoader: public AbstractGraphPostLoader
+{
+    Q_OBJECT
     /**
-     * @short An invalid request
+     * @brief Object
      */
-    InvalidRequest,
+    Q_PROPERTY(QFB::Object * reply READ reply NOTIFY replyChanged)
+    Q_PROPERTY(QString message READ message WRITE setMessage NOTIFY messageChanged)
+public:
     /**
-     * @short A request for an image
+     * @brief Default constructor
+     * @param parent parent object.
      */
-    ImageRequest,
+    explicit PostStatusLoader(QObject *parent = 0);
     /**
-     * @short A request to get the type of an object
+     * @brief Reply
+     * @return reply.
      */
-    TypeRequest,
+    Object * reply() const;
+    QString message() const;
+public Q_SLOTS:
+    void setMessage(const QString &message);
+Q_SIGNALS:
     /**
-     * @short A request to get a list of friends
+     * @brief Reply changed
      */
-    FriendListRequest,
+    void replyChanged();
+    void messageChanged();
+protected:
+    QVariantMap data() const;
     /**
-     * @short A request to get an user
+     * @brief Implementation of AbstractGraphLoader::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
      */
-    UserRequest,
+     Request createRequest(const QString &graph, const QVariantMap &data);
     /**
-     * @short A request to get a Facebook picture
+     * @brief Implementation of AbstractLoader::handleReply()
+     * @param processor Processor to handle.
      */
-    PictureRequest,
-    /**
-     * @short A request to get a feed
-     */
-    FeedRequest,
-    /**
-     * @short A request to get an album
-     */
-    AlbumRequest,
-    /**
-     * @short A request to get a list of albums
-     */
-    AlbumListRequest,
-    /**
-     * @short A request to get a list of photos
-     */
-    PhotoListRequest,
-    PostStatusRequest
-};
-
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+     void handleReply(AbstractProcessor *processor);
+private:
+    Q_DECLARE_PRIVATE(PostStatusLoader)
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_POSTSTATUSLOADER_H

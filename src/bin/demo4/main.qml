@@ -52,6 +52,7 @@ Item {
                 queryManager.token = BRIDGE.token
                 webView.visible = false
                 friendListModel.request("me/friends")
+                postStatusLoader.request("me/feed")
             }
         }
 
@@ -60,13 +61,13 @@ Item {
             queryManager.token = token
             webView.visible = false
             friendListModel.request("me/friends")
+            postStatusLoader.request("me/feed")
         }
     }
 
     QFBQueryManager {
         id: queryManager
     }
-
 
     QFBFriendListModel {
         id: friendListModel

@@ -25,7 +25,8 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/imageloader.h \
                     loaders/pictureloader.h \
                     loaders/albumloader.h \
-                    loaders/userloader.h
+                    loaders/userloader.h \
+                    loaders/poststatusloader.h
 # Models
 PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/albumlistmodel.h \
@@ -33,10 +34,12 @@ PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/friendlistmodel.h \
                     models/photolistmodel.h
 HEADERS +=  $${PRIVATE_HEADERS} \
-            $${PUBLIC_HEADERS}
+            $${PUBLIC_HEADERS} \
+    loaders/abstractgraphpostloader.h
 
 # Base
-SOURCES +=  postvalidator.cpp
+SOURCES +=  postvalidator.cpp \
+    loaders/abstractgraphpostloader.cpp
 # Loaders
 SOURCES +=  loaders/abstractloader.cpp \
             loaders/abstractgraphloader.cpp \
@@ -44,7 +47,8 @@ SOURCES +=  loaders/abstractloader.cpp \
             loaders/imageloader.cpp \
             loaders/pictureloader.cpp \
             loaders/albumloader.cpp \
-            loaders/userloader.cpp
+            loaders/userloader.cpp \
+            loaders/poststatusloader.cpp
 # Models
 SOURCES +=  models/abstractloadablemodel.cpp \
             models/albumlistmodel.cpp \

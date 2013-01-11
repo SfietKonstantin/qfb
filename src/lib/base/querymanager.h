@@ -24,6 +24,7 @@
 
 #include "base_global.h"
 #include <QtCore/QObject>
+#include <QtCore/QVariantMap>
 
 class QUrl;
 class QNetworkAccessManager;
@@ -139,6 +140,7 @@ public:
     Request queryAlbum(const QString &graph, const QString &arguments = QString());
     Request queryAlbumList(const QString &graph, const QString &arguments = QString());
     Request queryPhotoList(const QString &graph, const QString &arguments = QString());
+    Request queryPostStatus(const QString &graph, const QVariantMap &data = QVariantMap());
 public Q_SLOTS:
     /**
      * @brief Set the access token

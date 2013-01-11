@@ -114,7 +114,8 @@ Page {
             id: feed
             visible: feedButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            graph: container.facebookId + "/feed"
+            facebookId: container.facebookId
+            stream: "feed"
         }
 
         Item {

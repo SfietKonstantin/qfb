@@ -41,7 +41,8 @@ PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
                     argumentpair.h \
                     querymanager.h \
-                    request.h
+                    request.h \
+                    preprocessordata.h
 # Objects
 PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/object.h \
@@ -64,17 +65,17 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/friendlistprocessor.h \
                     processors/photoprocessor.h \
                     processors/photolistprocessor.h \
-                    processors/userprocessor.h
+                    processors/userprocessor.h \
+                    processors/poststatusprocessor.h
 
 HEADERS =   $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS} \
-    preprocessordata.h
 
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
             request.cpp \
-    preprocessordata.cpp
+            preprocessordata.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \
@@ -97,7 +98,8 @@ SOURCES +=  processors/abstractprocessor.cpp \
             processors/friendlistprocessor.cpp \
             processors/photoprocessor.cpp \
             processors/photolistprocessor.cpp \
-            processors/userprocessor.cpp
+            processors/userprocessor.cpp \
+            processors/poststatusprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

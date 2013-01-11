@@ -42,6 +42,7 @@
 #include "loaders/pictureloader.h"
 #include "loaders/albumloader.h"
 #include "loaders/userloader.h"
+#include "loaders/poststatusloader.h"
 #include "postvalidator.h"
 #include "models/albumlistmodel.h"
 #include "models/feedmodel.h"
@@ -93,6 +94,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
     qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
+    qmlRegisterType<QFB::PostStatusLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostStatusLoader");
 
     qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");

@@ -26,15 +26,59 @@ Item {
     height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
                                                                 : 0)
     property bool loading: model.loading
-    property string graph
+    property string facebookId
+    property string stream
     function load() {
-        model.request(container.graph)
+        model.request(container.facebookId + "/" + stream)
     }
 
     Column {
         id: column
         width: parent.width
         spacing: Ui.MARGIN_DEFAULT
+
+        Item {
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            height: Math.max(postTextArea.height, postButton.height)
+
+            TextArea {
+                id: postTextArea
+                enabled: !postStatusLoader.loading
+                anchors.left: parent.left
+                anchors.right: postButton.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+
+            }
+
+            ToolIcon {
+                id: postButton
+                visible: !postStatusLoader.loading
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                iconId: "toolbar-new-message"
+                onClicked: {
+                    if (postStatusLoader.message.trim() != "") {
+                        postStatusLoader.request(container.facebookId + "/feed")
+                    }
+                }
+            }
+
+            BusyIndicator {
+                anchors.centerIn: postButton
+                visible: postStatusLoader.loading
+                running: visible
+            }
+
+            QFBPostStatusLoader {
+                id: postStatusLoader
+                queryManager: QUERY_MANAGER
+                message: postTextArea.text
+                onLoaded: {
+                    container.load()
+                    postTextArea.text = ""
+                }
+            }
+        }
 
         Repeater {
             model: QFBFeedModel {

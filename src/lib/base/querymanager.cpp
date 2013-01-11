@@ -36,6 +36,7 @@
 #include "processors/friendlistprocessor.h"
 #include "processors/photolistprocessor.h"
 #include "processors/userprocessor.h"
+#include "processors/poststatusprocessor.h"
 
 namespace QFB
 {
@@ -52,7 +53,8 @@ public:
     AbstractProcessor * createProcessor(const Request &request);
     void preparePreprocessor(AbstractProcessor *processor, const Request &request);
     Request createGraphPreprocessor(RequestType type, OperationType operation, const QString &graph,
-                                    const QString &arguments, int priority = 0);
+                                    const QString &arguments,
+                                    const QVariantMap &postData = QVariantMap());
     /// @todo clean mess in processor
     void slotPreprocessFinished(bool needLoading);
     void slotPreprocessError();
@@ -118,6 +120,9 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     case PhotoListRequest:
         processor = new PhotoListProcessor(q);
         break;
+    case PostStatusRequest:
+        processor = new PostStatusProcessor(q);
+        break;
     case InvalidRequest:
         break;
     }
@@ -141,7 +146,7 @@ void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, cons
 
 Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, OperationType operation,
                                                      const QString &graph, const QString &arguments,
-                                                     int priority)
+                                                     const QVariantMap &postData)
 {
     if (token.isEmpty()) {
         return Request();
@@ -154,12 +159,13 @@ Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, Operation
         return Request();
     }
 
+    request.preprocessorData().setOperation(operation);
     request.preprocessorData().setGraph(graph);
     request.preprocessorData().setArguments(arguments);
-    request.preprocessorData().setOperation(operation);
+    request.preprocessorData().setData(postData);
     preparePreprocessor(processor, request);
     processor->setToken(token);
-    processThreadPoll->start(processor, priority);
+    processThreadPoll->start(processor);
 
     return request;
 }
@@ -289,7 +295,7 @@ Request QueryManager::queryImage(const QUrl &url)
 Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(FriendListRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(FriendListRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryPicture(const QString &graph, const QString &arguments)
@@ -301,37 +307,43 @@ Request QueryManager::queryPicture(const QString &graph, const QString &argument
 Request QueryManager::queryUser(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryFeed(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(FeedRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(FeedRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryType(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments, 10000);
+    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryAlbum(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(AlbumRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(AlbumRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryAlbumList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(AlbumListRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(AlbumListRequest, GetOperation, graph, arguments);
 }
 
 Request QueryManager::queryPhotoList(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(PhotoListRequest, GetOperation, graph, arguments, 1000);
+    return d->createGraphPreprocessor(PhotoListRequest, GetOperation, graph, arguments);
+}
+
+Request QueryManager::queryPostStatus(const QString &graph, const QVariantMap &data)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(PostStatusRequest, PostOperation, graph, QString(), data);
 }
 
 void QueryManager::setToken(const QString &token)

@@ -29,13 +29,24 @@ Item {
     Rectangle {
         id: coverBackground
         anchors.fill: parent
-        color: "#0057AE"
+        color: Ui.THEME_COLOR_PRIMARY
         clip: true
 
         FacebookImage {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
             url: coverUrl
+        }
+
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left; anchors.right: parent.right
+            height: Ui.MARGIN_DEFAULT + nameText.height + Ui.MARGIN_DEFAULT
+            opacity: 0.8
+            gradient: Gradient {
+                GradientStop {position: 0; color: "#00000000"}
+                GradientStop {position: 1; color: "black"}
+            }
         }
 
         Text {
