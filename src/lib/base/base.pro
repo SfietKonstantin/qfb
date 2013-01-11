@@ -104,4 +104,5 @@ publicHeaders.files = $${PUBLIC_HEADERS}
 privateHeaders.path = $${INCLUDEDIR}/private
 privateHeaders.files = $${PRIVATE_HEADERS}
 
-INSTALLS += target publicHeaders privateHeaders
+INSTALLS += target
+contains(CONFIG, dev): INSTALLS += publicHeaders privateHeaders

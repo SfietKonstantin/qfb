@@ -14,60 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "userloader.h"
-#include "abstractloader_p.h"
+/**
+ * @file albumloader.cpp
+ * @brief Implementation of QFB::AlbumLoader
+ */
+
+#include "albumloader.h"
+#include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/userprocessor.h"
-#include "objects/user.h"
+#include "processors/albumprocessor.h"
+#include "objects/album.h"
 
 namespace QFB
 {
 
-class UserLoaderPrivate: public AbstractLoaderPrivate
+class AlbumLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    UserLoaderPrivate(UserLoader *q);
-    User *user;
+    AlbumLoaderPrivate(AlbumLoader *q);
+    Album *album;
 };
 
-UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
+AlbumLoaderPrivate::AlbumLoaderPrivate(AlbumLoader *q):
     AbstractLoaderPrivate(q)
 {
-    user = 0;
+    album = 0;
 }
 
 ////// End of private class //////
 
-UserLoader::UserLoader(QObject *parent) :
-    AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
+AlbumLoader::AlbumLoader(QObject *parent):
+    AbstractGraphLoader(*(new AlbumLoaderPrivate(this)), parent)
 {
 }
 
-User * UserLoader::user() const
+Album * AlbumLoader::album() const
 {
-    Q_D(const UserLoader);
-    return d->user;
+    Q_D(const AlbumLoader);
+    return d->album;
 }
 
-Request UserLoader::createRequest(const QString &graph, const QString &arguments)
+Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryUser(graph, arguments);
+        return queryManager()->queryAlbum(graph, arguments);
     }
     return Request();
 }
 
-void UserLoader::handleReply(AbstractProcessor *processor)
+void AlbumLoader::handleReply(AbstractProcessor *processor)
 {
-    Q_D(UserLoader);
-    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
-    if (d->user) {
-        d->user->deleteLater();
+    Q_D(AlbumLoader);
+    AlbumProcessor *albumProcessor = qobject_cast<AlbumProcessor *>(processor);
+    if (d->album) {
+        d->album->deleteLater();
     }
 
-    d->user = userProcessor->user();
-    d->user->setParent(this);
-    emit userChanged();
+    d->album = albumProcessor->album();
+    d->album->setParent(this);
+    emit albumChanged();
 }
 
 }

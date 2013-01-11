@@ -16,23 +16,23 @@
 
 
 /**
- * @file albumlistmodel.cpp
- * @brief Implementation of QFB::AlbumListModel
+ * @file photolistmodel.cpp
+ * @brief Implementation of QFB::PhotoListModel
  */
 
-#include "albumlistmodel.h"
-#include "abstractloadablemodel_p.h"
+#include "photolistmodel.h"
+#include "private/abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include "processors/albumlistprocessor.h"
-#include "objects/album.h"
+#include "processors/photolistprocessor.h"
+#include "objects/photo.h"
 
 namespace QFB
 {
 /**
  * @internal
- * @brief Private class for QFB::AlbumListModel
+ * @brief Private class for QFB::PhotoListModel
  */
-class AlbumListModelPrivate: public AbstractLoadableModelPrivate
+class PhotoListModelPrivate: public AbstractLoadableModelPrivate
 {
 public:
     /**
@@ -40,45 +40,45 @@ public:
      * @brief Default constructor
      * @param q Q-pointer
      */
-    AlbumListModelPrivate(AlbumListModel *q);
+    PhotoListModelPrivate(PhotoListModel *q);
     /**
      * @internal
      * @brief Data
      */
-    QList<Album *> data;
+    QList<Photo *> data;
 };
 
-AlbumListModelPrivate::AlbumListModelPrivate(AlbumListModel *q):
+PhotoListModelPrivate::PhotoListModelPrivate(PhotoListModel *q):
     AbstractLoadableModelPrivate(q)
 {
 }
 
 ////// End of private class //////
 
-AlbumListModel::AlbumListModel(QObject *parent):
-    AbstractLoadableModel(*(new AlbumListModelPrivate(this)), parent)
+PhotoListModel::PhotoListModel(QObject *parent):
+    AbstractLoadableModel(*(new PhotoListModelPrivate(this)), parent)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     setRoleNames(roleNames());
 #endif
 }
 
-int AlbumListModel::rowCount(const QModelIndex &parent) const
+int PhotoListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    Q_D(const AlbumListModel);
+    Q_D(const PhotoListModel);
     return d->data.count();
 }
 
-QVariant AlbumListModel::data(const QModelIndex &index, int role) const
+QVariant PhotoListModel::data(const QModelIndex &index, int role) const
 {
-    Q_D(const AlbumListModel);
+    Q_D(const PhotoListModel);
     int row = index.row();
     if (row < 0 || row >= rowCount()) {
         return QVariant();
     }
 
-    Album *item = d->data.at(row);
+    Photo *item = d->data.at(row);
 
     switch (role) {
     case DataRole:
@@ -90,17 +90,17 @@ QVariant AlbumListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-Request AlbumListModel::createRequest(const QString &graph, const QString &arguments)
+Request PhotoListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryAlbumList(graph, arguments);
+        return queryManager()->queryPhotoList(graph, arguments);
     }
     return Request();
 }
 
-void AlbumListModel::clear()
+void PhotoListModel::clear()
 {
-    Q_D(AlbumListModel);
+    Q_D(PhotoListModel);
     beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
     qDeleteAll(d->data);
     d->data.clear();
@@ -108,29 +108,28 @@ void AlbumListModel::clear()
     endRemoveRows();
 }
 
-void AlbumListModel::handleReply(AbstractPagingProcessor *processor)
+void PhotoListModel::handleReply(AbstractPagingProcessor *processor)
 {
-    Q_D(AlbumListModel);
-    AlbumListProcessor *albumListProcessor = qobject_cast<AlbumListProcessor *>(processor);
-    if (!albumListProcessor) {
+    Q_D(PhotoListModel);
+    PhotoListProcessor *photoListProcessor = qobject_cast<PhotoListProcessor *>(processor);
+    if (!photoListProcessor) {
         return;
     }
 
-    // TODO: adapt this code if needed
-    QList<Album *> albumlist = albumListProcessor->albumList();
+    QList<Photo *> photolist = photoListProcessor->photoList();
 
-    if (albumlist.isEmpty()) {
+    if (photolist.isEmpty()) {
         setDoNotHaveNext();
         return;
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + albumlist.count() - 1);
-    d->data.append(albumlist);
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + photolist.count() - 1);
+    d->data.append(photolist);
     emit countChanged();
     endInsertRows();
 }
 
-QHash<int, QByteArray> AlbumListModel::roleNames() const
+QHash<int, QByteArray> PhotoListModel::roleNames() const
 {
     QHash <int, QByteArray> roles;
     roles.insert(DataRole, "data");

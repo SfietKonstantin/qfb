@@ -21,4 +21,5 @@ target.path = $${LIBDIR}
 headers.path = $${INCLUDEDIR}/login
 headers.files = $${HEADERS}
 
-INSTALLS += target headers
+INSTALLS += target
+contains(CONFIG, dev): INSTALLS += headers

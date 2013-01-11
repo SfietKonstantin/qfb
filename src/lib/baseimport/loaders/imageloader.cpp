@@ -14,65 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file albumloader.cpp
- * @brief Implementation of QFB::AlbumLoader
- */
-
-#include "albumloader.h"
-#include "abstractloader_p.h"
+#include "imageloader.h"
+#include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/albumprocessor.h"
-#include "objects/album.h"
+#include "processors/imageprocessor.h"
 
 namespace QFB
 {
 
-class AlbumLoaderPrivate: public AbstractLoaderPrivate
+class ImageLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    AlbumLoaderPrivate(AlbumLoader *q);
-    Album *album;
+    ImageLoaderPrivate(ImageLoader *q);
+    QString imagePath;
 };
 
-AlbumLoaderPrivate::AlbumLoaderPrivate(AlbumLoader *q):
+ImageLoaderPrivate::ImageLoaderPrivate(ImageLoader *q):
     AbstractLoaderPrivate(q)
 {
-    album = 0;
 }
 
 ////// End of private class //////
 
-AlbumLoader::AlbumLoader(QObject *parent):
-    AbstractGraphLoader(*(new AlbumLoaderPrivate(this)), parent)
+ImageLoader::ImageLoader(QObject *parent) :
+    AbstractLoader(*(new ImageLoaderPrivate(this)), parent)
 {
 }
 
-Album * AlbumLoader::album() const
+QString ImageLoader::imagePath() const
 {
-    Q_D(const AlbumLoader);
-    return d->album;
+    Q_D(const ImageLoader);
+    return d->imagePath;
 }
 
-Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
+void ImageLoader::request(const QUrl &url)
+{
+    Request createdRequest = createRequest(url);
+    if (createdRequest.isValid()) {
+        handleRequest(createdRequest);
+    }
+}
+
+Request ImageLoader::createRequest(const QUrl &url)
 {
     if (queryManager()) {
-        return queryManager()->queryAlbum(graph, arguments);
+        return queryManager()->queryImage(url);
     }
     return Request();
 }
 
-void AlbumLoader::handleReply(AbstractProcessor *processor)
+void ImageLoader::handleReply(AbstractProcessor *processor)
 {
-    Q_D(AlbumLoader);
-    AlbumProcessor *albumProcessor = qobject_cast<AlbumProcessor *>(processor);
-    if (d->album) {
-        d->album->deleteLater();
+    Q_D(ImageLoader);
+    ImageProcessor *imageProcessor = qobject_cast<ImageProcessor *>(processor);
+    QString imagePath = imageProcessor->imagePath();
+    if (d->imagePath != imagePath) {
+        d->imagePath = imagePath;
+        emit imagePathChanged();
     }
-
-    d->album = albumProcessor->album();
-    d->album->setParent(this);
-    emit albumChanged();
 }
+
 
 }

@@ -12,40 +12,52 @@ DEFINES += QFBBASEIMPORT_LIBRARY
 INCLUDEPATH += ../base/
 LIBS += -L../base/ -lqfb
 
-HEADERS +=  baseimport_global.h \
-            abstractloader.h \
-            abstractloader_p.h \
-            abstractgraphloader.h \
-            abstractloadablemodel.h \
-            imageloader.h \
-            typeloader.h \
-            pictureloader.h \
-            userloader.h \
-            friendlistmodel.h \
-            postvalidator.h \
-            feedmodel.h \
-    albumloader.h \
-            albumlistmodel.h \
-            photolistmodel.h \
+# Private headers
+PRIVATE_HEADERS +=  private/abstractloader_p.h \
+                    private/abstractloadablemodel_p.h
+# Base
+PUBLIC_HEADERS +=   baseimport_global.h \
+                    postvalidator.h
+# Loaders
+PUBLIC_HEADERS +=   loaders/abstractloader.h \
+                    loaders/abstractgraphloader.h \
+                    loaders/typeloader.h \
+                    loaders/imageloader.h \
+                    loaders/pictureloader.h \
+                    loaders/albumloader.h \
+                    loaders/userloader.h
+# Models
+PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
+                    models/albumlistmodel.h \
+                    models/feedmodel.h \
+                    models/friendlistmodel.h \
+                    models/photolistmodel.h
+HEADERS +=  $${PRIVATE_HEADERS} \
+            $${PUBLIC_HEADERS}
 
-SOURCES +=  abstractloader.cpp \
-            abstractgraphloader.cpp \
-            abstractloadablemodel.cpp \
-            imageloader.cpp \
-            typeloader.cpp \
-            pictureloader.cpp \
-            userloader.cpp \
-            friendlistmodel.cpp \
-            postvalidator.cpp \
-            feedmodel.cpp \
-    albumloader.cpp \
-            albumlistmodel.cpp \
-            photolistmodel.cpp
+# Base
+SOURCES +=  postvalidator.cpp
+# Loaders
+SOURCES +=  loaders/abstractloader.cpp \
+            loaders/abstractgraphloader.cpp \
+            loaders/typeloader.cpp \
+            loaders/imageloader.cpp \
+            loaders/pictureloader.cpp \
+            loaders/albumloader.cpp \
+            loaders/userloader.cpp
+# Models
+SOURCES +=  models/abstractloadablemodel.cpp \
+            models/albumlistmodel.cpp \
+            models/feedmodel.cpp \
+            models/friendlistmodel.cpp \
+            models/photolistmodel.cpp
 
 # Deployment
 target.path = $${LIBDIR}
+publicHeaders.path = $${INCLUDEDIR}
+publicHeaders.files = $${PUBLIC_HEADERS}
+privateHeaders.path = $${INCLUDEDIR}/private
+privateHeaders.files = $${PRIVATE_HEADERS}
 
-headers.path = $${INCLUDEDIR}
-headers.files = $${HEADERS}
-
-INSTALLS += target headers
+INSTALLS += target
+contains(CONFIG, dev): INSTALLS += publicHeaders privateHeaders

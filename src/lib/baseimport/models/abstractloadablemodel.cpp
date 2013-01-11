@@ -20,7 +20,7 @@
  */
 
 #include "abstractloadablemodel.h"
-#include "abstractloadablemodel_p.h"
+#include "private/abstractloadablemodel_p.h"
 #include <QtCore/QDebug>
 #include "querymanager.h"
 #include "processors/abstractpagingprocessor.h"

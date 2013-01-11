@@ -14,60 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "typeloader.h"
-#include "abstractloader_p.h"
+#include "userloader.h"
+#include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "objects/object.h"
-#include "processors/typeprocessor.h"
+#include "processors/userprocessor.h"
+#include "objects/user.h"
 
 namespace QFB
 {
 
-class TypeLoaderPrivate: public AbstractLoaderPrivate
+class UserLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    TypeLoaderPrivate(TypeLoader *q);
-    Object * object;
+    UserLoaderPrivate(UserLoader *q);
+    User *user;
 };
 
-TypeLoaderPrivate::TypeLoaderPrivate(TypeLoader *q):
+UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
     AbstractLoaderPrivate(q)
 {
-    object = 0;
+    user = 0;
 }
 
 ////// End of private class //////
 
-TypeLoader::TypeLoader(QObject *parent) :
-    AbstractGraphLoader(*(new TypeLoaderPrivate(this)), parent)
+UserLoader::UserLoader(QObject *parent) :
+    AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
 {
 }
 
-Object * TypeLoader::object() const
+User * UserLoader::user() const
 {
-    Q_D(const TypeLoader);
-    return d->object;
+    Q_D(const UserLoader);
+    return d->user;
 }
 
-Request TypeLoader::createRequest(const QString &graph, const QString &arguments)
+Request UserLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryType(graph, arguments);
+        return queryManager()->queryUser(graph, arguments);
     }
     return Request();
 }
 
-void TypeLoader::handleReply(AbstractProcessor *processor)
+void UserLoader::handleReply(AbstractProcessor *processor)
 {
-    Q_D(TypeLoader);
-    TypeProcessor *typeProcessor = qobject_cast<TypeProcessor *>(processor);
-    if (d->object) {
-        d->object->deleteLater();
+    Q_D(UserLoader);
+    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
+    if (d->user) {
+        d->user->deleteLater();
     }
 
-    d->object = typeProcessor->object();
-    d->object->setParent(this);
-    emit objectChanged();
+    d->user = userProcessor->user();
+    d->user->setParent(this);
+    emit userChanged();
 }
 
 }

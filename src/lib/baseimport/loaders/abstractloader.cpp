@@ -15,10 +15,10 @@
  ****************************************************************************************/
 
 #include "abstractloader.h"
-#include "abstractloader_p.h"
-
+#include "private/abstractloader_p.h"
 #include "processors/abstractprocessor.h"
 #include "querymanager.h"
+
 
 namespace QFB
 {

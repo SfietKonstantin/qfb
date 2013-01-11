@@ -105,7 +105,7 @@ def createSource(className, loadedClass):
     source += " * @brief Implementation of QFB::" + className + "\n"
     source += " */\n\n"
     source += "#include \"" + className.lower() + ".h\"\n"
-    source += "#include \"abstractloader_p.h\"\n"
+    source += "#include \"private/abstractloader_p.h\"\n"
     source += "#include \"querymanager.h\"\n"
     source += "#include \"processors/" + loadedClass.lower() + "processor.h\"\n\n"
     source += "#include \"objects/" + loadedClass.lower() + ".h\"\n"

@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "pictureloader.h"
-#include "abstractloader_p.h"
+#include "private/abstractloader_p.h"
 #include "querymanager.h"
 #include "private/picture_p.h"
 #include "processors/pictureprocessor.h"

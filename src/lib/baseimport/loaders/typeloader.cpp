@@ -14,65 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "imageloader.h"
-#include "abstractloader_p.h"
+#include "typeloader.h"
+#include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/imageprocessor.h"
+#include "objects/object.h"
+#include "processors/typeprocessor.h"
 
 namespace QFB
 {
 
-class ImageLoaderPrivate: public AbstractLoaderPrivate
+class TypeLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    ImageLoaderPrivate(ImageLoader *q);
-    QString imagePath;
+    TypeLoaderPrivate(TypeLoader *q);
+    Object * object;
 };
 
-ImageLoaderPrivate::ImageLoaderPrivate(ImageLoader *q):
+TypeLoaderPrivate::TypeLoaderPrivate(TypeLoader *q):
     AbstractLoaderPrivate(q)
 {
+    object = 0;
 }
 
 ////// End of private class //////
 
-ImageLoader::ImageLoader(QObject *parent) :
-    AbstractLoader(*(new ImageLoaderPrivate(this)), parent)
+TypeLoader::TypeLoader(QObject *parent) :
+    AbstractGraphLoader(*(new TypeLoaderPrivate(this)), parent)
 {
 }
 
-QString ImageLoader::imagePath() const
+Object * TypeLoader::object() const
 {
-    Q_D(const ImageLoader);
-    return d->imagePath;
+    Q_D(const TypeLoader);
+    return d->object;
 }
 
-void ImageLoader::request(const QUrl &url)
-{
-    Request createdRequest = createRequest(url);
-    if (createdRequest.isValid()) {
-        handleRequest(createdRequest);
-    }
-}
-
-Request ImageLoader::createRequest(const QUrl &url)
+Request TypeLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryImage(url);
+        return queryManager()->queryType(graph, arguments);
     }
     return Request();
 }
 
-void ImageLoader::handleReply(AbstractProcessor *processor)
+void TypeLoader::handleReply(AbstractProcessor *processor)
 {
-    Q_D(ImageLoader);
-    ImageProcessor *imageProcessor = qobject_cast<ImageProcessor *>(processor);
-    QString imagePath = imageProcessor->imagePath();
-    if (d->imagePath != imagePath) {
-        d->imagePath = imagePath;
-        emit imagePathChanged();
+    Q_D(TypeLoader);
+    TypeProcessor *typeProcessor = qobject_cast<TypeProcessor *>(processor);
+    if (d->object) {
+        d->object->deleteLater();
     }
-}
 
+    d->object = typeProcessor->object();
+    d->object->setParent(this);
+    emit objectChanged();
+}
 
 }

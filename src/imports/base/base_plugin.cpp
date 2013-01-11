@@ -37,16 +37,16 @@
 #include "objects/photo.h"
 #include "objects/post.h"
 #include "objects/user.h"
-#include "typeloader.h"
-#include "imageloader.h"
-#include "friendlistmodel.h"
-#include "pictureloader.h"
-#include "userloader.h"
-#include "feedmodel.h"
+#include "loaders/typeloader.h"
+#include "loaders/imageloader.h"
+#include "loaders/pictureloader.h"
+#include "loaders/albumloader.h"
+#include "loaders/userloader.h"
 #include "postvalidator.h"
-#include "albumloader.h"
-#include "albumlistmodel.h"
-#include "photolistmodel.h"
+#include "models/albumlistmodel.h"
+#include "models/feedmodel.h"
+#include "models/friendlistmodel.h"
+#include "models/photolistmodel.h"
 
 namespace QFB
 {
@@ -84,17 +84,20 @@ void BasePlugin5::registerTypes(const char *uri)
                                           "QFBPostcannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
                                           "QFBUser cannot be created");
+
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
+    qmlRegisterType<QFB::PostValidator>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostValidator");
+
     qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
     qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
-    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
     qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
-    qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
+
     qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
+    qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
+    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
-    qmlRegisterType<QFB::PostValidator>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostValidator");
 }
 
 }

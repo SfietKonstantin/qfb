@@ -133,7 +133,7 @@ def createSource(className, loadedClass):
  */
 
 #include \"""" + className.lower() + """.h\"
-#include "abstractloadablemodel_p.h"
+#include "private/abstractloadablemodel_p.h"
 #include "querymanager.h"
 #include \"processors/""" + loadedClass.lower() + """listprocessor.h\"
 #include \"objects/""" + loadedClass.lower() + """.h\"
