@@ -14,51 +14,57 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_REQUEST_H
-#define QFB_REQUEST_H
+#ifndef QFB_PREPROCESSORDATA_H
+#define QFB_PREPROCESSORDATA_H
 
 #include "base_global.h"
 #include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QMetaType>
 #include <QtCore/QSharedData>
 #include <QtCore/QUrl>
+#include <QtCore/QVariantMap>
 #include "qfb.h"
-#include "preprocessordata.h"
+#include "argumentpair.h"
 
 namespace QFB
 {
 
-struct RequestPrivate: public QSharedData
+struct PreprocessorDataPrivate: public QSharedData
 {
-    int id;
-    PreprocessorData preprocessorData;
-    RequestType type;
+    OperationType operation;
+    QUrl url;
+    QString graph;
+    QList<ArgumentPair> arguments;
+    QByteArray postData;
+    QVariantMap data;
 };
 
-class QFBBASE_EXPORT Request
+
+class QFBBASE_EXPORT PreprocessorData
 {
 public:
-    explicit Request();
-    explicit Request(int id, RequestType type);
-    Request(const Request &other);
-    virtual ~Request();
-    bool operator==(const Request &other) const;
-    bool operator!=(const Request &other) const;
-    bool isValid() const;
-    int id() const;
-    PreprocessorData preprocessorData() const;
-    PreprocessorData & preprocessorData();
-    RequestType type() const;
-    void setId(int id);
-    void setPreprocessorData(const PreprocessorData &preprocessorData);
-    void setType(RequestType type);
+    explicit PreprocessorData();
+    PreprocessorData(const PreprocessorData &other);
+    virtual ~PreprocessorData();
+    QVariant & operator[](const QString &key);
+    QVariant operator[](const QString &key) const;
+    OperationType operation() const;
+    QUrl url() const;
+    QString graph() const;
+    QList<ArgumentPair> arguments() const;
+    QByteArray postData() const;
+    QVariantMap data() const;
+    void setOperation(OperationType operationType);
+    void setUrl(const QUrl &url);
+    void setGraph(const QString &graph);
+    void setArguments(const QString &arguments);
+    void setArguments(const QList<ArgumentPair> &arguments);
+    void setPostData(const QByteArray &postData);
+    void setData(const QVariantMap &data);
 private:
-    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Request)
+    QExplicitlySharedDataPointer<PreprocessorDataPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PreprocessorData)
 };
 
 }
 
-Q_DECLARE_METATYPE(QFB::Request)
-
-#endif // QFB_REQUEST_H
+#endif // QFB_PREPROCESSORDATA_H

@@ -80,7 +80,10 @@ enum RequestType {
      * @short A request to get a list of photos
      */
     PhotoListRequest
+};
 
+enum OperationType {
+    InvalidOperation, GetOperation, PostOperation, DeleteOperation
 };
 
 }

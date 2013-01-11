@@ -20,29 +20,6 @@
 namespace QFB
 {
 
-/**
- * @internal
- * @brief Create arguments
- * @param arguments arguments as a string.
- * @return arguments as a list of argument pair.
- */
-inline QList<ArgumentPair> createArguments(const QString &arguments)
-{
-    QStringList argumentList = arguments.split(",");
-    QList<ArgumentPair> trueArguments;
-    foreach (QString argument, argumentList) {
-        int indexOfEqual = argument.indexOf("=");
-
-        ArgumentPair argumentPair;
-        argumentPair.first = argument.left(indexOfEqual);
-        argumentPair.second = argument.right(argument.size() - indexOfEqual - 1);
-        if (!argumentPair.first.isEmpty() && !argumentPair.second.isEmpty()) {
-            trueArguments.append(argumentPair);
-        }
-    }
-    return trueArguments;
-}
-
 Request::Request():
     d_ptr(new RequestPrivate)
 {
@@ -81,7 +58,8 @@ bool Request::operator !=(const Request &other) const
 bool Request::isValid() const
 {
     Q_D(const Request);
-    return (d->id != -1 && d->type != InvalidRequest);
+    return (d->id != -1 && d->type != InvalidRequest
+            && d->preprocessorData.operation() != InvalidOperation);
 }
 
 int Request::id() const
@@ -90,22 +68,16 @@ int Request::id() const
     return d->id;
 }
 
-QUrl Request::url() const
+PreprocessorData Request::preprocessorData() const
 {
     Q_D(const Request);
-    return d->url;
+    return d->preprocessorData;
 }
 
-QString Request::graph() const
+PreprocessorData & Request::preprocessorData()
 {
-    Q_D(const Request);
-    return d->graph;
-}
-
-QList<ArgumentPair> Request::arguments() const
-{
-    Q_D(const Request);
-    return d->arguments;
+    Q_D(Request);
+    return d->preprocessorData;
 }
 
 RequestType Request::type() const
@@ -120,28 +92,10 @@ void Request::setId(int id)
     d->id = id;
 }
 
-void Request::setUrl(const QUrl &url)
+void Request::setPreprocessorData(const PreprocessorData &preprocessorData)
 {
     Q_D(Request);
-    d->url = url;
-}
-
-void Request::setGraph(const QString &graph)
-{
-    Q_D(Request);
-    d->graph = graph;
-}
-
-void Request::setArguments(const QString &arguments)
-{
-    setArguments(createArguments(arguments));
-    Q_D(Request);
-}
-
-void Request::setArguments(const QList<ArgumentPair> &arguments)
-{
-    Q_D(Request);
-    d->arguments = arguments;
+    d->preprocessorData = preprocessorData;
 }
 
 void Request::setType(RequestType type)

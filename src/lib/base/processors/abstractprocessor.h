@@ -25,6 +25,7 @@
 #include "base_global.h"
 #include <QtCore/QObject>
 #include <QtCore/QRunnable>
+#include <QtCore/QVariantMap>
 #include "argumentpair.h"
 
 class QIODevice;
@@ -156,6 +157,7 @@ protected:
      * @return if the preprocessing task is successful.
      */
     virtual bool preprocess() = 0;
+    virtual QByteArray processPostData(const QVariantMap &data);
     /**
      * @brief Process data source
      *

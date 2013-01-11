@@ -72,9 +72,11 @@ void AbstractProcessor::run()
         return;
     }
 
+    PreprocessorData &preprocessorData = d->request.preprocessorData();
     bool ok = false;
     switch (d->processingTask) {
     case Preprocessing:
+        preprocessorData.setPostData(processPostData(preprocessorData.data()));
         ok = preprocess();
         if (ok) {
             emit preprocessingFinished(d->needLoading);
@@ -121,6 +123,12 @@ void AbstractProcessor::setDataSource(QIODevice *dataSource)
 {
     Q_D(AbstractProcessor);
     d->dataSource = dataSource;
+}
+
+QByteArray AbstractProcessor::processPostData(const QVariantMap &data)
+{
+    Q_UNUSED(data)
+    return QByteArray();
 }
 
 void AbstractProcessor::setNeedLoading(bool needLoading)

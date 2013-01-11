@@ -92,7 +92,7 @@ void NetworkRequestHandlerPrivate::slotFinished()
 
     QUrl redirect = redirectUrl(reply);
     if (!redirect.isEmpty()) {
-        request.setUrl(redirect);
+        request.preprocessorData().setUrl(redirect);
         q->get(request);
         removeReply();
         return;
@@ -113,7 +113,23 @@ void NetworkRequestHandlerPrivate::scheduleReplies()
     Q_Q(NetworkRequestHandler);
     while (runningReplies < MAX_REPLIES && !queue.isEmpty()) {
         Request nextRequest = queue.takeFirst();
-        QNetworkReply *reply = networkAccessManager->get(QNetworkRequest(nextRequest.url()));
+        QUrl url = nextRequest.preprocessorData().url();
+        QNetworkReply *reply = 0;
+        switch (nextRequest.preprocessorData().operation()) {
+        case GetOperation:
+            reply = networkAccessManager->get(QNetworkRequest(url));
+            break;
+        case PostOperation:
+            reply = networkAccessManager->post(QNetworkRequest(url),
+                                               nextRequest.preprocessorData().postData());
+            break;
+        case DeleteOperation:
+            reply = networkAccessManager->deleteResource(QNetworkRequest(url));
+            break;
+        default:
+            qFatal("Invalid operation");
+        }
+
         QObject::connect(reply, SIGNAL(finished()), q, SLOT(slotFinished()));
         replies.insert(reply, nextRequest);
         runningReplies ++;

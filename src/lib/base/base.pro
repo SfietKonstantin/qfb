@@ -67,12 +67,14 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/userprocessor.h
 
 HEADERS =   $${PRIVATE_HEADERS} \
-            $${PUBLIC_HEADERS}
+            $${PUBLIC_HEADERS} \
+    preprocessordata.h
 
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
-            request.cpp
+            request.cpp \
+    preprocessordata.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \
