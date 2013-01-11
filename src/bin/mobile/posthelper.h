@@ -18,7 +18,7 @@
 #define POSTHELPER_H
 
 #include <QtCore/QObject>
-#include "post.h"
+#include "objects/post.h"
 
 class PostHelper : public QObject
 {

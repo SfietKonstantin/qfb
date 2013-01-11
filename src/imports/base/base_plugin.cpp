@@ -29,14 +29,14 @@
 #include <QtQml/qqml.h>
 #endif
 
-#include "object.h"
-#include "namedobject.h"
-#include "user.h"
-#include "cover.h"
-#include "post.h"
-#include "album.h"
-#include "photo.h"
 #include "querymanager.h"
+#include "objects/object.h"
+#include "objects/namedobject.h"
+#include "objects/album.h"
+#include "objects/cover.h"
+#include "objects/photo.h"
+#include "objects/post.h"
+#include "objects/user.h"
 #include "typeloader.h"
 #include "imageloader.h"
 #include "friendlistmodel.h"
@@ -74,16 +74,16 @@ void BasePlugin5::registerTypes(const char *uri)
                                             "QFBObject cannot be created");
     qmlRegisterUncreatableType<QFB::NamedObject>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBNamedObject",
                                               "QFBNamedObject cannot be created");
-    qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
-                                          "QFBUser cannot be created");
-    qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
-                                           "QFBCover cannot be created");
-    qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
-                                          "QFBPostcannot be created");
     qmlRegisterUncreatableType<QFB::Album>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbum",
                                            "QFBAlbum be created");
+    qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
+                                           "QFBCover cannot be created");
     qmlRegisterUncreatableType<QFB::Photo>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhoto",
                                            "QFBPhoto be created");
+    qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
+                                          "QFBPostcannot be created");
+    qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
+                                          "QFBUser cannot be created");
     qmlRegisterType<QFB::QueryManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBQueryManager");
     qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
     qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");

@@ -17,7 +17,7 @@
 #include "abstractloader.h"
 #include "abstractloader_p.h"
 
-#include "abstractprocessor.h"
+#include "processors/abstractprocessor.h"
 #include "querymanager.h"
 
 namespace QFB

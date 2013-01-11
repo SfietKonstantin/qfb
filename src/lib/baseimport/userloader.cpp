@@ -17,8 +17,8 @@
 #include "userloader.h"
 #include "abstractloader_p.h"
 #include "querymanager.h"
-#include "user.h"
-#include "userprocessor.h"
+#include "processors/userprocessor.h"
+#include "objects/user.h"
 
 namespace QFB
 {

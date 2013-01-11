@@ -15,11 +15,11 @@
  ****************************************************************************************/
 
 #include "pictureprocessor.h"
-#include "abstractgraphprocessor_p.h"
 #include <QtCore/QDir>
 #include <QtGui/QImage>
-#include "cachehelper_p.h"
-#include "picture_p.h"
+#include "private/abstractgraphprocessor_p.h"
+#include "private/cachehelper_p.h"
+#include "private/picture_p.h"
 
 namespace QFB
 {

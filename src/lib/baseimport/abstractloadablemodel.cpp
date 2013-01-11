@@ -22,8 +22,8 @@
 #include "abstractloadablemodel.h"
 #include "abstractloadablemodel_p.h"
 #include <QtCore/QDebug>
-#include "abstractpagingprocessor.h"
 #include "querymanager.h"
+#include "processors/abstractpagingprocessor.h"
 
 namespace QFB
 {

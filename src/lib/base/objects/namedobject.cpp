@@ -15,76 +15,31 @@
  ****************************************************************************************/
 
 /**
- * @file photo.cpp
- * @brief Implementation of QFB::Photo
+ * @file namedobject.cpp
+ * @brief Implementation of QFB::NamedObject
  */
 
-#include "photo.h"
-#include "objectbase_p.h"
-#include "photo_keys_p.h"
+#include "namedobject.h"
+#include "private/objectbase_p.h"
+#include "private/namedobject_keys_p.h"
+
 namespace QFB
 {
 
-Photo::Photo(QObject *parent):
-    NamedObject(parent)
+NamedObject::NamedObject(QObject *parent) :
+    Object(parent)
 {
 }
 
-Photo::Photo(const PropertiesMap propertiesMap, QObject *parent):
-    NamedObject(propertiesMap, parent)
+NamedObject::NamedObject(const PropertiesMap propertiesMap, QObject *parent):
+    Object(propertiesMap, parent)
 {
-    Q_D(ObjectBase);
-
-    // TODO: check reparenting
-    // It was done automatically by a script
-
-    // Reparent from
-    QObject *fromObject = d->propertiesMap.value(PHOTO_FROM_KEY).value<NamedObject *>();
-    if (fromObject) {
-        fromObject->setParent(this);
-    }
-
 }
-NamedObject * Photo::from() const
+
+QString NamedObject::name() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_FROM_KEY).value<NamedObject *>();
-}
-
-QString Photo::icon() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_ICON_KEY).toString();
-}
-
-QString Photo::picture() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_PICTURE_KEY).toString();
-}
-
-QUrl Photo::source() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_SOURCE_KEY).toUrl();
-}
-
-int Photo::height() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_HEIGHT_KEY).toInt();
-}
-
-int Photo::width() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_WIDTH_KEY).toInt();
-}
-
-QUrl Photo::link() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(PHOTO_LINK_KEY).toUrl();
+    return d->propertiesMap.value(NAMEDOBJECT_NAME_KEY).toString();
 }
 
 }

@@ -14,19 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file photolistprocessor.cpp
- * @brief Implementation of QFB::PhotoListProcessor
- */
-
-#include "photolistprocessor.h"
+#include "friendlistprocessor.h"
 #include <QtCore/QCoreApplication>
-#include "abstractpagingprocessor_p.h"
-#include "photo.h"
-#include "photoprocessor_p.h"
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "paging_keys_p.h"
+#include "private/abstractpagingprocessor_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "private/namedobject_keys_p.h"
+#include "private/object_keys_p.h"
+#include "private/paging_keys_p.h"
+#include "objects/namedobject.h"
 
 namespace QFB
 {
@@ -35,50 +31,43 @@ namespace QFB
  * @internal
  * @brief DATA_KEY
  *
- * Used in QFB::FeedReply.
+ * Used in QFB::FriendListReply.
  */
 static const char *DATA_KEY = "data";
 
-/**
- * @internal
- * @brief Private class for QFB::PhotoListProcessor
- */
-class PhotoListProcessorPrivate: public AbstractPagingProcessorPrivate
+class FriendListProcessorPrivate: public AbstractPagingProcessorPrivate
 {
 public:
+    explicit FriendListProcessorPrivate();
     /**
      * @internal
-     * @brief Default constructor
+     * @brief Friend list
      */
-    explicit PhotoListProcessorPrivate();
-    /**
-     * @internal
-     * @brief Photo list
-     */
-    QList<Photo *> photoList;
+    QList<NamedObject *> friendList;
 };
 
-PhotoListProcessorPrivate::PhotoListProcessorPrivate():
+FriendListProcessorPrivate::FriendListProcessorPrivate():
     AbstractPagingProcessorPrivate()
 {
 }
 
 ////// End of private class //////
 
-PhotoListProcessor::PhotoListProcessor(QObject *parent):
-    AbstractPagingProcessor(*(new PhotoListProcessorPrivate), parent)
+FriendListProcessor::FriendListProcessor(QObject *parent):
+    AbstractPagingProcessor(*(new FriendListProcessorPrivate()), parent)
 {
 }
 
-QList<Photo *> PhotoListProcessor::photoList() const
+QList<NamedObject *> FriendListProcessor::friendList() const
 {
-    Q_D(const PhotoListProcessor);
-    return d->photoList;
+    Q_D(const FriendListProcessor);
+    return d->friendList;
 }
 
-bool PhotoListProcessor::processDataSource(QIODevice *dataSource)
+bool FriendListProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(PhotoListProcessor);
+    Q_D(FriendListProcessor);
+
     QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
     if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
@@ -96,9 +85,15 @@ bool PhotoListProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue value, dataArray) {
         if (QFB_JSON_IS_OBJECT(value)) {
             JsonObject object = QFB_JSON_GET_OBJECT(value);
-            Photo * photo = PhotoProcessorPrivate::createPhoto(object);
-            if (photo) {
-                d->photoList.append(photo);
+            if (object.contains(OBJECT_ID_KEY) && object.contains(NAMEDOBJECT_NAME_KEY)) {
+                QString id = object.value(OBJECT_ID_KEY).toString();
+                QString name = object.value(NAMEDOBJECT_NAME_KEY).toString();
+                PropertiesMap propertiesMap;
+                propertiesMap.insert(OBJECT_ID_KEY, id);
+                propertiesMap.insert(NAMEDOBJECT_NAME_KEY, name);
+                NamedObject *userBase = new NamedObject(propertiesMap);
+                userBase->moveToThread(QCoreApplication::instance()->thread());
+                d->friendList.append(userBase);
             }
         }
     }

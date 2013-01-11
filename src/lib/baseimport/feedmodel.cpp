@@ -18,9 +18,9 @@
 #include "abstractloadablemodel_p.h"
 #include <QtCore/QDebug>
 #include "querymanager.h"
-#include "feedprocessor.h"
-#include "post.h"
 #include "postvalidator.h"
+#include "processors/feedprocessor.h"
+#include "objects/post.h"
 
 namespace QFB
 {

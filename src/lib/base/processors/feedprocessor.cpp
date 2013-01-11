@@ -15,17 +15,16 @@
  ****************************************************************************************/
 
 #include "feedprocessor.h"
-#include "abstractpagingprocessor_p.h"
 #include <QtCore/QCoreApplication>
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "namedobject.h"
-#include "namedobject_keys_p.h"
-#include "object_keys_p.h"
-#include "paging_keys_p.h"
-#include "post.h"
-#include "post_keys_p.h"
-#include "processorhelper_p.h"
+#include "private/abstractpagingprocessor_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "private/namedobject_keys_p.h"
+#include "private/object_keys_p.h"
+#include "private/paging_keys_p.h"
+#include "private/post_keys_p.h"
+#include "private/processorhelper_p.h"
+#include "objects/post.h"
 
 namespace QFB
 {

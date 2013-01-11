@@ -15,22 +15,22 @@
  ****************************************************************************************/
 
 /**
- * @file album.cpp
- * @brief Implementation of QFB::Album
+ * @file photo.cpp
+ * @brief Implementation of QFB::Photo
  */
 
-#include "album.h"
-#include "objectbase_p.h"
-#include "album_keys_p.h"
+#include "photo.h"
+#include "private/objectbase_p.h"
+#include "private/photo_keys_p.h"
 namespace QFB
 {
 
-Album::Album(QObject *parent):
+Photo::Photo(QObject *parent):
     NamedObject(parent)
 {
 }
 
-Album::Album(const PropertiesMap propertiesMap, QObject *parent):
+Photo::Photo(const PropertiesMap propertiesMap, QObject *parent):
     NamedObject(propertiesMap, parent)
 {
     Q_D(ObjectBase);
@@ -39,70 +39,52 @@ Album::Album(const PropertiesMap propertiesMap, QObject *parent):
     // It was done automatically by a script
 
     // Reparent from
-    QObject *fromObject = d->propertiesMap.value(ALBUM_FROM_KEY).value<NamedObject *>();
+    QObject *fromObject = d->propertiesMap.value(PHOTO_FROM_KEY).value<NamedObject *>();
     if (fromObject) {
         fromObject->setParent(this);
     }
 
 }
-NamedObject * Album::from() const
+NamedObject * Photo::from() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_FROM_KEY).value<NamedObject *>();
+    return d->propertiesMap.value(PHOTO_FROM_KEY).value<NamedObject *>();
 }
 
-QString Album::description() const
+QString Photo::icon() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_DESCRIPTION_KEY).toString();
+    return d->propertiesMap.value(PHOTO_ICON_KEY).toString();
 }
 
-QString Album::location() const
+QString Photo::picture() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_LOCATION_KEY).toString();
+    return d->propertiesMap.value(PHOTO_PICTURE_KEY).toString();
 }
 
-QUrl Album::link() const
+QUrl Photo::source() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_LINK_KEY).toUrl();
+    return d->propertiesMap.value(PHOTO_SOURCE_KEY).toUrl();
 }
 
-QString Album::coverPhoto() const
+int Photo::height() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_COVER_PHOTO_KEY).toString();
+    return d->propertiesMap.value(PHOTO_HEIGHT_KEY).toInt();
 }
 
-int Album::count() const
+int Photo::width() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_COUNT_KEY).toInt();
+    return d->propertiesMap.value(PHOTO_WIDTH_KEY).toInt();
 }
 
-QString Album::type() const
+QUrl Photo::link() const
 {
     Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_TYPE_KEY).toString();
-}
-
-QDateTime Album::createdTime() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_CREATED_TIME_KEY).toDateTime();
-}
-
-QDateTime Album::updatedTime() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_UPDATED_TIME_KEY).toDateTime();
-}
-
-bool Album::canUpload() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(ALBUM_CAN_UPLOAD_KEY).toBool();
+    return d->propertiesMap.value(PHOTO_LINK_KEY).toUrl();
 }
 
 }

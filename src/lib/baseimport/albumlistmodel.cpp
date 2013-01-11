@@ -23,8 +23,8 @@
 #include "albumlistmodel.h"
 #include "abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include "album.h"
-#include "albumlistprocessor.h"
+#include "processors/albumlistprocessor.h"
+#include "objects/album.h"
 
 namespace QFB
 {

@@ -24,18 +24,18 @@
 #include <QtCore/QDebug>
 #include <QtCore/QMetaType>
 #include <QtCore/QThreadPool>
-#include "networkrequesthandler_p.h"
-#include "helper_p.h"
 #include "request.h"
-#include "typeprocessor.h"
-#include "imageprocessor.h"
-#include "friendlistprocessor.h"
-#include "pictureprocessor.h"
-#include "userprocessor.h"
-#include "feedprocessor.h"
-#include "albumprocessor.h"
-#include "albumlistprocessor.h"
-#include "photolistprocessor.h"
+#include "private/networkrequesthandler_p.h"
+#include "private/helper_p.h"
+#include "processors/typeprocessor.h"
+#include "processors/imageprocessor.h"
+#include "processors/pictureprocessor.h"
+#include "processors/albumprocessor.h"
+#include "processors/albumlistprocessor.h"
+#include "processors/feedprocessor.h"
+#include "processors/friendlistprocessor.h"
+#include "processors/photolistprocessor.h"
+#include "processors/userprocessor.h"
 
 namespace QFB
 {

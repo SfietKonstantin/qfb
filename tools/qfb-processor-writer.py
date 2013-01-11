@@ -145,8 +145,8 @@ def createHeaderPrivate(className, includes, baseClass, variables):
     headerPrivate += " * @brief Definition of QFB::" + className + "ProcessorPrivate\n"
     headerPrivate += " */\n\n"
 
-    headerPrivate += "#include \"abstractgraphprocessor_p.h\"\n"
-    headerPrivate += "#include \"jsonhelper_p.h\"\n"
+    headerPrivate += "#include \"private/abstractgraphprocessor_p.h\"\n"
+    headerPrivate += "#include \"private/jsonhelper_p.h\"\n"
 
     headerPrivate += "\nnamespace QFB\n{\n\n"
 
@@ -193,16 +193,16 @@ def createSource(className, includes, baseClass, variables, templateOnly):
     source += " * @brief Implementation of QFB::" + className + "Processor\n"
     source += " */\n\n"
     source += "#include \"" + className.lower() + "processor.h\"\n"
-    if not templateOnly:
-        source += "#include \"" + className.lower() + "processor_p.h\"\n"
     source += "#include <QtCore/QCoreApplication>\n"
-    source += "#include \"" + className.lower() + ".h\"\n"
-    source += "#include \"" + className.lower() + "_keys_p.h\"\n"
-    source += "#include \"helper_p.h\"\n"
-    source += "#include \"namedobject_keys_p.h\"\n"
-    source += "#include \"object_keys_p.h\"\n"
+    if not templateOnly:
+        source += "#include \"private/" + className.lower() + "processor_p.h\"\n"
+    source += "#include \"private/" + className.lower() + "_keys_p.h\"\n"
+    source += "#include \"private/helper_p.h\"\n"
+    source += "#include \"private/namedobject_keys_p.h\"\n"
+    source += "#include \"private/object_keys_p.h\"\n"
     if templateOnly:
-        source += "#include \"jsonhelper_p.h\"\n"
+        source += "#include \"private/jsonhelper_p.h\"\n"
+    source += "#include \"objects/" + className.lower() + ".h\"\n"
 
     source += "\nnamespace QFB\n"
     source += "{\n\n"

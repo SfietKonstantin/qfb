@@ -15,13 +15,13 @@
  ****************************************************************************************/
 
 #include "albumprocessor.h"
-#include "albumprocessor_p.h"
 #include <QtCore/QCoreApplication>
-#include "album.h"
-#include "album_keys_p.h"
-#include "helper_p.h"
-#include "namedobject_keys_p.h"
-#include "object_keys_p.h"
+#include "private/albumprocessor_p.h"
+#include "private/album_keys_p.h"
+#include "private/helper_p.h"
+#include "private/namedobject_keys_p.h"
+#include "private/object_keys_p.h"
+#include "objects/album.h"
 
 namespace QFB
 {

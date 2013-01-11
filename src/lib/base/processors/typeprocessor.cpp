@@ -15,14 +15,14 @@
  ****************************************************************************************/
 
 #include "typeprocessor.h"
-#include "abstractgraphprocessor_p.h"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "object.h"
-#include "object_keys_p.h"
-#include "object_type_keys_p.h"
+#include "private/abstractgraphprocessor_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "objects/object.h"
+#include "private/object_keys_p.h"
+#include "private/object_type_keys_p.h"
 
 namespace QFB
 {

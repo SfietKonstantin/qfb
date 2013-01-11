@@ -16,8 +16,8 @@
 
 #include "imageloader.h"
 #include "abstractloader_p.h"
-#include "imageprocessor.h"
 #include "querymanager.h"
+#include "processors/imageprocessor.h"
 
 namespace QFB
 {

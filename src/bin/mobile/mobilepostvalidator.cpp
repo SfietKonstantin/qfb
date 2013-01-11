@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "mobilepostvalidator.h"
-#include "post.h"
+#include "objects/post.h"
 
 MobilePostValidator::MobilePostValidator(QObject *parent):
     QFB::PostValidator(parent)

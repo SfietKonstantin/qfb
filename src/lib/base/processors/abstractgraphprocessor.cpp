@@ -20,9 +20,9 @@
  */
 
 #include "abstractgraphprocessor.h"
-#include "abstractgraphprocessor_p.h"
 #include <QtCore/QDebug>
-#include "helper_p.h"
+#include "private/abstractgraphprocessor_p.h"
+#include "private/helper_p.h"
 
 namespace QFB
 {

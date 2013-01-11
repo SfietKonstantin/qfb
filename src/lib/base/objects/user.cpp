@@ -20,8 +20,8 @@
  */
 
 #include "user.h"
-#include "objectbase_p.h"
-#include "user_keys_p.h"
+#include "private/objectbase_p.h"
+#include "private/user_keys_p.h"
 
 namespace QFB
 {

@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "request.h"
-#include "helper_p.h"
+#include "private/helper_p.h"
 
 namespace QFB
 {

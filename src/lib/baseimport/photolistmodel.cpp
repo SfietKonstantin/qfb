@@ -23,8 +23,8 @@
 #include "photolistmodel.h"
 #include "abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include "photo.h"
-#include "photolistprocessor.h"
+#include "processors/photolistprocessor.h"
+#include "objects/photo.h"
 
 namespace QFB
 {

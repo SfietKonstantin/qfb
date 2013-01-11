@@ -15,18 +15,18 @@
  ****************************************************************************************/
 
 /**
- * @file albumlistprocessor.cpp
- * @brief Implementation of QFB::AlbumListProcessor
+ * @file photolistprocessor.cpp
+ * @brief Implementation of QFB::PhotoListProcessor
  */
 
-#include "albumlistprocessor.h"
+#include "photolistprocessor.h"
 #include <QtCore/QCoreApplication>
-#include "abstractpagingprocessor_p.h"
-#include "album.h"
-#include "albumprocessor_p.h"
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "paging_keys_p.h"
+#include "private/abstractpagingprocessor_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "private/paging_keys_p.h"
+#include "private/photoprocessor_p.h"
+#include "objects/photo.h"
 
 namespace QFB
 {
@@ -41,44 +41,44 @@ static const char *DATA_KEY = "data";
 
 /**
  * @internal
- * @brief Private class for QFB::AlbumListProcessor
+ * @brief Private class for QFB::PhotoListProcessor
  */
-class AlbumListProcessorPrivate: public AbstractPagingProcessorPrivate
+class PhotoListProcessorPrivate: public AbstractPagingProcessorPrivate
 {
 public:
     /**
      * @internal
      * @brief Default constructor
      */
-    explicit AlbumListProcessorPrivate();
+    explicit PhotoListProcessorPrivate();
     /**
      * @internal
-     * @brief Album list
+     * @brief Photo list
      */
-    QList<Album *> albumList;
+    QList<Photo *> photoList;
 };
 
-AlbumListProcessorPrivate::AlbumListProcessorPrivate():
+PhotoListProcessorPrivate::PhotoListProcessorPrivate():
     AbstractPagingProcessorPrivate()
 {
 }
 
 ////// End of private class //////
 
-AlbumListProcessor::AlbumListProcessor(QObject *parent):
-    AbstractPagingProcessor(*(new AlbumListProcessorPrivate), parent)
+PhotoListProcessor::PhotoListProcessor(QObject *parent):
+    AbstractPagingProcessor(*(new PhotoListProcessorPrivate), parent)
 {
 }
 
-QList<Album *> AlbumListProcessor::albumList() const
+QList<Photo *> PhotoListProcessor::photoList() const
 {
-    Q_D(const AlbumListProcessor);
-    return d->albumList;
+    Q_D(const PhotoListProcessor);
+    return d->photoList;
 }
 
-bool AlbumListProcessor::processDataSource(QIODevice *dataSource)
+bool PhotoListProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(AlbumListProcessor);
+    Q_D(PhotoListProcessor);
     QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
     if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
@@ -96,9 +96,9 @@ bool AlbumListProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue value, dataArray) {
         if (QFB_JSON_IS_OBJECT(value)) {
             JsonObject object = QFB_JSON_GET_OBJECT(value);
-            Album * album = AlbumProcessorPrivate::createAlbum(object);
-            if (album) {
-                d->albumList.append(album);
+            Photo * photo = PhotoProcessorPrivate::createPhoto(object);
+            if (photo) {
+                d->photoList.append(photo);
             }
         }
     }

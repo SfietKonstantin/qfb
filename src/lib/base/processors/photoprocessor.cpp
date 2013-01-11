@@ -20,14 +20,14 @@
  */
 
 #include "photoprocessor.h"
-#include "photoprocessor_p.h"
 #include <QtCore/QCoreApplication>
-#include "photo.h"
-#include "photo_keys_p.h"
-#include "helper_p.h"
-#include "namedobject_keys_p.h"
-#include "object_keys_p.h"
-#include "processorhelper_p.h"
+#include "private/photoprocessor_p.h"
+#include "private/photo_keys_p.h"
+#include "private/helper_p.h"
+#include "private/namedobject_keys_p.h"
+#include "private/object_keys_p.h"
+#include "private/processorhelper_p.h"
+#include "objects/photo.h"
 
 namespace QFB
 {

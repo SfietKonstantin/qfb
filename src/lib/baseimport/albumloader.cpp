@@ -22,8 +22,8 @@
 #include "albumloader.h"
 #include "abstractloader_p.h"
 #include "querymanager.h"
-#include "album.h"
-#include "albumprocessor.h"
+#include "processors/albumprocessor.h"
+#include "objects/album.h"
 
 namespace QFB
 {

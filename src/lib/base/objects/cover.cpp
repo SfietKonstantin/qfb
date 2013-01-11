@@ -20,8 +20,8 @@
  */
 
 #include "cover.h"
-#include "objectbase_p.h"
-#include "cover_keys_p.h"
+#include "private/objectbase_p.h"
+#include "private/cover_keys_p.h"
 
 namespace QFB
 {

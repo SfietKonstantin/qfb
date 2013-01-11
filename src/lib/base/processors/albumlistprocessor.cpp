@@ -14,15 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "friendlistprocessor.h"
-#include "abstractpagingprocessor_p.h"
+/**
+ * @file albumlistprocessor.cpp
+ * @brief Implementation of QFB::AlbumListProcessor
+ */
+
+#include "albumlistprocessor.h"
 #include <QtCore/QCoreApplication>
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "namedobject.h"
-#include "namedobject_keys_p.h"
-#include "object_keys_p.h"
-#include "paging_keys_p.h"
+#include "private/abstractpagingprocessor_p.h"
+#include "private/albumprocessor_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "private/paging_keys_p.h"
+#include "objects/album.h"
 
 namespace QFB
 {
@@ -31,43 +35,50 @@ namespace QFB
  * @internal
  * @brief DATA_KEY
  *
- * Used in QFB::FriendListReply.
+ * Used in QFB::FeedReply.
  */
 static const char *DATA_KEY = "data";
 
-class FriendListProcessorPrivate: public AbstractPagingProcessorPrivate
+/**
+ * @internal
+ * @brief Private class for QFB::AlbumListProcessor
+ */
+class AlbumListProcessorPrivate: public AbstractPagingProcessorPrivate
 {
 public:
-    explicit FriendListProcessorPrivate();
     /**
      * @internal
-     * @brief Friend list
+     * @brief Default constructor
      */
-    QList<NamedObject *> friendList;
+    explicit AlbumListProcessorPrivate();
+    /**
+     * @internal
+     * @brief Album list
+     */
+    QList<Album *> albumList;
 };
 
-FriendListProcessorPrivate::FriendListProcessorPrivate():
+AlbumListProcessorPrivate::AlbumListProcessorPrivate():
     AbstractPagingProcessorPrivate()
 {
 }
 
 ////// End of private class //////
 
-FriendListProcessor::FriendListProcessor(QObject *parent):
-    AbstractPagingProcessor(*(new FriendListProcessorPrivate()), parent)
+AlbumListProcessor::AlbumListProcessor(QObject *parent):
+    AbstractPagingProcessor(*(new AlbumListProcessorPrivate), parent)
 {
 }
 
-QList<NamedObject *> FriendListProcessor::friendList() const
+QList<Album *> AlbumListProcessor::albumList() const
 {
-    Q_D(const FriendListProcessor);
-    return d->friendList;
+    Q_D(const AlbumListProcessor);
+    return d->albumList;
 }
 
-bool FriendListProcessor::processDataSource(QIODevice *dataSource)
+bool AlbumListProcessor::processDataSource(QIODevice *dataSource)
 {
-    Q_D(FriendListProcessor);
-
+    Q_D(AlbumListProcessor);
     QFB_JSON_GET_DOCUMENT(jsonDocument, dataSource);
     if (!QFB_JSON_CHECK_DOCUMENT(jsonDocument)) {
         setError("Received data is not a JSON document");
@@ -85,15 +96,9 @@ bool FriendListProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue value, dataArray) {
         if (QFB_JSON_IS_OBJECT(value)) {
             JsonObject object = QFB_JSON_GET_OBJECT(value);
-            if (object.contains(OBJECT_ID_KEY) && object.contains(NAMEDOBJECT_NAME_KEY)) {
-                QString id = object.value(OBJECT_ID_KEY).toString();
-                QString name = object.value(NAMEDOBJECT_NAME_KEY).toString();
-                PropertiesMap propertiesMap;
-                propertiesMap.insert(OBJECT_ID_KEY, id);
-                propertiesMap.insert(NAMEDOBJECT_NAME_KEY, name);
-                NamedObject *userBase = new NamedObject(propertiesMap);
-                userBase->moveToThread(QCoreApplication::instance()->thread());
-                d->friendList.append(userBase);
+            Album * album = AlbumProcessorPrivate::createAlbum(object);
+            if (album) {
+                d->albumList.append(album);
             }
         }
     }

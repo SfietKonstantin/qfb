@@ -23,8 +23,8 @@
 #include "abstractloadablemodel_p.h"
 #include <QtCore/QDebug>
 #include "querymanager.h"
-#include "namedobject.h"
-#include "friendlistprocessor.h"
+#include "processors/friendlistprocessor.h"
+#include "objects/namedobject.h"
 
 namespace QFB
 {

@@ -15,16 +15,16 @@
  ****************************************************************************************/
 
 #include "userprocessor.h"
-#include "abstractgraphprocessor_p.h"
 #include <QtCore/QCoreApplication>
-#include "cover_keys_p.h"
-#include "helper_p.h"
-#include "jsonhelper_p.h"
-#include "namedobject_keys_p.h"
-#include "object_keys_p.h"
-#include "user.h"
-#include "user_keys_p.h"
-#include "processorhelper_p.h"
+#include "private/abstractgraphprocessor_p.h"
+#include "private/cover_keys_p.h"
+#include "private/helper_p.h"
+#include "private/jsonhelper_p.h"
+#include "private/namedobject_keys_p.h"
+#include "private/object_keys_p.h"
+#include "private/processorhelper_p.h"
+#include "private/user_keys_p.h"
+#include "objects/user.h"
 
 /**
  * @internal

@@ -15,48 +15,42 @@
  ****************************************************************************************/
 
 /**
- * @file object.cpp
- * @brief Implementation of QFB::Object
+ * @file objectbase.cpp
+ * @brief Implementation of QFB::ObjectBase
  */
 
-#include "object.h"
-#include "objectbase_p.h"
-#include "object_keys_p.h"
-#include "object_type_keys_p.h"
+
+#include "objectbase.h"
+#include "private/objectbase_p.h"
 
 namespace QFB
 {
 
-Object::Object(QObject *parent):
-    ObjectBase(parent)
+ObjectBasePrivate::ObjectBasePrivate()
 {
 }
 
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
-    ObjectBase(propertiesMap, parent)
+////// End of private class ///////
+
+ObjectBase::ObjectBase(QObject *parent) :
+    QObject(parent), d_ptr(new ObjectBasePrivate())
+{
+}
+
+ObjectBase::ObjectBase(const PropertiesMap &propertiesMap, QObject *parent):
+    QObject(parent), d_ptr(new ObjectBasePrivate())
 {
     Q_D(ObjectBase);
     d->propertiesMap = propertiesMap;
-    if (!propertiesMap.contains(OBJECT_TYPE_KEY)) {
-        d->propertiesMap.insert(OBJECT_TYPE_KEY, Object::Unknown);
-    }
 }
 
-Object::Object(ObjectBasePrivate &dd, QObject *parent):
-    ObjectBase(dd, parent)
+ObjectBase::ObjectBase(ObjectBasePrivate &dd, QObject *parent):
+    QObject(parent), d_ptr(&dd)
 {
 }
 
-QString Object::facebookId() const
+ObjectBase::~ObjectBase()
 {
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
-}
-
-Object::ObjectType Object::objectType() const
-{
-    Q_D(const ObjectBase);
-    return (Object::ObjectType) d->propertiesMap.value(OBJECT_TYPE_KEY).toInt();
 }
 
 }

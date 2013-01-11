@@ -16,9 +16,9 @@
 
 #include "typeloader.h"
 #include "abstractloader_p.h"
-#include "object.h"
 #include "querymanager.h"
-#include "typeprocessor.h"
+#include "objects/object.h"
+#include "processors/typeprocessor.h"
 
 namespace QFB
 {

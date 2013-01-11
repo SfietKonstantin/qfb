@@ -13,84 +13,95 @@ INCLUDEPATH += ../../3rdparty/qjson/src/
 contains(CONFIG, noqjson):LIBS += -L$${QJSON_PATH} -lqjson
 !contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
-HEADERS +=  base_global.h \
-            qfb.h \
-            argumentpair.h \
-            helper_p.h \
-            jsonhelper_p.h \
-            cachehelper_p.h \
-            picture_p.h \
-            objectbase.h \
-            objectbase_p.h \
-            object.h \
-            object_keys_p.h \
-            object_type_keys_p.h \
-            namedobject.h \
-            namedobject_keys_p.h \
-            user.h \
-            user_keys_p.h \
-            cover.h \
-            cover_keys_p.h \
-            post.h \
-            post_keys_p.h \
-            networkrequesthandler_p.h \
-            abstractprocessor.h \
-            abstractprocessor_p.h \
-            abstractgraphprocessor.h \
-            abstractgraphprocessor_p.h \
-            abstractpagingprocessor.h \
-            abstractpagingprocessor_p.h \
-            paging_keys_p.h \
-            request.h \
-            querymanager.h \
-            imageprocessor.h \
-            typeprocessor.h \
-            pictureprocessor.h \
-            userprocessor.h \
-            friendlistprocessor.h \
-            feedprocessor.h \
-    album.h \
-    album_keys_p.h \
-    albumprocessor.h \
-    albumprocessor_p.h \
-            photo.h \
-            photo_keys_p.h \
-            photoprocessor.h \
-            photoprocessor_p.h \
-    processorhelper_p.h \
-            albumlistprocessor.h \
-            photolistprocessor.h \
+# Helpers
+PRIVATE_HEADERS +=  private/helper_p.h \
+                    private/jsonhelper_p.h \
+                    private/cachehelper_p.h \
+                    private/picture_p.h \
+                    private/paging_keys_p.h
+# Private headers for objects
+PRIVATE_HEADERS +=  private/objectbase_p.h \
+                    private/object_keys_p.h \
+                    private/object_type_keys_p.h \
+                    private/namedobject_keys_p.h \
+                    private/album_keys_p.h \
+                    private/cover_keys_p.h \
+                    private/photo_keys_p.h \
+                    private/post_keys_p.h \
+                    private/user_keys_p.h
+# Private headers for processors
+PRIVATE_HEADERS +=  private/abstractprocessor_p.h \
+                    private/abstractgraphprocessor_p.h \
+                    private/abstractpagingprocessor_p.h \
+                    private/albumprocessor_p.h \
+                    private/photoprocessor_p.h \
+                    private/networkrequesthandler_p.h
+# Base
+PUBLIC_HEADERS +=   base_global.h \
+                    qfb.h \
+                    argumentpair.h \
+                    querymanager.h \
+                    request.h
+# Objects
+PUBLIC_HEADERS +=   objects/objectbase.h \
+                    objects/object.h \
+                    objects/namedobject.h \
+                    objects/album.h \
+                    objects/cover.h \
+                    objects/photo.h \
+                    objects/post.h \
+                    objects/user.h
+# Processors
+PUBLIC_HEADERS +=   processors/abstractprocessor.h \
+                    processors/abstractgraphprocessor.h \
+                    processors/abstractpagingprocessor.h \
+                    processors/imageprocessor.h \
+                    processors/typeprocessor.h \
+                    processors/pictureprocessor.h \
+                    processors/albumprocessor.h \
+                    processors/albumlistprocessor.h \
+                    processors/feedprocessor.h \
+                    processors/friendlistprocessor.h \
+                    processors/photoprocessor.h \
+                    processors/photolistprocessor.h \
+                    processors/userprocessor.h
 
+HEADERS =   $${PRIVATE_HEADERS} \
+            $${PUBLIC_HEADERS}
 
-SOURCES +=  objectbase.cpp \
-            object.cpp \
-            namedobject.cpp \
-            user.cpp \
-            cover.cpp \
-            post.cpp \
-            networkrequesthandler_p.cpp \
-            abstractprocessor.cpp \
-            abstractgraphprocessor.cpp \
-            abstractpagingprocessor.cpp \
-            request.cpp \
+# Base and private
+SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
-            imageprocessor.cpp \
-            typeprocessor.cpp \
-            pictureprocessor.cpp \
-            userprocessor.cpp \
-            friendlistprocessor.cpp \
-            feedprocessor.cpp \
-    album.cpp \
-    albumprocessor.cpp \
-            photo.cpp \
-            photoprocessor.cpp \
-            albumlistprocessor.cpp \
-            photolistprocessor.cpp \
+            request.cpp
+# Objects
+SOURCES +=  objects/objectbase.cpp \
+            objects/object.cpp \
+            objects/namedobject.cpp \
+            objects/album.cpp \
+            objects/cover.cpp \
+            objects/photo.cpp \
+            objects/post.cpp \
+            objects/user.cpp
+# Processors
+SOURCES +=  processors/abstractprocessor.cpp \
+            processors/abstractgraphprocessor.cpp \
+            processors/abstractpagingprocessor.cpp \
+            processors/imageprocessor.cpp \
+            processors/typeprocessor.cpp \
+            processors/pictureprocessor.cpp \
+            processors/albumprocessor.cpp \
+            processors/albumlistprocessor.cpp \
+            processors/feedprocessor.cpp \
+            processors/friendlistprocessor.cpp \
+            processors/photoprocessor.cpp \
+            processors/photolistprocessor.cpp \
+            processors/userprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}
+publicHeaders.path = $${INCLUDEDIR}
+publicHeaders.files = $${PUBLIC_HEADERS}
+privateHeaders.path = $${INCLUDEDIR}/private
+privateHeaders.files = $${PRIVATE_HEADERS}
 
-headers.path = $${INCLUDEDIR}
-headers.files = $${HEADERS}
-
-INSTALLS += target headers
+INSTALLS += target publicHeaders privateHeaders

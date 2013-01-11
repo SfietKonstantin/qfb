@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 #include "posthelper.h"
-#include "namedobject.h"
+#include "objects/namedobject.h"
 
 #include <QtCore/QDebug>
 

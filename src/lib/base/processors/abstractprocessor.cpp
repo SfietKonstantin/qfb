@@ -20,9 +20,9 @@
  */
 
 #include "abstractprocessor.h"
-#include "abstractprocessor_p.h"
 #include <QtCore/QDebug>
 #include "request.h"
+#include "private/abstractprocessor_p.h"
 
 namespace QFB
 {

@@ -26,9 +26,9 @@
 
 
 #include "jsonhelper_p.h"
-#include "object_keys_p.h"
-#include "namedobject.h"
 #include "namedobject_keys_p.h"
+#include "object_keys_p.h"
+#include "objects/namedobject.h"
 
 namespace QFB
 {

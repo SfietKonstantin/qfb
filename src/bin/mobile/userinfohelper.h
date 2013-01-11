@@ -18,7 +18,7 @@
 #define USERINFOHELPER_H
 
 #include <QtCore/QObject>
-#include "user.h"
+#include "objects/user.h"
 
 class UserInfoHelper : public QObject
 {

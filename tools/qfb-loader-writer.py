@@ -107,8 +107,8 @@ def createSource(className, loadedClass):
     source += "#include \"" + className.lower() + ".h\"\n"
     source += "#include \"abstractloader_p.h\"\n"
     source += "#include \"querymanager.h\"\n"
-    source += "#include \"" + loadedClass.lower() + ".h\"\n"
-    source += "#include \"" + loadedClass.lower() + "processor.h\"\n\n"
+    source += "#include \"processors/" + loadedClass.lower() + "processor.h\"\n\n"
+    source += "#include \"objects/" + loadedClass.lower() + ".h\"\n"
 
     source += "namespace QFB\n"
     source += "{\n\n"

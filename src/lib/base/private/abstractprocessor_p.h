@@ -14,32 +14,69 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef QFB_ABSTRACTPROCESSOR_P_H
+#define QFB_ABSTRACTPROCESSOR_P_H
+
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
 /**
- * @file namedobject.cpp
- * @brief Implementation of QFB::NamedObject
+ * @internal
+ * @file abstractprocessor_p.h
+ * @short Definition of QFB::AbstractProcessorPrivate
  */
 
-#include "namedobject.h"
-#include "objectbase_p.h"
-#include "namedobject_keys_p.h"
+#include "request.h"
+#include "processors/abstractprocessor.h"
 
+class QIODevice;
+class QString;
 namespace QFB
 {
 
-NamedObject::NamedObject(QObject *parent) :
-    Object(parent)
+/**
+ * @internal
+ * @brief Private class for QFB::AbstractProcessor
+ */
+class AbstractProcessorPrivate
 {
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit AbstractProcessorPrivate();
+    /**
+     * @internal
+     * @brief Request
+     */
+    Request request;
+    /**
+     * @internal
+     * @brief Processing task
+     */
+    AbstractProcessor::ProcessingTask processingTask;
+    /**
+     * @internal
+     * @brief If data loading from Facebook API is required
+     */
+    bool needLoading;
+    /**
+     * @internal
+     * @brief Data source
+     */
+    QIODevice *dataSource;
+    /**
+     * @internal
+     * @brief Error message
+     */
+    QString error;
+};
+
 }
 
-NamedObject::NamedObject(const PropertiesMap propertiesMap, QObject *parent):
-    Object(propertiesMap, parent)
-{
-}
-
-QString NamedObject::name() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(NAMEDOBJECT_NAME_KEY).toString();
-}
-
-}
+#endif // QFB_ABSTRACTPROCESSOR_P_H
