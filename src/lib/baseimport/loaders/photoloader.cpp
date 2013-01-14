@@ -14,27 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FEEDPROCESSOR_H
-#define QFB_FEEDPROCESSOR_H
+/**
+ * @file photoloader.cpp
+ * @brief Implementation of QFB::PhotoLoader
+ */
 
-#include "abstractpagingprocessor.h"
+#include "photoloader.h"
+#include "private/abstractloader_p.h"
+#include "querymanager.h"
+#include "processors/objectprocessor.h"
 
+#include "objects/photo.h"
 namespace QFB
 {
-class Post;
-class FeedProcessorPrivate;
-class QFBBASE_EXPORT FeedProcessor: public AbstractPagingProcessor
+
+class PhotoLoaderPrivate: public AbstractLoaderPrivate
 {
-    Q_OBJECT
 public:
-    explicit FeedProcessor(QObject *parent = 0);
-    QList<Post *> feed() const;
-protected:
-    bool processDataSource(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(FeedProcessor)
+    PhotoLoaderPrivate(PhotoLoader *q);
+    Photo *photo;
 };
 
+PhotoLoaderPrivate::PhotoLoaderPrivate(PhotoLoader *q):
+    AbstractLoaderPrivate(q)
+{
+    photo = 0;
 }
 
-#endif // QFB_FEEDPROCESSOR_H
+////// End of private class //////
+
+PhotoLoader::PhotoLoader(QObject *parent):
+    AbstractGraphLoader(*(new PhotoLoaderPrivate(this)), parent)
+{
+}
+
+Photo * PhotoLoader::photo() const
+{
+    Q_D(const PhotoLoader);
+    return d->photo;
+}
+
+Request PhotoLoader::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryObject(Object::PhotoType, graph, arguments);
+    }
+    return Request();
+}
+
+void PhotoLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(PhotoLoader);
+    ObjectProcessor *objectProcessor = qobject_cast<ObjectProcessor *>(processor);
+    if (d->photo) {
+        d->photo->deleteLater();
+    }
+
+    d->photo = qobject_cast<Photo*>(objectProcessor->object());
+    d->photo->setParent(this);
+    emit photoChanged();
+}
+
+}

@@ -14,12 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file userloader.cpp
+ * @brief Implementation of QFB::UserLoader
+ */
+
 #include "userloader.h"
 #include "private/abstractloader_p.h"
 #include "querymanager.h"
 #include "processors/objectprocessor.h"
+#include <QtCore/QDebug>
 #include "objects/user.h"
-
 namespace QFB
 {
 
@@ -38,7 +43,7 @@ UserLoaderPrivate::UserLoaderPrivate(UserLoader *q):
 
 ////// End of private class //////
 
-UserLoader::UserLoader(QObject *parent) :
+UserLoader::UserLoader(QObject *parent):
     AbstractGraphLoader(*(new UserLoaderPrivate(this)), parent)
 {
 }
@@ -65,7 +70,7 @@ void UserLoader::handleReply(AbstractProcessor *processor)
         d->user->deleteLater();
     }
 
-    d->user = qobject_cast<User *>(objectProcessor->object());
+    d->user = qobject_cast<User*>(objectProcessor->object());
     d->user->setParent(this);
     emit userChanged();
 }

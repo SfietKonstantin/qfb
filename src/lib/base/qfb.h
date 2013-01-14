@@ -51,7 +51,7 @@ enum RequestType {
      * @short A request to get a Facebook object
      */
     ObjectRequest,
-    ObjectListRequest
+    ObjectListRequest,
     /**
      * @short A request to get a list of friends
      */
@@ -72,7 +72,7 @@ enum RequestType {
      * @short A request to get a list of photos
      */
 //    PhotoListRequest,
-//    PostStatusRequest
+    PostStatusRequest
 };
 
 enum OperationType {

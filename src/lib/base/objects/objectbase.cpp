@@ -47,7 +47,6 @@ ObjectBase::ObjectBase(const QVariantMap &propertiesMap, QObject *parent):
 ObjectBase::ObjectBase(ObjectBasePrivate &dd, QObject *parent):
     QObject(parent), d_ptr(&dd)
 {
-    Q_D(ObjectBase);
 }
 
 ObjectBase::~ObjectBase()

@@ -23,7 +23,7 @@
 #include "albumlistmodel.h"
 #include "private/abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include "processors/albumlistprocessor.h"
+#include "processors/objectlistprocessor.h"
 #include "objects/album.h"
 
 namespace QFB
@@ -93,7 +93,7 @@ QVariant AlbumListModel::data(const QModelIndex &index, int role) const
 Request AlbumListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryAlbumList(graph, arguments);
+        return queryManager()->queryObjectList(Object::AlbumType, graph, arguments);
     }
     return Request();
 }
@@ -111,21 +111,29 @@ void AlbumListModel::clear()
 void AlbumListModel::handleReply(AbstractPagingProcessor *processor)
 {
     Q_D(AlbumListModel);
-    AlbumListProcessor *albumListProcessor = qobject_cast<AlbumListProcessor *>(processor);
-    if (!albumListProcessor) {
+    ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
+    if (!objectListProcessor) {
         return;
     }
 
     // TODO: adapt this code if needed
-    QList<Album *> albumlist = albumListProcessor->albumList();
+    QList<Object *> objectList = objectListProcessor->objectList();
 
-    if (albumlist.isEmpty()) {
+    if (objectList.isEmpty()) {
         setDoNotHaveNext();
         return;
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + albumlist.count() - 1);
-    d->data.append(albumlist);
+    QList<Album*> castedObjectList;
+    foreach (Object *object, objectList) {
+        Album *castedObject = qobject_cast<Album*>(object);
+        if (castedObject) {
+            castedObjectList.append(castedObject);
+        }
+    }
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + castedObjectList.count() - 1);
+    d->data.append(castedObjectList);
     emit countChanged();
     endInsertRows();
 }

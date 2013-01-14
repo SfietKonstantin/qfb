@@ -32,13 +32,7 @@
 #include "processors/pictureprocessor.h"
 #include "processors/objectprocessor.h"
 #include "processors/objectlistprocessor.h"
-//#include "processors/albumprocessor.h"
-//#include "processors/albumlistprocessor.h"
-//#include "processors/feedprocessor.h"
-//#include "processors/friendlistprocessor.h"
-//#include "processors/photolistprocessor.h"
-//#include "processors/userprocessor.h"
-//#include "processors/poststatusprocessor.h"
+#include "processors/poststatusprocessor.h"
 
 namespace QFB
 {
@@ -114,7 +108,13 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
         case ObjectListRequest:
             processor = new ObjectListProcessor(q);
             break;
+        default:
+            break;
         }
+        break;
+    case PostOperation:
+        processor = new PostStatusProcessor(q);
+        break;
     default:
         break;
     }
@@ -315,6 +315,13 @@ Request QueryManager::queryObjectList(Object::ObjectType type, const QString &gr
     Q_D(QueryManager);
     return d->createGraphPreprocessor(ObjectListRequest, GetOperation, type,
                                       graph, arguments);
+}
+
+Request QueryManager::queryPostStatus(const QString &graph, const QVariantMap &data)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(PostStatusRequest, PostOperation, Object::UnknownType,
+                                      graph, QString(), data);
 }
 
 

@@ -62,37 +62,38 @@ void UserInfoHelper::createText()
     QString formattedInformations;
 
     // Add gender (and interested in)
-    if (!m_user->gender() == QFB::User::Unknown) {
-        QString gender;
-        switch(m_user->gender()) {
-        case QFB::User::Male:
-            gender = tr("Male");
-            break;
-        case QFB::User::Female:
-            gender = tr("Female");
-            break;
-        default:
-            break;
-        }
+    QString gender = m_user->gender();
+//    if (!m_user->gender() == QFB::User::Unknown) {
+//        QString gender;
+//        switch(m_user->gender()) {
+//        case QFB::User::Male:
+//            gender = tr("Male");
+//            break;
+//        case QFB::User::Female:
+//            gender = tr("Female");
+//            break;
+//        default:
+//            break;
+//        }
 
         formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Gender"), gender);
-    }
+//    }
 
     formattedInformations += "\n";
 
     // Add birthday
-    QDate birthday = m_user->birthday();
-    if (birthday.isValid()) {
-        QString birthdayString;
-        if (birthday.year() == 1900) {
-            birthdayString = birthday.toString("dd/MM");
-        } else {
-            birthdayString = birthday.toString("dd/MM/yyyy");
-        }
-        formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Birthday"), birthdayString);
-    }
+//    QDate birthday = m_user->birthday();
+//    if (birthday.isValid()) {
+//        QString birthdayString;
+//        if (birthday.year() == 1900) {
+//            birthdayString = birthday.toString("dd/MM");
+//        } else {
+//            birthdayString = birthday.toString("dd/MM/yyyy");
+//        }
+//        formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Birthday"), birthdayString);
+//    }
 
-    formattedInformations += "\n";
+//    formattedInformations += "\n";
 
     // Add languages
     if (!m_user->languages().isEmpty()) {

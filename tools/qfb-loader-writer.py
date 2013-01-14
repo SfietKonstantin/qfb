@@ -107,7 +107,7 @@ def createSource(className, loadedClass):
     source += "#include \"" + className.lower() + ".h\"\n"
     source += "#include \"private/abstractloader_p.h\"\n"
     source += "#include \"querymanager.h\"\n"
-    source += "#include \"processors/" + loadedClass.lower() + "processor.h\"\n\n"
+    source += "#include \"processors/objectprocessor.h\"\n\n"
     source += "#include \"objects/" + loadedClass.lower() + ".h\"\n"
 
     source += "namespace QFB\n"
@@ -144,8 +144,8 @@ def createSource(className, loadedClass):
     source += "::createRequest(const QString &graph, const QString &arguments)\n"
     source += "{\n"
     source += "    if (queryManager()) {\n"
-    source += "        return queryManager()->query"
-    source += loadedClass + "(graph, arguments);\n"
+    source += "        return queryManager()->queryObject(Object::" + loadedClass + "Type, "
+    source += "graph, arguments);\n"
     source += "    }\n"
     source += "    return Request();\n"
     source += "}\n\n"
@@ -153,15 +153,13 @@ def createSource(className, loadedClass):
     source += """void """ + className + """::handleReply(AbstractProcessor *processor)
 {
     Q_D(""" + className + """);
-    """ + loadedClass + """Processor *""" + qfbtools.lowerCamelCase(loadedClass)
-    source += """Processor = qobject_cast<""" + loadedClass +  """Processor *>(processor);
+    ObjectProcessor *objectProcessor = qobject_cast<ObjectProcessor *>(processor);
     if (d->""" + qfbtools.lowerCamelCase(loadedClass) + """) {
         d->""" + qfbtools.lowerCamelCase(loadedClass) + """->deleteLater();
     }
 
-    d->""" + qfbtools.lowerCamelCase(loadedClass) + """ = """
-    source += qfbtools.lowerCamelCase(loadedClass) + """Processor->"""
-    source += qfbtools.lowerCamelCase(loadedClass) + """();
+    d->""" + qfbtools.lowerCamelCase(loadedClass) + """ = qobject_cast<"""
+    source += loadedClass + """*>(objectProcessor->object());
     d->""" + qfbtools.lowerCamelCase(loadedClass) + """->setParent(this);
     emit """ + qfbtools.lowerCamelCase(loadedClass) + """Changed();
 }

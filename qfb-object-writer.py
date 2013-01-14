@@ -252,8 +252,8 @@ class """ + className + """Private;
  * fields=id,name
  * @endcode
  *
- * These parameters should be add to the query that is used
- * to get """ + aOrAn + " " + className.lower() + """
+ * These parameters should be added to the query that is used
+ * to get """ + aOrAn + " " + className.lower() + """.
 """
 
     missing = []
@@ -523,7 +523,7 @@ def createKeys(className, includes, baseClass, variables):
 
 // Warning
 //
-// This file exists for the convenience\
+// This file exists for the convenience
 // of other qfb classes.
 // This header file may change from version
 // to version without notice or even be removed.

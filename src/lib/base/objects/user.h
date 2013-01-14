@@ -70,8 +70,8 @@ class UserPrivate;
  * fields=id,name
  * @endcode
  *
- * These parameters should be add to the query that is used
- * to get an user
+ * These parameters should be added to the query that is used
+ * to get an user.
  *
  * @section missing Missing properties
  *

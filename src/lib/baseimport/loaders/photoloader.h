@@ -14,28 +14,64 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_FRIENDLISTPROCESSOR_H
-#define QFB_FRIENDLISTPROCESSOR_H
+#ifndef QFB_PHOTOLOADER_H
+#define QFB_PHOTOLOADER_H
 
-#include "abstractpagingprocessor.h"
+/**
+ * @file photoloader.h
+ * @brief Definition of QFB::PhotoLoader
+ */
+
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
 
-class NamedObject;
-class FriendListProcessorPrivate;
-class QFBBASE_EXPORT FriendListProcessor: public AbstractPagingProcessor
+class Photo;
+class PhotoLoaderPrivate;
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASEIMPORT_EXPORT PhotoLoader: public AbstractGraphLoader
 {
     Q_OBJECT
+    /**
+     * @brief Photo
+     */
+    Q_PROPERTY(QFB::Photo * photo READ photo NOTIFY photoChanged)
 public:
-    explicit FriendListProcessor(QObject *parent = 0);
-    QList<NamedObject *> friendList() const;
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit PhotoLoader(QObject *parent = 0);
+    /**
+     * @brief Photo
+     * @return photo.
+     */
+    Photo * photo() const;
+Q_SIGNALS:
+    /**
+     * @brief Photo changed
+     */
+    void photoChanged();
 protected:
-    bool processDataSource(QIODevice *dataSource);
+    /**
+     * @brief Implementation of AbstractGraphLoader::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
+     */
+     Request createRequest(const QString &graph, const QString &arguments);
+    /**
+     * @brief Implementation of AbstractLoader::handleReply()
+     * @param processor Processor to handle.
+     */
+     void handleReply(AbstractProcessor *processor);
 private:
-    Q_DECLARE_PRIVATE(FriendListProcessor)
+    Q_DECLARE_PRIVATE(PhotoLoader)
 };
 
 }
 
-#endif // QFB_FRIENDLISTPROCESSOR_H
+#endif // QFB_PHOTOLOADER_H

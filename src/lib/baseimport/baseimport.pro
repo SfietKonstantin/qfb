@@ -25,15 +25,16 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/typeloader.h \
                     loaders/imageloader.h \
                     loaders/pictureloader.h \
-                    loaders/userloader.h
-#                    loaders/albumloader.h \
-#                    loaders/poststatusloader.h
+                    loaders/albumloader.h \
+                    loaders/photoloader.h \
+                    loaders/userloader.h \
+                    loaders/poststatusloader.h
 # Models
 PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/friendlistmodel.h \
-#                    models/albumlistmodel.h \
-                    models/feedmodel.h
-#                    models/photolistmodel.h
+                    models/albumlistmodel.h \
+                    models/feedmodel.h \
+                    models/photolistmodel.h
 HEADERS +=  $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS}
 
@@ -46,15 +47,16 @@ SOURCES +=  loaders/abstractloader.cpp \
             loaders/typeloader.cpp \
             loaders/imageloader.cpp \
             loaders/pictureloader.cpp \
-            loaders/userloader.cpp
-#            loaders/albumloader.cpp \
-#            loaders/poststatusloader.cpp
+            loaders/albumloader.cpp \
+            loaders/photoloader.cpp \
+            loaders/userloader.cpp \
+            loaders/poststatusloader.cpp
 # Models
 SOURCES +=  models/abstractloadablemodel.cpp \
             models/friendlistmodel.cpp \
-#            models/albumlistmodel.cpp \
+            models/albumlistmodel.cpp \
             models/feedmodel.cpp \
-#            models/photolistmodel.cpp
+            models/photolistmodel.cpp
 
 # Deployment
 target.path = $${LIBDIR}

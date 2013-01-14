@@ -23,7 +23,7 @@
 #include "photolistmodel.h"
 #include "private/abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include "processors/photolistprocessor.h"
+#include "processors/objectlistprocessor.h"
 #include "objects/photo.h"
 
 namespace QFB
@@ -93,7 +93,7 @@ QVariant PhotoListModel::data(const QModelIndex &index, int role) const
 Request PhotoListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryPhotoList(graph, arguments);
+        return queryManager()->queryObjectList(Object::PhotoType, graph, arguments);
     }
     return Request();
 }
@@ -111,20 +111,29 @@ void PhotoListModel::clear()
 void PhotoListModel::handleReply(AbstractPagingProcessor *processor)
 {
     Q_D(PhotoListModel);
-    PhotoListProcessor *photoListProcessor = qobject_cast<PhotoListProcessor *>(processor);
-    if (!photoListProcessor) {
+    ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
+    if (!objectListProcessor) {
         return;
     }
 
-    QList<Photo *> photolist = photoListProcessor->photoList();
+    // TODO: adapt this code if needed
+    QList<Object *> objectList = objectListProcessor->objectList();
 
-    if (photolist.isEmpty()) {
+    if (objectList.isEmpty()) {
         setDoNotHaveNext();
         return;
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + photolist.count() - 1);
-    d->data.append(photolist);
+    QList<Photo*> castedObjectList;
+    foreach (Object *object, objectList) {
+        Photo *castedObject = qobject_cast<Photo*>(object);
+        if (castedObject) {
+            castedObjectList.append(castedObject);
+        }
+    }
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + castedObjectList.count() - 1);
+    d->data.append(castedObjectList);
     emit countChanged();
     endInsertRows();
 }

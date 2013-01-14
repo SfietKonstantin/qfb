@@ -1,0 +1,83 @@
+Album
+<QtCore/QDateTime>
+<QtCore/QUrl>
+---
+The album ID
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString id
+---
+The profile that created this album
+
+Requires an access token.
+NamedObject * from
+---
+The title of the album
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString name
+---
+The description of the album
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString description
+---
+The location of the album
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString location
+---
+A link to this album on Facebook
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QUrl link
+---
+The album cover photo ID
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString cover_photo
+---
+privacy
+---
+The number of photos in this album
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+int count
+---
+The type of the album
+
+The type can be: profile, mobile, wall, normal or album
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QString type
+---
+The time the photo album was initially created
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QDateTime created_time
+---
+The last time the photo album was updated
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+QDateTime updated_time
+---
+If the user can upload to that album
+
+Determines whether the UID can upload to the album and returns
+true if the user owns the album, the album is not full, and
+the app can add photos to the album.
+
+Requires an access token or \e user_photos
+or \e friend_photos.
+bool can_upload
+---

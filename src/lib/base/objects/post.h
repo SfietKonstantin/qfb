@@ -62,8 +62,8 @@ class PostPrivate;
  * fields=id,name
  * @endcode
  *
- * These parameters should be add to the query that is used
- * to get a post
+ * These parameters should be added to the query that is used
+ * to get a post.
  *
  * @section missing Missing properties
  *

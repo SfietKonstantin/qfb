@@ -32,22 +32,23 @@
 #include "querymanager.h"
 #include "objects/object.h"
 #include "objects/namedobject.h"
-//#include "objects/album.h"
-//#include "objects/cover.h"
-//#include "objects/photo.h"
+#include "objects/album.h"
+#include "objects/cover.h"
+#include "objects/photo.h"
 #include "objects/post.h"
 #include "objects/user.h"
 #include "loaders/typeloader.h"
 #include "loaders/imageloader.h"
 #include "loaders/pictureloader.h"
-//#include "loaders/albumloader.h"
+#include "loaders/albumloader.h"
+#include "loaders/photoloader.h"
 #include "loaders/userloader.h"
-//#include "loaders/poststatusloader.h"
+#include "loaders/poststatusloader.h"
 #include "postvalidator.h"
-//#include "models/albumlistmodel.h"
+#include "models/albumlistmodel.h"
 #include "models/feedmodel.h"
 #include "models/friendlistmodel.h"
-//#include "models/photolistmodel.h"
+#include "models/photolistmodel.h"
 
 namespace QFB
 {
@@ -75,12 +76,12 @@ void BasePlugin5::registerTypes(const char *uri)
                                             "QFBObject cannot be created");
     qmlRegisterUncreatableType<QFB::NamedObject>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBNamedObject",
                                               "QFBNamedObject cannot be created");
-//    qmlRegisterUncreatableType<QFB::Album>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbum",
-//                                           "QFBAlbum be created");
-//    qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
-//                                           "QFBCover cannot be created");
-//    qmlRegisterUncreatableType<QFB::Photo>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhoto",
-//                                           "QFBPhoto be created");
+    qmlRegisterUncreatableType<QFB::Album>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbum",
+                                           "QFBAlbum be created");
+    qmlRegisterUncreatableType<QFB::Cover>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCover",
+                                           "QFBCover cannot be created");
+    qmlRegisterUncreatableType<QFB::Photo>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhoto",
+                                           "QFBPhoto be created");
     qmlRegisterUncreatableType<QFB::Post>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPost",
                                           "QFBPostcannot be created");
     qmlRegisterUncreatableType<QFB::User>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUser",
@@ -92,14 +93,18 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::TypeLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBTypeLoader");
     qmlRegisterType<QFB::ImageLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBImageLoader");
     qmlRegisterType<QFB::PictureLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPictureLoader");
+    qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
+    qmlRegisterType<QFB::PhotoLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
-//    qmlRegisterType<QFB::AlbumLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumLoader");
-//    qmlRegisterType<QFB::PostStatusLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostStatusLoader");
 
-//    qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
+    qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
-//    qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
+    qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
+
+
+
+    qmlRegisterType<QFB::PostStatusLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostStatusLoader");
 }
 
 }

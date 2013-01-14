@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -20,32 +20,61 @@
  */
 
 #include "cover.h"
+#include "private/helper_p.h"
 #include "private/objectbase_p.h"
+#include "private/object_creator_p.h"
 #include "private/cover_keys_p.h"
 
 namespace QFB
 {
 
-Cover::Cover(QObject *parent) :
-    Object(parent)
+class CoverPrivate: public ObjectBasePrivate
+{
+public:
+    explicit CoverPrivate();
+};
+
+CoverPrivate::CoverPrivate():
+    ObjectBasePrivate()
+{
+}
+
+////// End of private class //////
+
+Cover::Cover(QObject *parent):
+    ObjectBase(parent)
 {
 }
 
 Cover::Cover(const QVariantMap propertiesMap, QObject *parent):
-    Object(propertiesMap, parent)
+    ObjectBase(*(new CoverPrivate), parent)
 {
+    Q_D(Cover);
+    d->propertiesMap = propertiesMap;
+    // >>>>> custom object creation code
+    // TODO: check object creation
+    // It was done automatically by a script
+    // <<<<< custom object creation code
 }
 
 QUrl Cover::source() const
 {
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(COVER_SOURCE_KEY).toUrl();
+    Q_D(const Cover);
+    // >>>>> property source
+    return parseUrl(d->propertiesMap.value(COVER_SOURCE_KEY).toString());
+    // <<<<< property source
 }
 
 double Cover::offsetY() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const Cover);
+    // >>>>> property offset_y
     return d->propertiesMap.value(COVER_OFFSET_Y_KEY).toDouble();
+    // <<<<< property offset_y
 }
+
+
+// >>>>> custom source code
+// <<<<< custom source code
 
 }

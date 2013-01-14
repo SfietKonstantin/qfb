@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -23,15 +23,16 @@
  */
 
 #include "namedobject.h"
+// >>>>> includes
 #include <QtCore/QDateTime>
 #include <QtCore/QUrl>
+// <<<<< includes
 
-namespace QFB
-{
-
+namespace QFB {
+class AlbumPrivate;
 /**
  * @short An album
- * 
+ *
  * This class represents an album in Facebook.
  * Extending QFB::NamedObject, it contains a lot of properties
  * that can be accessed through
@@ -45,19 +46,20 @@ namespace QFB
  * - createdTime()
  * - updatedTime()
  * - canUpload()
-
+ *
  * Some of these fields might not be set, because of
  * users hiding them in their settings, or because of
  * missing permissions.
  *
- * You can choose the fields you want using the fields
+ * You can choose the fields you want using the "fields"
  * query parameter:
  *
  * @code
  * fields=id,name
  * @endcode
- * These parameters should be add to the query that is used
- * to get an user.
+ *
+ * These parameters should be added to the query that is used
+ * to get an album.
  *
  * @section missing Missing properties
  *
@@ -69,41 +71,67 @@ class QFBBASE_EXPORT Album: public NamedObject
     Q_OBJECT
     /**
      * @short The profile that created this album
+     * 
+     * Requires an access token.
      */
     Q_PROPERTY(NamedObject * from READ from CONSTANT)
     /**
      * @short The description of the album
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QString description READ description CONSTANT)
     /**
      * @short The location of the album
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QString location READ location CONSTANT)
     /**
      * @short A link to this album on Facebook
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QUrl link READ link CONSTANT)
     /**
      * @short The album cover photo ID
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QString coverPhoto READ coverPhoto CONSTANT)
     /// @todo privacy
     /**
      * @short The number of photos in this album
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(int count READ count CONSTANT)
     /**
      * @short The type of the album
      * 
      * The type can be: profile, mobile, wall, normal or album
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QString type READ type CONSTANT)
     /**
      * @short The time the photo album was initially created
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QDateTime createdTime READ createdTime CONSTANT)
     /**
      * @short The last time the photo album was updated
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(QDateTime updatedTime READ updatedTime CONSTANT)
     /**
@@ -112,8 +140,13 @@ class QFBBASE_EXPORT Album: public NamedObject
      * Determines whether the UID can upload to the album and returns
      * true if the user owns the album, the album is not full, and
      * the app can add photos to the album.
+     * 
+     * Requires an access token or \e user_photos
+     * or \e friend_photos.
      */
     Q_PROPERTY(bool canUpload READ canUpload CONSTANT)
+    // >>>>> custom header code
+    // <<<<< custom header code
 public:
     /**
      * @brief Invalid constructor
@@ -125,7 +158,7 @@ public:
      * @param propertiesMap properties.
      * @param parent parent object.
      */
-    explicit Album(const PropertiesMap propertiesMap, QObject *parent = 0);
+    explicit Album(const QVariantMap propertiesMap, QObject *parent = 0);
     /**
      * @brief From
      * @return from.
@@ -177,11 +210,12 @@ public:
      */
     bool canUpload() const;
 private:
-    Q_DECLARE_PRIVATE(ObjectBase)
+    Q_DECLARE_PRIVATE(Album)
 };
 
 }
 
 Q_DECLARE_METATYPE(QFB::Album *)
+
 
 #endif // QFB_ALBUM_H

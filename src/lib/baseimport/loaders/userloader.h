@@ -17,6 +17,11 @@
 #ifndef QFB_USERLOADER_H
 #define QFB_USERLOADER_H
 
+/**
+ * @file userloader.h
+ * @brief Definition of QFB::UserLoader
+ */
+
 #include "abstractgraphloader.h"
 
 namespace QFB
@@ -24,18 +29,45 @@ namespace QFB
 
 class User;
 class UserLoaderPrivate;
-class QFBBASEIMPORT_EXPORT UserLoader : public AbstractGraphLoader
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASEIMPORT_EXPORT UserLoader: public AbstractGraphLoader
 {
     Q_OBJECT
+    /**
+     * @brief User
+     */
     Q_PROPERTY(QFB::User * user READ user NOTIFY userChanged)
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit UserLoader(QObject *parent = 0);
+    /**
+     * @brief User
+     * @return user.
+     */
     User * user() const;
 Q_SIGNALS:
+    /**
+     * @brief User changed
+     */
     void userChanged();
 protected:
-    Request createRequest(const QString &graph, const QString &arguments);
-    void handleReply(AbstractProcessor *processor);
+    /**
+     * @brief Implementation of AbstractGraphLoader::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
+     */
+     Request createRequest(const QString &graph, const QString &arguments);
+    /**
+     * @brief Implementation of AbstractLoader::handleReply()
+     * @param processor Processor to handle.
+     */
+     void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(UserLoader)
 };

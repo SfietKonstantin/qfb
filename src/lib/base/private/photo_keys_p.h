@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -68,6 +68,21 @@ static const char *PHOTO_WIDTH_KEY = "width";
  * @brief PHOTO_LINK_KEY
  */
 static const char *PHOTO_LINK_KEY = "link";
+/**
+ * @internal
+ * @brief PHOTO_CREATED_TIME_KEY
+ */
+static const char *PHOTO_CREATED_TIME_KEY = "created_time";
+/**
+ * @internal
+ * @brief PHOTO_UPDATED_TIME_KEY
+ */
+static const char *PHOTO_UPDATED_TIME_KEY = "updated_time";
+/**
+ * @internal
+ * @brief PHOTO_POSITION_KEY
+ */
+static const char *PHOTO_POSITION_KEY = "position";
 
 }
 

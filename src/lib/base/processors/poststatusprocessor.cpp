@@ -88,7 +88,7 @@ bool PostStatusProcessor::processDataSource(QIODevice *dataSource)
         return false;
     }
     QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);
-    PropertiesMap propertiesMap;
+    QVariantMap propertiesMap;
     propertiesMap.insert(OBJECT_ID_KEY, rootObject.value(OBJECT_ID_KEY).toString());
 
     Object *reply = new Object(propertiesMap);

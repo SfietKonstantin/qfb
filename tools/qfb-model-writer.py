@@ -135,7 +135,7 @@ def createSource(className, loadedClass):
 #include \"""" + className.lower() + """.h\"
 #include "private/abstractloadablemodel_p.h"
 #include "querymanager.h"
-#include \"processors/""" + loadedClass.lower() + """listprocessor.h\"
+#include \"processors/objectlistprocessor.h\"
 #include \"objects/""" + loadedClass.lower() + """.h\"
 
 namespace QFB
@@ -205,7 +205,8 @@ QVariant """ + className + """::data(const QModelIndex &index, int role) const
 Request """ + className + """::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->query""" + loadedClass + """List(graph, arguments);
+        return queryManager()->queryObjectList(Object::""" + loadedClass
+    source += """Type, graph, arguments);
     }
     return Request();
 }
@@ -223,24 +224,29 @@ void """ + className + """::clear()
 void """ + className + """::handleReply(AbstractPagingProcessor *processor)
 {
     Q_D(""" + className + """);
-    """ + loadedClass + """ListProcessor *""" + qfbtools.lowerCamelCase(loadedClass)
-    source += """ListProcessor = qobject_cast<""" + loadedClass + """ListProcessor *>(processor);
-    if (!""" + qfbtools.lowerCamelCase(loadedClass) + """ListProcessor) {
+    ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
+    if (!objectListProcessor) {
         return;
     }
 
     // TODO: adapt this code if needed
-    QList<""" + loadedClass + """ *> """ + qfbtools.lowerCamelCase(loadedClass) + "list = """
-    source += qfbtools.lowerCamelCase(loadedClass) + """ListProcessor->"""
-    source += qfbtools.lowerCamelCase(loadedClass) + """List();
+    QList<Object *> objectList = objectListProcessor->objectList();
 
-    if (""" + qfbtools.lowerCamelCase(loadedClass) + """list.isEmpty()) {
+    if (objectList.isEmpty()) {
         setDoNotHaveNext();
         return;
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + """ + qfbtools.lowerCamelCase(loadedClass) + """list.count() - 1);
-    d->data.append(""" + qfbtools.lowerCamelCase(loadedClass) + """list);
+    QList<""" + loadedClass + """*> castedObjectList;
+    foreach (Object *object, objectList) {
+        """ + loadedClass + """ *castedObject = qobject_cast<""" + loadedClass + """*>(object);
+        if (castedObject) {
+            castedObjectList.append(castedObject);
+        }
+    }
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + castedObjectList.count() - 1);
+    d->data.append(castedObjectList);
     emit countChanged();
     endInsertRows();
 }

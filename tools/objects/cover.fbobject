@@ -1,0 +1,8 @@
+Cover
+<QtCore/QUrl>
+---
+Source of the cover
+QUrl source
+---
+Vertical offset
+double offset_y

@@ -24,9 +24,9 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/object_keys_p.h \
                     private/object_type_keys_p.h \
                     private/namedobject_keys_p.h \
-#                    private/album_keys_p.h \
-#                    private/cover_keys_p.h \
-#                    private/photo_keys_p.h \
+                    private/album_keys_p.h \
+                    private/cover_keys_p.h \
+                    private/photo_keys_p.h \
                     private/post_keys_p.h \
                     private/user_keys_p.h
 # Private headers for processors
@@ -35,9 +35,8 @@ PRIVATE_HEADERS +=  private/object_creator_p.h \
                     private/abstractgraphprocessor_p.h \
                     private/abstractpagingprocessor_p.h \
                     private/objectprocessor_p.h \
-                    private/networkrequesthandler_p.h
-#                    private/albumprocessor_p.h \
-#                    private/photoprocessor_p.h \
+                    private/networkrequesthandler_p.h \
+                    private/poststatusprocessor.h
 # Base
 PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
@@ -49,9 +48,9 @@ PUBLIC_HEADERS +=   base_global.h \
 PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/object.h \
                     objects/namedobject.h \
-#                    objects/album.h \
+                    objects/album.h \
                     objects/cover.h \
-#                    objects/photo.h \
+                    objects/photo.h \
                     objects/post.h \
                     objects/user.h
 # Processors
@@ -63,31 +62,23 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/pictureprocessor.h \
                     processors/objectprocessor.h \
                     processors/objectlistprocessor.h \
-#                    processors/albumprocessor.h \
-#                    processors/albumlistprocessor.h \
-#                    processors/feedprocessor.h \
-#                    processors/friendlistprocessor.h \
-#                    processors/photoprocessor.h \
-#                    processors/photolistprocessor.h \
-#                    processors/userprocessor.h \
-#                    processors/poststatusprocessor.h \
+                    processors/poststatusprocessor.h
 
 HEADERS =   $${PRIVATE_HEADERS} \
-            $${PUBLIC_HEADERS} \
+            $${PUBLIC_HEADERS}
 
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
             request.cpp \
-            preprocessordata.cpp \
-    processors/objectlistprocessor.cpp
+            preprocessordata.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \
             objects/namedobject.cpp \
-#            objects/album.cpp \
+            objects/album.cpp \
             objects/cover.cpp \
-#            objects/photo.cpp \
+            objects/photo.cpp \
             objects/post.cpp \
             objects/user.cpp
 # Processors
@@ -97,15 +88,9 @@ SOURCES +=  processors/abstractprocessor.cpp \
             processors/imageprocessor.cpp \
             processors/typeprocessor.cpp \
             processors/pictureprocessor.cpp \
-            processors/objectprocessor.cpp
-#            processors/albumprocessor.cpp \
-#            processors/albumlistprocessor.cpp \
-#            processors/feedprocessor.cpp \
-#            processors/friendlistprocessor.cpp \
-#            processors/photoprocessor.cpp \
-#            processors/photolistprocessor.cpp \
-#            processors/userprocessor.cpp \
-#            processors/poststatusprocessor.cpp \
+            processors/objectprocessor.cpp \
+            processors/objectlistprocessor.cpp \
+            processors/poststatusprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

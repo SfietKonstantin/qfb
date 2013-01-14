@@ -22,9 +22,9 @@
 #include "albumloader.h"
 #include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/albumprocessor.h"
-#include "objects/album.h"
+#include "processors/objectprocessor.h"
 
+#include "objects/album.h"
 namespace QFB
 {
 
@@ -57,7 +57,7 @@ Album * AlbumLoader::album() const
 Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryAlbum(graph, arguments);
+        return queryManager()->queryObject(Object::AlbumType, graph, arguments);
     }
     return Request();
 }
@@ -65,12 +65,12 @@ Request AlbumLoader::createRequest(const QString &graph, const QString &argument
 void AlbumLoader::handleReply(AbstractProcessor *processor)
 {
     Q_D(AlbumLoader);
-    AlbumProcessor *albumProcessor = qobject_cast<AlbumProcessor *>(processor);
+    ObjectProcessor *objectProcessor = qobject_cast<ObjectProcessor *>(processor);
     if (d->album) {
         d->album->deleteLater();
     }
 
-    d->album = albumProcessor->album();
+    d->album = qobject_cast<Album*>(objectProcessor->object());
     d->album->setParent(this);
     emit albumChanged();
 }

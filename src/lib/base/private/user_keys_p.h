@@ -19,7 +19,8 @@
 
 // Warning
 //
-// This file exists for the convenience// of other qfb classes.
+// This file exists for the convenience
+// of other qfb classes.
 // This header file may change from version
 // to version without notice or even be removed.
 
