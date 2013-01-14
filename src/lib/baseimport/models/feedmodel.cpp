@@ -19,7 +19,7 @@
 #include <QtCore/QDebug>
 #include "querymanager.h"
 #include "postvalidator.h"
-#include "processors/feedprocessor.h"
+#include "processors/objectlistprocessor.h"
 #include "objects/post.h"
 
 namespace QFB
@@ -109,27 +109,29 @@ void FeedModel::setValidator(PostValidator *validator)
 void FeedModel::handleReply(AbstractPagingProcessor *processor)
 {
     Q_D(FeedModel);
-    FeedProcessor *feedProcessor = qobject_cast<FeedProcessor *>(processor);
-    if (!feedProcessor) {
+    ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
+    if (!objectListProcessor) {
         return;
     }
 
-    QList<Post *> feed = feedProcessor->feed();
+    QList<Object *> feed = objectListProcessor->objectList();
 
     QList<Post *> finalFeed;
-    foreach (Post *post, feed) {
-        bool postOk = true;
-        if (d->validator) {
-            if (!d->validator->validate(post)) {
+    foreach (Object *post, feed) {
+        Post *castedPost = qobject_cast<Post *>(post);
+        bool postOk = castedPost;
+
+        if (d->validator && postOk) {
+            if (!d->validator->validate(castedPost)) {
                 postOk = false;
             }
         }
 
-        if (!postOk) {
-            post->deleteLater();
+        if (!postOk && castedPost) {
+            castedPost->deleteLater();
         } else {
-            post->setParent(this);
-            finalFeed.append(post);
+            castedPost->setParent(this);
+            finalFeed.append(castedPost);
         }
     }
 
@@ -157,7 +159,7 @@ void FeedModel::clear()
 Request FeedModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryFeed(graph, arguments);
+        return queryManager()->queryObjectList(Object::PostType, graph, arguments);
     }
     return Request();
 }

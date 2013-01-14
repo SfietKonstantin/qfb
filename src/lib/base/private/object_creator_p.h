@@ -23,12 +23,12 @@
 namespace QFB
 {
 
-template <class T> T * createObject(const QVariantMap &propertiesMap, QObject *parent = 0)
+template <class T> inline T * createObject(const QVariantMap &propertiesMap, QObject *parent = 0)
 {
     return new T(propertiesMap, parent);
 }
 
-QList<QString> createStringList(const QVariantList &propertiesList)
+inline QList<QString> createStringList(const QVariantList &propertiesList)
 {
     QList<QString> data;
     foreach (QVariant properties, propertiesList) {
@@ -37,7 +37,8 @@ QList<QString> createStringList(const QVariantList &propertiesList)
     return data;
 }
 
-template <class T> QList<T *> createList(const QVariantList &propertiesList, QObject *parent = 0)
+template <class T> inline QList<T *> createList(const QVariantList &propertiesList,
+                                                QObject *parent = 0)
 {
     QList<T *> data;
     foreach (QVariant properties, propertiesList) {

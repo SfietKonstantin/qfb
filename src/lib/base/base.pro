@@ -27,7 +27,7 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
 #                    private/album_keys_p.h \
 #                    private/cover_keys_p.h \
 #                    private/photo_keys_p.h \
-#                    private/post_keys_p.h \
+                    private/post_keys_p.h \
                     private/user_keys_p.h
 # Private headers for processors
 PRIVATE_HEADERS +=  private/object_creator_p.h \
@@ -52,7 +52,7 @@ PUBLIC_HEADERS +=   objects/objectbase.h \
 #                    objects/album.h \
                     objects/cover.h \
 #                    objects/photo.h \
-#                    objects/post.h \
+                    objects/post.h \
                     objects/user.h
 # Processors
 PUBLIC_HEADERS +=   processors/abstractprocessor.h \
@@ -88,7 +88,7 @@ SOURCES +=  objects/objectbase.cpp \
 #            objects/album.cpp \
             objects/cover.cpp \
 #            objects/photo.cpp \
-#            objects/post.cpp \
+            objects/post.cpp \
             objects/user.cpp
 # Processors
 SOURCES +=  processors/abstractprocessor.cpp \

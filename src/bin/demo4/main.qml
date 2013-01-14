@@ -75,10 +75,10 @@ Item {
         autoLoadNext: true
     }
 
-//    QFBFeedModel {
-//        id: feedModel
-//        queryManager: queryManager
-//    }
+    QFBFeedModel {
+        id: feedModel
+        queryManager: queryManager
+    }
 
     QFBUserLoader {
         id: userLoader
@@ -154,83 +154,83 @@ Item {
             }
 
         }
-//        ListView {
-//            id: feedView
-//            anchors.fill: parent
-//            model: feedModel
-//            visible: false
-//            delegate:Item {
-//                width: feedView.width
-//                height: column.height + 20
+        ListView {
+            id: feedView
+            anchors.fill: parent
+            model: feedModel
+            visible: false
+            delegate:Item {
+                width: feedView.width
+                height: column.height + 20
 
-//                Column {
-//                    id: column
-//                    width: parent.width - 20
-//                    anchors.centerIn: parent
-//                    spacing: 5
+                Column {
+                    id: column
+                    width: parent.width - 20
+                    anchors.centerIn: parent
+                    spacing: 5
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 20
-//                        text: model.data.from.name
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 20
+                        text: model.data.from.name
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.message
-//                        wrapMode: Text.WordWrap
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.message
+                        wrapMode: Text.WordWrap
+                    }
 
-//                    Image {
-//                        source: model.data.picture
-//                        asynchronous: true
-//                    }
+                    Image {
+                        source: model.data.picture
+                        asynchronous: true
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.link
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.link
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.name
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.name
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.caption
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.caption
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.description
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.description
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.source
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.source
+                    }
 
-//                    Text {
-//                        width: parent.width
-//                        font.pixelSize: 14
-//                        text: model.data.type
-//                    }
+                    Text {
+                        width: parent.width
+                        font.pixelSize: 14
+                        text: model.data.type
+                    }
 
-//                    Image {
-//                        source: model.data.icon
-//                        asynchronous: true
-//                    }
-//                }
+                    Image {
+                        source: model.data.icon
+                        asynchronous: true
+                    }
+                }
 
-//            }
-//        }
+            }
+        }
     }
 
     Rectangle {
@@ -247,26 +247,26 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     friendsView.visible = true
-//                    feedView.visible = false
+                    feedView.visible = false
                 }
             }
         }
 
-//        Rectangle {
-//            height: 40
-//            width: toolbar.width / 2
-//            color: "blue"
-//            anchors.right: parent.right
+        Rectangle {
+            height: 40
+            width: toolbar.width / 2
+            color: "blue"
+            anchors.right: parent.right
 
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    friendsView.visible = false
-//                    feedView.visible = true
-//                    feedModel.request("me/home")
-//                }
-//            }
-//        }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    friendsView.visible = false
+                    feedView.visible = true
+                    feedModel.request("me/home")
+                }
+            }
+        }
     }
 
 
