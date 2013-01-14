@@ -114,7 +114,7 @@ public:
      * @param arguments arguments.
      * @return a friend list reply.
      */
-    Request queryFriendList(const QString &graph, const QString &arguments = QString());
+//    Request queryFriendList(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a picture
      * @param graph graph entry of the Facebook graph API.
@@ -128,19 +128,19 @@ public:
      * @param arguments arguments.
      * @return a user reply.
      */
-    Request queryUser(const QString &graph, const QString &arguments = QString());
+//    Request queryUser(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a feed
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      * @return a feed reply.
      */
-    Request queryFeed(const QString &graph, const QString &arguments = QString());
-    Request queryType(const QString &graph, const QString &arguments = QString());
-    Request queryAlbum(const QString &graph, const QString &arguments = QString());
-    Request queryAlbumList(const QString &graph, const QString &arguments = QString());
-    Request queryPhotoList(const QString &graph, const QString &arguments = QString());
-    Request queryPostStatus(const QString &graph, const QVariantMap &data = QVariantMap());
+//    Request queryFeed(const QString &graph, const QString &arguments = QString());
+//    Request queryType(const QString &graph, const QString &arguments = QString());
+//    Request queryAlbum(const QString &graph, const QString &arguments = QString());
+//    Request queryAlbumList(const QString &graph, const QString &arguments = QString());
+//    Request queryPhotoList(const QString &graph, const QString &arguments = QString());
+//    Request queryPostStatus(const QString &graph, const QVariantMap &data = QVariantMap());
 public Q_SLOTS:
     /**
      * @brief Set the access token

@@ -23,6 +23,7 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QUrl>
 #include "qfb.h"
+#include "objects/object.h"
 #include "preprocessordata.h"
 
 namespace QFB
@@ -33,6 +34,7 @@ struct RequestPrivate: public QSharedData
     int id;
     PreprocessorData preprocessorData;
     RequestType type;
+    Object::ObjectType objectType;
 };
 
 class QFBBASE_EXPORT Request
@@ -49,9 +51,11 @@ public:
     PreprocessorData preprocessorData() const;
     PreprocessorData & preprocessorData();
     RequestType type() const;
+    Object::ObjectType objectType() const;
     void setId(int id);
     void setPreprocessorData(const PreprocessorData &preprocessorData);
     void setType(RequestType type);
+    void setObjectType(Object::ObjectType objectType);
 private:
     QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
     Q_DECLARE_PRIVATE(Request)

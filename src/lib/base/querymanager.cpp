@@ -30,13 +30,13 @@
 #include "processors/typeprocessor.h"
 #include "processors/imageprocessor.h"
 #include "processors/pictureprocessor.h"
-#include "processors/albumprocessor.h"
-#include "processors/albumlistprocessor.h"
-#include "processors/feedprocessor.h"
-#include "processors/friendlistprocessor.h"
-#include "processors/photolistprocessor.h"
-#include "processors/userprocessor.h"
-#include "processors/poststatusprocessor.h"
+//#include "processors/albumprocessor.h"
+//#include "processors/albumlistprocessor.h"
+//#include "processors/feedprocessor.h"
+//#include "processors/friendlistprocessor.h"
+//#include "processors/photolistprocessor.h"
+//#include "processors/userprocessor.h"
+//#include "processors/poststatusprocessor.h"
 
 namespace QFB
 {
@@ -99,29 +99,29 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     case TypeRequest:
         processor = new TypeProcessor(q);
         break;
-    case FriendListRequest:
-        processor = new FriendListProcessor(q);
-        break;
+//    case FriendListRequest:
+//        processor = new FriendListProcessor(q);
+//        break;
     case PictureRequest:
         processor = new PictureProcessor(q);
         break;
-    case UserRequest:
-        processor = new UserProcessor(q);
-        break;
-    case FeedRequest:
-        processor = new FeedProcessor(q);
-        break;
-    case AlbumRequest:
-        processor = new AlbumProcessor(q);
-        break;
-    case AlbumListRequest:
-        processor = new AlbumListProcessor(q);
-        break;
-    case PhotoListRequest:
-        processor = new PhotoListProcessor(q);
-        break;
-    case PostStatusRequest:
-        processor = new PostStatusProcessor(q);
+//    case UserRequest:
+//        processor = new UserProcessor(q);
+//        break;
+//    case FeedRequest:
+//        processor = new FeedProcessor(q);
+//        break;
+//    case AlbumRequest:
+//        processor = new AlbumProcessor(q);
+//        break;
+//    case AlbumListRequest:
+//        processor = new AlbumListProcessor(q);
+//        break;
+//    case PhotoListRequest:
+//        processor = new PhotoListProcessor(q);
+//        break;
+//    case PostStatusRequest:
+//        processor = new PostStatusProcessor(q);
         break;
     case InvalidRequest:
         break;
@@ -292,11 +292,11 @@ Request QueryManager::queryImage(const QUrl &url)
     return request;
 }
 
-Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(FriendListRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryFriendList(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(FriendListRequest, GetOperation, graph, arguments);
+//}
 
 Request QueryManager::queryPicture(const QString &graph, const QString &arguments)
 {
@@ -304,47 +304,47 @@ Request QueryManager::queryPicture(const QString &graph, const QString &argument
     return d->createGraphPreprocessor(PictureRequest, GetOperation, graph, arguments);
 }
 
-Request QueryManager::queryUser(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryUser(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryFeed(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(FeedRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryFeed(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(FeedRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryType(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryType(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryAlbum(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(AlbumRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryAlbum(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(AlbumRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryAlbumList(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(AlbumListRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryAlbumList(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(AlbumListRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryPhotoList(const QString &graph, const QString &arguments)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(PhotoListRequest, GetOperation, graph, arguments);
-}
+//Request QueryManager::queryPhotoList(const QString &graph, const QString &arguments)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(PhotoListRequest, GetOperation, graph, arguments);
+//}
 
-Request QueryManager::queryPostStatus(const QString &graph, const QVariantMap &data)
-{
-    Q_D(QueryManager);
-    return d->createGraphPreprocessor(PostStatusRequest, PostOperation, graph, QString(), data);
-}
+//Request QueryManager::queryPostStatus(const QString &graph, const QVariantMap &data)
+//{
+//    Q_D(QueryManager);
+//    return d->createGraphPreprocessor(PostStatusRequest, PostOperation, graph, QString(), data);
+//}
 
 void QueryManager::setToken(const QString &token)
 {

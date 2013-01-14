@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -19,8 +19,7 @@
 
 // Warning
 //
-// This file exists for the convenience
-// of other qfb classes.
+// This file exists for the convenience// of other qfb classes.
 // This header file may change from version
 // to version without notice or even be removed.
 
@@ -75,6 +74,11 @@ static const char *USER_LINK_KEY = "link";
 static const char *USER_USERNAME_KEY = "username";
 /**
  * @internal
+ * @brief USER_THIRD_PARTY_ID_KEY
+ */
+static const char *USER_THIRD_PARTY_ID_KEY = "third_party_id";
+/**
+ * @internal
  * @brief USER_TIMEZONE_KEY
  */
 static const char *USER_TIMEZONE_KEY = "timezone";
@@ -90,11 +94,6 @@ static const char *USER_UPDATED_TIME_KEY = "updated_time";
 static const char *USER_BIO_KEY = "bio";
 /**
  * @internal
- * @brief USER_BIRTHDAY_KEY
- */
-static const char *USER_BIRTHDAY_KEY = "birthday";
-/**
- * @internal
  * @brief USER_COVER_KEY
  */
 static const char *USER_COVER_KEY = "cover";
@@ -108,6 +107,11 @@ static const char *USER_EMAIL_KEY = "email";
  * @brief USER_HOMETOWN_KEY
  */
 static const char *USER_HOMETOWN_KEY = "hometown";
+/**
+ * @internal
+ * @brief USER_INTERESTED_IN_KEY
+ */
+static const char *USER_INTERESTED_IN_KEY = "interested_in";
 /**
  * @internal
  * @brief USER_LOCATION_KEY
@@ -143,7 +147,6 @@ static const char *USER_SIGNIFICANT_OTHER_KEY = "significant_other";
  * @brief USER_WEBSITE_KEY
  */
 static const char *USER_WEBSITE_KEY = "website";
-
 
 }
 

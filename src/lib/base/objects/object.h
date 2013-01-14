@@ -64,114 +64,114 @@ public:
          * This type is provided as a default type for most
          * objects.
          */
-        Unknown,
+        UnknownType,
         /**
          * @short The achievement(Instance) object represents the achievement
          * achieved by a user for a particular app.
          */
-        Achievement,
+        AchievementType,
         /**
          * @short An album of photos as represented in the Graph API
          */
-        Album,
+        AlbumType,
         /**
          * @short An application registered on Facebook Platform as represented in the Graph API
          *
          * Applications a user administers can be retrieved via the /accounts connection on the
          * User object.
          */
-        Application,
+        ApplicationType,
         /**
          * @short A Checkin represents a single visit to a location
          */
-        Checkin,
+        CheckinType,
         /**
          * @short A comment on a Graph API object
          */
-        Comment,
+        CommentType,
         /**
          * @short A web site domain within the Graph API
          */
-        Domain,
+        DomainType,
         /**
          * @short Specifies information about an event
          */
-        Event,
+        EventType,
         /**
          * @short A Facebook friend list
          */
-        FriendList,
+        FriendListType,
         /**
          * @short A Facebook Group
          */
-        Group,
+        GroupType,
         /**
          * @short An object containing statistics about applications, pages, and domains
          */
-        Insights,
+        InsightsType,
         /**
          * @short A link shared on a user's wall
          */
-        Link,
+        LinkType,
         /**
          * @short An individual message in the new Facebook messaging system
          */
-        Message,
+        MessageType,
         /**
          * @short A Facebook Note
          */
-        Note,
+        NoteType,
         /**
          * @short An Offer represents an offer that is published by a page
          */
-        Offer,
+        OfferType,
         /**
          * @short You can use the order object to interact with orders created by
          * the application using Facebook Payments to view and update orders as needed.
          */
-        Order,
+        OrderType,
         /**
          * @short A Page in the Graph API
          */
-        Page,
+        PageType,
         /**
          * @short An individual photo as represented in the Graph API
          */
-        Photo,
+        PhotoType,
         /**
          * @short An individual entry in a profile's feed as represented in the Graph API
          */
-        Post,
+        PostType,
         /**
          * @short A question asked by a user, as represented in the Graph API
          */
-        Question,
+        QuestionType,
         /**
          * @short An option allowed as an answer to a Question, as represented in the Graph API
          */
         /// @todo this entry is tricky
-        QuestionOption,
+        QuestionOptionType,
         /**
          * @short An object representing a review for an application
          */
-        Review,
+        ReviewType,
         /**
          * @short A status message on a user's wall as represented in the Graph API
          */
-        Status,
+        StatusType,
         /**
          * @short A message thread in the new Facebook messaging system as represented in
          * the Graph API.
          */
-        Thread,
+        ThreadType,
         /**
          * @short A user profile as represented in the Graph API
          */
-        User,
+        UserType,
         /**
          * @short An individual Video in the Graph API
          */
-        Video
+        VideoType
     };
     /**
      * @brief Invalid constructor

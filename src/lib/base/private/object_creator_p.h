@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,49 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file object.cpp
- * @brief Implementation of QFB::Object
- */
+#ifndef QFB_OBJECT_CREATOR_P_H
+#define QFB_OBJECT_CREATOR_P_H
 
-#include "object.h"
-#include "private/objectbase_p.h"
-#include "private/object_keys_p.h"
-#include "private/object_type_keys_p.h"
+#include "qfb.h"
 
 namespace QFB
 {
 
-Object::Object(QObject *parent):
-    ObjectBase(parent)
+template <class T> createObject(const PropertiesMap &propertiesMap, QObject *parent = 0)
 {
-}
-
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
-    ObjectBase(propertiesMap, parent)
-{
-    Q_D(ObjectBase);
-    d->propertiesMap = propertiesMap;
-    if (!propertiesMap.contains(OBJECT_TYPE_KEY)) {
-        d->propertiesMap.insert(OBJECT_TYPE_KEY, Object::UnknownType);
-    }
-}
-
-Object::Object(ObjectBasePrivate &dd, QObject *parent):
-    ObjectBase(dd, parent)
-{
-}
-
-QString Object::facebookId() const
-{
-    Q_D(const ObjectBase);
-    return d->propertiesMap.value(OBJECT_ID_KEY).toString();
-}
-
-Object::ObjectType Object::objectType() const
-{
-    Q_D(const ObjectBase);
-    return (Object::ObjectType) d->propertiesMap.value(OBJECT_TYPE_KEY).toInt();
+    return new T(propertiesMap, parent);
 }
 
 }
+
+#endif // QFB_OBJECT_CREATOR_P_H

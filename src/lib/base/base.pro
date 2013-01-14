@@ -33,9 +33,9 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
 PRIVATE_HEADERS +=  private/abstractprocessor_p.h \
                     private/abstractgraphprocessor_p.h \
                     private/abstractpagingprocessor_p.h \
-                    private/albumprocessor_p.h \
-                    private/photoprocessor_p.h \
                     private/networkrequesthandler_p.h
+#                    private/albumprocessor_p.h \
+#                    private/photoprocessor_p.h \
 # Base
 PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
@@ -59,17 +59,19 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/imageprocessor.h \
                     processors/typeprocessor.h \
                     processors/pictureprocessor.h \
-                    processors/albumprocessor.h \
-                    processors/albumlistprocessor.h \
-                    processors/feedprocessor.h \
-                    processors/friendlistprocessor.h \
-                    processors/photoprocessor.h \
-                    processors/photolistprocessor.h \
-                    processors/userprocessor.h \
-                    processors/poststatusprocessor.h
+                    processors/objectprocessor.h
+#                    processors/albumprocessor.h \
+#                    processors/albumlistprocessor.h \
+#                    processors/feedprocessor.h \
+#                    processors/friendlistprocessor.h \
+#                    processors/photoprocessor.h \
+#                    processors/photolistprocessor.h \
+#                    processors/userprocessor.h \
+#                    processors/poststatusprocessor.h \
 
 HEADERS =   $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS} \
+    private/object_creator_p.h
 
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
@@ -92,14 +94,15 @@ SOURCES +=  processors/abstractprocessor.cpp \
             processors/imageprocessor.cpp \
             processors/typeprocessor.cpp \
             processors/pictureprocessor.cpp \
-            processors/albumprocessor.cpp \
-            processors/albumlistprocessor.cpp \
-            processors/feedprocessor.cpp \
-            processors/friendlistprocessor.cpp \
-            processors/photoprocessor.cpp \
-            processors/photolistprocessor.cpp \
-            processors/userprocessor.cpp \
-            processors/poststatusprocessor.cpp
+            processors/objectprocessor.cpp
+#            processors/albumprocessor.cpp \
+#            processors/albumlistprocessor.cpp \
+#            processors/feedprocessor.cpp \
+#            processors/friendlistprocessor.cpp \
+#            processors/photoprocessor.cpp \
+#            processors/photolistprocessor.cpp \
+#            processors/userprocessor.cpp \
+#            processors/poststatusprocessor.cpp \
 
 # Deployment
 target.path = $${LIBDIR}

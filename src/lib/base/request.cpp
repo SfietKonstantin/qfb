@@ -25,6 +25,7 @@ Request::Request():
 {
     setId(-1);
     setType(InvalidRequest);
+    setObjectType(Object::UnknownType);
 }
 
 Request::Request(int id, RequestType type):
@@ -32,6 +33,7 @@ Request::Request(int id, RequestType type):
 {
     setId(id);
     setType(type);
+    setObjectType(Object::UnknownType);
 }
 
 Request::Request(const Request &other):
@@ -86,6 +88,12 @@ RequestType Request::type() const
     return d->type;
 }
 
+Object::ObjectType Request::objectType() const
+{
+    Q_D(const Request);
+    return d->objectType;
+}
+
 void Request::setId(int id)
 {
     Q_D(Request);
@@ -102,6 +110,12 @@ void Request::setType(RequestType type)
 {
     Q_D(Request);
     d->type = type;
+}
+
+void Request::setObjectType(Object::ObjectType objectType)
+{
+    Q_D(Request);
+    d->objectType = objectType;
 }
 
 }

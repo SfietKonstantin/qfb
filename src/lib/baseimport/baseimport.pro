@@ -21,40 +21,40 @@ PUBLIC_HEADERS +=   baseimport_global.h \
 # Loaders
 PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/abstractgraphloader.h \
+                    loaders/abstractgraphpostloader.h \
                     loaders/typeloader.h \
                     loaders/imageloader.h \
-                    loaders/pictureloader.h \
-                    loaders/albumloader.h \
-                    loaders/userloader.h \
-                    loaders/poststatusloader.h
+                    loaders/pictureloader.h
+#                    loaders/albumloader.h \
+#                    loaders/userloader.h \
+#                    loaders/poststatusloader.h
 # Models
-PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
-                    models/albumlistmodel.h \
-                    models/feedmodel.h \
-                    models/friendlistmodel.h \
-                    models/photolistmodel.h
+PUBLIC_HEADERS +=   models/abstractloadablemodel.h
+#                    models/albumlistmodel.h \
+#                    models/feedmodel.h \
+#                    models/friendlistmodel.h \
+#                    models/photolistmodel.h
 HEADERS +=  $${PRIVATE_HEADERS} \
-            $${PUBLIC_HEADERS} \
-    loaders/abstractgraphpostloader.h
+            $${PUBLIC_HEADERS}
 
 # Base
-SOURCES +=  postvalidator.cpp \
-    loaders/abstractgraphpostloader.cpp
+SOURCES +=  postvalidator.cpp
 # Loaders
 SOURCES +=  loaders/abstractloader.cpp \
             loaders/abstractgraphloader.cpp \
+            loaders/abstractgraphpostloader.cpp \
             loaders/typeloader.cpp \
             loaders/imageloader.cpp \
-            loaders/pictureloader.cpp \
-            loaders/albumloader.cpp \
-            loaders/userloader.cpp \
-            loaders/poststatusloader.cpp
+            loaders/pictureloader.cpp
+#            loaders/albumloader.cpp \
+#            loaders/userloader.cpp \
+#            loaders/poststatusloader.cpp
 # Models
-SOURCES +=  models/abstractloadablemodel.cpp \
-            models/albumlistmodel.cpp \
-            models/feedmodel.cpp \
-            models/friendlistmodel.cpp \
-            models/photolistmodel.cpp
+SOURCES +=  models/abstractloadablemodel.cpp
+#            models/albumlistmodel.cpp \
+#            models/feedmodel.cpp \
+#            models/friendlistmodel.cpp \
+#            models/photolistmodel.cpp
 
 # Deployment
 target.path = $${LIBDIR}

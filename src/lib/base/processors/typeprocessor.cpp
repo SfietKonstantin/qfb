@@ -281,57 +281,57 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
 
     JsonObject metadata = QFB_JSON_GET_OBJECT(rootObject.value(METADATA_KEY));
     QString type = metadata.value(METADATA_TYPE_VALUE).toString();
-    Object::ObjectType trueType = Object::Unknown;
+    Object::ObjectType trueType = Object::UnknownType;
     if (type == ACHIEVEMENT) {
-        trueType = Object::Achievement;
+        trueType = Object::AchievementType;
     } else if (type == ALBUM) {
-        trueType = Object::Album;
+        trueType = Object::AlbumType;
     } else if (type == APPLICATION) {
-        trueType = Object::Application;
+        trueType = Object::ApplicationType;
     } else if (type == CHECKIN) {
-        trueType = Object::Checkin;
+        trueType = Object::CheckinType;
     } else if (type == COMMENT) {
-        trueType = Object::Comment;
+        trueType = Object::CommentType;
     } else if (type == DOMAIN) {
-        trueType = Object::Domain;
+        trueType = Object::DomainType;
     } else if (type == EVENT) {
-        trueType = Object::Event;
+        trueType = Object::EventType;
     } else if (type == FRIENDLIST) {
-        trueType = Object::FriendList;
+        trueType = Object::FriendListType;
     } else if (type == GROUP) {
-        trueType = Object::Group;
+        trueType = Object::GroupType;
     } else if (type == INSIGHTS) {
-        trueType = Object::Insights;
+        trueType = Object::InsightsType;
     } else if (type == LINK) {
-        trueType = Object::Link;
+        trueType = Object::LinkType;
     } else if (type == MESSAGE) {
-        trueType = Object::Message;
+        trueType = Object::MessageType;
     } else if (type == NOTE) {
-        trueType = Object::Note;
+        trueType = Object::NoteType;
     } else if (type == OFFER) {
-        trueType = Object::Offer;
+        trueType = Object::OfferType;
     } else if (type == ORDER) {
-        trueType = Object::Order;
+        trueType = Object::OrderType;
     } else if (type == PAGE) {
-        trueType = Object::Page;
+        trueType = Object::PageType;
     } else if (type == PHOTO) {
-        trueType = Object::Photo;
+        trueType = Object::PhotoType;
     } else if (type == POST) {
-        trueType = Object::Post;
+        trueType = Object::PostType;
     } else if (type == QUESTION) {
-        trueType = Object::Question;
+        trueType = Object::QuestionType;
     } else if (type == REVIEW) {
-        trueType = Object::Review;
+        trueType = Object::ReviewType;
     } else if (type == STATUS) {
-        trueType = Object::Status;
+        trueType = Object::StatusType;
     } else if (type == THREAD) {
-        trueType = Object::Thread;
+        trueType = Object::ThreadType;
     } else if (type == USER) {
-        trueType = Object::User;
+        trueType = Object::UserType;
     } else if (type == VIDEO) {
-        trueType = Object::Video;
+        trueType = Object::VideoType;
     } else {
-        trueType = Object::Unknown;
+        trueType = Object::UnknownType;
     }
 
     propertiesMap.insert(OBJECT_TYPE_KEY, trueType);
