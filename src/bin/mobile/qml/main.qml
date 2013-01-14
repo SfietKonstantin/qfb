@@ -28,34 +28,64 @@ PageStackWindow {
     Component.onCompleted: {
         LOGIN_MANAGER.clientId = "390204064393625"
         LOGIN_MANAGER.uiType = QFBLoginManager.Mobile
-        LOGIN_MANAGER.friendsPermissions = QFBLoginManager.FriendsBirthday
-                                           + QFBLoginManager.FriendsAboutMe
-                                           + QFBLoginManager.FriendsLikes
-                                           + QFBLoginManager.FriendsEducationHistory
-                                           + QFBLoginManager.FriendsRelationshipDetails
-                                           + QFBLoginManager.FriendsReligionPolitics
-                                           + QFBLoginManager.FriendsRelationships
-        LOGIN_MANAGER.userPermissions = QFBLoginManager.UserBirthday + QFBLoginManager.Email
-                                        + QFBLoginManager.UserAboutMe + QFBLoginManager.UserLikes
-                                        + QFBLoginManager.UserEducationHistory
-                                        + QFBLoginManager.UserRelationshipDetails
-                                        + QFBLoginManager.UserReligionPolitics
-                                        + QFBLoginManager.UserRelationships
+        LOGIN_MANAGER.friendsPermissions = QFBLoginManager.FriendsAboutMe
+                                         + QFBLoginManager.FriendsActivities
+                                         + QFBLoginManager.FriendsBirthday
+                                         + QFBLoginManager.FriendsEducationHistory
+                                         + QFBLoginManager.FriendsEvents
+                                         + QFBLoginManager.FriendsGroups
+                                         + QFBLoginManager.FriendsHometowm
+                                         + QFBLoginManager.FriendsInterests
+                                         + QFBLoginManager.FriendsLikes
+                                         + QFBLoginManager.FriendsLocation
+                                         + QFBLoginManager.FriendsNotes
+                                         + QFBLoginManager.FriendsPhotos
+                                         + QFBLoginManager.FriendsQuestions
+                                         + QFBLoginManager.FriendsRelationships
+                                         + QFBLoginManager.FriendsRelationshipDetails
+                                         + QFBLoginManager.FriendsReligionPolitics
+                                         + QFBLoginManager.FriendsStatus
+                                         + QFBLoginManager.FriendsSubscriptions
+                                         + QFBLoginManager.FriendsVideos
+                                         + QFBLoginManager.FriendsWebsite
+                                         + QFBLoginManager.FriendsWorkHistory
+        LOGIN_MANAGER.userPermissions = QFBLoginManager.UserAboutMe
+                                       + QFBLoginManager.UserActivities
+                                       + QFBLoginManager.UserBirthday
+                                       + QFBLoginManager.UserEducationHistory
+                                       + QFBLoginManager.UserEvents
+                                       + QFBLoginManager.UserGroups
+                                       + QFBLoginManager.UserHometown
+                                       + QFBLoginManager.UserInterests
+                                       + QFBLoginManager.UserLikes
+                                       + QFBLoginManager.UserLocation
+                                       + QFBLoginManager.UserNotes
+                                       + QFBLoginManager.UserPhotos
+                                       + QFBLoginManager.UserQuestions
+                                       + QFBLoginManager.UserRelationships
+                                       + QFBLoginManager.UserRelationshipDetails
+                                       + QFBLoginManager.UserReligionPolitics
+                                       + QFBLoginManager.UserStatus
+                                       + QFBLoginManager.UserSubscriptions
+                                       + QFBLoginManager.UserVideos
+                                       + QFBLoginManager.UserWebsite
+                                       + QFBLoginManager.UserWorkHistory
+                                       + QFBLoginManager.Email
         LOGIN_MANAGER.extendedPermissions = QFBLoginManager.ReadFriendList
-                                            + QFBLoginManager.ReadInsights
-                                            + QFBLoginManager.ReadMailbox
-                                            + QFBLoginManager.ReadRequests
-                                            + QFBLoginManager.ReadStream
-                                            + QFBLoginManager.XmppLogin
-                                            + QFBLoginManager.AdsManagement
-                                            + QFBLoginManager.CreateEvent
-                                            + QFBLoginManager.ManageFriendList
-                                            + QFBLoginManager.ManageNotifications
-                                            + QFBLoginManager.UserOnlinePresence
-                                            + QFBLoginManager.FriendsOnlinePresence
-                                            + QFBLoginManager.PublishCheckins
-                                            + QFBLoginManager.PublishStream
-                                            + QFBLoginManager.RsvpEvent
+                                          + QFBLoginManager.ReadInsights
+                                          + QFBLoginManager.ReadMailbox
+                                          + QFBLoginManager.ReadRequests
+                                          + QFBLoginManager.ReadStream
+                                          + QFBLoginManager.XmppLogin
+                                          + QFBLoginManager.AdsManagement
+                                          + QFBLoginManager.CreateEvent
+                                          + QFBLoginManager.ManageFriendList
+                                          + QFBLoginManager.ManageNotifications
+                                          + QFBLoginManager.UserOnlinePresence
+                                          + QFBLoginManager.FriendsOnlinePresence
+                                          + QFBLoginManager.PublishCheckins
+                                          + QFBLoginManager.PublishStream
+                                          + QFBLoginManager.RsvpEvent
         if (TOKEN_MANAGER.token == "") {
             loginSheet.open()
             LOGIN_MANAGER.login()
