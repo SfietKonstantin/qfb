@@ -52,7 +52,6 @@ PreprocessorData::PreprocessorData():
 PreprocessorData::PreprocessorData(const PreprocessorData &other):
     d_ptr(other.d_ptr)
 {
-    setOperation(InvalidOperation);
 }
 
 PreprocessorData::~PreprocessorData()

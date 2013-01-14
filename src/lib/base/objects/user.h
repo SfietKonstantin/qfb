@@ -30,6 +30,7 @@
 // <<<<< includes
 
 namespace QFB {
+class UserPrivate;
 /**
  * @short An user
  *
@@ -74,7 +75,7 @@ namespace QFB {
  *
  * @section missing Missing properties
  *
- * Some fields such as birthday,currency,devices,education,paymentPricepoints,picture,securitySettings,videoUploadLimits,work
+ * Some fields such as birthday, currency, devices, education, paymentPricepoints, picture, securitySettings, videoUploadLimits, work
  * are not yet implemented.
  *
  * @section notImplemented Not implemented
@@ -249,7 +250,7 @@ public:
      * @param propertiesMap properties.
      * @param parent parent object.
      */
-    explicit User(const PropertiesMap propertiesMap, QObject *parent = 0);
+    explicit User(const QVariantMap propertiesMap, QObject *parent = 0);
     /**
      * @brief First name
      * @return first name.
@@ -279,7 +280,7 @@ public:
      * @brief Languages
      * @return languages.
      */
-    QList<NamedObject *> languages() const;
+    QList<QFB::NamedObject *> languages() const;
     /**
      * @brief Link
      * @return link.
@@ -366,7 +367,7 @@ public:
      */
     QString website() const;
 private:
-    Q_DECLARE_PRIVATE(ObjectBase)
+    Q_DECLARE_PRIVATE(User)
 };
 
 }

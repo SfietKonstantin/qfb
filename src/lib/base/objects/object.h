@@ -183,7 +183,7 @@ public:
      * @param propertiesMap properties map.
      * @param parent parent object.
      */
-    explicit Object(const PropertiesMap &propertiesMap, QObject *parent = 0);
+    explicit Object(const QVariantMap &propertiesMap, QObject *parent = 0);
     /**
      * @brief Facebook identifier
      * @return facebook identifier.

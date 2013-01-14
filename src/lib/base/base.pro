@@ -10,8 +10,8 @@ QT = core gui network
 DEFINES += QFBBASE_LIBRARY
 
 INCLUDEPATH += ../../3rdparty/qjson/src/
-contains(CONFIG, noqjson):LIBS += -L$${QJSON_PATH} -lqjson
-!contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
+isEqual(QT_MAJOR_VERSION, 4):contains(CONFIG, noqjson):LIBS += -L$${QJSON_PATH} -lqjson
+isEqual(QT_MAJOR_VERSION, 4):!contains(CONFIG, noqjson):LIBS += -L../../3rdparty/qjson/ -lqfb-qjson
 
 # Helpers
 PRIVATE_HEADERS +=  private/helper_p.h \
@@ -24,10 +24,10 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/object_keys_p.h \
                     private/object_type_keys_p.h \
                     private/namedobject_keys_p.h \
-                    private/album_keys_p.h \
-                    private/cover_keys_p.h \
-                    private/photo_keys_p.h \
-                    private/post_keys_p.h \
+#                    private/album_keys_p.h \
+#                    private/cover_keys_p.h \
+#                    private/photo_keys_p.h \
+#                    private/post_keys_p.h \
                     private/user_keys_p.h
 # Private headers for processors
 PRIVATE_HEADERS +=  private/abstractprocessor_p.h \
@@ -47,10 +47,10 @@ PUBLIC_HEADERS +=   base_global.h \
 PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/object.h \
                     objects/namedobject.h \
-                    objects/album.h \
+#                    objects/album.h \
                     objects/cover.h \
-                    objects/photo.h \
-                    objects/post.h \
+#                    objects/photo.h \
+#                    objects/post.h \
                     objects/user.h
 # Processors
 PUBLIC_HEADERS +=   processors/abstractprocessor.h \
@@ -82,10 +82,10 @@ SOURCES +=  private/networkrequesthandler_p.cpp \
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \
             objects/namedobject.cpp \
-            objects/album.cpp \
+#            objects/album.cpp \
             objects/cover.cpp \
-            objects/photo.cpp \
-            objects/post.cpp \
+#            objects/photo.cpp \
+#            objects/post.cpp \
             objects/user.cpp
 # Processors
 SOURCES +=  processors/abstractprocessor.cpp \

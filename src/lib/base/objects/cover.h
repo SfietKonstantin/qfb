@@ -60,7 +60,7 @@ public:
      * @param propertiesMap properties.
      * @param parent parent object.
      */
-    explicit Cover(const PropertiesMap propertiesMap, QObject *parent = 0);
+    explicit Cover(const QVariantMap propertiesMap, QObject *parent = 0);
     /**
      * @brief Source
      * @return source.

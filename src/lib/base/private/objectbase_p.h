@@ -53,7 +53,7 @@ public:
      * @internal
      * @brief Properties
      */
-    PropertiesMap propertiesMap;
+    QVariantMap propertiesMap;
 
 };
 

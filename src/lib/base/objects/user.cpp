@@ -22,57 +22,68 @@
 #include "user.h"
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
+#include "private/object_creator_p.h"
 #include "private/user_keys_p.h"
 
 namespace QFB
 {
+
+class UserPrivate: public ObjectBasePrivate
+{
+public:
+    explicit UserPrivate();
+    QList<QFB::NamedObject *> languages;
+    QFB::Cover * cover;
+    QFB::NamedObject * hometown;
+    QList<QString> interestedIn;
+    QFB::NamedObject * location;
+    QFB::NamedObject * significantOther;
+};
+
+UserPrivate::UserPrivate():
+    ObjectBasePrivate()
+{
+}
+
+////// End of private class //////
 
 User::User(QObject *parent):
     NamedObject(parent)
 {
 }
 
-User::User(const PropertiesMap propertiesMap, QObject *parent):
-    NamedObject(propertiesMap, parent)
+User::User(const QVariantMap propertiesMap, QObject *parent):
+    NamedObject(*(new UserPrivate), parent)
 {
-    Q_D(ObjectBase);
-    // >>>>> custom reparenting code
-    // TODO: check reparenting
+    Q_D(User);
+    d->propertiesMap = propertiesMap;
+    // >>>>> custom object creation code
+    // TODO: check object creation
     // It was done automatically by a script
-    // Reparent languages
-    QVariantList languagesList = d->propertiesMap.value(USER_LANGUAGES_KEY).toList();
-    foreach (QVariant languagesVariant, languagesList) {
-        QObject *languagesObject = languagesVariant.value<NamedObject *>();
-        if (languagesObject) {
-            languagesObject->setParent(this);
-        }
-    }
-    // Reparent cover
-    QObject *coverObject = d->propertiesMap.value(USER_COVER_KEY).value<QFB::Cover *>();
-    if (coverObject) {
-        coverObject->setParent(this);
-    }
-    // Reparent hometown
-    QObject *hometownObject = d->propertiesMap.value(USER_HOMETOWN_KEY).value<QFB::NamedObject *>();
-    if (hometownObject) {
-        hometownObject->setParent(this);
-    }
-    // Reparent location
-    QObject *locationObject = d->propertiesMap.value(USER_LOCATION_KEY).value<QFB::NamedObject *>();
-    if (locationObject) {
-        locationObject->setParent(this);
-    }
-    // Reparent significantOther
-    QObject *significantOtherObject = d->propertiesMap.value(USER_SIGNIFICANT_OTHER_KEY).value<QFB::NamedObject *>();
-    if (significantOtherObject) {
-        significantOtherObject->setParent(this);
-    }
-    // <<<<< custom reparenting code
+    // Create languages
+    QVariantList languagesData = d->propertiesMap.take(USER_LANGUAGES_KEY).toList();
+    d->languages = createList<QFB::NamedObject>(languagesData, this);
+    // Create cover
+    QVariantMap coverData = d->propertiesMap.take(USER_COVER_KEY).toMap();
+    d->cover = createObject<QFB::Cover>(coverData, this);
+    // Create hometown
+    QVariantMap hometownData = d->propertiesMap.take(USER_HOMETOWN_KEY).toMap();
+    d->hometown = createObject<QFB::NamedObject>(hometownData, this);
+    // Create interestedIn
+    QVariantList interestedInData = d->propertiesMap.take(USER_INTERESTED_IN_KEY).toList();
+    d->interestedIn = createStringList(interestedInData);
+    // Create location
+    QVariantMap locationData = d->propertiesMap.take(USER_LOCATION_KEY).toMap();
+    d->location = createObject<QFB::NamedObject>(locationData, this);
+    // Create significantOther
+    QVariantMap significantOtherData = d->propertiesMap.take(USER_SIGNIFICANT_OTHER_KEY).toMap();
+    d->significantOther = createObject<QFB::NamedObject>(significantOtherData, this);
+    // <<<<< custom object creation code
 }
 
 QString User::firstName() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property first_name
     return d->propertiesMap.value(USER_FIRST_NAME_KEY).toString();
     // <<<<< property first_name
@@ -80,7 +91,7 @@ QString User::firstName() const
 
 QString User::middleName() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property middle_name
     return d->propertiesMap.value(USER_MIDDLE_NAME_KEY).toString();
     // <<<<< property middle_name
@@ -88,7 +99,7 @@ QString User::middleName() const
 
 QString User::lastName() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property last_name
     return d->propertiesMap.value(USER_LAST_NAME_KEY).toString();
     // <<<<< property last_name
@@ -96,7 +107,7 @@ QString User::lastName() const
 
 QString User::gender() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property gender
     return d->propertiesMap.value(USER_GENDER_KEY).toString();
     // <<<<< property gender
@@ -104,28 +115,23 @@ QString User::gender() const
 
 QString User::locale() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property locale
     return d->propertiesMap.value(USER_LOCALE_KEY).toString();
     // <<<<< property locale
 }
 
-QList<NamedObject *> User::languages() const
+QList<QFB::NamedObject *> User::languages() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property languages
-    QVariantList variantList = d->propertiesMap.value(USER_LANGUAGES_KEY).toList();
-    QList<NamedObject *> returnedData;
-    foreach (QVariant entry, variantList) {
-        returnedData.append(entry.value<NamedObject *>());
-    }
-    return returnedData;
+    return d->languages;
     // <<<<< property languages
 }
 
 QUrl User::link() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property link
     return parseUrl(d->propertiesMap.value(USER_LINK_KEY).toString());
     // <<<<< property link
@@ -133,7 +139,7 @@ QUrl User::link() const
 
 QString User::username() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property username
     return d->propertiesMap.value(USER_USERNAME_KEY).toString();
     // <<<<< property username
@@ -141,7 +147,7 @@ QString User::username() const
 
 QString User::thirdPartyId() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property third_party_id
     return d->propertiesMap.value(USER_THIRD_PARTY_ID_KEY).toString();
     // <<<<< property third_party_id
@@ -149,7 +155,7 @@ QString User::thirdPartyId() const
 
 int User::timezone() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property timezone
     return d->propertiesMap.value(USER_TIMEZONE_KEY).toString().toInt();
     // <<<<< property timezone
@@ -157,7 +163,7 @@ int User::timezone() const
 
 QDateTime User::updatedTime() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property updated_time
     return d->propertiesMap.value(USER_UPDATED_TIME_KEY).toDateTime();
     // <<<<< property updated_time
@@ -165,7 +171,7 @@ QDateTime User::updatedTime() const
 
 QString User::bio() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property bio
     return d->propertiesMap.value(USER_BIO_KEY).toString();
     // <<<<< property bio
@@ -173,15 +179,15 @@ QString User::bio() const
 
 QFB::Cover * User::cover() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property cover
-    return d->propertiesMap.value(USER_COVER_KEY).value<QFB::Cover *>();
+    return d->cover;
     // <<<<< property cover
 }
 
 QString User::email() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property email
     return d->propertiesMap.value(USER_EMAIL_KEY).toString();
     // <<<<< property email
@@ -189,36 +195,31 @@ QString User::email() const
 
 QFB::NamedObject * User::hometown() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property hometown
-    return d->propertiesMap.value(USER_HOMETOWN_KEY).value<QFB::NamedObject *>();
+    return d->hometown;
     // <<<<< property hometown
 }
 
 QList<QString> User::interestedIn() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property interested_in
-    QVariantList variantList = d->propertiesMap.value(USER_INTERESTED_IN_KEY).toList();
-    QList<QString> returnedData;
-    foreach (QVariant entry, variantList) {
-        returnedData.append(entry.value<QString>());
-    }
-    return returnedData;
+    return d->interestedIn;
     // <<<<< property interested_in
 }
 
 QFB::NamedObject * User::location() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property location
-    return d->propertiesMap.value(USER_LOCATION_KEY).value<QFB::NamedObject *>();
+    return d->location;
     // <<<<< property location
 }
 
 QString User::political() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property political
     return d->propertiesMap.value(USER_POLITICAL_KEY).toString();
     // <<<<< property political
@@ -226,7 +227,7 @@ QString User::political() const
 
 QString User::quotes() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property quotes
     return d->propertiesMap.value(USER_QUOTES_KEY).toString();
     // <<<<< property quotes
@@ -234,7 +235,7 @@ QString User::quotes() const
 
 QString User::relationshipStatus() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property relationship_status
     return d->propertiesMap.value(USER_RELATIONSHIP_STATUS_KEY).toString();
     // <<<<< property relationship_status
@@ -242,7 +243,7 @@ QString User::relationshipStatus() const
 
 QString User::religion() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property religion
     return d->propertiesMap.value(USER_RELIGION_KEY).toString();
     // <<<<< property religion
@@ -250,15 +251,15 @@ QString User::religion() const
 
 QFB::NamedObject * User::significantOther() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property significant_other
-    return d->propertiesMap.value(USER_SIGNIFICANT_OTHER_KEY).value<QFB::NamedObject *>();
+    return d->significantOther;
     // <<<<< property significant_other
 }
 
 QString User::website() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const User);
     // >>>>> property website
     return d->propertiesMap.value(USER_WEBSITE_KEY).toString();
     // <<<<< property website

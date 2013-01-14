@@ -17,14 +17,33 @@
 #ifndef QFB_OBJECT_CREATOR_P_H
 #define QFB_OBJECT_CREATOR_P_H
 
+#include <QtCore/QList>
 #include "qfb.h"
 
 namespace QFB
 {
 
-template <class T> createObject(const PropertiesMap &propertiesMap, QObject *parent = 0)
+template <class T> T * createObject(const QVariantMap &propertiesMap, QObject *parent = 0)
 {
     return new T(propertiesMap, parent);
+}
+
+QList<QString> createStringList(const QVariantList &propertiesList)
+{
+    QList<QString> data;
+    foreach (QVariant properties, propertiesList) {
+        data.append(properties.toString());
+    }
+    return data;
+}
+
+template <class T> QList<T *> createList(const QVariantList &propertiesList, QObject *parent = 0)
+{
+    QList<T *> data;
+    foreach (QVariant properties, propertiesList) {
+        data.append(new T(properties.toMap(), parent));
+    }
+    return data;
 }
 
 }

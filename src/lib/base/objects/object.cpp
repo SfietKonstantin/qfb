@@ -32,7 +32,7 @@ Object::Object(QObject *parent):
 {
 }
 
-Object::Object(const PropertiesMap &propertiesMap, QObject *parent):
+Object::Object(const QVariantMap &propertiesMap, QObject *parent):
     ObjectBase(propertiesMap, parent)
 {
     Q_D(ObjectBase);

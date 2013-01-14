@@ -59,7 +59,7 @@ public:
      * @param propertiesMap properties map.
      * @param parent parent object.
      */
-    explicit ObjectBase(const PropertiesMap &propertiesMap, QObject *parent = 0);
+    explicit ObjectBase(const QVariantMap &propertiesMap, QObject *parent = 0);
     /**
      * @brief Destructor
      */

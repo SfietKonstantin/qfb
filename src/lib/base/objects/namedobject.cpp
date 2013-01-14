@@ -31,8 +31,13 @@ NamedObject::NamedObject(QObject *parent) :
 {
 }
 
-NamedObject::NamedObject(const PropertiesMap propertiesMap, QObject *parent):
+NamedObject::NamedObject(const QVariantMap propertiesMap, QObject *parent):
     Object(propertiesMap, parent)
+{
+}
+
+NamedObject::NamedObject(ObjectBasePrivate &dd, QObject *parent):
+    Object(dd, parent)
 {
 }
 

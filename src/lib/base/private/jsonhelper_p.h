@@ -146,11 +146,13 @@ typedef QVariantMap JsonObject;
 typedef QVariant JsonValue;
 typedef QVariantList JsonArray;
 // Checks
-#define QFB_JSON_IS_ARRAY(jsonValue) jsonValue.canConvert(QVariant::List)
-#define QFB_JSON_IS_BOOL(jsonValue) jsonValue.canConvert(QVariant::Bool)
-#define QFB_JSON_IS_DOUBLE(jsonValue) jsonValue.canConvert(QVariant::Double)
-#define QFB_JSON_IS_OBJECT(jsonValue) jsonValue.canConvert(QVariant::Map)
-#define QFB_JSON_IS_STRING(jsonValue) jsonValue.canConvert(QVariant::String)
+#define QFB_JSON_IS_ARRAY(jsonValue) jsonValue.type() == QVariant::List
+#define QFB_JSON_IS_BOOL(jsonValue) jsonValue.type() == QVariant::Bool
+#define QFB_JSON_IS_DOUBLE(jsonValue) jsonValue.type() == QVariant::Double
+#define QFB_JSON_IS_OBJECT(jsonValue) jsonValue.type() == QVariant::Map
+#define QFB_JSON_IS_STRING(jsonValue) jsonValue.type() != QVariant::List && \
+        jsonValue.type() != QVariant::Bool && jsonValue.type() != QVariant::Double &&\
+        jsonValue.type() != QVariant::Map
 // Getters
 #define QFB_JSON_GET_ARRAY(jsonValue) jsonValue.toList()
 #define QFB_JSON_GET_BOOL(jsonValue) jsonValue.toBool()

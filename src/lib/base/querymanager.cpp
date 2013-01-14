@@ -30,6 +30,7 @@
 #include "processors/typeprocessor.h"
 #include "processors/imageprocessor.h"
 #include "processors/pictureprocessor.h"
+#include "processors/objectprocessor.h"
 //#include "processors/albumprocessor.h"
 //#include "processors/albumlistprocessor.h"
 //#include "processors/feedprocessor.h"
@@ -92,6 +93,7 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
+    /*
     switch (request.type()) {
     case ImageRequest:
         processor = new ImageProcessor(q);
@@ -125,6 +127,26 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
         break;
     case InvalidRequest:
         break;
+    }*/
+
+    switch(request.preprocessorData().operation()) {
+    case GetOperation:
+        switch(request.type()) {
+        case ImageRequest:
+            processor = new ImageProcessor(q);
+            break;
+        case TypeRequest:
+            processor = new TypeProcessor(q);
+            break;
+        case PictureRequest:
+            processor = new PictureProcessor(q);
+            break;
+        default:
+            processor = new ObjectProcessor(q);
+            break;
+        }
+    default:
+        break;
     }
 
     if (processor) {
@@ -153,16 +175,18 @@ Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, Operation
     }
 
     Request request = createRequest(type);
+    request.preprocessorData().setOperation(operation);
+    request.preprocessorData().setGraph(graph);
+    request.preprocessorData().setArguments(arguments);
+    request.preprocessorData().setData(postData);
+
+
     AbstractGraphProcessor *processor
             = qobject_cast<AbstractGraphProcessor *>(createProcessor(request));
     if (!processor) {
         return Request();
     }
 
-    request.preprocessorData().setOperation(operation);
-    request.preprocessorData().setGraph(graph);
-    request.preprocessorData().setArguments(arguments);
-    request.preprocessorData().setData(postData);
     preparePreprocessor(processor, request);
     processor->setToken(token);
     processThreadPoll->start(processor);
@@ -304,11 +328,11 @@ Request QueryManager::queryPicture(const QString &graph, const QString &argument
     return d->createGraphPreprocessor(PictureRequest, GetOperation, graph, arguments);
 }
 
-//Request QueryManager::queryUser(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments);
-//}
+Request QueryManager::queryUser(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(UserRequest, GetOperation, graph, arguments);
+}
 
 //Request QueryManager::queryFeed(const QString &graph, const QString &arguments)
 //{
@@ -316,11 +340,11 @@ Request QueryManager::queryPicture(const QString &graph, const QString &argument
 //    return d->createGraphPreprocessor(FeedRequest, GetOperation, graph, arguments);
 //}
 
-//Request QueryManager::queryType(const QString &graph, const QString &arguments)
-//{
-//    Q_D(QueryManager);
-//    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments);
-//}
+Request QueryManager::queryType(const QString &graph, const QString &arguments)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(TypeRequest, GetOperation, graph, arguments);
+}
 
 //Request QueryManager::queryAlbum(const QString &graph, const QString &arguments)
 //{

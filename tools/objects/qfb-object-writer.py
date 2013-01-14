@@ -51,7 +51,7 @@ class ImplementationData:
     includes = ""
     headerCode = ""
     sourceCode = ""
-    reparentingCode = ""
+    objectCreationCode = ""
     variablesCode = {}
 
 
@@ -122,16 +122,16 @@ def detectImplementation(parserData):
         sourceFile.close()
 
         sourceFile = open(input + ".cpp")
-        foundReparentingMarker = False
+        foundObjectCreationMarker = False
         for line in sourceFile:
-            if line.strip() == "// <<<<< custom reparenting code":
-                foundReparentingMarker = False
+            if line.strip() == "// <<<<< custom object creation code":
+                foundObjectCreationMarker = False
 
-            if foundReparentingMarker:
-                implementationData.reparentingCode += line
+            if foundObjectCreationMarker:
+                implementationData.objectCreationCode += line
 
-            if line.strip() == "// >>>>> custom reparenting code":
-                foundReparentingMarker = True
+            if line.strip() == "// >>>>> custom object creation code":
+                foundObjectCreationMarker = True
 
         sourceFile.close()
         print "Source file was found. It will be patched"
@@ -228,6 +228,7 @@ def createHeader(className, includes, baseClass, variables, implementationData):
         aOrAn = "an"
 
     header += """namespace QFB {
+class """ + className + """Private;
 /**
  * @short """ + aOrAn[0].upper() + aOrAn[1:] + " " + className.lower() + """
  *
@@ -264,7 +265,7 @@ def createHeader(className, includes, baseClass, variables, implementationData):
  * @section missing Missing properties
  *
  * Some fields such as """
-        header += ",".join(missing)
+        header += ", ".join(missing)
         header += """
  * are not yet implemented.
 """
@@ -320,7 +321,7 @@ public:
      * @param propertiesMap properties.
      * @param parent parent object.
      */
-    explicit """ + className + """(const PropertiesMap propertiesMap, QObject *parent = 0);
+    explicit """ + className + """(const QVariantMap propertiesMap, QObject *parent = 0);
 """
     for variable in variables:
         if variable["type"] != "TODO" and variable["type"] != "NO" and variable["type"] != "":
@@ -340,7 +341,7 @@ public:
                 header += qfbtools.camelCase(splittedName) + "() const;\n"
 
     header += """private:
-    Q_DECLARE_PRIVATE(ObjectBase)
+    Q_DECLARE_PRIVATE(""" + className + """)
 };
 
 }
@@ -366,12 +367,36 @@ def createSource(className, includes, baseClass, variables, implementationData):
 #include \"""" + className.lower() + """.h\"
 #include \"private/helper_p.h\"
 #include \"private/objectbase_p.h\"
+#include \"private/object_creator_p.h\"
 #include \"private/""" + className.lower() + """_keys_p.h\"
 
 namespace QFB
 {
 
+class """ + className + """Private: public ObjectBasePrivate
+{
+public:
+    explicit """ + className + """Private();
 """
+    for variable in variables:
+        if qfbtools.isPointer(variable["type"]) or variable["isList"]:
+            splittedName = qfbtools.split(variable["name"])
+            if not variable["isList"]:
+                source += "    " + variable["type"] + " " + qfbtools.camelCase(splittedName) + ";\n"
+            else:
+                source += "    QList<" + variable["type"] + "> " + qfbtools.camelCase(splittedName)
+                source += ";\n"
+    source += """};
+
+""" + className + "Private::" + className + """Private():
+    ObjectBasePrivate()
+{
+}
+
+////// End of private class //////
+
+"""
+
     source += className + "::" + className + """(QObject *parent):
     """ + baseClass + """(parent)
 {
@@ -380,51 +405,52 @@ namespace QFB
 """
 
     source += className + "::" + className
-    source += """(const PropertiesMap propertiesMap, QObject *parent):
-    """ + baseClass + """(propertiesMap, parent)
+    source += """(const QVariantMap propertiesMap, QObject *parent):
+    """ + baseClass + """(*(new """ +  className + """Private), parent)
 {
-    Q_D(ObjectBase);
-    // >>>>> custom reparenting code
+    Q_D(""" + className + """);
+    d->propertiesMap = propertiesMap;
+    // >>>>> custom object creation code
 """
-    if implementationData.reparentingCode != "":
-        source += implementationData.reparentingCode
+    if implementationData.objectCreationCode != "":
+        source += implementationData.objectCreationCode
     else:
-        source += """    // TODO: check reparenting
+        source += """    // TODO: check object creation
     // It was done automatically by a script
 """
 
         for variable in variables:
-            if qfbtools.isPointer(variable["type"]):
+            if qfbtools.isPointer(variable["type"]) or variable["isList"]:
                 splittedName = qfbtools.split(variable["name"])
-                source += "    // Reparent " + qfbtools.camelCase(splittedName) + "\n"
+                source += "    // Create " + qfbtools.camelCase(splittedName) + "\n"
                 if not variable["isList"]:
-                    source += "    QObject *" + qfbtools.camelCase(splittedName) + "Object = "
-                    source += "d->propertiesMap.value("
-                    source += qfbtools.staticKey(splittedName, className)
-                    source += ").value<" + variable["type"] + ">();\n"
-                    source += "    if (" + qfbtools.camelCase(splittedName) + "Object) {\n"
-                    source += "        " + qfbtools.camelCase(splittedName)
-                    source += "Object->setParent(this);\n"
-                    source += "    }\n"
+                    source += "    QVariantMap " + qfbtools.camelCase(splittedName) + "Data = "
+                    source += "d->propertiesMap.take("
+                    source += qfbtools.staticKey(splittedName, className) + ")."
+                    source += "toMap();\n"
+                    source += "    d->" + qfbtools.camelCase(splittedName) + " = createObject<"
+                    source += variable["type"][:-1].strip()
+                    source += ">(" + qfbtools.camelCase(splittedName)
+                    source += "Data, this);\n"
                 else:
-                    source += "    QVariantList " + qfbtools.camelCase(splittedName) + "List = "
-                    source += "d->propertiesMap.value("
-                    source += qfbtools.staticKey(splittedName, className)
-                    source += ").toList();\n"
-                    source += "    foreach (QVariant "  + qfbtools.camelCase(splittedName)
-                    source += "Variant, "
-                    source += qfbtools.camelCase(splittedName) + "List) {\n"
-                    source += "        QObject *" + qfbtools.camelCase(splittedName) + "Object = "
-                    source += qfbtools.camelCase(splittedName) + "Variant"
-                    source += ".value<" + variable["type"] + ">();\n"
-                    source += "        if (" + qfbtools.camelCase(splittedName) + "Object) {\n"
-                    source += "            " + qfbtools.camelCase(splittedName)
-                    source += "Object->setParent(this);\n"
-                    source += "        }\n"
-                    source += "    }\n"
+                    source += "    QVariantList " + qfbtools.camelCase(splittedName) + "Data = "
+                    source += "d->propertiesMap.take("
+                    source += qfbtools.staticKey(splittedName, className) + ")."
+                    source += "toList();\n"
+                    source += "    d->" + qfbtools.camelCase(splittedName) + " = "
+                    if variable["type"].strip() == "QString":
+                        source += "createStringList"
+                    else:
+                        source += "createList<"
+                        source += variable["type"][:-1].strip() + ">"
+                    source += "(" + qfbtools.camelCase(splittedName) + "Data"
+                    if variable["type"].strip() == "QString":
+                        source += ");\n"
+                    else:
+                        source += ", this);\n"
 
 
-    source += """    // <<<<< custom reparenting code
+    source += """    // <<<<< custom object creation code
 }
 
 """
@@ -435,7 +461,7 @@ namespace QFB
                 source += variable["type"] + " "
                 source +=  className + "::" + qfbtools.camelCase(splittedName) + """() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const """ + className + """);
     // >>>>> property """ + variable["name"] + """
 """
                 source += implementationData.variablesCode[variable["name"]]
@@ -451,20 +477,11 @@ namespace QFB
                     source += variable["type"] + " "
                 source +=  className + "::" + qfbtools.camelCase(splittedName) + """() const
 {
-    Q_D(const ObjectBase);
+    Q_D(const """ + className + """);
     // >>>>> property """ + variable["name"] + """
 """
                 if variable["isList"]:
-                    source += "    QVariantList variantList = d->propertiesMap.value("
-                    source += qfbtools.staticKey(splittedName, className)
-                    source += ").toList();\n"
-                    source += "    QList<" + variable["type"] + "> returnedData;\n"
-                    source += "    foreach (QVariant entry, variantList) {\n"
-                    source += "        returnedData.append(entry.value<"
-                    source += variable["type"]
-                    source += """>());
-    }
-    return returnedData;\n"""
+                    source += "    return d->" + qfbtools.camelCase(splittedName) + ";\n"
                 else:
                     if variable["type"] in knownTypes:
                         source += "    return d->propertiesMap.value("
@@ -475,9 +492,7 @@ namespace QFB
                         source += qfbtools.staticKey(splittedName, className)
                         source += ").toString());\n"
                     elif qfbtools.isPointer(variable["type"]):
-                        source += "    return d->propertiesMap.value("
-                        source += qfbtools.staticKey(splittedName, className)
-                        source += ").value<" + variable["type"] + ">();\n"
+                        source += "    return d->" + qfbtools.camelCase(splittedName) + ";\n"
                     else:
                         source += "    // TODO: define the returned data\n"
                 source += """    // <<<<< property """ + variable["name"] + """

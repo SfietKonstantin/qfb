@@ -17,7 +17,7 @@
 #include "userloader.h"
 #include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/userprocessor.h"
+#include "processors/objectprocessor.h"
 #include "objects/user.h"
 
 namespace QFB
@@ -60,12 +60,12 @@ Request UserLoader::createRequest(const QString &graph, const QString &arguments
 void UserLoader::handleReply(AbstractProcessor *processor)
 {
     Q_D(UserLoader);
-    UserProcessor *userProcessor = qobject_cast<UserProcessor *>(processor);
+    ObjectProcessor *userProcessor = qobject_cast<ObjectProcessor *>(processor);
     if (d->user) {
         d->user->deleteLater();
     }
 
-    d->user = userProcessor->user();
+    d->user = qobject_cast<User *>(userProcessor->object());
     d->user->setParent(this);
     emit userChanged();
 }

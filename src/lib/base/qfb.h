@@ -28,15 +28,6 @@
 namespace QFB
 {
 /**
- * @brief Properties map
- *
- * This typedef defines a mapping between a proprety name,
- * that is the string used in Facebook to identify a property,
- * and the value of that property.
- */
-typedef QMap<QString, QVariant> PropertiesMap;
-
-/**
  * @brief Enumeration describing the request type
  */
 enum RequestType {

@@ -55,12 +55,19 @@ public:
      * @param propertiesMap properties.
      * @param parent parent object.
      */
-    explicit NamedObject(const PropertiesMap propertiesMap, QObject *parent = 0);
+    explicit NamedObject(const QVariantMap propertiesMap, QObject *parent = 0);
     /**
      * @brief Name
      * @return name.
      */
     QString name() const;
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
+     * @param parent parent object.
+     */
+    explicit NamedObject(ObjectBasePrivate &dd, QObject *parent = 0);
 private:
     Q_DECLARE_PRIVATE(ObjectBase)
 };

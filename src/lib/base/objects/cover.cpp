@@ -31,7 +31,7 @@ Cover::Cover(QObject *parent) :
 {
 }
 
-Cover::Cover(const PropertiesMap propertiesMap, QObject *parent):
+Cover::Cover(const QVariantMap propertiesMap, QObject *parent):
     Object(propertiesMap, parent)
 {
 }

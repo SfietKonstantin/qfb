@@ -32,7 +32,7 @@ QString locale
 The user's languages
 
 Requires \e user_likes.
-<list> NamedObject * languages
+<list> QFB::NamedObject * languages
 ---
 The URL of the profile for the user on Facebook
 

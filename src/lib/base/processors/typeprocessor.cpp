@@ -275,7 +275,7 @@ bool TypeProcessor::processDataSource(QIODevice *dataSource)
         d->object->deleteLater();
     }
 
-    PropertiesMap propertiesMap;
+    QVariantMap propertiesMap;
 
     propertiesMap.insert(OBJECT_ID_KEY, rootObject.value(OBJECT_ID_KEY).toString());
 
