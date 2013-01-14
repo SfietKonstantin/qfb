@@ -52,7 +52,7 @@ User * UserLoader::user() const
 Request UserLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryUser(graph, arguments);
+        return queryManager()->queryObject(Object::UserType, graph, arguments);
     }
     return Request();
 }
@@ -60,12 +60,12 @@ Request UserLoader::createRequest(const QString &graph, const QString &arguments
 void UserLoader::handleReply(AbstractProcessor *processor)
 {
     Q_D(UserLoader);
-    ObjectProcessor *userProcessor = qobject_cast<ObjectProcessor *>(processor);
+    ObjectProcessor *objectProcessor = qobject_cast<ObjectProcessor *>(processor);
     if (d->user) {
         d->user->deleteLater();
     }
 
-    d->user = qobject_cast<User *>(userProcessor->object());
+    d->user = qobject_cast<User *>(objectProcessor->object());
     d->user->setParent(this);
     emit userChanged();
 }

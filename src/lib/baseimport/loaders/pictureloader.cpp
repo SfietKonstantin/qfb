@@ -15,6 +15,7 @@
  ****************************************************************************************/
 
 #include "pictureloader.h"
+#include <QtCore/QDebug>
 #include "private/abstractloader_p.h"
 #include "querymanager.h"
 #include "private/picture_p.h"
@@ -98,6 +99,7 @@ Request PictureLoader::createRequest(const QString &graph, const QString &argume
 {
     Q_D(PictureLoader);
     if (d->type == Invalid) {
+        qWarning() << "Invalid image type cannot be loaded";
         return Request();
     }
 

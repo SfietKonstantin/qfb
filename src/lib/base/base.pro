@@ -30,9 +30,11 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
 #                    private/post_keys_p.h \
                     private/user_keys_p.h
 # Private headers for processors
-PRIVATE_HEADERS +=  private/abstractprocessor_p.h \
+PRIVATE_HEADERS +=  private/object_creator_p.h \
+                    private/abstractprocessor_p.h \
                     private/abstractgraphprocessor_p.h \
                     private/abstractpagingprocessor_p.h \
+                    private/objectprocessor_p.h \
                     private/networkrequesthandler_p.h
 #                    private/albumprocessor_p.h \
 #                    private/photoprocessor_p.h \
@@ -59,7 +61,8 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/imageprocessor.h \
                     processors/typeprocessor.h \
                     processors/pictureprocessor.h \
-                    processors/objectprocessor.h
+                    processors/objectprocessor.h \
+                    processors/objectlistprocessor.h \
 #                    processors/albumprocessor.h \
 #                    processors/albumlistprocessor.h \
 #                    processors/feedprocessor.h \
@@ -71,13 +74,13 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
 
 HEADERS =   $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS} \
-    private/object_creator_p.h
 
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
             request.cpp \
-            preprocessordata.cpp
+            preprocessordata.cpp \
+    processors/objectlistprocessor.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \

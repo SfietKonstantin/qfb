@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,71 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_OBJECTPROCESSOR_P_H
+#define QFB_OBJECTPROCESSOR_P_H
 
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "private/abstractgraphprocessor_p.h"
+#include "request.h"
+#include "objects/object.h"
+#include "private/jsonhelper_p.h"
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
-    /**
-     * @short An invalid request
-     */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest
-    /**
-     * @short A request to get a list of friends
-     */
-//    FriendListRequest,
-    /**
-     * @short A request to get a feed
-     */
-//    FeedRequest,
-    /**
-     * @short A request to get an album
-     */
-//    AlbumRequest,
-    /**
-     * @short A request to get a list of albums
-     */
-//    AlbumListRequest,
-    /**
-     * @short A request to get a list of photos
-     */
-//    PhotoListRequest,
-//    PostStatusRequest
-};
 
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+class ObjectProcessorPrivate: public AbstractGraphProcessorPrivate
+{
+public:
+    explicit ObjectProcessorPrivate();
+    static QVariantMap createObjectProperties(const JsonObject &object);
+    static Object * guessType(const QVariantMap &propertiesMap, QObject *parent = 0);
+    static Object * createObject(const JsonObject &jsonObject, const Request &request,
+                                 QObject *parent = 0);
+    Object *object;
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_OBJECTPROCESSOR_P_H

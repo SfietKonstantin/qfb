@@ -25,6 +25,7 @@
 #include "base_global.h"
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
+#include "objects/object.h"
 
 class QUrl;
 class QNetworkAccessManager;
@@ -105,42 +106,24 @@ public:
     /**
      * @brief Query an image
      * @param url url to the image.
-     * @return an image reply.
      */
     Request queryImage(const QUrl &url);
-    /**
-     * @brief Query a friend list
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     * @return a friend list reply.
-     */
-//    Request queryFriendList(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query a picture
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
-     * @return a picture reply.
      */
     Request queryPicture(const QString &graph, const QString &arguments = QString());
-    /**
-     * @brief Query an user
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     * @return a user reply.
-     */
-    Request queryUser(const QString &graph, const QString &arguments = QString());
-    /**
-     * @brief Query a feed
-     * @param graph graph entry of the Facebook graph API.
-     * @param arguments arguments.
-     * @return a feed reply.
-     */
-//    Request queryFeed(const QString &graph, const QString &arguments = QString());
     Request queryType(const QString &graph, const QString &arguments = QString());
-//    Request queryAlbum(const QString &graph, const QString &arguments = QString());
-//    Request queryAlbumList(const QString &graph, const QString &arguments = QString());
-//    Request queryPhotoList(const QString &graph, const QString &arguments = QString());
-//    Request queryPostStatus(const QString &graph, const QVariantMap &data = QVariantMap());
+    /**
+     * @brief Query an object
+     * @param graph graph entry of the Facebook graph API.
+     * @param arguments arguments.
+     */
+    Request queryObject(QFB::Object::ObjectType type, const QString &graph,
+                        const QString &arguments = QString());
+    Request queryObjectList(QFB::Object::ObjectType type, const QString &graph,
+                            const QString &arguments = QString());
 public Q_SLOTS:
     /**
      * @brief Set the access token

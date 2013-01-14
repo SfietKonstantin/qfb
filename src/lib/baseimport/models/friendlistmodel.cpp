@@ -23,7 +23,7 @@
 #include "private/abstractloadablemodel_p.h"
 #include <QtCore/QDebug>
 #include "querymanager.h"
-#include "processors/friendlistprocessor.h"
+#include "processors/objectlistprocessor.h"
 #include "objects/namedobject.h"
 
 namespace QFB
@@ -107,13 +107,13 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
 void FriendListModel::handleReply(AbstractPagingProcessor *processor)
 {
     Q_D(FriendListModel);
-    FriendListProcessor *friendListProcessor = qobject_cast<FriendListProcessor *>(processor);
-    if (!friendListProcessor) {
+    ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
+    if (!objectListProcessor) {
         return;
     }
 
-    QList<NamedObject *> friendList = friendListProcessor->friendList();
-    if (friendList.isEmpty()) {
+    QList<Object *> objectList = objectListProcessor->objectList();
+    if (objectList.isEmpty()) {
         setDoNotHaveNext();
         qSort(d->temporaryData.begin(), d->temporaryData.end(), nameSortLesser);
         beginInsertRows(QModelIndex(), 0, d->temporaryData.count() - 1);
@@ -124,11 +124,16 @@ void FriendListModel::handleReply(AbstractPagingProcessor *processor)
         return;
     }
 
-    foreach (NamedObject *user, friendList) {
-        user->setParent(this);
+    QList<NamedObject *> castedObjectList;
+    foreach (Object *object, objectList) {
+        object->setParent(this);
+        NamedObject *castedObject = qobject_cast<NamedObject *>(object);
+        if (castedObject) {
+            castedObjectList.append(castedObject);
+        }
     }
 
-    d->temporaryData.append(friendList);
+    d->temporaryData.append(castedObjectList);
 }
 
 void FriendListModel::clear()
@@ -143,7 +148,7 @@ void FriendListModel::clear()
 Request FriendListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
-        return queryManager()->queryFriendList(graph, arguments);
+        return queryManager()->queryObjectList(Object::UnknownType, graph, arguments);
     }
     return Request();
 }

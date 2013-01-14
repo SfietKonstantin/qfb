@@ -29,10 +29,10 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
 #                    loaders/albumloader.h \
 #                    loaders/poststatusloader.h
 # Models
-PUBLIC_HEADERS +=   models/abstractloadablemodel.h
+PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
+                    models/friendlistmodel.h
 #                    models/albumlistmodel.h \
 #                    models/feedmodel.h \
-#                    models/friendlistmodel.h \
 #                    models/photolistmodel.h
 HEADERS +=  $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS}
@@ -50,10 +50,10 @@ SOURCES +=  loaders/abstractloader.cpp \
 #            loaders/albumloader.cpp \
 #            loaders/poststatusloader.cpp
 # Models
-SOURCES +=  models/abstractloadablemodel.cpp
+SOURCES +=  models/abstractloadablemodel.cpp \
+            models/friendlistmodel.cpp
 #            models/albumlistmodel.cpp \
 #            models/feedmodel.cpp \
-#            models/friendlistmodel.cpp \
 #            models/photolistmodel.cpp
 
 # Deployment

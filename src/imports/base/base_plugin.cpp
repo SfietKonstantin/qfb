@@ -46,7 +46,7 @@
 #include "postvalidator.h"
 //#include "models/albumlistmodel.h"
 //#include "models/feedmodel.h"
-//#include "models/friendlistmodel.h"
+#include "models/friendlistmodel.h"
 //#include "models/photolistmodel.h"
 
 namespace QFB
@@ -98,7 +98,7 @@ void BasePlugin5::registerTypes(const char *uri)
 
 //    qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
 //    qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
-//    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
+    qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
 //    qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
 }
 

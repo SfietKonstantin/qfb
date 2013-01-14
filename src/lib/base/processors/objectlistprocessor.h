@@ -14,71 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_OBJECTLISTPROCESSOR_H
+#define QFB_OBJECTLISTPROCESSOR_H
 
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "abstractpagingprocessor.h"
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
-    /**
-     * @short An invalid request
-     */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest
-    /**
-     * @short A request to get a list of friends
-     */
-//    FriendListRequest,
-    /**
-     * @short A request to get a feed
-     */
-//    FeedRequest,
-    /**
-     * @short A request to get an album
-     */
-//    AlbumRequest,
-    /**
-     * @short A request to get a list of albums
-     */
-//    AlbumListRequest,
-    /**
-     * @short A request to get a list of photos
-     */
-//    PhotoListRequest,
-//    PostStatusRequest
-};
 
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+class Object;
+class ObjectListProcessorPrivate;
+class QFBBASE_EXPORT ObjectListProcessor: public AbstractPagingProcessor
+{
+    Q_OBJECT
+public:
+    explicit ObjectListProcessor(QObject *parent = 0);
+    QList<Object *> objectList() const;
+protected:
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(ObjectListProcessor)
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_OBJECTLISTPROCESSOR_H
