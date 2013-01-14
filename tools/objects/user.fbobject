@@ -1,0 +1,166 @@
+User
+<QtCore/QDateTime>
+<QtCore/QUrl>
+"cover.h"
+---
+The user's Facebook ID
+QString id
+---
+The user's full name
+QString name
+---
+The user's first name
+QString first_name
+---
+The user's middle name
+QString middle_name
+---
+The user's last name
+QString last_name
+---
+The user's gender
+
+This value is either "female" or "male".
+QString gender
+---
+The user's locale
+
+This value is a string containing the ISO
+Language Code and ISO Country Code.
+QString locale
+---
+The user's languages
+
+Requires \e user_likes.
+<list> NamedObject * languages
+---
+The URL of the profile for the user on Facebook
+
+QUrl link
+---
+The user's Facebook username
+
+QString username
+---
+An anonymous, but unique identifier for the user
+
+This property is only returned if specifically
+requested via the fields parameter.
+
+Requires an access token.
+QString third_party_id
+---
+<no> installed
+---
+The user's timezone offset from UTC
+
+This property is only available for the current
+user.
+int timezone
+---
+The last time the user's profile was updated
+
+Changes to the languages, link, timezone, verified, interested_in,
+favorite_athletes, favorite_teams, and video_upload_limits properties
+are not not reflected in this value.
+
+Requires an access token.
+QDateTime updated_time
+---
+The user's biography
+QString bio
+---
+birthday
+---
+The user's cover photo
+
+This property is only returned if specifically
+requested via the fields parameter.
+
+Requires an access token.
+QFB::Cover * cover
+---
+currency
+---
+devices
+---
+education
+---
+The proxied or contact email address granted by the user
+
+QString email
+---
+The user's hometown
+
+Requires \e user_hometown or \e friends_hometown.
+QFB::NamedObject * hometown
+---
+The genders the user is interested in
+
+Requires \e user_relationship_details or
+\e friends_relationship_details.
+<list> QString interested_in
+---
+The user's current city
+
+Requires \e user_location or \e friends_location.
+QFB::NamedObject * location
+---
+The user's political view
+
+Requires \e user_religion_politics or
+\e friends_religion_politics.
+QString political
+---
+payment_pricepoints
+---
+<no> favorite_athletes
+---
+<no> favorite_teams
+---
+picture
+---
+The user's favorite quotes
+
+Requires \e user_about_me or \e friends_about_me.
+QString quotes
+---
+The user's relationship status
+
+This property can take the following values:
+- Single
+- In a relationship
+- Engaged
+- Married
+- It's complicated
+- In an open relationship
+- Widowed
+- Separated
+- Divorced
+- In a civil union
+- In a domestic partnership
+
+Requires \e user_relationships or \e friends_relationships.
+QString relationship_status
+---
+The user's religion
+
+Requires \e user_religion_politics or
+\e friends_religion_politics.
+QString religion
+---
+security_settings
+---
+The user's significant other
+
+Requires \e user_relationships or \e friends_relationships.
+QFB::NamedObject * significant_other
+---
+video_upload_limits
+---
+The URL of the user's personal website
+
+Requires \e user_website or \e friends_website.
+QString website
+---
+work
