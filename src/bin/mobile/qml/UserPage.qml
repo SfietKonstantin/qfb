@@ -27,7 +27,6 @@ Page {
     function load() {
         portraitLoader.request(facebookId + "/picture")
         userLoader.request(facebookId, "fields=cover")
-        feedButton.checked = true
         feed.load()
     }
 
@@ -36,18 +35,25 @@ Page {
             iconId: "toolbar-back"
             onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
-        ButtonRow {
-            style: TabButtonStyle {}
-            TabButton {
-                id: feedButton
-                text: qsTr("Feed")
-                onClicked: {
-                    feed.load()
-                }
+
+        ToolIcon {
+            iconId: "toolbar-view-menu"
+            onClicked: menu.open()
+        }
+    }
+
+    Menu {
+        id: menu
+        MenuLayout {
+            MenuItem {
+                text: facebookId == "me" ? qsTr("Personnal informations")
+                                         : qsTr("User informations")
+                onClicked: PAGE_MANAGEMENT_BRIDGE.addUserInfoPage(facebookId, name, banner.coverUrl)
             }
-            TabButton {
-                id: miscButton
-                text: qsTr("Misc")
+            MenuItem {
+                text: qsTr("Albums")
+                onClicked: PAGE_MANAGEMENT_BRIDGE.addAlbumListPage(facebookId, name,
+                                                                   banner.coverUrl)
             }
         }
     }
@@ -65,8 +71,7 @@ Page {
         id: flickable
         anchors.fill: parent
         contentWidth: width
-        contentHeight: banner.height + (feedButton.checked ? feed.height : userMisc.height)
-                       + Ui.MARGIN_DEFAULT
+        contentHeight: banner.height + feed.height + Ui.MARGIN_DEFAULT
 
 
         Banner {
@@ -78,17 +83,25 @@ Page {
         Rectangle {
             id: portraitContainer
             opacity: 0
-            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
             anchors.top: banner.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-            width: portrait.width + Ui.MARGIN_SMALL
-            height: portrait.height + Ui.MARGIN_SMALL
+            width: portrait.width + 2 * Ui.MARGIN_XSMALL
+            height: Math.min(portrait.height + 2 * Ui.MARGIN_XSMALL,
+                             banner.height - 2 * Ui.MARGIN_DEFAULT)
             color: "white"
 
-            Image {
-                id: portrait
-                source: portraitLoader.picturePath
-                anchors.centerIn: parent
+            Item {
+                anchors.fill: parent
+                anchors.margins: Ui.MARGIN_XSMALL
+                clip: true
+
+                Image {
+                    id: portrait
+                    source: portraitLoader.picturePath
+                    anchors.top: parent.top
+                }
             }
+
 
             QFBPictureLoader {
                 id: portraitLoader
@@ -112,48 +125,9 @@ Page {
 
         Feed {
             id: feed
-            visible: feedButton.checked
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             facebookId: container.facebookId
             stream: "feed"
-        }
-
-        Item {
-            id: userMisc
-            visible: miscButton.checked
-            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            width: container.width
-
-            height: Math.max(2 * Ui.MARGIN_DEFAULT + buttonColumn.height,
-                             container.height - banner.height)
-
-            ButtonColumn {
-                exclusive: false
-                anchors.centerIn: parent
-                id: buttonColumn
-
-                Button {
-                    text: qsTr("Informations")
-                    onClicked: PAGE_MANAGEMENT_BRIDGE.addUserInfoPage(facebookId, name,
-                                                                      banner.coverUrl)
-                }
-
-                Button {
-                    text: qsTr("Albums")
-                    onClicked: PAGE_MANAGEMENT_BRIDGE.addAlbumListPage(facebookId, name,
-                                                                       banner.coverUrl)
-                }
-
-                Button {
-                    text: qsTr("Photos")
-                    enabled: false
-                }
-
-                Button {
-                    text: qsTr("Videos")
-                    enabled: false
-                }
-            }
         }
     }
 }

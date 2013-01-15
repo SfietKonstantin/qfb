@@ -52,11 +52,18 @@ Item {
                 color: !theme.inverted ? "white" : "black"
 
                 FacebookPicture {
+                    id: picture
                     clip: true
                     pictureType: QFBPictureLoader.Normal
                     fillMode: Image.PreserveAspectCrop
                     anchors.fill: parent
                     facebookId: model.data.facebookId
+                }
+
+                BusyIndicator {
+                    anchors.centerIn: picture
+                    visible: picture.loading
+                    running: visible
                 }
 
                 MouseArea {

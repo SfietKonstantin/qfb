@@ -48,6 +48,12 @@ Rectangle {
         facebookId: container.facebookId
     }
 
+    BusyIndicator {
+        anchors.centerIn: picture
+        visible: picture.loading
+        running: visible
+    }
+
     Label {
         id: text
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT

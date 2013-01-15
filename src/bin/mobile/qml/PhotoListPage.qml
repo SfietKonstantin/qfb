@@ -58,4 +58,19 @@ Page {
             graph: facebookId + "/photos"
         }
     }
+
+    Row {
+        id: loadingIndicator
+        anchors.centerIn: parent
+        visible: photoList.loading
+        spacing: Ui.MARGIN_DEFAULT
+
+        BusyIndicator {
+            running: loadingIndicator.visible
+        }
+
+        Label {
+            text: qsTr("Loading")
+        }
+    }
 }

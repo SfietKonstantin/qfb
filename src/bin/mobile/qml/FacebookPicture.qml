@@ -23,6 +23,7 @@ Image {
     id: picture
     property string facebookId
     property alias pictureType: pictureLoader.type
+    property bool loading: state != "visible"
     onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
     width: Ui.ICON_SIZE_DEFAULT
     height: Ui.ICON_SIZE_DEFAULT
