@@ -124,7 +124,7 @@ public:
                         const QString &arguments = QString());
     Request queryObjectList(QFB::Object::ObjectType type, const QString &graph,
                             const QString &arguments = QString());
-    Request queryPostStatus(const QString &graph, const QVariantMap &data);
+    Request querySimpleCreate(const QString &graph, const QVariantMap &data);
 public Q_SLOTS:
     /**
      * @brief Set the access token

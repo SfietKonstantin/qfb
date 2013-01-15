@@ -44,7 +44,7 @@ Item {
 
             TextArea {
                 id: postTextArea
-                enabled: !postStatusLoader.loading
+                enabled: !createPostLoader.loading
                 anchors.left: parent.left
                 anchors.right: postButton.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
 
@@ -52,25 +52,25 @@ Item {
 
             ToolIcon {
                 id: postButton
-                visible: !postStatusLoader.loading
+                visible: !createPostLoader.loading
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 iconId: "toolbar-new-message"
                 onClicked: {
-                    if (postStatusLoader.message.trim() != "") {
-                        postStatusLoader.request(container.facebookId + "/feed")
+                    if (createPostLoader.message.trim() != "") {
+                        createPostLoader.request(container.facebookId + "/feed")
                     }
                 }
             }
 
             BusyIndicator {
                 anchors.centerIn: postButton
-                visible: postStatusLoader.loading
+                visible: createPostLoader.loading
                 running: visible
             }
 
-            QFBPostStatusLoader {
-                id: postStatusLoader
+            QFBCreatePostLoader {
+                id: createPostLoader
                 queryManager: QUERY_MANAGER
                 message: postTextArea.text
                 onLoaded: {

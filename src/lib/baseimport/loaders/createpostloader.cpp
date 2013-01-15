@@ -15,28 +15,28 @@
  ****************************************************************************************/
 
 /**
- * @file poststatusloader.cpp
- * @brief Implementation of QFB::PostStatusLoader
+ * @file createpostloader.cpp
+ * @brief Implementation of QFB::CreatePostLoader
  */
 
-#include "poststatusloader.h"
+#include "createpostloader.h"
 #include "private/abstractloader_p.h"
 #include "querymanager.h"
-#include "processors/poststatusprocessor.h"
+#include "processors/simplecreateobjectprocessor.h"
 
 #include "objects/object.h"
 namespace QFB
 {
 
-class PostStatusLoaderPrivate: public AbstractLoaderPrivate
+class CreatePostLoaderPrivate: public AbstractLoaderPrivate
 {
 public:
-    PostStatusLoaderPrivate(PostStatusLoader *q);
+    CreatePostLoaderPrivate(CreatePostLoader *q);
     Object *reply;
     QString message;
 };
 
-PostStatusLoaderPrivate::PostStatusLoaderPrivate(PostStatusLoader *q):
+CreatePostLoaderPrivate::CreatePostLoaderPrivate(CreatePostLoader *q):
     AbstractLoaderPrivate(q)
 {
     reply = 0;
@@ -44,57 +44,57 @@ PostStatusLoaderPrivate::PostStatusLoaderPrivate(PostStatusLoader *q):
 
 ////// End of private class //////
 
-PostStatusLoader::PostStatusLoader(QObject *parent):
-    AbstractGraphPostLoader(*(new PostStatusLoaderPrivate(this)), parent)
+CreatePostLoader::CreatePostLoader(QObject *parent):
+    AbstractGraphPostLoader(*(new CreatePostLoaderPrivate(this)), parent)
 {
 }
 
-Object * PostStatusLoader::reply() const
+Object * CreatePostLoader::reply() const
 {
-    Q_D(const PostStatusLoader);
+    Q_D(const CreatePostLoader);
     return d->reply;
 }
 
-QString PostStatusLoader::message() const
+QString CreatePostLoader::message() const
 {
-    Q_D(const PostStatusLoader);
+    Q_D(const CreatePostLoader);
     return d->message;
 }
 
-void PostStatusLoader::setMessage(const QString &message)
+void CreatePostLoader::setMessage(const QString &message)
 {
-    Q_D(PostStatusLoader);
+    Q_D(CreatePostLoader);
     if(d->message != message) {
         d->message = message;
         emit messageChanged();
     }
 }
 
-QVariantMap PostStatusLoader::data() const
+QVariantMap CreatePostLoader::data() const
 {
-    Q_D(const PostStatusLoader);
+    Q_D(const CreatePostLoader);
     QVariantMap returnedData;
     returnedData.insert("message", d->message);
     return returnedData;
 }
 
-Request PostStatusLoader::createRequest(const QString &graph, const QVariantMap &data)
+Request CreatePostLoader::createRequest(const QString &graph, const QVariantMap &data)
 {
     if (queryManager()) {
-        return queryManager()->queryPostStatus(graph, data);
+        return queryManager()->querySimpleCreate(graph, data);
     }
     return Request();
 }
 
-void PostStatusLoader::handleReply(AbstractProcessor *processor)
+void CreatePostLoader::handleReply(AbstractProcessor *processor)
 {
-    Q_D(PostStatusLoader);
-    PostStatusProcessor *postStatusProcessor = qobject_cast<PostStatusProcessor *>(processor);
+    Q_D(CreatePostLoader);
+    SimpleCreateObjectProcessor *postProcessor = qobject_cast<SimpleCreateObjectProcessor *>(processor);
     if (d->reply) {
         d->reply->deleteLater();
     }
 
-    d->reply = postStatusProcessor->reply();
+    d->reply = postProcessor->object();
     d->reply->setParent(this);
     emit replyChanged();
 }

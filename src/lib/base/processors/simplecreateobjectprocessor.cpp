@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,51 +14,26 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
-
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "simplecreateobjectprocessor.h"
+#include <QtCore/QStringList>
+#include <QtCore/QVariantMap>
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
-    /**
-     * @short An invalid request
-     */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest,
-    SimplePostRequest
-};
 
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
-};
-
+SimpleCreateObjectProcessor::SimpleCreateObjectProcessor(QObject *parent):
+    ObjectProcessor(parent)
+{
 }
 
-#endif // QFB_QFB_H
+QByteArray SimpleCreateObjectProcessor::processPostData(const QVariantMap &data)
+{
+    QStringList finalStringList;
+    foreach (QString key, data.keys()) {
+        finalStringList.append(QString("%1=%2").arg(key, data.value(key).toString()));
+    }
+
+    return finalStringList.join("&").toLocal8Bit();
+}
+
+}

@@ -43,7 +43,7 @@
 #include "loaders/albumloader.h"
 #include "loaders/photoloader.h"
 #include "loaders/userloader.h"
-#include "loaders/poststatusloader.h"
+#include "loaders/createpostloader.h"
 #include "postvalidator.h"
 #include "models/albumlistmodel.h"
 #include "models/feedmodel.h"
@@ -104,7 +104,7 @@ void BasePlugin5::registerTypes(const char *uri)
 
 
 
-    qmlRegisterType<QFB::PostStatusLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostStatusLoader");
+    qmlRegisterType<QFB::CreatePostLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCreatePostLoader");
 }
 
 }

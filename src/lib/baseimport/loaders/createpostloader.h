@@ -14,12 +14,12 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_POSTSTATUSLOADER_H
-#define QFB_POSTSTATUSLOADER_H
+#ifndef QFB_CREATEPOSTLOADER_H
+#define QFB_CREATEPOSTLOADER_H
 
 /**
- * @file poststatusloader.h
- * @brief Definition of QFB::PostStatusLoader
+ * @file createpostloader.h
+ * @brief Definition of QFB::CreatePostLoader
  */
 
 #include "abstractgraphpostloader.h"
@@ -28,11 +28,11 @@ namespace QFB
 {
 
 class Object;
-class PostStatusLoaderPrivate;
+class CreatePostLoaderPrivate;
 /**
  * @short WRITE DOCUMENTATION HERE
  */
-class QFBBASEIMPORT_EXPORT PostStatusLoader: public AbstractGraphPostLoader
+class QFBBASEIMPORT_EXPORT CreatePostLoader: public AbstractGraphPostLoader
 {
     Q_OBJECT
     /**
@@ -45,7 +45,7 @@ public:
      * @brief Default constructor
      * @param parent parent object.
      */
-    explicit PostStatusLoader(QObject *parent = 0);
+    explicit CreatePostLoader(QObject *parent = 0);
     /**
      * @brief Reply
      * @return reply.
@@ -75,9 +75,9 @@ protected:
      */
      void handleReply(AbstractProcessor *processor);
 private:
-    Q_DECLARE_PRIVATE(PostStatusLoader)
+    Q_DECLARE_PRIVATE(CreatePostLoader)
 };
 
 }
 
-#endif // QFB_POSTSTATUSLOADER_H
+#endif // QFB_CREATEPOSTLOADER_H

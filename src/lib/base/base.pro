@@ -35,8 +35,7 @@ PRIVATE_HEADERS +=  private/object_creator_p.h \
                     private/abstractgraphprocessor_p.h \
                     private/abstractpagingprocessor_p.h \
                     private/objectprocessor_p.h \
-                    private/networkrequesthandler_p.h \
-                    private/poststatusprocessor.h
+                    private/networkrequesthandler_p.h
 # Base
 PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
@@ -62,7 +61,7 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/pictureprocessor.h \
                     processors/objectprocessor.h \
                     processors/objectlistprocessor.h \
-                    processors/poststatusprocessor.h
+                    processors/simplecreateobjectprocessor.h
 
 HEADERS =   $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS}
@@ -90,7 +89,7 @@ SOURCES +=  processors/abstractprocessor.cpp \
             processors/pictureprocessor.cpp \
             processors/objectprocessor.cpp \
             processors/objectlistprocessor.cpp \
-            processors/poststatusprocessor.cpp
+            processors/simplecreateobjectprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

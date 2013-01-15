@@ -32,7 +32,7 @@
 #include "processors/pictureprocessor.h"
 #include "processors/objectprocessor.h"
 #include "processors/objectlistprocessor.h"
-#include "processors/poststatusprocessor.h"
+#include "processors/simplecreateobjectprocessor.h"
 
 namespace QFB
 {
@@ -113,7 +113,7 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
         }
         break;
     case PostOperation:
-        processor = new PostStatusProcessor(q);
+        processor = new SimpleCreateObjectProcessor(q);
         break;
     default:
         break;
@@ -317,10 +317,10 @@ Request QueryManager::queryObjectList(Object::ObjectType type, const QString &gr
                                       graph, arguments);
 }
 
-Request QueryManager::queryPostStatus(const QString &graph, const QVariantMap &data)
+Request QueryManager::querySimpleCreate(const QString &graph, const QVariantMap &data)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(PostStatusRequest, PostOperation, Object::UnknownType,
+    return d->createGraphPreprocessor(SimplePostRequest, PostOperation, Object::UnknownType,
                                       graph, QString(), data);
 }
 

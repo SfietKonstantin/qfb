@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,45 +14,23 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_POSTSTATUSPROCESSOR_H
-#define QFB_POSTSTATUSPROCESSOR_H
+#ifndef QFB_SIMPLECREATEOBJECTPROCESSOR_H
+#define QFB_SIMPLECREATEOBJECTPROCESSOR_H
 
-/**
- * @file poststatusprocessor.h
- * @brief Definition of QFB::PostStatusProcessor
- */
-
-#include "abstractgraphprocessor.h"
+#include "objectprocessor.h"
 
 namespace QFB
 {
 
-class Object;
-class PostStatusProcessorPrivate;
-/**
- * @short WRITE DOCUMENTATION HERE
- */
-class QFBBASE_EXPORT PostStatusProcessor: public AbstractGraphProcessor
+class SimpleCreateObjectProcessor: public ObjectProcessor
 {
     Q_OBJECT
 public:
-    /**
-     * @brief Default constructor
-     * @param parent parent object.
-     */
-    explicit PostStatusProcessor(QObject *parent = 0);
-    /**
-     * @brief PostStatus
-     * @return poststatus.
-     */
-    Object * reply() const;
+    explicit SimpleCreateObjectProcessor(QObject *parent = 0);
 protected:
     QByteArray processPostData(const QVariantMap &data);
-    bool processDataSource(QIODevice *dataSource);
-private:
-    Q_DECLARE_PRIVATE(PostStatusProcessor)
 };
 
 }
 
-#endif // QFB_POSTSTATUSPROCESSOR_H
+#endif // QFB_SIMPLECREATEOBJECTPROCESSOR_H
