@@ -89,6 +89,8 @@ bool ObjectListProcessor::processDataSource(QIODevice *dataSource)
     }
 
     JsonObject pagingObject = QFB_JSON_GET_OBJECT(rootObject.value(PAGING_KEY));
+    QUrl previousPageUrl = parseUrl(pagingObject.value(PAGING_PREVIOUS_KEY).toString());
+    setPreviousPageUrl(previousPageUrl);
     QUrl nextPageUrl = parseUrl(pagingObject.value(PAGING_NEXT_KEY).toString());
     setNextPageUrl(nextPageUrl);
 

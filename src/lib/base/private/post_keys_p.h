@@ -85,9 +85,19 @@ static const char *POST_ICON_KEY = "icon";
 static const char *POST_TYPE_KEY = "type";
 /**
  * @internal
+ * @brief POST_LIKES_KEY
+ */
+static const char *POST_LIKES_KEY = "likes";
+/**
+ * @internal
  * @brief POST_STORY_KEY
  */
 static const char *POST_STORY_KEY = "story";
+/**
+ * @internal
+ * @brief POST_COMMENTS_KEY
+ */
+static const char *POST_COMMENTS_KEY = "comments";
 /**
  * @internal
  * @brief POST_OBJECT_ID_KEY

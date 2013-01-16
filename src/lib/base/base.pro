@@ -25,7 +25,10 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/object_type_keys_p.h \
                     private/namedobject_keys_p.h \
                     private/album_keys_p.h \
+                    private/comment_keys_p.h \
+                    private/commentscontainer_keys_p.h \
                     private/cover_keys_p.h \
+                    objects/likescontainer_keys_p.h \
                     private/photo_keys_p.h \
                     private/post_keys_p.h \
                     private/user_keys_p.h
@@ -48,7 +51,10 @@ PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/object.h \
                     objects/namedobject.h \
                     objects/album.h \
+                    objects/comment.h \
+                    objects/commentscontainer.h \
                     objects/cover.h \
+                    objects/likescontainer.h \
                     objects/photo.h \
                     objects/post.h \
                     objects/user.h
@@ -76,7 +82,10 @@ SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \
             objects/namedobject.cpp \
             objects/album.cpp \
+            objects/comment.cpp \
+            objects/commentscontainer.cpp \
             objects/cover.cpp \
+            objects/likescontainer.cpp \
             objects/photo.cpp \
             objects/post.cpp \
             objects/user.cpp

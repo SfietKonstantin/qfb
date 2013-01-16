@@ -26,6 +26,8 @@ class AbstractPagingProcessorPrivate: public AbstractGraphProcessorPrivate
 {
 public:
     explicit AbstractPagingProcessorPrivate();
+    QString previousPageGraph;
+    QString previousPageArguments;
     /**
      * @internal
      * @brief Graph used to get the next page

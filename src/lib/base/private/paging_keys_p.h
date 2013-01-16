@@ -29,6 +29,11 @@ static const char *PAGING_KEY = "paging";
  * @brief PAGING_NEXT_KEY
  */
 static const char *PAGING_NEXT_KEY = "next";
+/**
+ * @internal
+ * @brief PAGING_PREVIOUS_KEY
+ */
+static const char *PAGING_PREVIOUS_KEY = "previous";
 
 }
 

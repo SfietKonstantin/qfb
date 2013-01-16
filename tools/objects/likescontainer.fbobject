@@ -1,0 +1,12 @@
+LikesContainer
+"namedobject.h"
+---
+Number of likes
+int count
+---
+Information about the likes
+
+This list contains the list of the
+id and name of all users that liked
+this object.
+<list> QFB::NamedObject * data

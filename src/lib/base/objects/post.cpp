@@ -34,6 +34,8 @@ public:
     explicit PostPrivate();
     QFB::NamedObject * from;
     QList<QFB::NamedObject *> to;
+    QFB::LikesContainer * likes;
+    QFB::CommentsContainer * comments;
     QFB::NamedObject * application;
 };
 
@@ -63,6 +65,12 @@ Post::Post(const QVariantMap propertiesMap, QObject *parent):
     // Create to
     QVariantList toData = d->propertiesMap.take(POST_TO_KEY).toList();
     d->to = createList<QFB::NamedObject>(toData, this);
+    // Create likes
+    QVariantMap likesData = d->propertiesMap.take(POST_LIKES_KEY).toMap();
+    d->likes = createObject<QFB::LikesContainer>(likesData, this);
+    // Create comments
+    QVariantMap commentsData = d->propertiesMap.take(POST_COMMENTS_KEY).toMap();
+    d->comments = createObject<QFB::CommentsContainer>(commentsData, this);
     // Create application
     QVariantMap applicationData = d->propertiesMap.take(POST_APPLICATION_KEY).toMap();
     d->application = createObject<QFB::NamedObject>(applicationData, this);
@@ -149,12 +157,28 @@ QString Post::type() const
     // <<<<< property type
 }
 
+QFB::LikesContainer * Post::likes() const
+{
+    Q_D(const Post);
+    // >>>>> property likes
+    return d->likes;
+    // <<<<< property likes
+}
+
 QString Post::story() const
 {
     Q_D(const Post);
     // >>>>> property story
     return d->propertiesMap.value(POST_STORY_KEY).toString();
     // <<<<< property story
+}
+
+QFB::CommentsContainer * Post::comments() const
+{
+    Q_D(const Post);
+    // >>>>> property comments
+    return d->comments;
+    // <<<<< property comments
 }
 
 QString Post::objectId() const

@@ -128,6 +128,8 @@ Page {
             anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             facebookId: container.facebookId
             stream: "feed"
+            onShowPost: PAGE_MANAGEMENT_BRIDGE.addPostPage(container.facebookId, container.name,
+                                                           banner.coverUrl, post)
         }
     }
 }

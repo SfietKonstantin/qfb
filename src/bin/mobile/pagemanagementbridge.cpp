@@ -54,3 +54,9 @@ void PageManagementBridge::addPhotoListPage(const QString &facebookId, const QSt
 {
     emit addPhotoListPageRequested(facebookId, name, coverUrl);
 }
+
+void PageManagementBridge::addPostPage(const QString &facebookId, const QString &name,
+                                       const QString &coverUrl, QFB::Post *post)
+{
+    emit addPostPageRequested(facebookId, name, coverUrl, post);
+}

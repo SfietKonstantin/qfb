@@ -28,6 +28,7 @@ Item {
     property bool loading: model.loading
     property string facebookId
     property string stream
+    signal showPost(variant post)
     function load() {
         model.request(container.facebookId + "/" + stream)
     }
@@ -84,29 +85,20 @@ Item {
             model: QFBFeedModel {
                 id: model
                 queryManager: QUERY_MANAGER
+                validator: QFBMobilePostValidator {}
             }
 
             delegate: Item {
                 width: container.width
                 height: content.height
 
-                QFBPostHelper {
-                    id: postHelper
-                    post: model.data
-                }
-
                 Post {
                     id: content
-                    header: postHelper.header
-                    from: model.data.from
-                    createdTime: model.data.createdTime
-                    message: postHelper.message
-                    picture: model.data.picture
-                    name: model.data.name
-                    caption: model.data.caption
-                    description: model.data.description
+                    post: model.data
+                    interactive: true
                     opacity: 0
                     Component.onCompleted: opacity = 1
+                    onClicked: container.showPost(model.data)
 
                     Behavior on opacity {
                         NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }

@@ -46,6 +46,7 @@ protected:
      * @param parent parent object.
      */
     explicit AbstractPagingProcessor(AbstractPagingProcessorPrivate &dd, QObject *parent = 0);
+    void setPreviousPageUrl(const QUrl &url);
     /**
      * @brief Set the url used to get the next page
      * @param url url used to get the next page.

@@ -33,6 +33,7 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
 PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/friendlistmodel.h \
                     models/albumlistmodel.h \
+                    models/commentlistmodel.h \
                     models/feedmodel.h \
                     models/photolistmodel.h
 HEADERS +=  $${PRIVATE_HEADERS} \
@@ -55,6 +56,7 @@ SOURCES +=  loaders/abstractloader.cpp \
 SOURCES +=  models/abstractloadablemodel.cpp \
             models/friendlistmodel.cpp \
             models/albumlistmodel.cpp \
+            models/commentlistmodel.cpp \
             models/feedmodel.cpp \
             models/photolistmodel.cpp
 

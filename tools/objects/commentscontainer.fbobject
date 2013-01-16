@@ -1,0 +1,11 @@
+CommentsContainer
+"comment.h"
+---
+Number of comments
+int count
+---
+Information about the comments
+
+This list contains the list of the
+comments.
+<list> QFB::Comment * data

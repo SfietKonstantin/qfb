@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,15 +14,36 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "mobilepostvalidator.h"
-#include "objects/post.h"
+#ifndef QFB_LIKESCONTAINER_KEYS_P_H
+#define QFB_LIKESCONTAINER_KEYS_P_H
 
-MobilePostValidator::MobilePostValidator(QObject *parent):
-    QFB::PostValidator(parent)
+// Warning
+//
+// This file exists for the convenience
+// of other qfb classes.
+// This header file may change from version
+// to version without notice or even be removed.
+
+/**
+ * @internal
+ * @file likescontainer_keys_p.h
+ * @brief Definition of internal keys associated to QFB::LikesContainer
+ */
+
+namespace QFB
 {
+
+/**
+ * @internal
+ * @brief LIKESCONTAINER_COUNT_KEY
+ */
+static const char *LIKESCONTAINER_COUNT_KEY = "count";
+/**
+ * @internal
+ * @brief LIKESCONTAINER_DATA_KEY
+ */
+static const char *LIKESCONTAINER_DATA_KEY = "data";
+
 }
 
-bool MobilePostValidator::validate(QFB::Post *post)
-{
-    return post->story().isEmpty();
-}
+#endif // QFB_LIKESCONTAINER_KEYS_P_H

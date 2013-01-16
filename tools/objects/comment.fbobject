@@ -1,0 +1,40 @@
+Comment
+<QtCore/QDateTime>
+"namedobject.h"
+---
+The Facebook ID of the comment
+
+Requires an access token.
+QString id
+---
+The user that created the comment
+
+Requires an access token.
+QFB::NamedObject * from
+---
+The comment text
+
+Requires an access token.
+QString message
+---
+The timedate the comment was created
+
+Requires an access token.
+QDateTime created_time
+---
+The number of times this comment was liked
+---
+If the authenticated user liked this comment
+
+This field is returned only if the authenticated
+user likes this comment. It is always true.
+
+Requires an access token.
+bool user_likes
+---
+The type of this object
+
+This field always returns comment.
+
+Requires an access token.
+QString type

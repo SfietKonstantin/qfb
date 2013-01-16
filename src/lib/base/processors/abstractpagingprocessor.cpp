@@ -28,6 +28,33 @@ AbstractPagingProcessorPrivate::AbstractPagingProcessorPrivate():
 {
 }
 
+inline QString extractGraph(const QUrl &url)
+{
+    return url.path();
+}
+
+inline QString extractArguments(const QUrl &url)
+{
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    QListIterator<QPair<QString, QString> > queryItemsIterator =
+            QListIterator<QPair<QString, QString> >(url.queryItems());
+#else
+    QUrlQuery urlQuery = QUrlQuery(url);
+    QListIterator<QPair<QString, QString> > queryItemsIterator =
+            QListIterator<QPair<QString, QString> >(urlQuery.queryItems());
+#endif
+    QStringList parametersList;
+
+    while (queryItemsIterator.hasNext()) {
+        QPair<QString, QString> queryItem = queryItemsIterator.next();
+        if (queryItem.first != FB_GRAPH_QUERY_TOKEN_KEY) {
+            parametersList.append(QString("%1=%2").arg(queryItem.first, queryItem.second));
+        }
+    }
+
+    return parametersList.join(",");
+}
+
 ////// End of private class //////
 
 AbstractPagingProcessor::AbstractPagingProcessor(QObject *parent):
@@ -53,28 +80,18 @@ QString AbstractPagingProcessor::nextPageArguments() const
     return d->nextPageArguments;
 }
 
+void AbstractPagingProcessor::setPreviousPageUrl(const QUrl &url)
+{
+    Q_D(AbstractPagingProcessor);
+    d->previousPageGraph = extractGraph(url);
+    d->previousPageArguments = extractArguments(url);
+}
+
 void AbstractPagingProcessor::setNextPageUrl(const QUrl &url)
 {
     Q_D(AbstractPagingProcessor);
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    QListIterator<QPair<QString, QString> > queryItemsIterator =
-            QListIterator<QPair<QString, QString> >(url.queryItems());
-#else
-    QUrlQuery urlQuery = QUrlQuery(url);
-    QListIterator<QPair<QString, QString> > queryItemsIterator =
-            QListIterator<QPair<QString, QString> >(urlQuery.queryItems());
-#endif
-    QStringList parametersList;
-
-    while (queryItemsIterator.hasNext()) {
-        QPair<QString, QString> queryItem = queryItemsIterator.next();
-        if (queryItem.first != FB_GRAPH_QUERY_TOKEN_KEY) {
-            parametersList.append(QString("%1=%2").arg(queryItem.first, queryItem.second));
-        }
-    }
-
-    d->nextPageGraph = url.path();
-    d->nextPageArguments = parametersList.join(",");
+    d->nextPageGraph = extractGraph(url);
+    d->nextPageArguments = extractArguments(url);
 }
 
 }

@@ -2,6 +2,8 @@ Post
 <QtCore/QDateTime>
 <QtCore/QUrl>
 "namedobject.h"
+"commentscontainer.h"
+"likescontainer.h"
 ---
 The post ID
 
@@ -73,7 +75,10 @@ A string indicating the type for this post
 Requires an access token.
 QString type
 ---
-likes
+Likes for this post
+
+Requires an access token.
+QFB::LikesContainer * likes
 ---
 place
 ---
@@ -90,7 +95,10 @@ story_tags
 ---
 with_tags
 ---
-comments
+Comments for this post
+
+Requires \e read_stream.
+QFB::CommentsContainer * comments
 ---
 The Facebook object id for an uploaded photo or video
 

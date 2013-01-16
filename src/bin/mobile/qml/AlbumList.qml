@@ -27,6 +27,7 @@ Item {
                                                                 : 0)
     property bool loading: model.loading
     property string graph
+    property int count: model.count
     signal showAlbum(string facebookId)
     function load() {
         model.request(container.graph)

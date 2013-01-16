@@ -14,15 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "mobilepostvalidator.h"
-#include "objects/post.h"
+#ifndef QFB_OBJECTPROCESSOR_H
+#define QFB_OBJECTPROCESSOR_H
 
-MobilePostValidator::MobilePostValidator(QObject *parent):
-    QFB::PostValidator(parent)
+#include "abstractgraphprocessor.h"
+
+namespace QFB
 {
+
+class Object;
+class ObjectProcessorPrivate;
+class QFBBASE_EXPORT ObjectProcessor: public AbstractGraphProcessor
+{
+    Q_OBJECT
+public:
+    explicit ObjectProcessor(QObject *parent = 0);
+    Object * object() const;
+protected:
+    /**
+     * @brief D-pointer constructor
+     * @param dd d-pointer.
+     * @param parent parent object.
+     */
+    explicit ObjectProcessor(AbstractGraphProcessorPrivate &dd, QObject *parent);
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(ObjectProcessor)
+};
+
 }
 
-bool MobilePostValidator::validate(QFB::Post *post)
-{
-    return post->story().isEmpty();
-}
+#endif // QFB_OBJECTPROCESSOR_H

@@ -138,6 +138,12 @@ PageStackWindow {
                                                  "coverUrl": coverUrl})
             newPage.load()
         }
+        onAddPostPageRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("PostPage.qml"),
+                                                {"facebookId": facebookId, "name": name,
+                                                 "coverUrl": coverUrl, "post": post})
+            newPage.load()
+        }
 
         onResolveTypeRequested: {
             currentResolvingTypeObject.name = name

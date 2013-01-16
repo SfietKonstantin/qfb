@@ -18,6 +18,7 @@
 #define PAGEMANAGEMENTBRIDGE_H
 
 #include <QtCore/QObject>
+#include "objects/post.h"
 
 class PageManagementBridge : public QObject
 {
@@ -35,6 +36,8 @@ signals:
                                    const QString &coverUrl);
     void addPhotoListPageRequested(const QString &facebookId, const QString &name,
                                    const QString &coverUrl);
+    void addPostPageRequested(const QString &facebookId, const QString &name, const QString &coverUrl,
+                            QFB::Post *post);
 public slots:
     void pop();
     void resolveType(const QString &facebookId, const QString &name);
@@ -42,6 +45,8 @@ public slots:
     void addUserInfoPage(const QString &facebookId, const QString &name, const QString &coverUrl);
     void addAlbumListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
     void addPhotoListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
+    void addPostPage(const QString &facebookId, const QString &name, const QString &coverUrl,
+                     QFB::Post *post);
 
 };
 

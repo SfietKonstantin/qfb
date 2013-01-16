@@ -80,6 +80,7 @@ private:
     QString error;
     QString nextPageGraph;
     QString nextPageArguments;
+    bool havePrevious;
     bool haveNext;
     bool loading;
     bool autoLoadNext;

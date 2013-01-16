@@ -17,22 +17,32 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
 Rectangle {
     id: container
-    property string header
-    property QtObject from
-    property date createdTime
-    property string message
-    property string picture
-    property string name
-    property string caption
-    property string description
+    property QtObject post
+    property bool interactive: false
+    signal clicked()
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-    height: childrenRect.height + 2 * Ui.MARGIN_DEFAULT
+    height: title.height + Ui.MARGIN_DEFAULT + messageContainer.height + content.height
+            + Ui.MARGIN_DEFAULT
     color: !theme.inverted ? "white" : "black"
+
+    QFBPostHelper {
+        id: postHelper
+        post: container.post
+    }
+
+    BorderImage {
+        id: background
+        anchors.fill: parent
+        visible: mouseArea.pressed
+        source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
+                "-background-pressed-center"
+    }
 
     Item {
         id: title
@@ -44,7 +54,7 @@ Rectangle {
         FacebookPicture {
             id: picture
             anchors.verticalCenter: parent.verticalCenter
-            facebookId: from.facebookId
+            facebookId: container.post.from.facebookId
             pictureType: QFBPictureLoader.Square
         }
 
@@ -57,7 +67,7 @@ Rectangle {
                 id: name
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
-                text: header
+                text: postHelper.header
                 onLinkActivated: {
                     var strings = link.split("-")
                     PAGE_MANAGEMENT_BRIDGE.resolveType(strings[0], strings[1])
@@ -69,7 +79,7 @@ Rectangle {
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_SMALL
                 color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
-                text: Qt.formatDateTime(createdTime, Qt.SystemLocaleShortDate)
+                text: Qt.formatDateTime(container.post.createdTime, Qt.SystemLocaleShortDate)
             }
         }
     }
@@ -83,7 +93,7 @@ Rectangle {
 
         Label {
             id: message
-            text: container.message
+            text: postHelper.message
             anchors.top: parent.top;  anchors.topMargin: Ui.MARGIN_DEFAULT
             anchors.left: parent.left; anchors.right: parent.right
         }
@@ -91,12 +101,10 @@ Rectangle {
 
     Item {
         id: content
-        property bool valid: container.picture != "" || container.name != ""
-                             || container.caption != "" || container.description != ""
         anchors.top: messageContainer.bottom
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        height: valid ? contentColumn.height + Ui.MARGIN_DEFAULT : 0
+        height: contentColumn.height + Ui.MARGIN_DEFAULT
 
         Column {
             id: contentColumn
@@ -108,30 +116,59 @@ Rectangle {
             FacebookImage {
                 id: postImage
                 anchors.horizontalCenter: parent.horizontalCenter
-                url: container.picture
+                url: container.post.picture
             }
 
             Label {
-                text: container.name
+                text: container.post.name
                 width: parent.width
                 visible: text != ""
             }
 
             Label {
-                text: container.caption
+                text: container.post.caption
+                width: parent.width
+                visible: text != ""
+                font.pixelSize: Ui.FONT_SIZE_SMALL
+                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+            }
+
+            Label {
+                text: container.post.description
                 width: parent.width
                 visible: text != ""
                 font.pixelSize: Ui.FONT_SIZE_SMALL
                 color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
             }
 
-            Label {
-                text: container.description
-                width: parent.width
-                visible: text != ""
-                font.pixelSize: Ui.FONT_SIZE_SMALL
-                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+            Row {
+                anchors.right: parent.right
+                spacing: Ui.MARGIN_DEFAULT
+                height: Math.max(commentsLabel.height, likesLabel.height)
+
+                Label {
+                    id: commentsLabel
+                    text: qsTr("%n comments", "", container.post.comments.count)
+                    font.pixelSize: Ui.FONT_SIZE_SMALL
+                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
+                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
+                }
+
+                Label {
+                    id: likesLabel
+                    text: qsTr("%n likes", "", container.post.likes.count)
+                    font.pixelSize: Ui.FONT_SIZE_SMALL
+                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
+                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
+                }
             }
         }
+    }
+
+    MouseArea {
+        id: mouseArea
+        enabled: container.interactive
+        anchors.fill: parent
+        onClicked: container.clicked()
     }
 }

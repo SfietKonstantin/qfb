@@ -17,16 +17,16 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 
 Page {
     id: container
+    property string facebookId
     property string name
+    property string coverUrl
+    property QtObject post
     function load() {
-        banner.loaded = false
-        userLoader.request("me", "fields=cover")
-        feed.load()
+        model.request(container.post.facebookId + "/comments")
     }
 
     tools: ToolBarLayout {
@@ -36,46 +36,48 @@ Page {
         }
     }
 
-    QFBUserLoader {
-        id: userLoader
-        queryManager: QUERY_MANAGER
-        onLoadingChanged: {
-            if (!loading) {
-                if (!banner.loaded) {
-                    banner.loaded = true
-                    banner.coverUrl = user.cover.source
+    Banner {
+        id: banner
+        name: container.name
+        coverUrl: container.coverUrl
+    }
+
+    ScrollDecorator { flickableItem: flickable }
+    Flickable {
+        id: flickable
+        clip: true
+        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right
+        contentWidth: flickable.width
+        contentHeight: column.height
+
+        Column {
+            id: column
+            anchors.top: parent.top
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            spacing: Ui.MARGIN_DEFAULT
+
+            Post {
+                id: post
+                post: container.post
+            }
+
+            Repeater {
+                model: QFBCommentListModel {
+                    id: model
+                    queryManager: QUERY_MANAGER
+                }
+                delegate: Item {
+                    width: column.width
+                    height: comment.height
+
+                    CommentEntry {
+                        id: comment
+                        comment: model.data
+                    }
                 }
             }
         }
-    }
-
-
-    Item {
-        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-
-        ScrollDecorator { flickableItem: flickable }
-        Flickable {
-            id: flickable
-            anchors.fill: parent
-            contentWidth: width
-            contentHeight: feed.height
-
-            Feed {
-                id: feed
-                facebookId: "me"
-                stream: "home"
-                onShowPost: PAGE_MANAGEMENT_BRIDGE.addPostPage(container.facebookId, container.name,
-                                                               banner.coverUrl, post)
-            }
-        }
-    }
-
-
-    Banner {
-        id: banner
-        property bool loaded: false
-        name: container.name
     }
 }
