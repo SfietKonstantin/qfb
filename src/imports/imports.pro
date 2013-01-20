@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = base login
+SUBDIRS = base login dialogs

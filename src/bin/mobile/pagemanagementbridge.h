@@ -36,8 +36,10 @@ signals:
                                    const QString &coverUrl);
     void addPhotoListPageRequested(const QString &facebookId, const QString &name,
                                    const QString &coverUrl);
-    void addPostPageRequested(const QString &facebookId, const QString &name, const QString &coverUrl,
-                            QFB::Post *post);
+    void addPostPageRequested(const QString &facebookId, const QString &name,
+                              const QString &coverUrl,
+                              QFB::Post *post);
+    void showFeedDialogRequested(const QString &to);
 public slots:
     void pop();
     void resolveType(const QString &facebookId, const QString &name);
@@ -47,6 +49,7 @@ public slots:
     void addPhotoListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
     void addPostPage(const QString &facebookId, const QString &name, const QString &coverUrl,
                      QFB::Post *post);
+    void showFeedDialog(const QString &to);
 
 };
 

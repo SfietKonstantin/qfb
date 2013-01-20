@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS += login base baseimport
+SUBDIRS += login base baseimport \
+    dialogs

@@ -34,6 +34,13 @@ Page {
             iconId: "toolbar-back"
             onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
+
+        ToolButton {
+            text: qsTr("Post something")
+            onClicked: PAGE_MANAGEMENT_BRIDGE.showFeedDialog("me")
+        }
+
+        ToolIcon {}
     }
 
     QFBUserLoader {

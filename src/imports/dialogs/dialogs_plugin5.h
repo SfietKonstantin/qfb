@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,17 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "networkaccessmanagerfactory.h"
-#include "networkaccessmanager.h"
-#include "cookiejar.h"
+#ifndef QFB_DIALOGS_PLUGIN5_H
+#define QFB_DIALOGS_PLUGIN5_H
 
-static const char *N9_USER_AGENT = "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 \
-(KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13 ";
+/**
+ * @internal
+ * @file dialogs_plugin5.h
+ * @short Definition of QFB::DialogsPlugin5 (Qt5)
+ */
 
-QNetworkAccessManager * NetworkAccessManagerFactory::create(QObject *parent)
+#include <QtQml/QQmlExtensionPlugin>
+
+namespace QFB
 {
-    NetworkAccessManager *networkAccessManager = new NetworkAccessManager(parent);
-    networkAccessManager->setUserAgent(N9_USER_AGENT);
-    networkAccessManager->setCookieJar(new QFB::CookieJar(networkAccessManager));
-    return networkAccessManager;
+/**
+ * @internal
+ * @short Login QML plugin for qfb (Qt5)
+ */
+class DialogsPlugin5: public QQmlExtensionPlugin
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface/1.0")
+public:
+    /**
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
+
 }
+
+#endif // QFB_DIALOGS_PLUGIN5_H
+

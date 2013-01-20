@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,17 +14,50 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "networkaccessmanagerfactory.h"
-#include "networkaccessmanager.h"
-#include "cookiejar.h"
+/**
+ * @internal
+ * @file dialogs_plugin.cpp
+ * @short Implementation of QFB::DialogsPlugin4 or QFB::DialogsPlugin5
+ */
 
-static const char *N9_USER_AGENT = "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 \
-(KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13 ";
+#include <QtCore/QtGlobal>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include "dialogs_plugin4.h"
+#include <QtDeclarative/qdeclarative.h>
+#else
+#include "dialogs_plugin5.h"
+#include <QtQml/qqml.h>
+#endif
 
-QNetworkAccessManager * NetworkAccessManagerFactory::create(QObject *parent)
+#include "feeddialogmanager.h"
+
+namespace QFB
 {
-    NetworkAccessManager *networkAccessManager = new NetworkAccessManager(parent);
-    networkAccessManager->setUserAgent(N9_USER_AGENT);
-    networkAccessManager->setCookieJar(new QFB::CookieJar(networkAccessManager));
-    return networkAccessManager;
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+/**
+ * @internal
+ * @brief PLUGIN_VERSION_MAJOR
+ */
+static const int PLUGIN_VERSION_MAJOR = 4;
+
+void DialogsPlugin4::registerTypes(const char *uri)
+#else
+/**
+ * @internal
+ * @brief PLUGIN_VERSION_MAJOR
+ */
+static const int PLUGIN_VERSION_MAJOR = 5;
+
+void DialogsPlugin5::registerTypes(const char *uri)
+#endif
+{
+    // @uri org.SfietKonstantin.qfb.dialogs
+    qmlRegisterType<QFB::FeedDialogManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedDialogManager");
 }
+
+}
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+Q_EXPORT_PLUGIN2(qfbplugin, QFB::DialogsPlugin4)
+#endif

@@ -14,21 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-
 import QtQuick 1.1
-import QtWebKit 1.0
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
+import org.SfietKonstantin.qfb.dialogs 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
+import QtWebKit 1.0
 
 Sheet {
     id: sheet
-    onRejected: Qt.quit()
-    rejectButtonText: qsTr("Cancel")
-    onStatusChanged: {
-        if (status == DialogStatus.Open) {
-            infoBanner.show()
-        }
+    rejectButtonText: qsTr("Close dialog")
+    property alias to: feedDialogManager.to
+    function showDialog() {
+        webView.url = ""
+        feedDialogManager.displayDialog()
+        sheet.open()
     }
 
     content: Item {
@@ -52,27 +52,20 @@ Sheet {
             }
         }
 
-        Flickable {
+
+        WebView {
+            id: webView
+            visible: webView.status == WebView.Ready
             anchors.fill: parent
-            contentHeight: webView.height
-
-            WebView {
-                id: webView
-                visible: webView.status == WebView.Ready
-                width: parent.width
-                preferredWidth: parent.width
-                onUrlChanged: LOGIN_MANAGER.checkUrl(url)
-            }
-        }
-
-        InfoBanner {
-            id: infoBanner
-            text: qsTr("You might need to tap a field twice to display the keyboard")
+            onUrlChanged: feedDialogManager.checkUrl(url)
         }
     }
 
-    Connections {
-        target: LOGIN_MANAGER
+    QFBFeedDialogManager {
+        id: feedDialogManager
+        clientId: CLIENT_ID
         onUrlRequested: webView.url = url
+        onPostFailed: reject()
+        onPostSucceeded: accept()
     }
 }

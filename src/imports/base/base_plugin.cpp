@@ -46,7 +46,6 @@
 #include "loaders/albumloader.h"
 #include "loaders/photoloader.h"
 #include "loaders/userloader.h"
-#include "loaders/createpostloader.h"
 #include "postvalidator.h"
 #include "models/albumlistmodel.h"
 #include "models/commentlistmodel.h"
@@ -114,9 +113,6 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
     qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
-
-
-    qmlRegisterType<QFB::CreatePostLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCreatePostLoader");
 }
 
 }

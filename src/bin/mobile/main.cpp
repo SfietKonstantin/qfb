@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
     view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
     view.rootContext()->setContextProperty("PAGE_MANAGEMENT_BRIDGE", &pageManagementBridge);
+    view.rootContext()->setContextProperty("CLIENT_ID", "390204064393625");
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();
     QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));

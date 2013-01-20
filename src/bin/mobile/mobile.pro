@@ -65,7 +65,8 @@ OTHER_FILES +=  qml/main.qml \
     qml/PhotoList.qml \
     qml/PhotoBrowserPage.qml \
     qml/PostPage.qml \
-    qml/CommentEntry.qml
+    qml/CommentEntry.qml \
+    qml/FeedDialogSheet.qml
 
 # Deployment
 contains(CONFIG, optify) {

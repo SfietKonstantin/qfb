@@ -60,3 +60,12 @@ void PageManagementBridge::addPostPage(const QString &facebookId, const QString 
 {
     emit addPostPageRequested(facebookId, name, coverUrl, post);
 }
+
+void PageManagementBridge::showFeedDialog(const QString &to)
+{
+    if (to == "me") {
+        emit showFeedDialogRequested(QString());
+    } else {
+        emit showFeedDialogRequested(to);
+    }
+}

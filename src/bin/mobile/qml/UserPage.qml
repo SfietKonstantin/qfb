@@ -36,6 +36,11 @@ Page {
             onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
 
+        ToolButton {
+            text: qsTr("Post something")
+            onClicked: PAGE_MANAGEMENT_BRIDGE.showFeedDialog(container.facebookId)
+        }
+
         ToolIcon {
             iconId: "toolbar-view-menu"
             onClicked: menu.open()

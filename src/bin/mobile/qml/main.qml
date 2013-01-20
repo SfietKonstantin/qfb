@@ -144,6 +144,10 @@ PageStackWindow {
                                                  "coverUrl": coverUrl, "post": post})
             newPage.load()
         }
+        onShowFeedDialogRequested: {
+            feedDialogSheet.to = to
+            feedDialogSheet.showDialog()
+        }
 
         onResolveTypeRequested: {
             currentResolvingTypeObject.name = name
@@ -202,6 +206,11 @@ PageStackWindow {
 
     LoginSheet {
         id: loginSheet
+    }
+
+    FeedDialogSheet {
+        id: feedDialogSheet
+        onAccepted: window.pageStack.currentPage.load()
     }
 
     MainPage {

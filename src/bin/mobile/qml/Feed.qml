@@ -38,49 +38,6 @@ Item {
         width: parent.width
         spacing: Ui.MARGIN_DEFAULT
 
-        Item {
-            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            height: Math.max(postTextArea.height, postButton.height)
-
-            TextArea {
-                id: postTextArea
-                enabled: !createPostLoader.loading
-                anchors.left: parent.left
-                anchors.right: postButton.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-
-            }
-
-            ToolIcon {
-                id: postButton
-                visible: !createPostLoader.loading
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                iconId: "toolbar-new-message"
-                onClicked: {
-                    if (createPostLoader.message.trim() != "") {
-                        createPostLoader.request(container.facebookId + "/feed")
-                    }
-                }
-            }
-
-            BusyIndicator {
-                anchors.centerIn: postButton
-                visible: createPostLoader.loading
-                running: visible
-            }
-
-            QFBCreatePostLoader {
-                id: createPostLoader
-                queryManager: QUERY_MANAGER
-                message: postTextArea.text
-                onLoaded: {
-                    container.load()
-                    postTextArea.text = ""
-                }
-            }
-        }
-
         Repeater {
             model: QFBFeedModel {
                 id: model

@@ -17,8 +17,10 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.dialogs 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
+import QtWebKit 1.0
 
 Page {
     id: container
@@ -27,6 +29,7 @@ Page {
     property string coverUrl
     function load() {
         userLoader.request(facebookId)
+        feedDialogManager.displayDialog()
     }
 
     tools: ToolBarLayout {

@@ -27,8 +27,7 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/pictureloader.h \
                     loaders/albumloader.h \
                     loaders/photoloader.h \
-                    loaders/userloader.h \
-                    loaders/createpostloader.h
+                    loaders/userloader.h
 # Models
 PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/friendlistmodel.h \
@@ -50,8 +49,7 @@ SOURCES +=  loaders/abstractloader.cpp \
             loaders/pictureloader.cpp \
             loaders/albumloader.cpp \
             loaders/photoloader.cpp \
-            loaders/userloader.cpp \
-            loaders/createpostloader.cpp
+            loaders/userloader.cpp
 # Models
 SOURCES +=  models/abstractloadablemodel.cpp \
             models/friendlistmodel.cpp \

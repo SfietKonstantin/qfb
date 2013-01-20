@@ -52,7 +52,7 @@ static const int PLUGIN_VERSION_MAJOR = 5;
 void LoginPlugin5::registerTypes(const char *uri)
 #endif
 {
-    // @uri org.SfietKonstantin.qfb
+    // @uri org.SfietKonstantin.qfb.login
     qmlRegisterType<QFB::LoginManager>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLoginManager");
 }
 

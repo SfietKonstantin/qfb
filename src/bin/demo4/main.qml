@@ -27,7 +27,7 @@ Item {
 
     QFBLoginManager {
         id: qfbLoginManager
-        clientId: "390204064393625"
+        clientId: CLIENT_ID
         extendedPermissions: QFBLoginManager.ReadStream
         userPermissions: QFBLoginManager.UserBirthday + QFBLoginManager.Email
                          + QFBLoginManager.UserAboutMe + QFBLoginManager.UserLikes
@@ -52,7 +52,6 @@ Item {
                 queryManager.token = BRIDGE.token
                 webView.visible = false
                 friendListModel.request("me/friends")
-//                postStatusLoader.request("me/feed")
             }
         }
 
@@ -61,7 +60,6 @@ Item {
             queryManager.token = token
             webView.visible = false
             friendListModel.request("me/friends")
-//            postStatusLoader.request("me/feed")
         }
     }
 

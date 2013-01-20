@@ -3,24 +3,22 @@ include(../../../globals.pri)
 TEMPLATE = lib
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
-TARGET = $${NAME}login
+TARGET = $${NAME}dialogs
 
 QT = core
 
-DEFINES += QFBLOGIN_LIBRARY
+DEFINES += QFBDIALOGS_LIBRARY
 
-HEADERS +=  login_global.h \
-            loginmanager.h \
-            cookiejar.h
-SOURCES +=  loginmanager.cpp \
-            cookiejar.cpp
+HEADERS +=  dialogs_global.h \
+            feeddialogmanager.h
+SOURCES +=  feeddialogmanager.cpp
 
 
 
 # Deployment
 target.path = $${LIBDIR}
 
-headers.path = $${INCLUDEDIR}/login
+headers.path = $${INCLUDEDIR}/dialogs
 headers.files = $${HEADERS}
 
 INSTALLS += target

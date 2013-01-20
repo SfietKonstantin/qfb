@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,17 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "networkaccessmanagerfactory.h"
-#include "networkaccessmanager.h"
-#include "cookiejar.h"
+#ifndef QFB_DIALOGS_GLOBAL_H
+#define QFB_DIALOGS_GLOBAL_H
 
-static const char *N9_USER_AGENT = "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 \
-(KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13 ";
+#include <QtCore/qglobal.h>
 
-QNetworkAccessManager * NetworkAccessManagerFactory::create(QObject *parent)
-{
-    NetworkAccessManager *networkAccessManager = new NetworkAccessManager(parent);
-    networkAccessManager->setUserAgent(N9_USER_AGENT);
-    networkAccessManager->setCookieJar(new QFB::CookieJar(networkAccessManager));
-    return networkAccessManager;
-}
+#if defined(QFBDIALOGS_LIBRARY)
+#  define QFBDIALOGS_EXPORT Q_DECL_EXPORT
+#else
+#  define QFBDIALOGS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QFB_DIALOGS_GLOBAL_H
