@@ -16,19 +16,24 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.1
 import org.SfietKonstantin.qfb.dialogs 4.0
-import org.SfietKonstantin.qfb.mobile 4.0
 import "UiConstants.js" as Ui
 import QtWebKit 1.0
 
 Sheet {
     id: sheet
-    rejectButtonText: qsTr("Close dialog")
     property alias to: feedDialogManager.to
     function showDialog() {
         webView.url = ""
         feedDialogManager.displayDialog()
         sheet.open()
+    }
+    rejectButtonText: qsTr("Close dialog")
+    onStatusChanged: {
+        if (status == DialogStatus.Open) {
+            infoBanner.show()
+        }
     }
 
     content: Item {
@@ -57,7 +62,13 @@ Sheet {
             id: webView
             visible: webView.status == WebView.Ready
             anchors.fill: parent
+            preferredWidth: parent.width
             onUrlChanged: feedDialogManager.checkUrl(url)
+        }
+
+        InfoBanner {
+            id: infoBanner
+            text: qsTr("You might need to tap a field twice to display the keyboard")
         }
     }
 

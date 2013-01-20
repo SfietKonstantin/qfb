@@ -29,7 +29,6 @@ Page {
     property string coverUrl
     function load() {
         userLoader.request(facebookId)
-        feedDialogManager.displayDialog()
     }
 
     tools: ToolBarLayout {

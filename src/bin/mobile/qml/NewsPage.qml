@@ -40,7 +40,7 @@ Page {
             onClicked: PAGE_MANAGEMENT_BRIDGE.showFeedDialog("me")
         }
 
-        ToolIcon {}
+        Item {width: 80}
     }
 
     QFBUserLoader {

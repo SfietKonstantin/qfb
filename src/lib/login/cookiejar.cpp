@@ -25,18 +25,18 @@ namespace QFB
 class CookieJarPrivate
 {
 public:
-    void load();
-    void save();
-    QList<QNetworkCookie> cookies;
+    QList<QNetworkCookie> load();
+    void save(const QList<QNetworkCookie> &cookies);
 };
 
-void CookieJarPrivate::load()
+QList<QNetworkCookie> CookieJarPrivate::load()
 {
+    QList<QNetworkCookie> cookies;
     QString path = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
     QDir dir (path);
     QFile file (dir.filePath("cookies"));
     if (!file.open(QIODevice::ReadOnly)) {
-        return;
+        return cookies;
     }
 
     while (!file.atEnd()) {
@@ -47,9 +47,10 @@ void CookieJarPrivate::load()
 
 
     file.close();
+    return cookies;
 }
 
-void CookieJarPrivate::save()
+void CookieJarPrivate::save(const QList<QNetworkCookie> &cookies)
 {
     QString path = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
     QDir::root().mkpath(path);
@@ -74,8 +75,7 @@ CookieJar::CookieJar(QObject *parent) :
     QNetworkCookieJar(parent), d_ptr(new CookieJarPrivate)
 {
     Q_D(CookieJar);
-    d->load();
-    setAllCookies(d->cookies);
+    setAllCookies(d->load());
 
 }
 
@@ -87,16 +87,14 @@ bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const
 {
     Q_D(CookieJar);
     QList<QNetworkCookie> trueCookieList;
-    foreach (QNetworkCookie cookie, cookieList) {
+    foreach (QNetworkCookie cookie, allCookies()) {
         if (!cookie.isSessionCookie()) {
             trueCookieList.append(cookie);
         }
     }
 
-    if (!trueCookieList.isEmpty()) {
-        d->cookies.append(trueCookieList);
-    }
-    d->save();
+
+    d->save(trueCookieList);
     return QNetworkCookieJar::setCookiesFromUrl(cookieList, url);
 }
 
