@@ -74,4 +74,14 @@ Page {
             text: qsTr("Loading")
         }
     }
+
+    Label {
+        anchors.fill: flickable
+        visible: !photoList.loading && photoList.count == 0
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: Ui.FONT_SIZE_XXLARGE
+        color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+        text: qsTr("No photos")
+    }
 }

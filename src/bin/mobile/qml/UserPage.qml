@@ -62,7 +62,8 @@ Page {
             }
             MenuItem {
                 text: qsTr("Photos")
-//                onClicked: PAGE_MANAGEMENT_BRIDGE.add
+                onClicked: PAGE_MANAGEMENT_BRIDGE.addPhotoListPage(facebookId, name,
+                                                                   banner.coverUrl)
             }
         }
     }

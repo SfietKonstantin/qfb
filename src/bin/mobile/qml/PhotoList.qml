@@ -27,6 +27,7 @@ Item {
     property bool loading: model.loading
     property string graph
     property int columns
+    property int count: model.count
     function load() {
         model.request(container.graph)
     }
