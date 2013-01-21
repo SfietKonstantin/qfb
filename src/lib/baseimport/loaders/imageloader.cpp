@@ -51,7 +51,7 @@ void ImageLoader::request(const QUrl &url)
 {
     Query createdRequest = createRequest(url);
     if (createdRequest.isValid()) {
-        handleRequest(createdRequest);
+        handleQuery(createdRequest);
     }
 }
 

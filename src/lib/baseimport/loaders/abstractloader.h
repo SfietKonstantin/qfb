@@ -69,7 +69,7 @@ protected:
      */
     explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
     void setLoading(bool loading);
-    void handleRequest(const Query &request);
+    void handleQuery(const Query &query);
     virtual void handleReply(AbstractProcessor *processor) = 0;
     /**
      * @short D-pointer
@@ -78,9 +78,9 @@ protected:
 private:
     Q_DECLARE_PRIVATE(AbstractLoader)
     /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &request,
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &query,
                                                AbstractProcessor *processor))
-    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &request,
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &query,
                                             const QString &errorString))
     /// @endcond
 };

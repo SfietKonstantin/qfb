@@ -142,9 +142,9 @@ protected:
 private:
     Q_DECLARE_PRIVATE(AbstractLoadableModel)
     /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &request,
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &query,
                                                AbstractProcessor *processor))
-    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &request,
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &query,
                                             const QString &errorString))
     /// @endcond
 };

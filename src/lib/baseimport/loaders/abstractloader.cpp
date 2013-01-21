@@ -34,11 +34,11 @@ AbstractLoaderPrivate::~AbstractLoaderPrivate()
 {
 }
 
-void AbstractLoaderPrivate::slotFinished(const QFB::Query &currentQuery,
+void AbstractLoaderPrivate::slotFinished(const QFB::Query &query,
                                          AbstractProcessor *processor)
 {
     Q_Q(AbstractLoader);
-    if (currentQuery != currentQuery) {
+    if (query != currentQuery) {
         return;
     }
 
@@ -47,10 +47,10 @@ void AbstractLoaderPrivate::slotFinished(const QFB::Query &currentQuery,
     q->setLoading(false);
 }
 
-void AbstractLoaderPrivate::slotError(const QFB::Query &request, const QString &errorString)
+void AbstractLoaderPrivate::slotError(const QFB::Query &query, const QString &errorString)
 {
     Q_Q(AbstractLoader);
-    if (request != currentQuery) {
+    if (query != currentQuery) {
         return;
     }
 
@@ -127,10 +127,10 @@ void AbstractLoader::setLoading(bool loading)
     }
 }
 
-void AbstractLoader::handleRequest(const Query &request)
+void AbstractLoader::handleQuery(const Query &query)
 {
     Q_D(AbstractLoader);
-    d->currentQuery = request;
+    d->currentQuery = query;
     if (!d->error.isEmpty()) {
         d->error.clear();
         emit errorChanged();

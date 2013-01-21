@@ -67,18 +67,18 @@ private:
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished(const QFB::Query &request, AbstractProcessor *processor);
+    void slotFinished(const QFB::Query &query, AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotError(const QFB::Query &request, const QString &errorString);
+    void slotError(const QFB::Query &query, const QString &errorString);
     /**
      * @internal
      * @brief Query manager
      */
     QueryManager *queryManager;
-    Query currentRequest;
+    Query currentQuery;
     QString error;
     QString previousPageGraph;
     QString previousPageArguments;

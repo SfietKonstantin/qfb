@@ -52,12 +52,12 @@ private:
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished(const QFB::Query &currentQuery, QFB::AbstractProcessor *processor);
+    void slotFinished(const QFB::Query &query, QFB::AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotError(const QFB::Query &currentQuery, const QString &errorString);
+    void slotError(const QFB::Query &query, const QString &errorString);
     /**
      * @internal
      * @brief Query manager

@@ -62,7 +62,7 @@ void AbstractLoadableModelPrivate::handleQuery(const Query &query)
         return;
     }
 
-    currentRequest = query;
+    currentQuery = query;
     if (!error.isEmpty()) {
         error.clear();
         emit q->errorChanged();
@@ -71,11 +71,11 @@ void AbstractLoadableModelPrivate::handleQuery(const Query &query)
     setLoading(true);
 }
 
-void AbstractLoadableModelPrivate::slotFinished(const QFB::Query &request,
+void AbstractLoadableModelPrivate::slotFinished(const QFB::Query &query,
                                                 AbstractProcessor *processor)
 {
     Q_Q(AbstractLoadableModel);
-    if (request != currentRequest) {
+    if (query != currentQuery) {
         return;
     }
 
@@ -110,11 +110,11 @@ void AbstractLoadableModelPrivate::slotFinished(const QFB::Query &request,
     setLoading(false);
 }
 
-void AbstractLoadableModelPrivate::slotError(const QFB::Query &request,
+void AbstractLoadableModelPrivate::slotError(const QFB::Query &query,
                                              const QString &errorString)
 {
     Q_Q(AbstractLoadableModel);
-    if (request != currentRequest) {
+    if (query != currentQuery) {
         return;
     }
 

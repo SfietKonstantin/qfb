@@ -39,7 +39,7 @@ void AbstractGraphLoader::request(const QString &graph, const QString &arguments
 
     Query createdRequest = createRequest(graph, arguments);
     if (createdRequest.isValid()) {
-        handleRequest(createdRequest);
+        handleQuery(createdRequest);
     }
 }
 
