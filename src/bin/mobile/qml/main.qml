@@ -26,7 +26,7 @@ PageStackWindow {
     initialPage: mainPage
 
     Component.onCompleted: {
-        LOGIN_MANAGER.clientId = "390204064393625"
+        LOGIN_MANAGER.clientId = CLIENT_ID
         LOGIN_MANAGER.uiType = QFBLoginManager.Mobile
         LOGIN_MANAGER.friendsPermissions = QFBLoginManager.FriendsAboutMe
                                          + QFBLoginManager.FriendsActivities
