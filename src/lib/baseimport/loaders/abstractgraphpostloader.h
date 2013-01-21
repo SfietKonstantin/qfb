@@ -54,7 +54,7 @@ protected:
      * @param arguments arguments.
      * @return a reply.
      */
-    virtual Request createRequest(const QString &graph,
+    virtual Query createRequest(const QString &graph,
                                   const QVariantMap &data = QVariantMap()) = 0;
 };
 

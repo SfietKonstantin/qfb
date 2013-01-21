@@ -90,12 +90,12 @@ QVariant CommentListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-Request CommentListModel::createRequest(const QString &graph, const QString &arguments)
+Query CommentListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::CommentType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void CommentListModel::clear()

@@ -49,12 +49,12 @@ Object * TypeLoader::object() const
     return d->object;
 }
 
-Request TypeLoader::createRequest(const QString &graph, const QString &arguments)
+Query TypeLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryType(graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void TypeLoader::handleReply(AbstractProcessor *processor)

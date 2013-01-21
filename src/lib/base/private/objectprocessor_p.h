@@ -18,7 +18,7 @@
 #define QFB_OBJECTPROCESSOR_P_H
 
 #include "private/abstractgraphprocessor_p.h"
-#include "request.h"
+#include "query.h"
 #include "objects/object.h"
 #include "private/jsonhelper_p.h"
 
@@ -31,7 +31,7 @@ public:
     explicit ObjectProcessorPrivate();
     static QVariantMap createObjectProperties(const JsonObject &object);
     static Object * guessType(const QVariantMap &propertiesMap, QObject *parent = 0);
-    static Object * createObject(const JsonObject &jsonObject, const Request &request,
+    static Object * createObject(const JsonObject &jsonObject, const Query &query,
                                  QObject *parent = 0);
     Object *object;
 };

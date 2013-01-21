@@ -90,12 +90,12 @@ QVariant PhotoListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-Request PhotoListModel::createRequest(const QString &graph, const QString &arguments)
+Query PhotoListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::PhotoType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void PhotoListModel::clear()

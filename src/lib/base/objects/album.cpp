@@ -28,10 +28,22 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::Album
+ */
 class AlbumPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit AlbumPrivate();
+    /**
+     * @internal
+     * @short From
+     */
     NamedObject * from;
 };
 

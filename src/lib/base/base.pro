@@ -44,7 +44,7 @@ PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
                     argumentpair.h \
                     querymanager.h \
-                    request.h \
+                    query.h \
                     preprocessordata.h
 # Objects
 PUBLIC_HEADERS +=   objects/objectbase.h \
@@ -75,7 +75,7 @@ HEADERS =   $${PRIVATE_HEADERS} \
 # Base and private
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
-            request.cpp \
+            query.cpp \
             preprocessordata.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \

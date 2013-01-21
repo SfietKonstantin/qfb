@@ -54,12 +54,12 @@ User * UserLoader::user() const
     return d->user;
 }
 
-Request UserLoader::createRequest(const QString &graph, const QString &arguments)
+Query UserLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObject(Object::UserType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void UserLoader::handleReply(AbstractProcessor *processor)

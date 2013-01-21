@@ -24,7 +24,7 @@
  */
 
 #include <QtCore/QtGlobal>
-#include "request.h"
+#include "query.h"
 #include "models/abstractloadablemodel.h"
 
 namespace QFB
@@ -55,7 +55,7 @@ public:
      */
     virtual ~AbstractLoadableModelPrivate();
     void setLoading(bool loadingToSet);
-    void handleRequest(const Request &request);
+    void handleQuery(const Query &query);
 protected:
     /**
      * @internal
@@ -67,18 +67,18 @@ private:
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished(const QFB::Request &request, AbstractProcessor *processor);
+    void slotFinished(const QFB::Query &request, AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotError(const QFB::Request &request, const QString &errorString);
+    void slotError(const QFB::Query &request, const QString &errorString);
     /**
      * @internal
      * @brief Query manager
      */
     QueryManager *queryManager;
-    Request currentRequest;
+    Query currentRequest;
     QString error;
     QString previousPageGraph;
     QString previousPageArguments;

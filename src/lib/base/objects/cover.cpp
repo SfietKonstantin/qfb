@@ -28,9 +28,17 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::Cover
+ */
 class CoverPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit CoverPrivate();
 };
 

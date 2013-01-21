@@ -14,107 +14,107 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "request.h"
+#include "query.h"
 #include "private/helper_p.h"
 
 namespace QFB
 {
 
-Request::Request():
-    d_ptr(new RequestPrivate)
+Query::Query():
+    d_ptr(new QueryPrivate)
 {
     setId(-1);
     setType(InvalidRequest);
     setObjectType(Object::UnknownType);
 }
 
-Request::Request(int id, RequestType type):
-    d_ptr(new RequestPrivate)
+Query::Query(int id, RequestType type):
+    d_ptr(new QueryPrivate)
 {
     setId(id);
     setType(type);
     setObjectType(Object::UnknownType);
 }
 
-Request::Request(const Request &other):
+Query::Query(const Query &other):
     d_ptr(other.d_ptr)
 {
 }
 
-Request::~Request()
+Query::~Query()
 {
 }
 
-bool Request::operator==(const Request &other) const
+bool Query::operator==(const Query &other) const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return (d->id == other.id() && d->type == other.type());
 }
 
-bool Request::operator !=(const Request &other) const
+bool Query::operator !=(const Query &other) const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return (d->id != other.id() || d->type != other.type());
 }
 
-bool Request::isValid() const
+bool Query::isValid() const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return (d->id != -1 && d->type != InvalidRequest
             && d->preprocessorData.operation() != InvalidOperation);
 }
 
-int Request::id() const
+int Query::id() const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return d->id;
 }
 
-PreprocessorData Request::preprocessorData() const
+PreprocessorData Query::preprocessorData() const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return d->preprocessorData;
 }
 
-PreprocessorData & Request::preprocessorData()
+PreprocessorData & Query::preprocessorData()
 {
-    Q_D(Request);
+    Q_D(Query);
     return d->preprocessorData;
 }
 
-RequestType Request::type() const
+RequestType Query::type() const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return d->type;
 }
 
-Object::ObjectType Request::objectType() const
+Object::ObjectType Query::objectType() const
 {
-    Q_D(const Request);
+    Q_D(const Query);
     return d->objectType;
 }
 
-void Request::setId(int id)
+void Query::setId(int id)
 {
-    Q_D(Request);
+    Q_D(Query);
     d->id = id;
 }
 
-void Request::setPreprocessorData(const PreprocessorData &preprocessorData)
+void Query::setPreprocessorData(const PreprocessorData &preprocessorData)
 {
-    Q_D(Request);
+    Q_D(Query);
     d->preprocessorData = preprocessorData;
 }
 
-void Request::setType(RequestType type)
+void Query::setType(RequestType type)
 {
-    Q_D(Request);
+    Q_D(Query);
     d->type = type;
 }
 
-void Request::setObjectType(Object::ObjectType objectType)
+void Query::setObjectType(Object::ObjectType objectType)
 {
-    Q_D(Request);
+    Q_D(Query);
     d->objectType = objectType;
 }
 

@@ -24,7 +24,7 @@ class QUrl;
 namespace QFB
 {
 
-class Request;
+class Query;
 class NetworkRequestHandlerPrivate;
 class NetworkRequestHandler : public QObject
 {
@@ -32,10 +32,10 @@ class NetworkRequestHandler : public QObject
 public:
     explicit NetworkRequestHandler(QObject *parent = 0);
     virtual ~NetworkRequestHandler();
-    void get(const Request &request);
+    void get(const Query &query);
 Q_SIGNALS:
-    void error(const QFB::Request &request);
-    void finished(const QFB::Request &request, QIODevice *dataSource);
+    void error(const QFB::Query &query);
+    void finished(const QFB::Query &query, QIODevice *dataSource);
 protected:
     QScopedPointer<NetworkRequestHandlerPrivate> d_ptr;
 private:

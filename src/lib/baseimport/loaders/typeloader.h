@@ -34,7 +34,7 @@ public:
 Q_SIGNALS:
     void objectChanged();
 protected:
-    Request createRequest(const QString &graph, const QString &arguments);
+    Query createRequest(const QString &graph, const QString &arguments);
     void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(TypeLoader)

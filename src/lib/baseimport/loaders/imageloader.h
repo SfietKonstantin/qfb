@@ -36,7 +36,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void imagePathChanged();
 protected:
-    Request createRequest(const QUrl &url);
+    Query createRequest(const QUrl &url);
     void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(ImageLoader)

@@ -16,7 +16,7 @@
 
 #include "abstractgraphloader.h"
 
-#include "request.h"
+#include "query.h"
 
 namespace QFB
 {
@@ -37,7 +37,7 @@ void AbstractGraphLoader::request(const QString &graph, const QString &arguments
         return;
     }
 
-    Request createdRequest = createRequest(graph, arguments);
+    Query createdRequest = createRequest(graph, arguments);
     if (createdRequest.isValid()) {
         handleRequest(createdRequest);
     }

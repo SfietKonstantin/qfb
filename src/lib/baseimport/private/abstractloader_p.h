@@ -18,7 +18,7 @@
 #define QFB_ABSTRACTLOADER_P_H
 
 #include <QtCore/QtGlobal>
-#include "request.h"
+#include "query.h"
 
 class QString;
 namespace QFB
@@ -52,12 +52,12 @@ private:
      * @internal
      * @brief Slot when the request is finished
      */
-    void slotFinished(const QFB::Request &currentRequest, QFB::AbstractProcessor *processor);
+    void slotFinished(const QFB::Query &currentQuery, QFB::AbstractProcessor *processor);
     /**
      * @internal
      * @brief Slot when the request failed
      */
-    void slotError(const QFB::Request &currentRequest, const QString &errorString);
+    void slotError(const QFB::Query &currentQuery, const QString &errorString);
     /**
      * @internal
      * @brief Query manager
@@ -67,7 +67,7 @@ private:
      * @internal
      * @brief Reply
      */
-    Request currentRequest;
+    Query currentQuery;
     bool loading;
     QString error;
     Q_DECLARE_PUBLIC(AbstractLoader)

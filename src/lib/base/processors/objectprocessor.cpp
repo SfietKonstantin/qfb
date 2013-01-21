@@ -94,13 +94,13 @@ Object * ObjectProcessorPrivate::guessType(const QVariantMap &propertiesMap, QOb
     }
 }
 
-Object * ObjectProcessorPrivate::createObject(const JsonObject &jsonObject, const Request &request,
+Object * ObjectProcessorPrivate::createObject(const JsonObject &jsonObject, const Query &query,
                                               QObject *parent)
 {
     Object *object = 0;
     QVariantMap propertiesMap = ObjectProcessorPrivate::createObjectProperties(jsonObject);
 
-    switch (request.objectType()) {
+    switch (query.objectType()) {
     case Object::AlbumType:
         object = new Album(propertiesMap, parent);
         break;
@@ -152,7 +152,7 @@ bool ObjectProcessor::processDataSource(QIODevice *dataSource)
     }
     QFB_JSON_GET_ROOT_OBJECT(rootObject, jsonDocument);
 
-    d->object = d->createObject(rootObject, request());
+    d->object = d->createObject(rootObject, query());
 
     if (d->object) {
         d->object->moveToThread(QCoreApplication::instance()->thread());

@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_REQUEST_H
-#define QFB_REQUEST_H
+#ifndef QFB_QUERY_H
+#define QFB_QUERY_H
 
 #include "base_global.h"
 #include <QtCore/QExplicitlySharedDataPointer>
@@ -29,7 +29,7 @@
 namespace QFB
 {
 
-struct RequestPrivate: public QSharedData
+struct QueryPrivate: public QSharedData
 {
     int id;
     PreprocessorData preprocessorData;
@@ -37,15 +37,20 @@ struct RequestPrivate: public QSharedData
     Object::ObjectType objectType;
 };
 
-class QFBBASE_EXPORT Request
+/**
+ * @brief Informations about a query
+ *
+ *
+ */
+class QFBBASE_EXPORT Query
 {
 public:
-    explicit Request();
-    explicit Request(int id, RequestType type);
-    Request(const Request &other);
-    virtual ~Request();
-    bool operator==(const Request &other) const;
-    bool operator!=(const Request &other) const;
+    explicit Query();
+    explicit Query(int id, RequestType type);
+    Query(const Query &other);
+    virtual ~Query();
+    bool operator==(const Query &other) const;
+    bool operator!=(const Query &other) const;
     bool isValid() const;
     int id() const;
     PreprocessorData preprocessorData() const;
@@ -57,12 +62,12 @@ public:
     void setType(RequestType type);
     void setObjectType(Object::ObjectType objectType);
 private:
-    QExplicitlySharedDataPointer<RequestPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Request)
+    QExplicitlySharedDataPointer<QueryPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Query)
 };
 
 }
 
-Q_DECLARE_METATYPE(QFB::Request)
+Q_DECLARE_METATYPE(QFB::Query)
 
-#endif // QFB_REQUEST_H
+#endif // QFB_QUERY_H

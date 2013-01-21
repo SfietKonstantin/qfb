@@ -28,10 +28,22 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::Comment
+ */
 class CommentPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit CommentPrivate();
+    /**
+     * @internal
+     * @short From
+     */
     QFB::NamedObject * from;
 };
 

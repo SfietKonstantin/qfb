@@ -373,14 +373,32 @@ def createSource(className, includes, baseClass, variables, implementationData):
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::""" + className + """
+ */
 class """ + className + """Private: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit """ + className + """Private();
 """
     for variable in variables:
         if qfbtools.isPointer(variable["type"]) or variable["isList"]:
             splittedName = qfbtools.split(variable["name"])
+            readableName = " ".join(splittedName)
+            if variable["isList"]:
+                readableName = "List of " + readableName
+            else:
+                readableName = readableName[0].upper() + readableName[1:]
+            source += """    /**
+     * @internal
+     * @short """ + readableName + """
+     */
+"""
             if not variable["isList"]:
                 source += "    " + variable["type"] + " " + qfbtools.camelCase(splittedName) + ";\n"
             else:

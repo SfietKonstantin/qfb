@@ -54,12 +54,12 @@ Album * AlbumLoader::album() const
     return d->album;
 }
 
-Request AlbumLoader::createRequest(const QString &graph, const QString &arguments)
+Query AlbumLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObject(Object::AlbumType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void AlbumLoader::handleReply(AbstractProcessor *processor)

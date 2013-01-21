@@ -52,7 +52,7 @@ protected:
      * @param arguments arguments.
      * @return a reply.
      */
-    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
+    virtual Query createRequest(const QString &graph, const QString &arguments = QString()) = 0;
 };
 
 }

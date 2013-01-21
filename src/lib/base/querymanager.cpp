@@ -24,7 +24,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QMetaType>
 #include <QtCore/QThreadPool>
-#include "request.h"
+#include "query.h"
 #include "private/networkrequesthandler_p.h"
 #include "private/helper_p.h"
 #include "processors/typeprocessor.h"
@@ -45,18 +45,18 @@ class QueryManagerPrivate
 {
 public:
     explicit QueryManagerPrivate(QueryManager *q);
-    Request createRequest(RequestType type);
-    AbstractProcessor * createProcessor(const Request &request);
-    void preparePreprocessor(AbstractProcessor *processor, const Request &request);
-    Request createGraphPreprocessor(RequestType type, OperationType operation,
+    Query createQuery(RequestType type);
+    AbstractProcessor * createProcessor(const Query &query);
+    void preparePreprocessor(AbstractProcessor *processor, const Query &query);
+    Query createGraphPreprocessor(RequestType type, OperationType operation,
                                     Object::ObjectType objectType, const QString &graph,
                                     const QString &arguments,
                                     const QVariantMap &postData = QVariantMap());
     /// @todo clean mess in processor
     void slotPreprocessFinished(bool needLoading);
     void slotPreprocessError();
-    void createPostprocessor(const Request &request, QIODevice *dataSource);
-    void slotNetworkError(const QFB::Request &request);
+    void createPostprocessor(const Query &query, QIODevice *dataSource);
+    void slotNetworkError(const QFB::Query &query);
     void slotPostprocessFinished();
     void slotPostprocessError();
     NetworkRequestHandler *networkRequestHandler;
@@ -78,21 +78,21 @@ QueryManagerPrivate::QueryManagerPrivate(QueryManager *q):
     id = 0;
 }
 
-Request QueryManagerPrivate::createRequest(RequestType type)
+Query QueryManagerPrivate::createQuery(RequestType type)
 {
-    Request request (id, type);
+    Query query (id, type);
     id ++;
-    return request;
+    return query;
 }
 
-AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
+AbstractProcessor * QueryManagerPrivate::createProcessor(const Query &query)
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
 
-    switch(request.preprocessorData().operation()) {
+    switch(query.preprocessorData().operation()) {
     case GetOperation:
-        switch(request.type()) {
+        switch(query.type()) {
         case ImageRequest:
             processor = new ImageProcessor(q);
             break;
@@ -126,43 +126,43 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const Request &request)
     return processor;
 }
 
-void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, const Request &request)
+void QueryManagerPrivate::preparePreprocessor(AbstractProcessor *processor, const Query &query)
 {
     Q_Q(QueryManager);
-    processor->setRequest(request);
+    processor->setQuery(query);
     processor->setProcessingTask(AbstractProcessor::Preprocessing);
     QObject::connect(processor, SIGNAL(preprocessingFinished(bool)),
                      q, SLOT(slotPreprocessFinished(bool)));
     QObject::connect(processor, SIGNAL(error()), q, SLOT(slotPreprocessError()));
 }
 
-Request QueryManagerPrivate::createGraphPreprocessor(RequestType type, OperationType operation,
+Query QueryManagerPrivate::createGraphPreprocessor(RequestType type, OperationType operation,
                                                      Object::ObjectType objectType,
                                                      const QString &graph, const QString &arguments,
                                                      const QVariantMap &postData)
 {
     if (token.isEmpty()) {
-        return Request();
+        return Query();
     }
 
-    Request request = createRequest(type);
-    request.setObjectType(objectType);
-    request.preprocessorData().setOperation(operation);
-    request.preprocessorData().setGraph(graph);
-    request.preprocessorData().setArguments(arguments);
-    request.preprocessorData().setData(postData);
+    Query query = createQuery(type);
+    query.setObjectType(objectType);
+    query.preprocessorData().setOperation(operation);
+    query.preprocessorData().setGraph(graph);
+    query.preprocessorData().setArguments(arguments);
+    query.preprocessorData().setData(postData);
 
     AbstractGraphProcessor *processor
-            = qobject_cast<AbstractGraphProcessor *>(createProcessor(request));
+            = qobject_cast<AbstractGraphProcessor *>(createProcessor(query));
     if (!processor) {
-        return Request();
+        return Query();
     }
 
-    preparePreprocessor(processor, request);
+    preparePreprocessor(processor, query);
     processor->setToken(token);
     processThreadPoll->start(processor);
 
-    return request;
+    return query;
 }
 
 void QueryManagerPrivate::slotPreprocessFinished(bool needLoading)
@@ -172,13 +172,13 @@ void QueryManagerPrivate::slotPreprocessFinished(bool needLoading)
     if (!processor) {
         return;
     }
-    Request request = processor->request();
+    Query query = processor->query();
 
     if (needLoading) {
         processor->deleteLater();
-        networkRequestHandler->get(request);
+        networkRequestHandler->get(query);
     } else {
-        emit q->finished(request, processor);
+        emit q->finished(query, processor);
     }
 }
 
@@ -192,16 +192,16 @@ void QueryManagerPrivate::slotPreprocessError()
 
     QString errorString = processor->errorString();
     processor->deleteLater();
-    emit q->error(processor->request(), errorString);
+    emit q->error(processor->query(), errorString);
 }
 
-void QueryManagerPrivate::createPostprocessor(const Request &request, QIODevice *dataSource)
+void QueryManagerPrivate::createPostprocessor(const Query &query, QIODevice *dataSource)
 {
     Q_Q(QueryManager);
-    AbstractProcessor *processor = createProcessor(request);
+    AbstractProcessor *processor = createProcessor(query);
 
     if (processor) {
-        processor->setRequest(request);
+        processor->setQuery(query);
         processor->setProcessingTask(AbstractProcessor::PostProcessing);
         processor->setDataSource(dataSource);
         QObject::connect(processor, SIGNAL(postProcessingFinished()),
@@ -211,10 +211,10 @@ void QueryManagerPrivate::createPostprocessor(const Request &request, QIODevice 
     }
 }
 
-void QueryManagerPrivate::slotNetworkError(const Request &request)
+void QueryManagerPrivate::slotNetworkError(const Query &query)
 {
     Q_Q(QueryManager);
-    emit q->error(request, QObject::tr("A network error happened"));
+    emit q->error(query, QObject::tr("A network error happened"));
 }
 
 void QueryManagerPrivate::slotPostprocessFinished()
@@ -225,8 +225,8 @@ void QueryManagerPrivate::slotPostprocessFinished()
         return;
     }
 
-    Request request = processor->request();
-    emit q->finished(request, processor);
+    Query query = processor->query();
+    emit q->finished(query, processor);
 }
 
 void QueryManagerPrivate::slotPostprocessError()
@@ -237,8 +237,8 @@ void QueryManagerPrivate::slotPostprocessError()
         return;
     }
 
-    Request request = processor->request();
-    emit q->error(request, processor->errorString());
+    Query query = processor->query();
+    emit q->error(query, processor->errorString());
     processor->deleteLater();
 }
 
@@ -251,11 +251,11 @@ QueryManager::QueryManager(QObject *parent) :
     d->networkRequestHandler = new NetworkRequestHandler(this);
     d->processThreadPoll = new QThreadPool(this);
 
-    qRegisterMetaType<QFB::Request>();
-    connect(d->networkRequestHandler, SIGNAL(finished(QFB::Request,QIODevice*)),
-            this, SLOT(createPostprocessor(QFB::Request,QIODevice*)));
-    connect(d->networkRequestHandler, SIGNAL(error(QFB::Request)),
-            this, SLOT(slotNetworkError(QFB::Request)));
+    qRegisterMetaType<QFB::Query>();
+    connect(d->networkRequestHandler, SIGNAL(finished(QFB::Query,QIODevice*)),
+            this, SLOT(createPostprocessor(QFB::Query,QIODevice*)));
+    connect(d->networkRequestHandler, SIGNAL(error(QFB::Query)),
+            this, SLOT(slotNetworkError(QFB::Query)));
 }
 
 QueryManager::~QueryManager()
@@ -270,38 +270,38 @@ QString QueryManager::token() const
     return d->token;
 }
 
-Request QueryManager::queryImage(const QUrl &url)
+Query QueryManager::queryImage(const QUrl &url)
 {
     Q_D(QueryManager);
-    Request request = d->createRequest(ImageRequest);
-    request.preprocessorData().setOperation(GetOperation);
-    AbstractProcessor *processor = d->createProcessor(request);
+    Query query = d->createQuery(ImageRequest);
+    query.preprocessorData().setOperation(GetOperation);
+    AbstractProcessor *processor = d->createProcessor(query);
     if (!processor) {
-        return Request();
+        return Query();
     }
 
-    request.preprocessorData().setUrl(url);
-    d->preparePreprocessor(processor, request);
+    query.preprocessorData().setUrl(url);
+    d->preparePreprocessor(processor, query);
     d->processThreadPoll->start(processor, 0);
 
-    return request;
+    return query;
 }
 
-Request QueryManager::queryPicture(const QString &graph, const QString &arguments)
+Query QueryManager::queryPicture(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
     return d->createGraphPreprocessor(PictureRequest, GetOperation, Object::UnknownType,
                                       graph, arguments);
 }
 
-Request QueryManager::queryType(const QString &graph, const QString &arguments)
+Query QueryManager::queryType(const QString &graph, const QString &arguments)
 {
     Q_D(QueryManager);
     return d->createGraphPreprocessor(TypeRequest, GetOperation, Object::UnknownType,
                                       graph, arguments);
 }
 
-Request QueryManager::queryObject(Object::ObjectType type, const QString &graph,
+Query QueryManager::queryObject(Object::ObjectType type, const QString &graph,
                                   const QString &arguments)
 {
     Q_D(QueryManager);
@@ -309,7 +309,7 @@ Request QueryManager::queryObject(Object::ObjectType type, const QString &graph,
                                       graph, arguments);
 }
 
-Request QueryManager::queryObjectList(Object::ObjectType type, const QString &graph,
+Query QueryManager::queryObjectList(Object::ObjectType type, const QString &graph,
                                       const QString &arguments)
 {
     Q_D(QueryManager);
@@ -317,13 +317,12 @@ Request QueryManager::queryObjectList(Object::ObjectType type, const QString &gr
                                       graph, arguments);
 }
 
-Request QueryManager::querySimpleCreate(const QString &graph, const QVariantMap &data)
+Query QueryManager::querySimpleCreate(const QString &graph, const QVariantMap &data)
 {
     Q_D(QueryManager);
     return d->createGraphPreprocessor(SimplePostRequest, PostOperation, Object::UnknownType,
                                       graph, QString(), data);
 }
-
 
 void QueryManager::setToken(const QString &token)
 {

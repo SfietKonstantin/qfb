@@ -165,12 +165,12 @@ void FeedModel::clear()
     endRemoveRows();
 }
 
-Request FeedModel::createRequest(const QString &graph, const QString &arguments)
+Query FeedModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::PostType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 QHash<int, QByteArray> FeedModel::roleNames() const

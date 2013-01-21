@@ -61,13 +61,13 @@ bool ImageProcessor::preprocess()
 {
     Q_D(ImageProcessor);
     bool needLoading = true;
-    if (request().preprocessorData().url().isEmpty()) {
+    if (query().preprocessorData().url().isEmpty()) {
         needLoading = false;
         return false;
     }
 
     QDir dir (cacheFolderPath());
-    QString fileName = d->imageName(request().preprocessorData().url());
+    QString fileName = d->imageName(query().preprocessorData().url());
 
     if (dir.exists(fileName)) {
         d->imagePath = dir.absoluteFilePath(fileName);
@@ -84,7 +84,7 @@ bool ImageProcessor::processDataSource(QIODevice *dataSource)
     QString path = cacheFolderPath();
     QDir::root().mkpath(path);
     QDir dir = QDir(path);
-    QString fileName = d->imageName(request().preprocessorData().url());
+    QString fileName = d->imageName(query().preprocessorData().url());
 
     QImage image;
     bool ok = false;

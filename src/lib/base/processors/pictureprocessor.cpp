@@ -107,8 +107,8 @@ bool PictureProcessor::processDataSource(QIODevice *dataSource)
     QString path = cacheFolderPath();
     QDir::root().mkpath(path);
     QDir dir = QDir(path);
-    QString fileName = d->pictureName(request().preprocessorData().graph(),
-                                      request().preprocessorData().arguments());
+    QString fileName = d->pictureName(query().preprocessorData().graph(),
+                                      query().preprocessorData().arguments());
 
     QImage image;
     bool ok = false;

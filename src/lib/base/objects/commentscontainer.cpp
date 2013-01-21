@@ -28,10 +28,22 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::CommentsContainer
+ */
 class CommentsContainerPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit CommentsContainerPrivate();
+    /**
+     * @internal
+     * @short List of data
+     */
     QList<QFB::Comment *> data;
 };
 

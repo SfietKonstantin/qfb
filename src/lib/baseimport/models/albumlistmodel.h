@@ -78,7 +78,7 @@ protected:
      * @param arguments Arguments.
      * @return Created request.
      */
-    Request createRequest(const QString &graph, const QString &arguments);
+    Query createRequest(const QString &graph, const QString &arguments);
     /**
      * @brief Implementation of AbstractLoadableModel::handleReply()
      * @param processor Processor to handle.

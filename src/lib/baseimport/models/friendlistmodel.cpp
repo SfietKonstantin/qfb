@@ -146,12 +146,12 @@ void FriendListModel::clear()
     endRemoveRows();
 }
 
-Request FriendListModel::createRequest(const QString &graph, const QString &arguments)
+Query FriendListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::UnknownType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 QHash<int, QByteArray> FriendListModel::roleNames() const

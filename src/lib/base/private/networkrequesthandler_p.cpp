@@ -20,7 +20,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include "request.h"
+#include "query.h"
 
 namespace QFB
 {
@@ -36,9 +36,9 @@ public:
     void removeReply();
     void scheduleReplies();
     QNetworkAccessManager *networkAccessManager;
-    QMap<QNetworkReply *, Request> replies;
+    QMap<QNetworkReply *, Query> replies;
     int runningReplies;
-    QList<Request> queue;
+    QList<Query> queue;
 private:
     NetworkRequestHandler * const q_ptr;
     Q_DECLARE_PUBLIC(NetworkRequestHandler)
@@ -68,16 +68,14 @@ void NetworkRequestHandlerPrivate::slotFinished()
         return;
     }
 
-    // Check the request
     if (!replies.contains(reply)) {
         qDebug() << "Error: reply is unknown";
         return;
     }
 
-    Request request = replies.value(reply);
+    Query query = replies.value(reply);
     replies.remove(reply);
 
-    // Check the error
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "Error: encountered network error" << reply->error();
         qDebug() << reply->errorString();
@@ -85,20 +83,20 @@ void NetworkRequestHandlerPrivate::slotFinished()
         qDebug() << reply->readAll();
         reply->deleteLater();
 
-        emit q->error(request);
+        emit q->error(query);
         removeReply();
         return;
     }
 
     QUrl redirect = redirectUrl(reply);
     if (!redirect.isEmpty()) {
-        request.preprocessorData().setUrl(redirect);
-        q->get(request);
+        query.preprocessorData().setUrl(redirect);
+        q->get(query);
         removeReply();
         return;
     }
 
-    emit q->finished(request, reply);
+    emit q->finished(query, reply);
     removeReply();
 }
 
@@ -112,7 +110,7 @@ void NetworkRequestHandlerPrivate::scheduleReplies()
 {
     Q_Q(NetworkRequestHandler);
     while (runningReplies < MAX_REPLIES && !queue.isEmpty()) {
-        Request nextRequest = queue.takeFirst();
+        Query nextRequest = queue.takeFirst();
         QUrl url = nextRequest.preprocessorData().url();
         QNetworkReply *reply = 0;
         switch (nextRequest.preprocessorData().operation()) {
@@ -151,10 +149,10 @@ NetworkRequestHandler::~NetworkRequestHandler()
     d->networkAccessManager->deleteLater();
 }
 
-void NetworkRequestHandler::get(const Request &request)
+void NetworkRequestHandler::get(const Query &query)
 {
     Q_D(NetworkRequestHandler);
-    d->queue.append(request);
+    d->queue.append(query);
     d->scheduleReplies();
 }
 

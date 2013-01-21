@@ -54,12 +54,12 @@ Post * PostLoader::post() const
     return d->post;
 }
 
-Request PostLoader::createRequest(const QString &graph, const QString &arguments)
+Query PostLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObject(Object::PostType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void PostLoader::handleReply(AbstractProcessor *processor)

@@ -60,6 +60,10 @@ Page {
                 onClicked: PAGE_MANAGEMENT_BRIDGE.addAlbumListPage(facebookId, name,
                                                                    banner.coverUrl)
             }
+            MenuItem {
+                text: qsTr("Photos")
+//                onClicked: PAGE_MANAGEMENT_BRIDGE.add
+            }
         }
     }
 

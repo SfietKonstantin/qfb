@@ -34,6 +34,7 @@
  * - \ref base "libqfb", the base library.
  * - \ref login "libqfblogin", a simple library for performing Facebook OAuth2.
  * - \ref import "libqfbimport", additional features, designed to be exposed through QML.
+ * - \ref dialogs "libqfbdialogs", a simple library to call Facebook dialogs.
  *
  * %QFB is developed by Lucien XU (@@SfietKonstantin)
  *

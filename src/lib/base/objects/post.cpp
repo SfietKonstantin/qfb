@@ -28,14 +28,42 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::Post
+ */
 class PostPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit PostPrivate();
+    /**
+     * @internal
+     * @short From
+     */
     QFB::NamedObject * from;
+    /**
+     * @internal
+     * @short List of to
+     */
     QList<QFB::NamedObject *> to;
+    /**
+     * @internal
+     * @short Likes
+     */
     QFB::LikesContainer * likes;
+    /**
+     * @internal
+     * @short Comments
+     */
     QFB::CommentsContainer * comments;
+    /**
+     * @internal
+     * @short Application
+     */
     QFB::NamedObject * application;
 };
 

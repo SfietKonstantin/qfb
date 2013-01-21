@@ -21,7 +21,7 @@
 
 #include "abstractprocessor.h"
 #include <QtCore/QDebug>
-#include "request.h"
+#include "query.h"
 #include "private/abstractprocessor_p.h"
 
 namespace QFB
@@ -50,10 +50,10 @@ AbstractProcessor::~AbstractProcessor()
 {
 }
 
-Request AbstractProcessor::request() const
+Query AbstractProcessor::query() const
 {
     Q_D(const AbstractProcessor);
-    return d->request;
+    return d->query;
 }
 
 QString AbstractProcessor::errorString() const
@@ -65,14 +65,14 @@ QString AbstractProcessor::errorString() const
 void AbstractProcessor::run()
 {
     Q_D(AbstractProcessor);
-    if (!d->request.isValid()) {
-        qWarning() << "Warning: the request is not valid";
-        setError(tr("The request is not valid"));
+    if (!d->query.isValid()) {
+        qWarning() << "Warning: the query is not valid";
+        setError(tr("The query is not valid"));
         emit error();
         return;
     }
 
-    PreprocessorData &preprocessorData = d->request.preprocessorData();
+    PreprocessorData &preprocessorData = d->query.preprocessorData();
     bool ok = false;
     switch (d->processingTask) {
     case Preprocessing:
@@ -107,10 +107,10 @@ void AbstractProcessor::run()
     }
 }
 
-void AbstractProcessor::setRequest(const Request &request)
+void AbstractProcessor::setQuery(const Query &query)
 {
     Q_D(AbstractProcessor);
-    d->request = request;
+    d->query = query;
 }
 
 void AbstractProcessor::setProcessingTask(ProcessingTask processingTask)

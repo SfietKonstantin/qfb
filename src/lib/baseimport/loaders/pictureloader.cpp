@@ -95,12 +95,12 @@ void PictureLoader::setType(Type type)
 }
 
 
-Request PictureLoader::createRequest(const QString &graph, const QString &arguments)
+Query PictureLoader::createRequest(const QString &graph, const QString &arguments)
 {
     Q_D(PictureLoader);
     if (d->type == Invalid) {
         qWarning() << "Invalid image type cannot be loaded";
-        return Request();
+        return Query();
     }
 
     if (queryManager()) {
@@ -113,7 +113,7 @@ Request PictureLoader::createRequest(const QString &graph, const QString &argume
 
         return queryManager()->queryPicture(graph, finalArguments);
     }
-    return Request();
+    return Query();
 }
 
 void PictureLoader::handleReply(AbstractProcessor *processor)

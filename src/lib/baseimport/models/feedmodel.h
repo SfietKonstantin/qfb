@@ -79,7 +79,7 @@ Q_SIGNALS:
 protected:
     void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation);
     void clear();
-    Request createRequest(const QString &graph, const QString &arguments);
+    Query createRequest(const QString &graph, const QString &arguments);
     /**
      * @brief Role names
      * @return role names.

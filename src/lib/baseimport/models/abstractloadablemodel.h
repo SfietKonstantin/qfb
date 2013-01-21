@@ -24,7 +24,7 @@
 
 #include "baseimport_global.h"
 #include <QtCore/QAbstractListModel>
-#include "request.h"
+#include "query.h"
 
 namespace QFB
 {
@@ -127,7 +127,7 @@ protected:
     void setDoNotHaveMore();
     virtual void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation) = 0;
     virtual void clear() = 0;
-    virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
+    virtual Query createRequest(const QString &graph, const QString &arguments = QString()) = 0;
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     /**
      * @brief Role names
@@ -142,9 +142,9 @@ protected:
 private:
     Q_DECLARE_PRIVATE(AbstractLoadableModel)
     /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &request,
                                                AbstractProcessor *processor))
-    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Request &request,
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &request,
                                             const QString &errorString))
     /// @endcond
 };

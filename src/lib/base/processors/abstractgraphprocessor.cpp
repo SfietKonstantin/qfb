@@ -53,18 +53,18 @@ void AbstractGraphProcessor::setToken(const QString &token)
 bool AbstractGraphProcessor::preprocess()
 {
     Q_D(AbstractGraphProcessor);
-    if (d->request.preprocessorData().graph().isEmpty()) {
+    if (d->query.preprocessorData().graph().isEmpty()) {
         qWarning() << "Warning: the graph is empty";
         setError(tr("The graph is empty"));
         return false;
     }
 
-    bool ok = processGraphAndArguments(d->request.preprocessorData().graph(),
-                                       d->request.preprocessorData().arguments());
+    bool ok = processGraphAndArguments(d->query.preprocessorData().graph(),
+                                       d->query.preprocessorData().arguments());
     if (ok) {
-        QUrl url = graphUrl(d->request.preprocessorData().graph(), d->token,
-                            d->request.preprocessorData().arguments());
-        d->request.preprocessorData().setUrl(url);
+        QUrl url = graphUrl(d->query.preprocessorData().graph(), d->token,
+                            d->query.preprocessorData().arguments());
+        d->query.preprocessorData().setUrl(url);
     }
     return ok;
 }
@@ -80,8 +80,8 @@ void AbstractGraphProcessor::setPreprocessedData(const QString &graph,
                                                  const QList<ArgumentPair> &arguments)
 {
     Q_D(AbstractGraphProcessor);
-    d->request.preprocessorData().setGraph(graph);
-    d->request.preprocessorData().setArguments(arguments);
+    d->query.preprocessorData().setGraph(graph);
+    d->query.preprocessorData().setArguments(arguments);
 }
 
 }

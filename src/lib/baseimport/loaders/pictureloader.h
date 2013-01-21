@@ -51,7 +51,7 @@ Q_SIGNALS:
     void typeChanged();
     void picturePathChanged();
 protected:
-    Request createRequest(const QString &graph, const QString &arguments);
+    Query createRequest(const QString &graph, const QString &arguments);
     void handleReply(AbstractProcessor *processor);
 private:
     Q_DECLARE_PRIVATE(PictureLoader)

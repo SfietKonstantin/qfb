@@ -28,15 +28,47 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::User
+ */
 class UserPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit UserPrivate();
+    /**
+     * @internal
+     * @short List of languages
+     */
     QList<QFB::NamedObject *> languages;
+    /**
+     * @internal
+     * @short Cover
+     */
     QFB::Cover * cover;
+    /**
+     * @internal
+     * @short Hometown
+     */
     QFB::NamedObject * hometown;
+    /**
+     * @internal
+     * @short List of interested in
+     */
     QList<QString> interestedIn;
+    /**
+     * @internal
+     * @short Location
+     */
     QFB::NamedObject * location;
+    /**
+     * @internal
+     * @short Significant other
+     */
     QFB::NamedObject * significantOther;
 };
 

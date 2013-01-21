@@ -34,10 +34,11 @@ AbstractLoaderPrivate::~AbstractLoaderPrivate()
 {
 }
 
-void AbstractLoaderPrivate::slotFinished(const QFB::Request &request, AbstractProcessor *processor)
+void AbstractLoaderPrivate::slotFinished(const QFB::Query &currentQuery,
+                                         AbstractProcessor *processor)
 {
     Q_Q(AbstractLoader);
-    if (request != currentRequest) {
+    if (currentQuery != currentQuery) {
         return;
     }
 
@@ -46,10 +47,10 @@ void AbstractLoaderPrivate::slotFinished(const QFB::Request &request, AbstractPr
     q->setLoading(false);
 }
 
-void AbstractLoaderPrivate::slotError(const QFB::Request &request, const QString &errorString)
+void AbstractLoaderPrivate::slotError(const QFB::Query &request, const QString &errorString)
 {
     Q_Q(AbstractLoader);
-    if (request != currentRequest) {
+    if (request != currentQuery) {
         return;
     }
 
@@ -105,10 +106,10 @@ void AbstractLoader::setQueryManager(QueryManager *queryManager)
         }
 
         d->queryManager = queryManager;
-        connect(d->queryManager, SIGNAL(finished(QFB::Request,AbstractProcessor*)),
-                this, SLOT(slotFinished(QFB::Request,AbstractProcessor*)));
-        connect(d->queryManager, SIGNAL(error(QFB::Request,QString)),
-                this, SLOT(slotError(QFB::Request,QString)));
+        connect(d->queryManager, SIGNAL(finished(QFB::Query,AbstractProcessor*)),
+                this, SLOT(slotFinished(QFB::Query,AbstractProcessor*)));
+        connect(d->queryManager, SIGNAL(error(QFB::Query,QString)),
+                this, SLOT(slotError(QFB::Query,QString)));
         emit queryManagerChanged();
     }
 }
@@ -126,10 +127,10 @@ void AbstractLoader::setLoading(bool loading)
     }
 }
 
-void AbstractLoader::handleRequest(const Request &request)
+void AbstractLoader::handleRequest(const Query &request)
 {
     Q_D(AbstractLoader);
-    d->currentRequest = request;
+    d->currentQuery = request;
     if (!d->error.isEmpty()) {
         d->error.clear();
         emit errorChanged();

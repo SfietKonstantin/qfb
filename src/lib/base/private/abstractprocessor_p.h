@@ -30,7 +30,7 @@
  * @short Definition of QFB::AbstractProcessorPrivate
  */
 
-#include "request.h"
+#include "query.h"
 #include "processors/abstractprocessor.h"
 
 class QIODevice;
@@ -52,9 +52,9 @@ public:
     explicit AbstractProcessorPrivate();
     /**
      * @internal
-     * @brief Request
+     * @brief Query
      */
-    Request request;
+    Query query;
     /**
      * @internal
      * @brief Processing task

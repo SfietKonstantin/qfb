@@ -49,18 +49,18 @@ QString ImageLoader::imagePath() const
 
 void ImageLoader::request(const QUrl &url)
 {
-    Request createdRequest = createRequest(url);
+    Query createdRequest = createRequest(url);
     if (createdRequest.isValid()) {
         handleRequest(createdRequest);
     }
 }
 
-Request ImageLoader::createRequest(const QUrl &url)
+Query ImageLoader::createRequest(const QUrl &url)
 {
     if (queryManager()) {
         return queryManager()->queryImage(url);
     }
-    return Request();
+    return Query();
 }
 
 void ImageLoader::handleReply(AbstractProcessor *processor)

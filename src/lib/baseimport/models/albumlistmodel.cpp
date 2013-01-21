@@ -90,12 +90,12 @@ QVariant AlbumListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-Request AlbumListModel::createRequest(const QString &graph, const QString &arguments)
+Query AlbumListModel::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::AlbumType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void AlbumListModel::clear()

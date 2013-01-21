@@ -32,7 +32,7 @@ class QIODevice;
 namespace QFB
 {
 
-class Request;
+class Query;
 class AbstractProcessorPrivate;
 
 /**
@@ -91,10 +91,10 @@ public:
      */
     virtual ~AbstractProcessor();
     /**
-     * @brief Request to process
-     * @return request to process.
+     * @brief Query to process
+     * @return query to process.
      */
-    Request request() const;
+    Query query() const;
     /**
      * @brief Error message
      *
@@ -110,10 +110,10 @@ public:
     void run();
 public Q_SLOTS:
     /**
-     * @brief Set the request to process
-     * @param request request to process.
+     * @brief Set the query to process
+     * @param query query to process.
      */
-    void setRequest(const Request &request);
+    void setQuery(const Query &query);
     /**
      * @brief Set the processing task
      * @param processingTask processing task.

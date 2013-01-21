@@ -80,7 +80,7 @@ bool ObjectListProcessor::processDataSource(QIODevice *dataSource)
     foreach (JsonValue value, dataArray) {
         if (QFB_JSON_IS_OBJECT(value)) {
             JsonObject jsonObject = QFB_JSON_GET_OBJECT(value);
-            Object *object = ObjectProcessorPrivate::createObject(jsonObject, request());
+            Object *object = ObjectProcessorPrivate::createObject(jsonObject, query());
             if (object) {
                 d->objectList.append(object);
                 object->moveToThread(QCoreApplication::instance()->thread());

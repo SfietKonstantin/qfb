@@ -28,10 +28,22 @@
 namespace QFB
 {
 
+/**
+ * @internal
+ * @short Private class for QFB::LikesContainer
+ */
 class LikesContainerPrivate: public ObjectBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     */
     explicit LikesContainerPrivate();
+    /**
+     * @internal
+     * @short List of data
+     */
     QList<QFB::NamedObject *> data;
 };
 

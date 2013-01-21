@@ -25,7 +25,7 @@ namespace QFB
 
 class AbstractProcessor;
 class QueryManager;
-class Request;
+class Query;
 class AbstractLoaderPrivate;
 class QFBBASEIMPORT_EXPORT AbstractLoader: public QObject
 {
@@ -69,7 +69,7 @@ protected:
      */
     explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
     void setLoading(bool loading);
-    void handleRequest(const Request &request);
+    void handleRequest(const Query &request);
     virtual void handleReply(AbstractProcessor *processor) = 0;
     /**
      * @short D-pointer
@@ -78,9 +78,9 @@ protected:
 private:
     Q_DECLARE_PRIVATE(AbstractLoader)
     /// @cond buggy-doxygen
-    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Request &request,
+    Q_PRIVATE_SLOT(d_func(), void slotFinished(const QFB::Query &request,
                                                AbstractProcessor *processor))
-    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Request &request,
+    Q_PRIVATE_SLOT(d_func(), void slotError(const QFB::Query &request,
                                             const QString &errorString))
     /// @endcond
 };

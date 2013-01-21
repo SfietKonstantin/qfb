@@ -54,12 +54,12 @@ Photo * PhotoLoader::photo() const
     return d->photo;
 }
 
-Request PhotoLoader::createRequest(const QString &graph, const QString &arguments)
+Query PhotoLoader::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObject(Object::PhotoType, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void PhotoLoader::handleReply(AbstractProcessor *processor)

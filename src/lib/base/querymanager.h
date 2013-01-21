@@ -32,7 +32,7 @@ class QNetworkAccessManager;
 class QNetworkReply;
 namespace QFB
 {
-class Request;
+class Query;
 class AbstractProcessor;
 class QueryManagerPrivate;
 
@@ -53,15 +53,15 @@ class QueryManagerPrivate;
  *
  * It then provides numorous methods that are used to get
  * an object, or a collection of objects from Facebook.
- * All these methods returns a Request object, that is
+ * All these methods returns a Query object, that is
  * used for other classes to track the status of the
  * query.
  *
  * When a request is replied and terminated, the query
  * manager send notifications by broadcasting the signal
- * finished() or error(). These signals send the Request
+ * finished() or error(). These signals send the Query
  * as first argument, so classes concerned by a specific
- * request should compare the sent requests with the one
+ * request should compare the sent queries with the one
  * they got when performing the query.
  *
  * The finished() signal also provides the processor
@@ -76,8 +76,6 @@ class QueryManagerPrivate;
  * class that is concerned by that reply should delete
  * the processor afterwards. When an error occurs, the
  * processor is deleted, since it is not useful anymore.
- *
- * @todo the name "query manager" do not fit with request
  *
  * @see AbstractProcessor
  */
@@ -107,24 +105,25 @@ public:
      * @brief Query an image
      * @param url url to the image.
      */
-    Request queryImage(const QUrl &url);
+    Query queryImage(const QUrl &url);
     /**
      * @brief Query a picture
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      */
-    Request queryPicture(const QString &graph, const QString &arguments = QString());
-    Request queryType(const QString &graph, const QString &arguments = QString());
+    Query queryPicture(const QString &graph, const QString &arguments = QString());
+    Query queryType(const QString &graph, const QString &arguments = QString());
     /**
      * @brief Query an object
      * @param graph graph entry of the Facebook graph API.
      * @param arguments arguments.
      */
-    Request queryObject(QFB::Object::ObjectType type, const QString &graph,
+    Query queryObject(QFB::Object::ObjectType type, const QString &graph,
                         const QString &arguments = QString());
-    Request queryObjectList(QFB::Object::ObjectType type, const QString &graph,
+    Query queryObjectList(QFB::Object::ObjectType type, const QString &graph,
                             const QString &arguments = QString());
-    Request querySimpleCreate(const QString &graph, const QVariantMap &data);
+    Query querySimpleCreate(const QString &graph, const QVariantMap &data);
+//    Request querySimpleDelete(const QString &graph);
 public Q_SLOTS:
     /**
      * @brief Set the access token
@@ -138,10 +137,10 @@ signals:
     void tokenChanged();
     /**
      * @brief Error in a query
-     * @param request concerned request.
+     * @param query concerned query.
      * @param errorString error message.
      */
-    void error(const QFB::Request &request, const QString &errorString);
+    void error(const QFB::Query &query, const QString &errorString);
     /**
      * @brief A query is terminated
      *
@@ -149,10 +148,10 @@ signals:
      * as an AbstractProcessor. In order to get the result, it should
      * be cast to the correct form.
      *
-     * @param request concerned request.
+     * @param query concerned query.
      * @param processor processor used to process the reply.
      */
-    void finished(const QFB::Request &request, AbstractProcessor *processor);
+    void finished(const QFB::Query &query, AbstractProcessor *processor);
 protected:
     /**
      * @brief D-pointer
@@ -164,8 +163,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void slotPreprocessFinished(bool needLoading))
     Q_PRIVATE_SLOT(d_func(), void slotPreprocessError())
     Q_PRIVATE_SLOT(d_func(),
-                   void createPostprocessor(const QFB::Request &request, QIODevice *dataSource))
-    Q_PRIVATE_SLOT(d_func(), void slotNetworkError(const QFB::Request &request))
+                   void createPostprocessor(const QFB::Query &query, QIODevice *dataSource))
+    Q_PRIVATE_SLOT(d_func(), void slotNetworkError(const QFB::Query &query))
     Q_PRIVATE_SLOT(d_func(), void slotPostprocessFinished())
     Q_PRIVATE_SLOT(d_func(), void slotPostprocessError())
     /// @endcond
