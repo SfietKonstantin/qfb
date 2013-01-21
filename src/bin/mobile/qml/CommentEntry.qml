@@ -38,7 +38,7 @@ Item {
     FacebookPicture {
         id: picture
         anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: 2 * Ui.MARGIN_DEFAULT
         facebookId: container.comment.from.facebookId
         pictureType: QFBPictureLoader.Square
     }
@@ -47,7 +47,7 @@ Item {
         id: content
         anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.right; anchors.rightMargin: 2 * Ui.MARGIN_DEFAULT
 
         Label {
             id: name

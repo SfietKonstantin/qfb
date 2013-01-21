@@ -86,7 +86,7 @@ Rectangle {
 
     Item {
         id: messageContainer
-        height: container.message != "" ? Ui.MARGIN_DEFAULT + message.height : 0
+        height: postHelper.message != "" ? Ui.MARGIN_DEFAULT + message.height : 0
         anchors.top: title.bottom
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
@@ -113,10 +113,17 @@ Rectangle {
             anchors.right: parent.right
             spacing: Ui.MARGIN_DEFAULT
 
-            FacebookImage {
-                id: postImage
-                anchors.horizontalCenter: parent.horizontalCenter
-                url: container.post.picture
+            Item {
+                // There is a binding loop here (need to fix it)
+                id: imageContainer
+                width: contentColumn.width
+                height: postImage.status != Image.Ready ? 0 : postImage.height
+
+                FacebookImage {
+                    id: postImage
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    url: container.post.picture
+                }
             }
 
             Label {

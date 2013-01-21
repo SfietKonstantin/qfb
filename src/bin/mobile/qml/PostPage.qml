@@ -56,7 +56,6 @@ Page {
             id: column
             anchors.top: parent.top
             anchors.left: parent.left; anchors.right: parent.right
-            spacing: Ui.MARGIN_DEFAULT
 
             Post {
                 id: post
