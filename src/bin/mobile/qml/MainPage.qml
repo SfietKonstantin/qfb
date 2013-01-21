@@ -25,9 +25,10 @@ Page {
         anchors.fill: parent
         Banner {
             id: banner
-            large: true
+            large: screen.currentOrientation == Screen.Portrait
             name: me.name
             coverUrl: me.coverUrl
+
         }
 
         ListView {

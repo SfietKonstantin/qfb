@@ -15,19 +15,24 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
+import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import "UiConstants.js" as Ui
 
 Item {
     id: container
     property string name
+    property string category
     property string coverUrl
     property bool large: false
     anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
-    height: !large ? Ui.BANNER_HEIGHT_DEFAULT : Ui.BANNER_HEIGHT_LARGE
+    height: !large ? (coverBackground.portrait ? Ui.BANNER_HEIGHT_PORTRAIT
+                                               : Ui.BANNER_HEIGHT_LANDSCAPE)
+                   : Ui.BANNER_HEIGHT_LARGE
 
     Rectangle {
         id: coverBackground
+        property bool portrait: screen.currentOrientation == Screen.Portrait
         anchors.fill: parent
         color: Ui.THEME_COLOR_PRIMARY
         clip: true
@@ -41,7 +46,7 @@ Item {
         Rectangle {
             anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
-            height: Ui.MARGIN_DEFAULT + nameText.height + Ui.MARGIN_DEFAULT
+            height: Ui.MARGIN_DEFAULT + Ui.FONT_SIZE_XXLARGE + Ui.MARGIN_DEFAULT
             opacity: 0.8
             gradient: Gradient {
                 GradientStop {position: 0; color: "#00000000"}
@@ -62,7 +67,7 @@ Item {
             opacity: 0
             elide: Text.ElideRight
             wrapMode: Text.NoWrap
-            font.pixelSize: Ui.FONT_SIZE_XXLARGE
+            font.pixelSize: container.large ? Ui.FONT_SIZE_XXLARGE : Ui.FONT_SIZE_LARGE
             states: [
                 State {
                     name: "visible"; when: container.name != ""
@@ -70,6 +75,7 @@ Item {
                         target: nameText
                         opacity: 1
                         text: container.name
+                              + (container.category != "" ? (" − " + container.category) : "")
                     }
                 }
             ]

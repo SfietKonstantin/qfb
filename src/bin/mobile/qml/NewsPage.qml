@@ -84,5 +84,6 @@ Page {
         id: banner
         property bool loaded: false
         name: container.name
+        category: qsTr("News")
     }
 }

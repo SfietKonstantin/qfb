@@ -38,6 +38,7 @@ Page {
         Banner {
             id: banner
             name: me.name
+            category: qsTr("Friends")
             coverUrl: me.coverUrl
         }
 

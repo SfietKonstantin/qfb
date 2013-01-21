@@ -26,13 +26,10 @@ var MARGIN_MSMALL               = 12
 var MARGIN_SMALL                = 8
 var MARGIN_XSMALL               = 4
 
-// Headers
-//var HEADER_HEIGHT_PORTRAIT      = 72
-//var HEADER_HEIGHT_LANDSCAPE     = 46
-
 // Banners
 var BANNER_HEIGHT_LARGE         = 250
-var BANNER_HEIGHT_DEFAULT       = 72
+var BANNER_HEIGHT_PORTRAIT      = 72
+var BANNER_HEIGHT_LANDSCAPE     = 46
 
 // Icons
 var ICON_SIZE_XLARGE            = 80

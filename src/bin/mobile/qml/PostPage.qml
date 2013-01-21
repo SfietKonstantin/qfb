@@ -39,6 +39,7 @@ Page {
     Banner {
         id: banner
         name: container.name
+        category: qsTr("Post")
         coverUrl: container.coverUrl
     }
 
@@ -54,8 +55,7 @@ Page {
         Column {
             id: column
             anchors.top: parent.top
-            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.right: parent.right
             spacing: Ui.MARGIN_DEFAULT
 
             Post {

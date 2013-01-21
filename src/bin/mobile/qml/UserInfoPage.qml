@@ -46,6 +46,7 @@ Page {
     Banner {
         id: banner
         name: container.name
+        category: qsTr("Informations")
         coverUrl: container.coverUrl
     }
 
