@@ -25,13 +25,13 @@
 
 #include <QtCore/QtGlobal>
 #include "request.h"
+#include "models/abstractloadablemodel.h"
 
 namespace QFB
 {
 
 class AbstractProcessor;
 class QueryManager;
-class AbstractLoadableModel;
 /**
  * @internal
  * @brief Private class for QFB::AbstractLoadableModel
@@ -54,6 +54,8 @@ public:
      * @brief Destructor
      */
     virtual ~AbstractLoadableModelPrivate();
+    void setLoading(bool loadingToSet);
+    void handleRequest(const Request &request);
 protected:
     /**
      * @internal
@@ -78,8 +80,11 @@ private:
     QueryManager *queryManager;
     Request currentRequest;
     QString error;
+    QString previousPageGraph;
+    QString previousPageArguments;
     QString nextPageGraph;
     QString nextPageArguments;
+    AbstractLoadableModel::LoadMoreOperation loadMoreOperation;
     bool havePrevious;
     bool haveNext;
     bool loading;

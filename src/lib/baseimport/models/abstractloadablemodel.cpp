@@ -34,11 +34,41 @@ AbstractLoadableModelPrivate::AbstractLoadableModelPrivate(AbstractLoadableModel
     queryManager = 0;
     loading = false;
     autoLoadNext = false;
+    havePrevious = false;
     haveNext = false;
 }
 
 AbstractLoadableModelPrivate::~AbstractLoadableModelPrivate()
 {
+}
+
+void AbstractLoadableModelPrivate::setLoading(bool loadingToSet)
+{
+    Q_Q(AbstractLoadableModel);
+    if (loading != loadingToSet) {
+        loading = loadingToSet;
+        emit q->loadingChanged();
+
+        if (!loading) {
+            emit q->loaded();
+        }
+    }
+}
+
+void AbstractLoadableModelPrivate::handleRequest(const Request &request)
+{
+    Q_Q(AbstractLoadableModel);
+    if (!request.isValid()) {
+        return;
+    }
+
+    currentRequest = request;
+    if (!error.isEmpty()) {
+        error.clear();
+        emit q->errorChanged();
+    }
+
+    setLoading(true);
 }
 
 void AbstractLoadableModelPrivate::slotFinished(const QFB::Request &request,
@@ -54,11 +84,19 @@ void AbstractLoadableModelPrivate::slotFinished(const QFB::Request &request,
         return;
     }
 
-    q->handleReply(pagingProcessor);
+    q->handleReply(pagingProcessor, loadMoreOperation);
     pagingProcessor->deleteLater();
 
+    loadMoreOperation = AbstractLoadableModel::InvalidLoadOperation;
+    previousPageGraph = QString();
+    previousPageArguments = QString();
     nextPageGraph = QString();
     nextPageArguments = QString();
+
+    if (havePrevious) {
+        previousPageGraph = pagingProcessor->previousPageGraph();
+        previousPageArguments = pagingProcessor->previousPageArguments();
+    }
 
     if (haveNext) {
         nextPageGraph = pagingProcessor->nextPageGraph();
@@ -66,13 +104,10 @@ void AbstractLoadableModelPrivate::slotFinished(const QFB::Request &request,
 
         if (autoLoadNext) {
             q->loadNext();
-        } else {
-            q->setLoading(false);
+            return;
         }
-
-    } else {
-        q->setLoading(false);
     }
+    setLoading(false);
 }
 
 void AbstractLoadableModelPrivate::slotError(const QFB::Request &request,
@@ -88,8 +123,9 @@ void AbstractLoadableModelPrivate::slotError(const QFB::Request &request,
         emit q->errorChanged();
     }
 
-    q->setDoNotHaveNext();
-    q->setLoading(false);
+    q->setDoNotHaveMore();
+    setLoading(false);
+    loadMoreOperation = AbstractLoadableModel::InvalidLoadOperation;
 }
 
 ////// End of private class //////
@@ -124,6 +160,12 @@ QString AbstractLoadableModel::error() const
 {
     Q_D(const AbstractLoadableModel);
     return d->error;
+}
+
+bool AbstractLoadableModel::havePrevious() const
+{
+    Q_D(const AbstractLoadableModel);
+    return d->havePrevious;
 }
 
 bool AbstractLoadableModel::haveNext() const
@@ -176,13 +218,27 @@ void AbstractLoadableModel::request(const QString &graph, const QString &argumen
     }
 
     clear();
+    d->loadMoreOperation = InvalidLoadOperation;
+    d->havePrevious = true;
     d->haveNext = true;
     emit haveNextChanged();
+    emit havePreviousChanged();
 
-    Request request = createRequest(graph, arguments);
-    if (request.isValid()) {
-        handleRequest(request);
+    d->handleRequest(createRequest(graph, arguments));
+}
+
+void AbstractLoadableModel::loadPrevious()
+{
+    Q_D(AbstractLoadableModel);
+    if (!d->queryManager) {
+        return;
     }
+    if (!d->haveNext) {
+        return;
+    }
+
+    d->loadMoreOperation = LoadPreviousOperation;
+    d->handleRequest(createRequest(d->previousPageGraph, d->previousPageArguments));
 }
 
 void AbstractLoadableModel::loadNext()
@@ -195,43 +251,25 @@ void AbstractLoadableModel::loadNext()
         return;
     }
 
-    Request request = createRequest(d->nextPageGraph, d->nextPageArguments);
-    if (request.isValid()) {
-        handleRequest(request);
-    }
+    d->loadMoreOperation = LoadNextOperation;
+    d->handleRequest(createRequest(d->nextPageGraph, d->nextPageArguments));
 }
 
-void AbstractLoadableModel::handleRequest(const Request &request)
+void AbstractLoadableModel::setDoNotHaveMore()
 {
     Q_D(AbstractLoadableModel);
-    d->currentRequest = request;
-    if (!d->error.isEmpty()) {
-        d->error.clear();
-        emit errorChanged();
+    switch(d->loadMoreOperation) {
+    case LoadNextOperation:
+        d->haveNext = false;
+        emit haveNextChanged();
+        break;
+    case LoadPreviousOperation:
+        d->havePrevious = false;
+        emit havePreviousChanged();
+        break;
+    default:
+        break;
     }
-
-    setLoading(true);
-}
-
-void AbstractLoadableModel::setLoading(bool loading)
-{
-    Q_D(AbstractLoadableModel);
-    if (d->loading != loading) {
-        d->loading = loading;
-        emit loadingChanged();
-
-        if (!d->loading) {
-            emit loaded();
-        }
-    }
-}
-
-void AbstractLoadableModel::setDoNotHaveNext()
-{
-    Q_D(AbstractLoadableModel);
-    d->haveNext = false;
-    emit haveNextChanged();
-
 }
 
 }

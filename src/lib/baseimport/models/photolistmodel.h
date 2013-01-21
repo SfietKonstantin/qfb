@@ -83,7 +83,7 @@ protected:
      * @brief Implementation of AbstractLoadableModel::handleReply()
      * @param processor Processor to handle.
      */
-    void handleReply(AbstractPagingProcessor *processor);
+    void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation);
     /**
      * @brief Role names
      * @return role names.

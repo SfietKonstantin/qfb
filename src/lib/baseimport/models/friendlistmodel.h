@@ -74,7 +74,7 @@ public:
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 protected:
-    void handleReply(AbstractPagingProcessor *processor);
+    void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation);
     void clear();
     Request createRequest(const QString &graph, const QString &arguments);
     /**

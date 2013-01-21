@@ -68,6 +68,18 @@ AbstractPagingProcessor::AbstractPagingProcessor(AbstractPagingProcessorPrivate 
 {
 }
 
+QString AbstractPagingProcessor::previousPageGraph() const
+{
+    Q_D(const AbstractPagingProcessor);
+    return d->previousPageGraph;
+}
+
+QString AbstractPagingProcessor::previousPageArguments() const
+{
+    Q_D(const AbstractPagingProcessor);
+    return d->previousPageArguments;
+}
+
 QString AbstractPagingProcessor::nextPageGraph() const
 {
     Q_D(const AbstractPagingProcessor);

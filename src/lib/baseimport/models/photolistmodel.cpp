@@ -108,7 +108,7 @@ void PhotoListModel::clear()
     endRemoveRows();
 }
 
-void PhotoListModel::handleReply(AbstractPagingProcessor *processor)
+void PhotoListModel::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation)
 {
     Q_D(PhotoListModel);
     ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
@@ -120,7 +120,7 @@ void PhotoListModel::handleReply(AbstractPagingProcessor *processor)
     QList<Object *> objectList = objectListProcessor->objectList();
 
     if (objectList.isEmpty()) {
-        setDoNotHaveNext();
+        setDoNotHaveMore();
         return;
     }
 
@@ -132,8 +132,18 @@ void PhotoListModel::handleReply(AbstractPagingProcessor *processor)
         }
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + castedObjectList.count() - 1);
-    d->data.append(castedObjectList);
+    switch (operation) {
+    case LoadPreviousOperation:
+        beginInsertRows(QModelIndex(), 0, castedObjectList.count() - 1);
+        castedObjectList.append(d->data);
+        d->data = castedObjectList;
+        break;
+    default:
+        beginInsertRows(QModelIndex(), d->data.count(),
+                        d->data.count() + castedObjectList.count() - 1);
+        d->data.append(castedObjectList);
+        break;
+    }
     emit countChanged();
     endInsertRows();
 }

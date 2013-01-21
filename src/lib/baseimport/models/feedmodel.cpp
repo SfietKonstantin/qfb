@@ -106,7 +106,7 @@ void FeedModel::setValidator(PostValidator *validator)
     }
 }
 
-void FeedModel::handleReply(AbstractPagingProcessor *processor)
+void FeedModel::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation)
 {
     Q_D(FeedModel);
     ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
@@ -136,12 +136,21 @@ void FeedModel::handleReply(AbstractPagingProcessor *processor)
     }
 
     if (feed.isEmpty()) {
-        setDoNotHaveNext();
+        setDoNotHaveMore();
         return;
     }
 
-    beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + finalFeed.count() - 1);
-    d->data.append(finalFeed);
+    switch (operation) {
+    case LoadPreviousOperation:
+        beginInsertRows(QModelIndex(), 0, finalFeed.count() - 1);
+        finalFeed.append(d->data);
+        d->data = finalFeed;
+        break;
+    default:
+        beginInsertRows(QModelIndex(), d->data.count(), d->data.count() + finalFeed.count() - 1);
+        d->data.append(finalFeed);
+        break;
+    }
     emit countChanged();
     endInsertRows();
 }

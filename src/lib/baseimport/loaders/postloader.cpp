@@ -14,50 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPAGINGPROCESSOR_H
-#define QFB_ABSTRACTPAGINGPROCESSOR_H
+/**
+ * @file postloader.cpp
+ * @brief Implementation of QFB::PostLoader
+ */
 
-#include "abstractgraphprocessor.h"
-#include <QtCore/QUrl>
+#include "postloader.h"
+#include "private/abstractloader_p.h"
+#include "querymanager.h"
+#include "processors/objectprocessor.h"
 
+#include "objects/post.h"
 namespace QFB
 {
 
-class AbstractPagingProcessorPrivate;
-class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractGraphProcessor
+class PostLoaderPrivate: public AbstractLoaderPrivate
 {
-    Q_OBJECT
 public:
-    explicit AbstractPagingProcessor(QObject *parent = 0);
-    QString previousPageGraph() const;
-    QString previousPageArguments() const;
-    /**
-     * @brief Graph used to get the next page
-     * @return graph used to get the next page.
-     */
-    QString nextPageGraph() const;
-    /**
-     * @brief Arguments used to get the next page
-     * @return arguments used to get the next page.
-     */
-    QString nextPageArguments() const;
-protected:
-    /**
-     * @brief D-pointer constructor
-     * @param dd D-pointer.
-     * @param parent parent object.
-     */
-    explicit AbstractPagingProcessor(AbstractPagingProcessorPrivate &dd, QObject *parent = 0);
-    void setPreviousPageUrl(const QUrl &url);
-    /**
-     * @brief Set the url used to get the next page
-     * @param url url used to get the next page.
-     */
-    void setNextPageUrl(const QUrl &url);
-private:
-    Q_DECLARE_PRIVATE(AbstractPagingProcessor)
+    PostLoaderPrivate(PostLoader *q);
+    Post *post;
 };
 
+PostLoaderPrivate::PostLoaderPrivate(PostLoader *q):
+    AbstractLoaderPrivate(q)
+{
+    post = 0;
 }
 
-#endif // QFB_ABSTRACTPAGINGPROCESSOR_H
+////// End of private class //////
+
+PostLoader::PostLoader(QObject *parent):
+    AbstractGraphLoader(*(new PostLoaderPrivate(this)), parent)
+{
+}
+
+Post * PostLoader::post() const
+{
+    Q_D(const PostLoader);
+    return d->post;
+}
+
+Request PostLoader::createRequest(const QString &graph, const QString &arguments)
+{
+    if (queryManager()) {
+        return queryManager()->queryObject(Object::PostType, graph, arguments);
+    }
+    return Request();
+}
+
+void PostLoader::handleReply(AbstractProcessor *processor)
+{
+    Q_D(PostLoader);
+    ObjectProcessor *objectProcessor = qobject_cast<ObjectProcessor *>(processor);
+    if (d->post) {
+        d->post->deleteLater();
+    }
+
+    d->post = qobject_cast<Post*>(objectProcessor->object());
+    d->post->setParent(this);
+    emit postChanged();
+}
+
+}

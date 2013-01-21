@@ -25,8 +25,17 @@ Page {
     property string name
     property string coverUrl
     property QtObject post
+    property int offset: 0
     function load() {
-        model.request(container.post.facebookId + "/comments")
+        container.offset = 0
+        var commentCount = container.post.comments.count
+        var arguments = ""
+        if (commentCount > 20) {
+            container.offset = Math.floor(commentCount / 20) * 20
+            arguments = "offset=" + container.offset
+        }
+        model.request(container.post.facebookId + "/comments", arguments)
+        postLoader.request(container.post.facebookId)
     }
 
     tools: ToolBarLayout {
@@ -34,6 +43,11 @@ Page {
             iconId: "toolbar-back"
             onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
         }
+    }
+
+    QFBPostLoader {
+        id: postLoader
+        onPostChanged: container.post = post
     }
 
     Banner {
@@ -60,6 +74,28 @@ Page {
             Post {
                 id: post
                 post: container.post
+            }
+
+            Item {
+                width: column.width
+                height: loadPreviousCommentButton.height + 2 * Ui.MARGIN_DEFAULT
+                visible: model.havePrevious
+
+                BusyIndicator {
+                    anchors.verticalCenter: loadPreviousCommentButton.verticalCenter
+                    anchors.right: loadPreviousCommentButton.left
+                    anchors.rightMargin: Ui.MARGIN_DEFAULT
+                    visible: model.loading
+                    running: visible
+                }
+
+                Button {
+                    id: loadPreviousCommentButton
+                    enabled: !model.loading
+                    anchors.centerIn: parent
+                    text: !model.loading ? qsTr("Load previous comments") : qsTr("Loading")
+                    onClicked: model.loadPrevious()
+                }
             }
 
             Repeater {

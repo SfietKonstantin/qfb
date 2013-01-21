@@ -14,50 +14,64 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPAGINGPROCESSOR_H
-#define QFB_ABSTRACTPAGINGPROCESSOR_H
+#ifndef QFB_POSTLOADER_H
+#define QFB_POSTLOADER_H
 
-#include "abstractgraphprocessor.h"
-#include <QtCore/QUrl>
+/**
+ * @file postloader.h
+ * @brief Definition of QFB::PostLoader
+ */
+
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
 
-class AbstractPagingProcessorPrivate;
-class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractGraphProcessor
+class Post;
+class PostLoaderPrivate;
+/**
+ * @short WRITE DOCUMENTATION HERE
+ */
+class QFBBASEIMPORT_EXPORT PostLoader: public AbstractGraphLoader
 {
     Q_OBJECT
+    /**
+     * @brief Post
+     */
+    Q_PROPERTY(QFB::Post * post READ post NOTIFY postChanged)
 public:
-    explicit AbstractPagingProcessor(QObject *parent = 0);
-    QString previousPageGraph() const;
-    QString previousPageArguments() const;
     /**
-     * @brief Graph used to get the next page
-     * @return graph used to get the next page.
-     */
-    QString nextPageGraph() const;
-    /**
-     * @brief Arguments used to get the next page
-     * @return arguments used to get the next page.
-     */
-    QString nextPageArguments() const;
-protected:
-    /**
-     * @brief D-pointer constructor
-     * @param dd D-pointer.
+     * @brief Default constructor
      * @param parent parent object.
      */
-    explicit AbstractPagingProcessor(AbstractPagingProcessorPrivate &dd, QObject *parent = 0);
-    void setPreviousPageUrl(const QUrl &url);
+    explicit PostLoader(QObject *parent = 0);
     /**
-     * @brief Set the url used to get the next page
-     * @param url url used to get the next page.
+     * @brief Post
+     * @return post.
      */
-    void setNextPageUrl(const QUrl &url);
+    Post * post() const;
+Q_SIGNALS:
+    /**
+     * @brief Post changed
+     */
+    void postChanged();
+protected:
+    /**
+     * @brief Implementation of AbstractGraphLoader::createRequest()
+     * @param graph Graph.
+     * @param arguments Arguments.
+     * @return Created request.
+     */
+     Request createRequest(const QString &graph, const QString &arguments);
+    /**
+     * @brief Implementation of AbstractLoader::handleReply()
+     * @param processor Processor to handle.
+     */
+     void handleReply(AbstractProcessor *processor);
 private:
-    Q_DECLARE_PRIVATE(AbstractPagingProcessor)
+    Q_DECLARE_PRIVATE(PostLoader)
 };
 
 }
 
-#endif // QFB_ABSTRACTPAGINGPROCESSOR_H
+#endif // QFB_POSTLOADER_H

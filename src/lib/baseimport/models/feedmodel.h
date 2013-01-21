@@ -77,7 +77,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void validatorChanged();
 protected:
-    void handleReply(AbstractPagingProcessor *processor);
+    void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation);
     void clear();
     Request createRequest(const QString &graph, const QString &arguments);
     /**

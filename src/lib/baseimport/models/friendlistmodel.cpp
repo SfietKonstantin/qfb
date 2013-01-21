@@ -104,9 +104,10 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void FriendListModel::handleReply(AbstractPagingProcessor *processor)
+void FriendListModel::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation)
 {
     Q_D(FriendListModel);
+    Q_UNUSED(operation)
     ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
     if (!objectListProcessor) {
         return;
@@ -114,7 +115,7 @@ void FriendListModel::handleReply(AbstractPagingProcessor *processor)
 
     QList<Object *> objectList = objectListProcessor->objectList();
     if (objectList.isEmpty()) {
-        setDoNotHaveNext();
+        setDoNotHaveMore();
         qSort(d->temporaryData.begin(), d->temporaryData.end(), nameSortLesser);
         beginInsertRows(QModelIndex(), 0, d->temporaryData.count() - 1);
         d->data = d->temporaryData;

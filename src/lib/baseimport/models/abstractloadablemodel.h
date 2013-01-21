@@ -58,10 +58,16 @@ class QFBBASEIMPORT_EXPORT AbstractLoadableModel : public QAbstractListModel
     Q_PROPERTY(QFB::QueryManager * queryManager READ queryManager WRITE setQueryManager
                NOTIFY queryManagerChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
+    Q_PROPERTY(bool havePrevious READ havePrevious NOTIFY havePreviousChanged)
     Q_PROPERTY(bool haveNext READ haveNext NOTIFY haveNextChanged)
     Q_PROPERTY(bool autoLoadNext READ autoLoadNext WRITE setAutoLoadNext
                NOTIFY autoLoadNextChanged)
 public:
+    enum LoadMoreOperation {
+        InvalidLoadOperation,
+        LoadNextOperation,
+        LoadPreviousOperation
+    };
     /**
      * @brief Destructor
      */
@@ -78,6 +84,7 @@ public:
     QueryManager * queryManager() const;
     bool loading() const;
     QString error() const;
+    bool havePrevious() const;
     bool haveNext() const;
     bool autoLoadNext() const;
 public Q_SLOTS:
@@ -87,6 +94,7 @@ public Q_SLOTS:
      */
     void setQueryManager(QueryManager *queryManager);
     void setAutoLoadNext(bool autoLoadNext);
+    void loadPrevious();
     void loadNext();
     /**
      * @brief Perform a request
@@ -106,6 +114,7 @@ Q_SIGNALS:
     void loadingChanged();
     void loaded();
     void errorChanged();
+    void havePreviousChanged();
     void haveNextChanged();
     void autoLoadNextChanged();
 protected:
@@ -115,10 +124,8 @@ protected:
      * @param parent parent object.
      */
     explicit AbstractLoadableModel(AbstractLoadableModelPrivate &dd, QObject *parent = 0);
-    void handleRequest(const Request &request);
-    void setLoading(bool loading);
-    void setDoNotHaveNext();
-    virtual void handleReply(AbstractPagingProcessor *processor) = 0;
+    void setDoNotHaveMore();
+    virtual void handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation) = 0;
     virtual void clear() = 0;
     virtual Request createRequest(const QString &graph, const QString &arguments = QString()) = 0;
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
