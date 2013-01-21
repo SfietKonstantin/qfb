@@ -17,7 +17,12 @@
 #include "cookiejar.h"
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtGui/QDesktopServices>
+#else
+#include <QtCore/QStandardPaths>
+#include <QtNetwork/QNetworkCookie>
+#endif
 
 namespace QFB
 {
@@ -32,7 +37,11 @@ public:
 QList<QNetworkCookie> CookieJarPrivate::load()
 {
     QList<QNetworkCookie> cookies;
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QString path = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#else
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#endif
     QDir dir (path);
     QFile file (dir.filePath("cookies"));
     if (!file.open(QIODevice::ReadOnly)) {
@@ -52,7 +61,11 @@ QList<QNetworkCookie> CookieJarPrivate::load()
 
 void CookieJarPrivate::save(const QList<QNetworkCookie> &cookies)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QString path = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#else
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#endif
     QDir::root().mkpath(path);
     QDir dir (path);
     QFile file (dir.filePath("cookies"));

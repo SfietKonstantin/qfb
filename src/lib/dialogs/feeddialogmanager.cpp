@@ -17,6 +17,9 @@
 #include "feeddialogmanager.h"
 #include <QtCore/QStringList>
 #include <QtCore/QDebug>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QtCore/QUrlQuery>
+#endif
 
 namespace QFB
 {
@@ -262,7 +265,12 @@ void FeedDialogManager::checkUrl(const QUrl &url)
     // Check if the URL is not good
     if (!urlToString.contains(d->clientId)) {
         if (urlToString.contains("https://www.facebook.com/connect/login_success.html")) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
             QString postId = url.queryItemValue("post_id");
+#else
+            QUrlQuery urlQuery (url);
+            QString postId = urlQuery.queryItemValue("post_id");
+#endif
             if (postId.isEmpty()) {
                 emit postFailed();
             } else {
