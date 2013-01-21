@@ -37,7 +37,7 @@ class AbstractProcessor;
 class QueryManagerPrivate;
 
 /**
- * @brief Query manager
+ * @brief %Query manager
  *
  * This class is the central class that manages queries to
  * Facebook, queues tasks and send notifications when the

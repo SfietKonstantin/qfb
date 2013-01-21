@@ -22,7 +22,6 @@
  * @brief Definition of QFB::ArgumentPair
  */
 
-
 #include <QtCore/QString>
 #include <QtCore/QPair>
 

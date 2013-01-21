@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file query.cpp
+ * @brief Implementation of QFB::Query
+ */
+
 #include "query.h"
 #include "private/helper_p.h"
 
