@@ -4,7 +4,7 @@ NAME = qfb
 # version
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
-VERSION_PATCH = 0
+VERSION_PATCH = 2
 
 isEmpty(DEPLOYMENT_PREFIX) {
     DEPLOYMENT_PREFIX = /usr
@@ -36,7 +36,6 @@ isEmpty(SHAREDIR) {
 }
 
 isEmpty(OPTDIR) {
-
     OPTDIR = /opt/$${NAME}
 }
 
