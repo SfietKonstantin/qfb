@@ -29,7 +29,6 @@
 #include <QtCore/QUrl>
 #include "qfb.h"
 #include "objects/object.h"
-#include "preprocessordata.h"
 
 namespace QFB
 {
@@ -45,11 +44,6 @@ struct QueryPrivate: public QSharedData
      * @brief Id of the query
      */
     int id;
-    /**
-     * @internal
-     * @brief Preprocessor data
-     */
-    PreprocessorData preprocessorData;
     /**
      * @internal
      * @brief Request type
@@ -92,12 +86,6 @@ public:
      */
     explicit Query();
     /**
-     * @brief Default constructor
-     * @param id id of the query.
-     * @param type type of the query.
-     */
-    explicit Query(int id, RequestType type);
-    /**
      * @brief Copy constructor
      * @param other other query.
      */
@@ -129,16 +117,6 @@ public:
      */
     int id() const;
     /**
-     * @brief Preprocessor data
-     * @return preprocessor data.
-     */
-    PreprocessorData preprocessorData() const;
-    /**
-     * @brief Preprocessor data
-     * @return preprocessor data.
-     */
-    PreprocessorData & preprocessorData();
-    /**
      * @brief Request type
      * @return request type.
      */
@@ -148,26 +126,13 @@ public:
      * @return object type.
      */
     Object::ObjectType objectType() const;
-    /**
-     * @brief Set the id of the query.
-     * @param id id of the query to set.
-     */
-    void setId(int id);
-    /**
-     * @brief Set the request type
-     * @param type request type to set.
-     */
-    void setType(RequestType type);
-    /**
-     * @brief Set the object type
-     * @param objectType object type to set.
-     */
-    void setObjectType(Object::ObjectType objectType);
-private:
+protected:
+    Query(QueryPrivate &dd);
     /**
      * @brief D-pointer
      */
     QExplicitlySharedDataPointer<QueryPrivate> d_ptr;
+private:
     Q_DECLARE_PRIVATE(Query)
 };
 

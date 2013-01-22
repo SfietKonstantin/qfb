@@ -31,13 +31,15 @@ PRIVATE_HEADERS +=  private/object_creator_p.h \
                     private/abstractpagingprocessor_p.h \
                     private/objectprocessor_p.h \
                     private/networkrequesthandler_p.h
+# Other
+PRIVATE_HEADERS +=  private/writablequery_p.h \
+                    private/preprocessordata_p.h
 # Base
 PUBLIC_HEADERS +=   base_global.h \
                     qfb.h \
                     argumentpair.h \
                     querymanager.h \
-                    query.h \
-                    preprocessordata.h
+                    query.h
 # Objects
 PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/object.h \
@@ -69,7 +71,8 @@ HEADERS =   $${PRIVATE_HEADERS} \
 SOURCES +=  private/networkrequesthandler_p.cpp \
             querymanager.cpp \
             query.cpp \
-            preprocessordata.cpp
+            private/writablequery_p.cpp \
+            private/preprocessordata_p.cpp
 # Objects
 SOURCES +=  objects/objectbase.cpp \
             objects/object.cpp \

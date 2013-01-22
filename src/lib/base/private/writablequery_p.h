@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,69 +14,67 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_ABSTRACTPROCESSOR_P_H
-#define QFB_ABSTRACTPROCESSOR_P_H
+#ifndef QFB_WRITABLEQUERY_P_H
+#define QFB_WRITABLEQUERY_P_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
+#include "query.h"
+#include "preprocessordata_p.h"
 
-/**
- * @internal
- * @file abstractprocessor_p.h
- * @short Definition of QFB::AbstractProcessorPrivate
- */
-
-#include "processors/abstractprocessor.h"
-#include "private/writablequery_p.h"
-
-class QIODevice;
-class QString;
 namespace QFB
 {
 
-/**
- * @internal
- * @brief Private class for QFB::AbstractProcessor
- */
-class AbstractProcessorPrivate
+class WritableQueryPrivate: public QueryPrivate
 {
 public:
     /**
      * @internal
+     * @brief Preprocessor data
+     */
+    PreprocessorData preprocessorData;
+};
+
+class WritableQuery: public Query
+{
+public:
+    explicit WritableQuery();
+    /**
      * @brief Default constructor
+     * @param id id of the query.
+     * @param type type of the query.
      */
-    explicit AbstractProcessorPrivate();
+    explicit WritableQuery(int id, RequestType type);
+    WritableQuery(const WritableQuery &other);
+    static WritableQuery createWritableQuery(const Query &query);
     /**
-     * @internal
-     * @brief Query
+     * @brief Preprocessor data
+     * @return preprocessor data.
      */
-    WritableQuery query;
+    PreprocessorData preprocessorData() const;
     /**
-     * @internal
-     * @brief Processing task
+     * @brief Preprocessor data
+     * @return preprocessor data.
      */
-    AbstractProcessor::ProcessingTask processingTask;
+    PreprocessorData & preprocessorData();
     /**
-     * @internal
-     * @brief If data loading from Facebook API is required
+     * @brief Set the id of the query.
+     * @param id id of the query to set.
      */
-    bool needLoading;
+    void setId(int id);
     /**
-     * @internal
-     * @brief Data source
+     * @brief Set the request type
+     * @param type request type to set.
      */
-    QIODevice *dataSource;
+    void setType(RequestType type);
     /**
-     * @internal
-     * @brief Error message
+     * @brief Set the object type
+     * @param objectType object type to set.
      */
-    QString error;
+    void setObjectType(Object::ObjectType objectType);
+private:
+    WritableQuery(const Query &query);
+    Q_DECLARE_PRIVATE(WritableQuery)
 };
 
 }
 
-#endif // QFB_ABSTRACTPROCESSOR_P_H
+#endif // QFB_WRITABLEQUERY_P_H

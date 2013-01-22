@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,76 +14,68 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file query.cpp
- * @brief Implementation of QFB::Query
- */
-
-#include "query.h"
-#include "private/helper_p.h"
-#include "private/preprocessordata_p.h"
+#include "writablequery_p.h"
 
 namespace QFB
 {
 
-Query::Query():
-    d_ptr(new QueryPrivate)
+WritableQuery::WritableQuery():
+    Query(*(new WritableQueryPrivate))
+{
+}
+
+WritableQuery::WritableQuery(int id, RequestType type):
+    Query(*(new WritableQueryPrivate))
 {
     Q_D(Query);
-    d->id = -1;
-    d->type = InvalidRequest;
+    d->id = id;
+    d->type = type;
     d->objectType = Object::UnknownType;
 }
 
-Query::Query(const Query &other):
-    d_ptr(other.d_ptr)
+WritableQuery::WritableQuery(const WritableQuery &other):
+    Query(*other.d_ptr.data())
 {
 }
 
-Query::Query(QueryPrivate &dd):
-    d_ptr(&dd)
+WritableQuery::WritableQuery(const Query &query):
+    Query(query)
 {
 }
 
-Query::~Query()
+WritableQuery WritableQuery::createWritableQuery(const Query &query)
 {
+    return WritableQuery(query);
 }
 
-bool Query::operator==(const Query &other) const
+PreprocessorData WritableQuery::preprocessorData() const
 {
-    Q_D(const Query);
-    return (d->id == other.id() && d->type == other.type());
+    Q_D(const WritableQuery);
+    return d->preprocessorData;
 }
 
-bool Query::operator !=(const Query &other) const
+PreprocessorData & WritableQuery::preprocessorData()
 {
-    Q_D(const Query);
-    return (d->id != other.id() || d->type != other.type());
+    Q_D(WritableQuery);
+    return d->preprocessorData;
 }
 
-bool Query::isValid() const
+void WritableQuery::setId(int id)
 {
-    Q_D(const Query);
-    return (d->id != -1 && d->type != InvalidRequest);
+    Q_D(WritableQuery);
+    d->id = id;
 }
 
-int Query::id() const
+void WritableQuery::setType(RequestType type)
 {
-    Q_D(const Query);
-    return d->id;
+    Q_D(WritableQuery);
+    d->type = type;
 }
 
-
-RequestType Query::type() const
+void WritableQuery::setObjectType(Object::ObjectType objectType)
 {
-    Q_D(const Query);
-    return d->type;
-}
-
-Object::ObjectType Query::objectType() const
-{
-    Q_D(const Query);
-    return d->objectType;
+    Q_D(WritableQuery);
+    d->objectType = objectType;
 }
 
 }

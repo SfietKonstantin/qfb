@@ -21,7 +21,6 @@
 
 #include "abstractprocessor.h"
 #include <QtCore/QDebug>
-#include "query.h"
 #include "private/abstractprocessor_p.h"
 
 namespace QFB
@@ -110,7 +109,7 @@ void AbstractProcessor::run()
 void AbstractProcessor::setQuery(const Query &query)
 {
     Q_D(AbstractProcessor);
-    d->query = query;
+    d->query = WritableQuery::createWritableQuery(query);
 }
 
 void AbstractProcessor::setProcessingTask(ProcessingTask processingTask)

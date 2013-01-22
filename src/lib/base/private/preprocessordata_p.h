@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PREPROCESSORDATA_H
-#define QFB_PREPROCESSORDATA_H
+#ifndef QFB_PREPROCESSORDATA_P_H
+#define QFB_PREPROCESSORDATA_P_H
 
 #include "base_global.h"
 #include <QtCore/QExplicitlySharedDataPointer>
@@ -106,4 +106,4 @@ private:
 
 }
 
-#endif // QFB_PREPROCESSORDATA_H
+#endif // QFB_PREPROCESSORDATA_P_H

@@ -14,7 +14,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "preprocessordata.h"
+#include "preprocessordata_p.h"
 #include <QtCore/QStringList>
 
 namespace QFB

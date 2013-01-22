@@ -20,7 +20,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include "query.h"
+#include "private/writablequery_p.h"
 
 namespace QFB
 {
@@ -36,9 +36,9 @@ public:
     void removeReply();
     void scheduleReplies();
     QNetworkAccessManager *networkAccessManager;
-    QMap<QNetworkReply *, Query> replies;
+    QMap<QNetworkReply *, WritableQuery> replies;
     int runningReplies;
-    QList<Query> queue;
+    QList<WritableQuery> queue;
 private:
     NetworkRequestHandler * const q_ptr;
     Q_DECLARE_PUBLIC(NetworkRequestHandler)
@@ -73,7 +73,7 @@ void NetworkRequestHandlerPrivate::slotFinished()
         return;
     }
 
-    Query query = replies.value(reply);
+    WritableQuery query = replies.value(reply);
     replies.remove(reply);
 
     if (reply->error() != QNetworkReply::NoError) {
@@ -110,7 +110,7 @@ void NetworkRequestHandlerPrivate::scheduleReplies()
 {
     Q_Q(NetworkRequestHandler);
     while (runningReplies < MAX_REPLIES && !queue.isEmpty()) {
-        Query nextRequest = queue.takeFirst();
+        WritableQuery nextRequest = queue.takeFirst();
         QUrl url = nextRequest.preprocessorData().url();
         QNetworkReply *reply = 0;
         switch (nextRequest.preprocessorData().operation()) {
@@ -152,7 +152,7 @@ NetworkRequestHandler::~NetworkRequestHandler()
 void NetworkRequestHandler::get(const Query &query)
 {
     Q_D(NetworkRequestHandler);
-    d->queue.append(query);
+    d->queue.append(WritableQuery::createWritableQuery(query));
     d->scheduleReplies();
 }
 

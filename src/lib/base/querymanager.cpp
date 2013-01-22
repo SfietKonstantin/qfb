@@ -24,9 +24,9 @@
 #include <QtCore/QDebug>
 #include <QtCore/QMetaType>
 #include <QtCore/QThreadPool>
-#include "query.h"
 #include "private/networkrequesthandler_p.h"
 #include "private/helper_p.h"
+#include "private/writablequery_p.h"
 #include "processors/typeprocessor.h"
 #include "processors/imageprocessor.h"
 #include "processors/pictureprocessor.h"
@@ -45,8 +45,8 @@ class QueryManagerPrivate
 {
 public:
     explicit QueryManagerPrivate(QueryManager *q);
-    Query createQuery(RequestType type);
-    AbstractProcessor * createProcessor(const Query &query);
+    WritableQuery createQuery(RequestType type);
+    AbstractProcessor * createProcessor(const WritableQuery &query);
     void preparePreprocessor(AbstractProcessor *processor, const Query &query);
     Query createGraphPreprocessor(RequestType type, OperationType operation,
                                     Object::ObjectType objectType, const QString &graph,
@@ -78,18 +78,17 @@ QueryManagerPrivate::QueryManagerPrivate(QueryManager *q):
     id = 0;
 }
 
-Query QueryManagerPrivate::createQuery(RequestType type)
+WritableQuery QueryManagerPrivate::createQuery(RequestType type)
 {
-    Query query (id, type);
+    WritableQuery query (id, type);
     id ++;
     return query;
 }
 
-AbstractProcessor * QueryManagerPrivate::createProcessor(const Query &query)
+AbstractProcessor * QueryManagerPrivate::createProcessor(const WritableQuery &query)
 {
     Q_Q(QueryManager);
     AbstractProcessor *processor = 0;
-
     switch(query.preprocessorData().operation()) {
     case GetOperation:
         switch(query.type()) {
@@ -145,7 +144,7 @@ Query QueryManagerPrivate::createGraphPreprocessor(RequestType type, OperationTy
         return Query();
     }
 
-    Query query = createQuery(type);
+    WritableQuery query = createQuery(type);
     query.setObjectType(objectType);
     query.preprocessorData().setOperation(operation);
     query.preprocessorData().setGraph(graph);
@@ -198,7 +197,7 @@ void QueryManagerPrivate::slotPreprocessError()
 void QueryManagerPrivate::createPostprocessor(const Query &query, QIODevice *dataSource)
 {
     Q_Q(QueryManager);
-    AbstractProcessor *processor = createProcessor(query);
+    AbstractProcessor *processor = createProcessor(WritableQuery::createWritableQuery(query));
 
     if (processor) {
         processor->setQuery(query);
@@ -273,7 +272,7 @@ QString QueryManager::token() const
 Query QueryManager::queryImage(const QUrl &url)
 {
     Q_D(QueryManager);
-    Query query = d->createQuery(ImageRequest);
+    WritableQuery query = d->createQuery(ImageRequest);
     query.preprocessorData().setOperation(GetOperation);
     AbstractProcessor *processor = d->createProcessor(query);
     if (!processor) {
