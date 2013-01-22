@@ -23,10 +23,21 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/likescontainer_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief LIKESCONTAINER_COUNT_KEY
+ */
+static const char *LIKESCONTAINER_COUNT_KEY = "count";
+/**
+ * @internal
+ * @brief LIKESCONTAINER_DATA_KEY
+ */
+static const char *LIKESCONTAINER_DATA_KEY = "data";
+
 
 /**
  * @internal

@@ -22,17 +22,7 @@ PRIVATE_HEADERS +=  private/helper_p.h \
 # Private headers for objects
 PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/object_keys_p.h \
-                    private/object_type_keys_p.h \
-                    private/namedobject_keys_p.h \
-                    private/album_keys_p.h \
-                    private/comment_keys_p.h \
-                    private/commentscontainer_keys_p.h \
-                    private/cover_keys_p.h \
-                    objects/likescontainer_keys_p.h \
-                    private/photo_keys_p.h \
-                    private/photoinformations_keys_p.h \
-                    private/post_keys_p.h \
-                    private/user_keys_p.h
+                    private/namedobject_keys_p.h
 # Private headers for processors
 PRIVATE_HEADERS +=  private/object_creator_p.h \
                     private/abstractprocessor_p.h \

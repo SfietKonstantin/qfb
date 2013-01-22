@@ -68,8 +68,6 @@ def generate(input):
                  parserData.variables, implementationData)
     createSource(parserData.className, parserData.includes, parserData.baseClass,
                  parserData.variables, implementationData)
-    createKeys(parserData.className, parserData.includes, parserData.baseClass,
-               parserData.variables)
 
 
 def detectImplementation(parserData):
@@ -368,10 +366,25 @@ def createSource(className, includes, baseClass, variables, implementationData):
 #include \"private/helper_p.h\"
 #include \"private/objectbase_p.h\"
 #include \"private/object_creator_p.h\"
-#include \"private/""" + className.lower() + """_keys_p.h\"
 
 namespace QFB
 {
+
+"""
+
+    for variable in variables:
+        if variable["type"] != "TODO" and variable["type"] != "NO" and variable["type"] != "":
+            if variable["name"] != "id" and variable["name"] != "name":
+                splittedName = qfbtools.split(variable["name"])
+                source += """/**
+ * @internal
+ * @brief """ + qfbtools.staticKey(splittedName, className) + """
+ */
+static const char *""" + qfbtools.staticKey(splittedName, className) + " = "
+                source += "\"" + variable["name"] + "\";\n"
+
+
+    source += """
 
 /**
  * @internal
@@ -532,51 +545,6 @@ public:
     sourceFile = open(className.lower() + ".cpp", "w")
     sourceFile.write(source)
     sourceFile.close()
-
-def createKeys(className, includes, baseClass, variables):
-    keys = copyright
-    keys += """
-#ifndef QFB_""" + className.upper() + """_KEYS_P_H
-#define QFB_""" + className.upper() + """_KEYS_P_H
-
-// Warning
-//
-// This file exists for the convenience
-// of other qfb classes.
-// This header file may change from version
-// to version without notice or even be removed.
-
-/**
- * @internal
- * @file """ + className.lower() + """_keys_p.h
- * @brief Definition of internal keys associated to QFB::""" + className + """
- */
-
-namespace QFB
-{
-
-"""
-    for variable in variables:
-        if variable["type"] != "TODO" and variable["type"] != "NO" and variable["type"] != "":
-            if variable["name"] != "id" and variable["name"] != "name":
-                splittedName = qfbtools.split(variable["name"])
-                keys += """/**
- * @internal
- * @brief """ + qfbtools.staticKey(splittedName, className) + """
- */
-static const char *""" + qfbtools.staticKey(splittedName, className) + " = "
-                keys += "\"" + variable["name"] + "\";\n"
-
-    keys += """
-}
-
-#endif // QFB_""" + className.upper() + """_KEYS_P_H
-"""
-
-
-    keysFile = open(className.lower() + "_keys_p.h", "w")
-    keysFile.write(keys)
-    keysFile.close()
 
 # Main
 if __name__ == "__main__":

@@ -23,10 +23,96 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/post_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief POST_FROM_KEY
+ */
+static const char *POST_FROM_KEY = "from";
+/**
+ * @internal
+ * @brief POST_TO_KEY
+ */
+static const char *POST_TO_KEY = "to";
+/**
+ * @internal
+ * @brief POST_MESSAGE_KEY
+ */
+static const char *POST_MESSAGE_KEY = "message";
+/**
+ * @internal
+ * @brief POST_PICTURE_KEY
+ */
+static const char *POST_PICTURE_KEY = "picture";
+/**
+ * @internal
+ * @brief POST_LINK_KEY
+ */
+static const char *POST_LINK_KEY = "link";
+/**
+ * @internal
+ * @brief POST_CAPTION_KEY
+ */
+static const char *POST_CAPTION_KEY = "caption";
+/**
+ * @internal
+ * @brief POST_DESCRIPTION_KEY
+ */
+static const char *POST_DESCRIPTION_KEY = "description";
+/**
+ * @internal
+ * @brief POST_SOURCE_KEY
+ */
+static const char *POST_SOURCE_KEY = "source";
+/**
+ * @internal
+ * @brief POST_ICON_KEY
+ */
+static const char *POST_ICON_KEY = "icon";
+/**
+ * @internal
+ * @brief POST_TYPE_KEY
+ */
+static const char *POST_TYPE_KEY = "type";
+/**
+ * @internal
+ * @brief POST_LIKES_KEY
+ */
+static const char *POST_LIKES_KEY = "likes";
+/**
+ * @internal
+ * @brief POST_STORY_KEY
+ */
+static const char *POST_STORY_KEY = "story";
+/**
+ * @internal
+ * @brief POST_COMMENTS_KEY
+ */
+static const char *POST_COMMENTS_KEY = "comments";
+/**
+ * @internal
+ * @brief POST_OBJECT_ID_KEY
+ */
+static const char *POST_OBJECT_ID_KEY = "object_id";
+/**
+ * @internal
+ * @brief POST_APPLICATION_KEY
+ */
+static const char *POST_APPLICATION_KEY = "application";
+/**
+ * @internal
+ * @brief POST_CREATED_TIME_KEY
+ */
+static const char *POST_CREATED_TIME_KEY = "created_time";
+/**
+ * @internal
+ * @brief POST_UPDATED_TIME_KEY
+ */
+static const char *POST_UPDATED_TIME_KEY = "updated_time";
+
 
 /**
  * @internal

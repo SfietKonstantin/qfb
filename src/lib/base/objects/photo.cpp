@@ -23,10 +23,66 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/photo_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief PHOTO_FROM_KEY
+ */
+static const char *PHOTO_FROM_KEY = "from";
+/**
+ * @internal
+ * @brief PHOTO_ICON_KEY
+ */
+static const char *PHOTO_ICON_KEY = "icon";
+/**
+ * @internal
+ * @brief PHOTO_PICTURE_KEY
+ */
+static const char *PHOTO_PICTURE_KEY = "picture";
+/**
+ * @internal
+ * @brief PHOTO_SOURCE_KEY
+ */
+static const char *PHOTO_SOURCE_KEY = "source";
+/**
+ * @internal
+ * @brief PHOTO_HEIGHT_KEY
+ */
+static const char *PHOTO_HEIGHT_KEY = "height";
+/**
+ * @internal
+ * @brief PHOTO_WIDTH_KEY
+ */
+static const char *PHOTO_WIDTH_KEY = "width";
+/**
+ * @internal
+ * @brief PHOTO_IMAGES_KEY
+ */
+static const char *PHOTO_IMAGES_KEY = "images";
+/**
+ * @internal
+ * @brief PHOTO_LINK_KEY
+ */
+static const char *PHOTO_LINK_KEY = "link";
+/**
+ * @internal
+ * @brief PHOTO_CREATED_TIME_KEY
+ */
+static const char *PHOTO_CREATED_TIME_KEY = "created_time";
+/**
+ * @internal
+ * @brief PHOTO_UPDATED_TIME_KEY
+ */
+static const char *PHOTO_UPDATED_TIME_KEY = "updated_time";
+/**
+ * @internal
+ * @brief PHOTO_POSITION_KEY
+ */
+static const char *PHOTO_POSITION_KEY = "position";
+
 
 /**
  * @internal

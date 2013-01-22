@@ -22,10 +22,16 @@
 #include "object.h"
 #include "private/objectbase_p.h"
 #include "private/object_keys_p.h"
-#include "private/object_type_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief OBJECT_TYPE_KEY
+ */
+static const char *OBJECT_TYPE_KEY = "__qfb__object_type__";
+
 
 Object::Object(QObject *parent):
     ObjectBase(parent)

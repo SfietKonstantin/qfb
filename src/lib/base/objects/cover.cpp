@@ -23,10 +23,21 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/cover_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief COVER_SOURCE_KEY
+ */
+static const char *COVER_SOURCE_KEY = "source";
+/**
+ * @internal
+ * @brief COVER_OFFSET_Y_KEY
+ */
+static const char *COVER_OFFSET_Y_KEY = "offset_y";
+
 
 /**
  * @internal

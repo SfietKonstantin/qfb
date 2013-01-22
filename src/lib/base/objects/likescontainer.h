@@ -30,9 +30,9 @@
 namespace QFB {
 class LikesContainerPrivate;
 /**
- * @short A likes container
+ * @short A likescontainer
  *
- * This class represents a likes container in Facebook.
+ * This class represents a likescontainer in Facebook.
  * Extending QFB::ObjectBase, it contains a lot of properties
  * that can be accessed through
  * - count()
@@ -49,7 +49,7 @@ class LikesContainerPrivate;
  * @endcode
  *
  * These parameters should be added to the query that is used
- * to get a likes container.
+ * to get a likescontainer.
  */
 class QFBBASE_EXPORT LikesContainer: public ObjectBase
 {

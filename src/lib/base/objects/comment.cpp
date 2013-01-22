@@ -23,10 +23,36 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/comment_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief COMMENT_FROM_KEY
+ */
+static const char *COMMENT_FROM_KEY = "from";
+/**
+ * @internal
+ * @brief COMMENT_MESSAGE_KEY
+ */
+static const char *COMMENT_MESSAGE_KEY = "message";
+/**
+ * @internal
+ * @brief COMMENT_CREATED_TIME_KEY
+ */
+static const char *COMMENT_CREATED_TIME_KEY = "created_time";
+/**
+ * @internal
+ * @brief COMMENT_USER_LIKES_KEY
+ */
+static const char *COMMENT_USER_LIKES_KEY = "user_likes";
+/**
+ * @internal
+ * @brief COMMENT_TYPE_KEY
+ */
+static const char *COMMENT_TYPE_KEY = "type";
+
 
 /**
  * @internal

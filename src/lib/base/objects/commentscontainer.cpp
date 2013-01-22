@@ -23,10 +23,21 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/commentscontainer_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief COMMENTSCONTAINER_COUNT_KEY
+ */
+static const char *COMMENTSCONTAINER_COUNT_KEY = "count";
+/**
+ * @internal
+ * @brief COMMENTSCONTAINER_DATA_KEY
+ */
+static const char *COMMENTSCONTAINER_DATA_KEY = "data";
+
 
 /**
  * @internal

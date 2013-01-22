@@ -23,10 +23,26 @@
 #include "private/helper_p.h"
 #include "private/objectbase_p.h"
 #include "private/object_creator_p.h"
-#include "private/photoinformations_keys_p.h"
 
 namespace QFB
 {
+
+/**
+ * @internal
+ * @brief PHOTOINFORMATIONS_WIDTH_KEY
+ */
+static const char *PHOTOINFORMATIONS_WIDTH_KEY = "width";
+/**
+ * @internal
+ * @brief PHOTOINFORMATIONS_HEIGHT_KEY
+ */
+static const char *PHOTOINFORMATIONS_HEIGHT_KEY = "height";
+/**
+ * @internal
+ * @brief PHOTOINFORMATIONS_SOURCE_KEY
+ */
+static const char *PHOTOINFORMATIONS_SOURCE_KEY = "source";
+
 
 /**
  * @internal
