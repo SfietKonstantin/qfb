@@ -19,6 +19,7 @@
 
 #include <QtCore/QObject>
 #include "objects/post.h"
+#include "models/photolistmodel.h"
 
 class PageManagementBridge : public QObject
 {
@@ -39,6 +40,7 @@ signals:
     void addPostPageRequested(const QString &facebookId, const QString &name,
                               const QString &coverUrl,
                               QFB::Post *post);
+    void showPhotoRequested(QFB::PhotoListModel *model, int index);
     void showFeedDialogRequested(const QString &to);
 public slots:
     void pop();
@@ -49,6 +51,7 @@ public slots:
     void addPhotoListPage(const QString &facebookId, const QString &name, const QString &coverUrl);
     void addPostPage(const QString &facebookId, const QString &name, const QString &coverUrl,
                      QFB::Post *post);
+    void showPhoto(QFB::PhotoListModel *model, int index);
     void showFeedDialog(const QString &to);
 
 };

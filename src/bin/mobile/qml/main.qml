@@ -144,6 +144,12 @@ PageStackWindow {
                                                  "coverUrl": coverUrl, "post": post})
             newPage.load()
         }
+        onShowPhotoRequested: {
+            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoViewerPage.qml"),
+                                                {"model": model})
+            newPage.position(index)
+        }
+
         onShowFeedDialogRequested: {
             feedDialogSheet.to = to
             feedDialogSheet.showDialog()

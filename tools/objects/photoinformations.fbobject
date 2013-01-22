@@ -1,0 +1,11 @@
+PhotoInformations
+<QtCore/QUrl>
+---
+Width of the photo
+int width
+---
+Height of the photo
+int height
+---
+Source of the photo
+QUrl source

@@ -41,6 +41,7 @@ Item {
         spacing: Ui.MARGIN_DEFAULT
 
         Repeater {
+            id: repeater
             model: QFBPhotoListModel {
                 id: model
                 queryManager: QUERY_MANAGER
@@ -69,7 +70,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: console.debug(model.data.facebookId)
+                    onClicked: PAGE_MANAGEMENT_BRIDGE.showPhoto(repeater.model, model.index)
                 }
             }
         }

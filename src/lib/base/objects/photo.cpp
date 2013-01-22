@@ -45,6 +45,11 @@ public:
      * @short From
      */
     NamedObject * from;
+    /**
+     * @internal
+     * @short List of images
+     */
+    QList<PhotoInformations *> images;
 };
 
 PhotoPrivate::PhotoPrivate():
@@ -70,6 +75,9 @@ Photo::Photo(const QVariantMap propertiesMap, QObject *parent):
     // Create from
     QVariantMap fromData = d->propertiesMap.take(PHOTO_FROM_KEY).toMap();
     d->from = createObject<NamedObject>(fromData, this);
+    // Create images
+    QVariantList imagesData = d->propertiesMap.take(PHOTO_IMAGES_KEY).toList();
+    d->images = createList<PhotoInformations>(imagesData, this);
     // <<<<< custom object creation code
 }
 
@@ -119,6 +127,14 @@ int Photo::width() const
     // >>>>> property width
     return d->propertiesMap.value(PHOTO_WIDTH_KEY).toString().toInt();
     // <<<<< property width
+}
+
+QList<PhotoInformations *> Photo::images() const
+{
+    Q_D(const Photo);
+    // >>>>> property images
+    return d->images;
+    // <<<<< property images
 }
 
 QUrl Photo::link() const

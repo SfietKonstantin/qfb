@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_PHOTO_KEYS_P_H
-#define QFB_PHOTO_KEYS_P_H
+#ifndef QFB_PHOTOINFORMATIONS_KEYS_P_H
+#define QFB_PHOTOINFORMATIONS_KEYS_P_H
 
 // Warning
 //
@@ -26,8 +26,8 @@
 
 /**
  * @internal
- * @file photo_keys_p.h
- * @brief Definition of internal keys associated to QFB::Photo
+ * @file photoinformations_keys_p.h
+ * @brief Definition of internal keys associated to QFB::PhotoInformations
  */
 
 namespace QFB
@@ -35,60 +35,20 @@ namespace QFB
 
 /**
  * @internal
- * @brief PHOTO_FROM_KEY
+ * @brief PHOTOINFORMATIONS_WIDTH_KEY
  */
-static const char *PHOTO_FROM_KEY = "from";
+static const char *PHOTOINFORMATIONS_WIDTH_KEY = "width";
 /**
  * @internal
- * @brief PHOTO_ICON_KEY
+ * @brief PHOTOINFORMATIONS_HEIGHT_KEY
  */
-static const char *PHOTO_ICON_KEY = "icon";
+static const char *PHOTOINFORMATIONS_HEIGHT_KEY = "height";
 /**
  * @internal
- * @brief PHOTO_PICTURE_KEY
+ * @brief PHOTOINFORMATIONS_SOURCE_KEY
  */
-static const char *PHOTO_PICTURE_KEY = "picture";
-/**
- * @internal
- * @brief PHOTO_SOURCE_KEY
- */
-static const char *PHOTO_SOURCE_KEY = "source";
-/**
- * @internal
- * @brief PHOTO_HEIGHT_KEY
- */
-static const char *PHOTO_HEIGHT_KEY = "height";
-/**
- * @internal
- * @brief PHOTO_WIDTH_KEY
- */
-static const char *PHOTO_WIDTH_KEY = "width";
-/**
- * @internal
- * @brief PHOTO_IMAGES_KEY
- */
-static const char *PHOTO_IMAGES_KEY = "images";
-/**
- * @internal
- * @brief PHOTO_LINK_KEY
- */
-static const char *PHOTO_LINK_KEY = "link";
-/**
- * @internal
- * @brief PHOTO_CREATED_TIME_KEY
- */
-static const char *PHOTO_CREATED_TIME_KEY = "created_time";
-/**
- * @internal
- * @brief PHOTO_UPDATED_TIME_KEY
- */
-static const char *PHOTO_UPDATED_TIME_KEY = "updated_time";
-/**
- * @internal
- * @brief PHOTO_POSITION_KEY
- */
-static const char *PHOTO_POSITION_KEY = "position";
+static const char *PHOTOINFORMATIONS_SOURCE_KEY = "source";
 
 }
 
-#endif // QFB_PHOTO_KEYS_P_H
+#endif // QFB_PHOTOINFORMATIONS_KEYS_P_H

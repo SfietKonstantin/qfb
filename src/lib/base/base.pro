@@ -30,6 +30,7 @@ PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/cover_keys_p.h \
                     objects/likescontainer_keys_p.h \
                     private/photo_keys_p.h \
+                    private/photoinformations_keys_p.h \
                     private/post_keys_p.h \
                     private/user_keys_p.h
 # Private headers for processors
@@ -56,6 +57,7 @@ PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/cover.h \
                     objects/likescontainer.h \
                     objects/photo.h \
+                    objects/photoinformations.h \
                     objects/post.h \
                     objects/user.h
 # Processors
@@ -87,6 +89,7 @@ SOURCES +=  objects/objectbase.cpp \
             objects/cover.cpp \
             objects/likescontainer.cpp \
             objects/photo.cpp \
+            objects/photoinformations.cpp \
             objects/post.cpp \
             objects/user.cpp
 # Processors

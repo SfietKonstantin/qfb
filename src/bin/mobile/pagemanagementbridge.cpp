@@ -61,6 +61,11 @@ void PageManagementBridge::addPostPage(const QString &facebookId, const QString 
     emit addPostPageRequested(facebookId, name, coverUrl, post);
 }
 
+void PageManagementBridge::showPhoto(QFB::PhotoListModel *model, int index)
+{
+    emit showPhotoRequested(model, index);
+}
+
 void PageManagementBridge::showFeedDialog(const QString &to)
 {
     if (to == "me") {

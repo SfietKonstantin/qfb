@@ -1,5 +1,6 @@
 Photo
 "namedobject.h"
+"photoinformations.h"
 <QtCore/QUrl>
 <QtCore/QDateTime>
 ---
@@ -60,7 +61,9 @@ Requires an access token or \e user_photos
 or \e friend_photos.
 int width
 ---
-images
+The 4 different stored representations of the photo
+
+<list> PhotoInformations * images
 ---
 A link to the photo on Facebook
 

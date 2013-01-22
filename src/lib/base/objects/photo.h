@@ -24,6 +24,7 @@
 
 #include "namedobject.h"
 // >>>>> includes
+#include "photoinformations.h"
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>
 // <<<<< includes
@@ -63,7 +64,7 @@ class PhotoPrivate;
  *
  * @section missing Missing properties
  *
- * Some fields such as tags, nameTags, images, place
+ * Some fields such as tags, nameTags, place
  * are not yet implemented.
  */
 class QFBBASE_EXPORT Photo: public NamedObject
@@ -116,7 +117,6 @@ class QFBBASE_EXPORT Photo: public NamedObject
      * or \e friend_photos.
      */
     Q_PROPERTY(int width READ width CONSTANT)
-    /// @todo images
     /**
      * @short A link to the photo on Facebook
      * 
@@ -190,6 +190,11 @@ public:
      * @return width.
      */
     int width() const;
+    /**
+     * @brief Images
+     * @return images.
+     */
+    QList<PhotoInformations *> images() const;
     /**
      * @brief Link
      * @return link.

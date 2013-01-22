@@ -59,6 +59,7 @@ class AbstractProcessorPrivate;
  * better way, focusing on the passed graph and arguments.
  *
  * @see AbstractGraphProcessor
+ * @todo better doc
  */
 class QFBBASE_EXPORT AbstractProcessor : public QObject, public QRunnable
 {
