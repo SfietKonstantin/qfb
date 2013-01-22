@@ -22,6 +22,7 @@ PRIVATE_HEADERS +=  private/helper_p.h \
 # Private headers for objects
 PRIVATE_HEADERS +=  private/objectbase_p.h \
                     private/object_keys_p.h \
+                    private/object_type_keys_p.h \
                     private/namedobject_keys_p.h
 # Private headers for processors
 PRIVATE_HEADERS +=  private/object_creator_p.h \
