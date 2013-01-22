@@ -154,11 +154,6 @@ public:
      */
     void setId(int id);
     /**
-     * @brief Set the preprocessor data
-     * @param preprocessorData preprocessor data to set.
-     */
-    void setPreprocessorData(const PreprocessorData &preprocessorData);
-    /**
      * @brief Set the request type
      * @param type request type to set.
      */

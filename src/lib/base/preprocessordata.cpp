@@ -58,13 +58,13 @@ PreprocessorData::~PreprocessorData()
 {
 }
 
-QVariant & PreprocessorData::operator [](const QString &key)
+QVariant & PreprocessorData::operator[](const QString &key)
 {
     Q_D(PreprocessorData);
     return d->data[key];
 }
 
-QVariant PreprocessorData::operator [](const QString &key) const
+QVariant PreprocessorData::operator[](const QString &key) const
 {
     Q_D(const PreprocessorData);
     return d->data.value(key);
@@ -94,16 +94,16 @@ QList<ArgumentPair> PreprocessorData::arguments() const
     return d->arguments;
 }
 
-QByteArray PreprocessorData::postData() const
-{
-    Q_D(const PreprocessorData);
-    return d->postData;
-}
-
 QVariantMap PreprocessorData::data() const
 {
     Q_D(const PreprocessorData);
     return d->data;
+}
+
+QByteArray PreprocessorData::postData() const
+{
+    Q_D(const PreprocessorData);
+    return d->postData;
 }
 
 void PreprocessorData::setOperation(OperationType operationType)
@@ -135,15 +135,16 @@ void PreprocessorData::setArguments(const QList<ArgumentPair> &arguments)
     d->arguments = arguments;
 }
 
-void PreprocessorData::setPostData(const QByteArray &postData)
-{
-    Q_D(PreprocessorData);
-    d->postData = postData;
-}
 void PreprocessorData::setData(const QVariantMap &data)
 {
     Q_D(PreprocessorData);
     d->data = data;
+}
+
+void PreprocessorData::setPostData(const QByteArray &postData)
+{
+    Q_D(PreprocessorData);
+    d->postData = postData;
 }
 
 }

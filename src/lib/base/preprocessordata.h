@@ -38,12 +38,51 @@ struct PreprocessorDataPrivate: public QSharedData
     QVariantMap data;
 };
 
-
+/**
+ * @brief Preprocessed data
+ *
+ * This class is used to store the data that should
+ * be preprocessed. It contains a lot of properties,
+ * that might not be used all the time.
+ *
+ * The url() property is used to store the URL of
+ * the query. It can be preprocessed, and can be
+ * changed in order to handle redirections.
+ *
+ * The operation() property is used to contain the
+ * operation that is being carried out. It is used
+ * internally, and should not be changed.
+ *
+ * graph() and arguments() are used to contain
+ * the Facebook graph and arguments that are used
+ * to perform a call through Facebook graph API.
+ * Typically, they can be changed during a
+ * preprocessing task.
+ *
+ * data() and postData() are used for the data
+ * preprocessing. While data() contains the
+ * data to be sent as a variant map, before
+ * preprocessing, postData() contains the data to
+ * be sent after preprocessing. This can be useful
+ * if, for example, as a data to be preprocessed is
+ * passed the path to an image, and the preprocessor
+ * opens the image and serializes it.
+ */
 class QFBBASE_EXPORT PreprocessorData
 {
 public:
+    /**
+     * @brief Default constructor
+     */
     explicit PreprocessorData();
+    /**
+     * @brief Copy constructor
+     * @param other other preprocessor data.
+     */
     PreprocessorData(const PreprocessorData &other);
+    /**
+     * @brief Destructor
+     */
     virtual ~PreprocessorData();
     QVariant & operator[](const QString &key);
     QVariant operator[](const QString &key) const;
@@ -51,15 +90,15 @@ public:
     QUrl url() const;
     QString graph() const;
     QList<ArgumentPair> arguments() const;
-    QByteArray postData() const;
     QVariantMap data() const;
+    QByteArray postData() const;
     void setOperation(OperationType operationType);
     void setUrl(const QUrl &url);
     void setGraph(const QString &graph);
     void setArguments(const QString &arguments);
     void setArguments(const QList<ArgumentPair> &arguments);
-    void setPostData(const QByteArray &postData);
     void setData(const QVariantMap &data);
+    void setPostData(const QByteArray &postData);
 private:
     QExplicitlySharedDataPointer<PreprocessorDataPrivate> d_ptr;
     Q_DECLARE_PRIVATE(PreprocessorData)

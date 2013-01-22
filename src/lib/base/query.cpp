@@ -105,12 +105,6 @@ void Query::setId(int id)
     d->id = id;
 }
 
-void Query::setPreprocessorData(const PreprocessorData &preprocessorData)
-{
-    Q_D(Query);
-    d->preprocessorData = preprocessorData;
-}
-
 void Query::setType(RequestType type)
 {
     Q_D(Query);

@@ -39,7 +39,7 @@ class AbstractProcessorPrivate;
  * @brief Base class for a processor
  *
  * A processor is responsible for performing preprocessing
- * on an URL or a grap, as well as doing post processing,
+ * on an URL or a graph, as well as doing post processing,
  * that is converting a reply from Facebook, that is basically
  * a QIODevice, to something formatted, like a Facebook object,
  * that takes the form of a QObject.
@@ -54,12 +54,17 @@ class AbstractProcessorPrivate;
  * Subclasses of that class provides specific implementations
  * as well as getter for processed information.
  *
- * This class do not provide a specific way of doing
- * preprocessing. AbstractGraphProcessor provides a
- * better way, focusing on the passed graph and arguments.
+ * This class provides a virtual method that perform post
+ * preprocessing. By default, this method do not perform anything.
+ * In order to do post data preprocessing, you should reimplement
+ * this method.
+ *
+ * This class do not provide any other preprocessing method. Instead
+ * it use the generic preprocess() pure virtual method.
+ * AbstractGraphProcessor provides a better method, focusing on the
+ * passed graph and arguments.
  *
  * @see AbstractGraphProcessor
- * @todo better doc
  */
 class QFBBASE_EXPORT AbstractProcessor : public QObject, public QRunnable
 {
@@ -158,6 +163,18 @@ protected:
      * @return if the preprocessing task is successful.
      */
     virtual bool preprocess() = 0;
+    /**
+     * @brief Process post data
+     *
+     * This method is used to perform a preprocessing of the data
+     * that will be posted. The data is passed through a variant map
+     * and should be converted to a byte array that will be posted.
+     *
+     * By default, this method do not do anything.
+     *
+     * @param data data to be posted.
+     * @return processed data.
+     */
     virtual QByteArray processPostData(const QVariantMap &data);
     /**
      * @brief Process data source
