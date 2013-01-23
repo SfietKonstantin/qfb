@@ -81,7 +81,7 @@ def createHeader(className, loadedClass):
     header += "     * @param arguments Arguments.\n"
     header += "     * @return Created request.\n"
     header += "     */\n"
-    header += "     Request createRequest(const QString &graph, const QString &arguments);\n"
+    header += "    Query createRequest(const QString &graph, const QString &arguments);\n"
     header += "    /**\n"
     header += "     * @brief Implementation of AbstractLoader::handleReply()\n"
     header += "     * @param processor Processor to handle.\n"
@@ -110,7 +110,7 @@ def createSource(className, loadedClass):
     source += "#include \"processors/objectprocessor.h\"\n\n"
     source += "#include \"objects/" + loadedClass.lower() + ".h\"\n"
 
-    source += "namespace QFB\n"
+    source += "\nnamespace QFB\n"
     source += "{\n\n"
 
     source += "class " + className + "Private: public AbstractLoaderPrivate\n"
@@ -140,14 +140,14 @@ def createSource(className, loadedClass):
     source += "    return d->" + qfbtools.lowerCamelCase(loadedClass) + ";\n"
     source += "}\n\n"
 
-    source += "Request " + className
+    source += "Query " + className
     source += "::createRequest(const QString &graph, const QString &arguments)\n"
     source += "{\n"
     source += "    if (queryManager()) {\n"
     source += "        return queryManager()->queryObject(Object::" + loadedClass + "Type, "
     source += "graph, arguments);\n"
     source += "    }\n"
-    source += "    return Request();\n"
+    source += "    return Query();\n"
     source += "}\n\n"
 
     source += """void """ + className + """::handleReply(AbstractProcessor *processor)

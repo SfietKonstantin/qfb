@@ -25,6 +25,7 @@
 #include "processors/objectprocessor.h"
 
 #include "objects/post.h"
+
 namespace QFB
 {
 

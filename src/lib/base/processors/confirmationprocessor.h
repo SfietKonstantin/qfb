@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,53 +14,31 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_CONFIRMATIONPROCESSOR_H
+#define QFB_CONFIRMATIONPROCESSOR_H
 
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "abstractgraphprocessor.h"
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
+class ConfirmationProcessorPrivate;
+class QFBBASE_EXPORT ConfirmationProcessor: public AbstractGraphProcessor
+{
+    Q_OBJECT
+public:
+    explicit ConfirmationProcessor(QObject *parent = 0);
+    bool ok() const;
+protected:
     /**
-     * @short An invalid request
+     * @brief Implementation of AbstractProcessor::processDataSource()
+     * @param data data to be posted.
+     * @return processed data.
      */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest,
-    SimpleCreateRequest,
-    ConfirmationRequest,
-    SimpleDeleteRequest
-};
-
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+    bool processDataSource(QIODevice *dataSource);
+private:
+    Q_DECLARE_PRIVATE(ConfirmationProcessor)
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_CONFIRMATIONPROCESSOR_H

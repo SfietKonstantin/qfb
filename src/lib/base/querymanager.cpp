@@ -33,6 +33,7 @@
 #include "processors/objectprocessor.h"
 #include "processors/objectlistprocessor.h"
 #include "processors/simplecreateobjectprocessor.h"
+#include "processors/confirmationprocessor.h"
 
 namespace QFB
 {
@@ -112,7 +113,28 @@ AbstractProcessor * QueryManagerPrivate::createProcessor(const WritableQuery &qu
         }
         break;
     case PostOperation:
-        processor = new SimpleCreateObjectProcessor(q);
+        switch (query.type()) {
+        case SimpleCreateRequest:
+            processor = new SimpleCreateObjectProcessor(q);
+            break;
+        case ConfirmationRequest:
+            processor = new ConfirmationProcessor(q);
+            break;
+        default:
+            break;
+        }
+        break;
+    case DeleteOperation:
+        switch (query.type()) {
+        case SimpleDeleteRequest:
+            processor = new ObjectProcessor(q);
+            break;
+        case ConfirmationRequest:
+            processor = new ConfirmationProcessor(q);
+            break;
+        default:
+            break;
+        }
         break;
     default:
         break;
@@ -319,9 +341,31 @@ Query QueryManager::queryObjectList(Object::ObjectType type, const QString &grap
 Query QueryManager::querySimpleCreate(const QString &graph, const QVariantMap &data)
 {
     Q_D(QueryManager);
-    return d->createGraphPreprocessor(SimplePostRequest, PostOperation, Object::UnknownType,
+    return d->createGraphPreprocessor(SimpleCreateRequest, PostOperation, Object::UnknownType,
                                       graph, QString(), data);
 }
+
+Query QueryManager::queryConfirmedCreate(const QString &graph)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(ConfirmationRequest, PostOperation, Object::UnknownType,
+                                      graph, QString(), QVariantMap());
+}
+
+Query QueryManager::querySimpleDelete(const QString &graph)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(SimpleDeleteRequest, DeleteOperation, Object::UnknownType,
+                                      graph, QString());
+}
+
+Query QueryManager::queryConfirmedDelete(const QString &graph)
+{
+    Q_D(QueryManager);
+    return d->createGraphPreprocessor(ConfirmationRequest, DeleteOperation, Object::UnknownType,
+                                      graph, QString());
+}
+
 
 void QueryManager::setToken(const QString &token)
 {

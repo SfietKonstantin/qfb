@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,53 +14,38 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
+#ifndef QFB_LIKELOADER_H
+#define QFB_LIKELOADER_H
 
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "abstractgraphloader.h"
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
-    /**
-     * @short An invalid request
-     */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest,
-    SimpleCreateRequest,
-    ConfirmationRequest,
-    SimpleDeleteRequest
-};
 
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
+class LikeLoaderPrivate;
+class QFBBASEIMPORT_EXPORT LikeLoader: public AbstractGraphLoader
+{
+    Q_OBJECT
+    Q_ENUMS(LikeOperation)
+    Q_PROPERTY(LikeOperation likeOperation READ likeOperation WRITE setLikeOperation
+               NOTIFY likeOperationChanged)
+public:
+    enum LikeOperation {
+        Like, Unlike
+    };
+    explicit LikeLoader(QObject *parent = 0);
+    LikeOperation likeOperation() const;
+public Q_SLOTS:
+    void setLikeOperation(LikeOperation likeOperation);
+Q_SIGNALS:
+    void likeOperationChanged();
+protected:
+    Query createRequest(const QString &graph, const QString &arguments);
+    void handleReply(AbstractProcessor *processor);
+private:
+    Q_DECLARE_PRIVATE(LikeLoader)
 };
 
 }
 
-#endif // QFB_QFB_H
+#endif // QFB_LIKELOADER_H

@@ -25,6 +25,7 @@
 #include "processors/objectprocessor.h"
 
 #include "objects/album.h"
+
 namespace QFB
 {
 

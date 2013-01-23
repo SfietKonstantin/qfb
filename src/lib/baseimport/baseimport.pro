@@ -25,6 +25,7 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/typeloader.h \
                     loaders/imageloader.h \
                     loaders/pictureloader.h \
+                    loaders/likeloader.h \
                     loaders/albumloader.h \
                     loaders/photoloader.h \
                     loaders/postloader.h \
@@ -48,6 +49,7 @@ SOURCES +=  loaders/abstractloader.cpp \
             loaders/typeloader.cpp \
             loaders/imageloader.cpp \
             loaders/pictureloader.cpp \
+            loaders/likeloader.cpp \
             loaders/albumloader.cpp \
             loaders/photoloader.cpp \
             loaders/postloader.cpp \

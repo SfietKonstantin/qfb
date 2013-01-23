@@ -114,6 +114,15 @@ void AbstractLoader::setQueryManager(QueryManager *queryManager)
     }
 }
 
+void AbstractLoader::setError(const QString &error)
+{
+    Q_D(AbstractLoader);
+    if (d->error != error) {
+        d->error = error;
+        emit errorChanged();
+    }
+}
+
 void AbstractLoader::setLoading(bool loading)
 {
     Q_D(AbstractLoader);
@@ -122,7 +131,7 @@ void AbstractLoader::setLoading(bool loading)
         emit loadingChanged();
 
         if (!d->loading) {
-            emit loaded();
+            emit loaded(d->error.isEmpty());
         }
     }
 }

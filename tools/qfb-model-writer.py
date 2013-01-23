@@ -98,7 +98,7 @@ protected:
      * @param arguments Arguments.
      * @return Created request.
      */
-    Request createRequest(const QString &graph, const QString &arguments);
+    Query createRequest(const QString &graph, const QString &arguments);
     /**
      * @brief Implementation of AbstractLoadableModel::handleReply()
      * @param processor Processor to handle.
@@ -203,13 +203,13 @@ QVariant """ + className + """::data(const QModelIndex &index, int role) const
     }
 }
 
-Request """ + className + """::createRequest(const QString &graph, const QString &arguments)
+Query """ + className + """::createRequest(const QString &graph, const QString &arguments)
 {
     if (queryManager()) {
         return queryManager()->queryObjectList(Object::""" + loadedClass
     source += """Type, graph, arguments);
     }
-    return Request();
+    return Query();
 }
 
 void """ + className + """::clear()

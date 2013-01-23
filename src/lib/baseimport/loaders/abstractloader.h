@@ -59,7 +59,7 @@ Q_SIGNALS:
      */
     void queryManagerChanged();
     void loadingChanged();
-    void loaded();
+    void loaded(bool ok);
     void errorChanged();
 protected:
     /**
@@ -68,6 +68,7 @@ protected:
      * @param parent parent object.
      */
     explicit AbstractLoader(AbstractLoaderPrivate &dd, QObject *parent = 0);
+    void setError(const QString &error);
     void setLoading(bool loading);
     void handleQuery(const Query &query);
     virtual void handleReply(AbstractProcessor *processor) = 0;

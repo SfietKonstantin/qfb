@@ -62,7 +62,8 @@ PUBLIC_HEADERS +=   processors/abstractprocessor.h \
                     processors/pictureprocessor.h \
                     processors/objectprocessor.h \
                     processors/objectlistprocessor.h \
-                    processors/simplecreateobjectprocessor.h
+                    processors/simplecreateobjectprocessor.h \
+                    processors/confirmationprocessor.h
 
 HEADERS =   $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS}
@@ -95,7 +96,8 @@ SOURCES +=  processors/abstractprocessor.cpp \
             processors/pictureprocessor.cpp \
             processors/objectprocessor.cpp \
             processors/objectlistprocessor.cpp \
-            processors/simplecreateobjectprocessor.cpp
+            processors/simplecreateobjectprocessor.cpp \
+            processors/confirmationprocessor.cpp
 
 # Deployment
 target.path = $${LIBDIR}

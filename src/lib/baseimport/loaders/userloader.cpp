@@ -25,6 +25,7 @@
 #include "processors/objectprocessor.h"
 #include <QtCore/QDebug>
 #include "objects/user.h"
+
 namespace QFB
 {
 

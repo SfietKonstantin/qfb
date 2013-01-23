@@ -123,7 +123,9 @@ public:
     Query queryObjectList(QFB::Object::ObjectType type, const QString &graph,
                             const QString &arguments = QString());
     Query querySimpleCreate(const QString &graph, const QVariantMap &data);
-//    Request querySimpleDelete(const QString &graph);
+    Query queryConfirmedCreate(const QString &graph);
+    Query querySimpleDelete(const QString &graph);
+    Query queryConfirmedDelete(const QString &graph);
 public Q_SLOTS:
     /**
      * @brief Set the access token

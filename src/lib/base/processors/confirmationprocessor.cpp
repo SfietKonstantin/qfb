@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,53 +14,49 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef QFB_QFB_H
-#define QFB_QFB_H
-
-/**
- * @file qfb.h
- * @short Global enumerations used in qfb
- */
-
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include "confirmationprocessor.h"
+#include <QtCore/QDebug>
+#include "private/abstractgraphprocessor_p.h"
 
 namespace QFB
 {
-/**
- * @brief Enumeration describing the request type
- */
-enum RequestType {
-    /**
-     * @short An invalid request
-     */
-    InvalidRequest,
-    /**
-     * @short A request for an image
-     */
-    ImageRequest,
-    /**
-     * @short A request to get a Facebook picture
-     */
-    PictureRequest,
-    /**
-     * @short A request to get the type of an object
-     */
-    TypeRequest,
-    /**
-     * @short A request to get a Facebook object
-     */
-    ObjectRequest,
-    ObjectListRequest,
-    SimpleCreateRequest,
-    ConfirmationRequest,
-    SimpleDeleteRequest
+
+static const char *TRUE_STRING = "true";
+
+class ConfirmationProcessorPrivate: public AbstractGraphProcessorPrivate
+{
+public:
+    explicit ConfirmationProcessorPrivate();
+    bool ok;
 };
 
-enum OperationType {
-    InvalidOperation, GetOperation, PostOperation, DeleteOperation
-};
-
+ConfirmationProcessorPrivate::ConfirmationProcessorPrivate():
+    AbstractGraphProcessorPrivate()
+{
+    ok = false;
 }
 
-#endif // QFB_QFB_H
+////// End of private class //////
+
+ConfirmationProcessor::ConfirmationProcessor(QObject *parent):
+    AbstractGraphProcessor(*(new ConfirmationProcessorPrivate), parent)
+{
+}
+
+bool ConfirmationProcessor::ok() const
+{
+    Q_D(const ConfirmationProcessor);
+    return d->ok;
+}
+
+bool ConfirmationProcessor::processDataSource(QIODevice *dataSource)
+{
+    /// @todo catch error
+    Q_D(ConfirmationProcessor);
+    QByteArray data = dataSource->readAll().trimmed();
+    qDebug() << data;
+    d->ok = (data == TRUE_STRING);
+    return true;
+}
+
+}
