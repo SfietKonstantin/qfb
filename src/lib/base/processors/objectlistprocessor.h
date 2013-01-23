@@ -17,6 +17,11 @@
 #ifndef QFB_OBJECTLISTPROCESSOR_H
 #define QFB_OBJECTLISTPROCESSOR_H
 
+/**
+ * @file objectlistprocessor.h
+ * @brief Definition of QFB::ObjectListProcessor
+ */
+
 #include "abstractpagingprocessor.h"
 
 namespace QFB
@@ -24,13 +29,39 @@ namespace QFB
 
 class Object;
 class ObjectListProcessorPrivate;
+/**
+ * @brief Processor used to get a list of object
+ *
+ * This processor is used to get a list of Facebook entity, that
+ * are represented as a list of QFB::Object. As with
+ * QFB::ObjectProcessor, this class make use of
+ * the type of object that is requested to determine what kind
+ * of object it is, and can return a specialized subclass of
+ * QFB::Object.
+ *
+ * Note that the type() field of the objects are never set.
+ * @todo set that field.
+ */
 class QFBBASE_EXPORT ObjectListProcessor: public AbstractPagingProcessor
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit ObjectListProcessor(QObject *parent = 0);
+    /**
+     * @brief List of objects
+     * @return list of object.
+     */
     QList<Object *> objectList() const;
 protected:
+    /**
+     * @brief Implementation of AbstractProcessor::processDataSource()
+     * @param data data to be posted.
+     * @return processed data.
+     */
     bool processDataSource(QIODevice *dataSource);
 private:
     Q_DECLARE_PRIVATE(ObjectListProcessor)

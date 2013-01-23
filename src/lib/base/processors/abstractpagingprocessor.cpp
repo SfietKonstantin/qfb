@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file abstractpagingprocessor.cpp
+ * @brief Implementation of QFB::AbstractPagingProcessor
+ */
+
 #include "abstractpagingprocessor.h"
 #include <QtCore/QDebug>
 #include <QtCore/QString>

@@ -17,6 +17,11 @@
 #ifndef QFB_OBJECTPROCESSOR_H
 #define QFB_OBJECTPROCESSOR_H
 
+/**
+ * @file objectprocessor.h
+ * @brief Definition of QFB::ObjectProcessor
+ */
+
 #include "abstractgraphprocessor.h"
 
 namespace QFB
@@ -24,11 +29,31 @@ namespace QFB
 
 class Object;
 class ObjectProcessorPrivate;
+/**
+ * @brief Processor used to get an object
+ *
+ * This processor is used to get a Facebook entity, that
+ * is represented as an QFB::Object. This class make use of
+ * the type of object that is requested to determine what kind
+ * of object it is, and can return a specialized subclass of
+ * QFB::Object.
+ *
+ * Note that the type() field of the object is never set.
+ * @todo set that field.
+ */
 class QFBBASE_EXPORT ObjectProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit ObjectProcessor(QObject *parent = 0);
+    /**
+     * @brief Object
+     * @return object.
+     */
     Object * object() const;
 protected:
     /**
@@ -37,6 +62,11 @@ protected:
      * @param parent parent object.
      */
     explicit ObjectProcessor(AbstractGraphProcessorPrivate &dd, QObject *parent);
+    /**
+     * @brief Implementation of AbstractProcessor::processDataSource()
+     * @param data data to be posted.
+     * @return processed data.
+     */
     bool processDataSource(QIODevice *dataSource);
 private:
     Q_DECLARE_PRIVATE(ObjectProcessor)

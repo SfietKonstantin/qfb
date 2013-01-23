@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file objectlistprocessor.cpp
+ * @brief Implementation of QFB::ObjectListProcessor
+ */
+
 #include "objectlistprocessor.h"
 #include "private/objectprocessor_p.h"
 #include <QtCore/QCoreApplication>

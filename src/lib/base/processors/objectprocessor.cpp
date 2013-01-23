@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file objectprocessor.cpp
+ * @brief Implementation of QFB::ObjectProcessor
+ */
+
 #include "objectprocessor.h"
 #include "private/objectprocessor_p.h"
 #include <QtCore/QCoreApplication>

@@ -61,20 +61,9 @@ struct QueryPrivate: public QSharedData
  *
  * This class contains all the information that is related
  * to a query. All queries have an unique id, that can be
- * accessed through id(). They also contains information
- * that should be preprocessed, and the type of request,
- * as well as the type of object that is expected. These
- * properties can be accessed with preprocessorData(),
- * type() and objectType().
- *
- * All these properties can also be modified, but only
- * the data that should be preprocessed should effectively
- * be changed (during the preprocessing phase). Other
- * data should only be set by the query manager.
- *
- * Please note that when comparing two queries, only
- * the id and the type are compared, and not the object
- * type or the preprocessed data.
+ * accessed through id(). They also contain the type of query
+ * that is being done (get, post etc.) and the type of
+ * object that is expected to be received.
  *
  * This class is explicitely shared.
  */

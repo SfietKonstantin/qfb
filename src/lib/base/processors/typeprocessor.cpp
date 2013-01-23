@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file typeprocessor.cpp
+ * @brief Implementation of QFB::TypeProcessor
+ */
+
 #include "typeprocessor.h"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -224,10 +229,22 @@ static const char *USER = "user";
  */
 static const char *VIDEO = "video";
 
+/**
+ * @internal
+ * @brief Private class for QFB::TypeProcessor
+ */
 class TypeProcessorPrivate: public AbstractGraphProcessorPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
     explicit TypeProcessorPrivate();
+    /**
+     * @internal
+     * @brief Object with type
+     */
     Object *object;
 };
 

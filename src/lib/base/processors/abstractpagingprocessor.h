@@ -17,6 +17,12 @@
 #ifndef QFB_ABSTRACTPAGINGPROCESSOR_H
 #define QFB_ABSTRACTPAGINGPROCESSOR_H
 
+/**
+ * @file abstractpagingprocessor.h
+ * @brief Definition of QFB::AbstractPagingProcessor
+ */
+
+
 #include "abstractgraphprocessor.h"
 #include <QtCore/QUrl>
 
@@ -24,12 +30,33 @@ namespace QFB
 {
 
 class AbstractPagingProcessorPrivate;
+/**
+ * @brief Base class for processors that have to deal with paging
+ *
+ * This class is a base class for all graph based queries that
+ * needs to deal with paging. It provides two methods that
+ * helps parsing the next and previous page url and that should
+ * be used to retrieve the next and previous page grah and the
+ * next and previous page arguments.
+ */
 class QFBBASE_EXPORT AbstractPagingProcessor: public AbstractGraphProcessor
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Default contructor
+     * @param parent parent object.
+     */
     explicit AbstractPagingProcessor(QObject *parent = 0);
+    /**
+     * @brief Graph used to get the previous page
+     * @return graph used to get the previous page.
+     */
     QString previousPageGraph() const;
+    /**
+     * @brief Arguments used to get the previous page
+     * @return arguments used to get the previous page.
+     */
     QString previousPageArguments() const;
     /**
      * @brief Graph used to get the next page
