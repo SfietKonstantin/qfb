@@ -28,7 +28,7 @@ namespace QFB
  */
 inline QList<ArgumentPair> createArguments(const QString &arguments)
 {
-    QStringList argumentList = arguments.split(",");
+    QStringList argumentList = arguments.split("&");
     QList<ArgumentPair> trueArguments;
     foreach (QString argument, argumentList) {
         int indexOfEqual = argument.indexOf("=");

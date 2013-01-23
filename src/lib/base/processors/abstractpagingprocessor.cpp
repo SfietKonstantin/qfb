@@ -57,7 +57,7 @@ inline QString extractArguments(const QUrl &url)
         }
     }
 
-    return parametersList.join(",");
+    return parametersList.join("&");
 }
 
 ////// End of private class //////

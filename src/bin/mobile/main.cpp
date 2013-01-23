@@ -27,7 +27,7 @@
 #include "loginmanager.h"
 #include "tokenmanager.h"
 #include "networkaccessmanagerfactory.h"
-#include "pagemanagementbridge.h"
+#include "me.h"
 
 int main(int argc, char **argv)
 {
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     QFB::QueryManager queryManager;
     QFB::LoginManager loginManager;
     TokenManager tokenManager;
-    PageManagementBridge pageManagementBridge;
+    Me me;
 
     qmlRegisterType<UserInfoHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBUserInfoHelper");
     qmlRegisterType<PostHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBPostHelper");
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     view.rootContext()->setContextProperty("QUERY_MANAGER", &queryManager);
     view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
     view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
-    view.rootContext()->setContextProperty("PAGE_MANAGEMENT_BRIDGE", &pageManagementBridge);
+    view.rootContext()->setContextProperty("ME", &me);
     view.rootContext()->setContextProperty("CLIENT_ID", "390204064393625");
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();

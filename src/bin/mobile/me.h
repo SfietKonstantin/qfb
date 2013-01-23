@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,33 +14,35 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import "UiConstants.js" as Ui
+#ifndef ME_H
+#define ME_H
 
-Rectangle {
-    property alias title: title.text
-    property alias content: content.children
-    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-    anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-    height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + content.height
-                      + Ui.MARGIN_DEFAULT
-                    : 0
-    color: !theme.inverted ? "white" : "black"
+#include <QtCore/QObject>
+#include <QtCore/QUrl>
 
-    Label {
-        id: title
-        anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        font.pixelSize: Ui.FONT_SIZE_LARGE
-    }
+class Me : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString facebookId READ facebookId WRITE setFacebookId NOTIFY facebookIdChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QUrl coverUrl READ coverUrl WRITE setCoverUrl NOTIFY coverUrlChanged)
+public:
+    explicit Me(QObject *parent = 0);
+    QString facebookId() const;
+    QString name() const;
+    QUrl coverUrl() const;
+public slots:
+    void setFacebookId(const QString &facebookId);
+    void setName(const QString &name);
+    void setCoverUrl(const QUrl &coverUrl);
+signals:
+    void facebookIdChanged();
+    void nameChanged();
+    void coverUrlChanged();
+private:
+    QString m_facebookId;
+    QString m_name;
+    QUrl m_coverUrl;
+};
 
-    Item {
-        id: content
-        anchors.top: title.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        height: childrenRect.height
-    }
-}
+#endif // ME_H

@@ -14,65 +14,58 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-
 import QtQuick 1.1
-import QtWebKit 1.0
 import com.nokia.meego 1.0
-import com.nokia.extras 1.1
-import "UiConstants.js" as Ui
+import org.SfietKonstantin.qfb 4.0
+import org.SfietKonstantin.qfb.mobile 4.0
+import "../UiConstants.js" as Ui
+import "../components"
 
-Sheet {
-    id: sheet
-    onRejected: Qt.quit()
-    rejectButtonText: qsTr("Cancel")
-    onStatusChanged: {
-        if (status == DialogStatus.Open) {
-            infoBanner.show()
+Item {
+    id: container
+    width: parent.width
+    height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
+                                                                : 0)
+    property bool loading: model.loading
+    property string graph
+    property int count: model.count
+    signal showAlbum(string facebookId)
+    function load() {
+        model.request(container.graph)
+    }
+
+    Column {
+        id: column
+        width: parent.width
+        spacing: Ui.MARGIN_DEFAULT
+
+        Repeater {
+            model: QFBAlbumListModel {
+                id: model
+                queryManager: QUERY_MANAGER
+            }
+
+            delegate: Item {
+                width: container.width
+                height: content.height
+
+                AlbumEntry {
+                    id: content
+                    facebookId: model.data.facebookId
+                    name: model.data.name
+                    queryManager: QUERY_MANAGER
+                    onClicked: container.showAlbum(model.data.facebookId)
+                }
+            }
         }
     }
 
-    content: Item {
-        anchors.fill: parent
-
-        Column {
-            anchors.centerIn: parent
-            spacing: Ui.MARGIN_DEFAULT
-            visible: webView.status != WebView.Ready
-
-            Label {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Loading")
-            }
-
-            ProgressBar {
-                width: sheet.width / 2
-                minimumValue: 0
-                maximumValue: 1
-                value: webView.progress
-            }
-        }
-
-        Flickable {
-            anchors.fill: parent
-            contentHeight: webView.height
-
-            WebView {
-                id: webView
-                visible: webView.status == WebView.Ready
-                width: parent.width
-                preferredWidth: parent.width
-                onUrlChanged: LOGIN_MANAGER.checkUrl(url)
-            }
-        }
-
-        InfoBanner {
-            id: infoBanner
-            text: qsTr("You might need to tap a field twice to display the keyboard")
-        }
-    }
-
-    Connections {
-        target: LOGIN_MANAGER
-        onUrlRequested: webView.url = url
+    LoadingButton {
+        id: button
+        anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        model: model
+        text: qsTr("Load more")
+        onClicked: model.loadNext()
+        haveMore: model.haveNext
     }
 }

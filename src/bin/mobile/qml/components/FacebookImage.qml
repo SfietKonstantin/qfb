@@ -14,59 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
-Item {
-    id: container
-    signal clicked
-    property QtObject comment
-
-    width: parent.width
-    height: content.height + 2 * Ui.MARGIN_DEFAULT
-
-    BorderImage {
-        id: background
-        anchors.fill: parent
-        visible: mouseArea.pressed
-        source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
-                "-background-pressed-center"
-    }
-
-    FacebookPicture {
-        id: picture
-        anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.left: parent.left; anchors.leftMargin: 2 * Ui.MARGIN_DEFAULT
-        facebookId: container.comment.from.facebookId
-        pictureType: QFBPictureLoader.Square
-    }
-
-    Column {
-        id: content
-        anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: parent.right; anchors.rightMargin: 2 * Ui.MARGIN_DEFAULT
-
-        Label {
-            id: name
-            width: content.width
-            font.pixelSize: Ui.FONT_SIZE_SMALL
-            text: container.comment.from.name
+Image {
+    id: image
+    property string url
+    property QtObject queryManager
+    onUrlChanged: imageLoader.request(url)
+    smooth: true
+    source: imageLoader.imagePath
+    asynchronous: true
+    opacity: 0
+    states: State {
+        name: "visible"; when: image.status == Image.Ready
+        PropertyChanges {
+            target: image
+            opacity: 1
         }
-
-        Label {
-            id: message
-            width: content.width
-            text: container.comment.message
-        }
-
+    }
+    Behavior on opacity {
+        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: container
-        onClicked: container.clicked()
+    QFBImageLoader {
+        id: imageLoader
+        queryManager: image.queryManager
+        Component.onCompleted: request(image.url)
     }
 }

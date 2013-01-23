@@ -16,40 +16,12 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
-Page {
-    id: container
-    property QtObject model
-    function load() {
-        photoList.load()
-    }
-
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
-        }
-    }
-
-    ListView {
-        id: view
-        anchors.fill: parent
-        orientation: ListView.Horizontal
-        model: container.model
-        delegate: Rectangle {
-            color: "black"
-            width: view.width
-            height: view.height
-
-            FacebookPicture {
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                pictureType: QFBPictureLoader.Large
-                facebookId: model.data.facebookId
-            }
-        }
-    }
+Label {
+    anchors.fill: parent
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    font.pixelSize: Ui.FONT_SIZE_XXLARGE
+    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
 }

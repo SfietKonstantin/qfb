@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,43 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef USERINFOHELPER_H
-#define USERINFOHELPER_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import "../UiConstants.js" as Ui
 
-#include <QtCore/QObject>
-#include "objects/user.h"
+BusyIndicator {
+    id: container
+    property bool loading: false
+    property bool inverted: false
+    anchors.centerIn: parent
+    visible: loading
+    running: loading
 
-class UserInfoHelper : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QFB::User * user READ user WRITE setUser NOTIFY userChanged)
-    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
-    Q_PROPERTY(QString formattedInformations READ formattedInformations
-               NOTIFY formattedInformationsChanged)
-    Q_PROPERTY(QString bio READ bio NOTIFY bioChanged)
-    Q_PROPERTY(QString quotes READ quotes NOTIFY quotesChanged)
-public:
-    explicit UserInfoHelper(QObject *parent = 0);
-    QFB::User * user() const;
-    bool isValid() const;
-    QString formattedInformations() const;
-    QString bio() const;
-    QString quotes() const;
-public slots:
-    void setUser(QFB::User *user);
-signals:
-    void validChanged();
-    void formattedInformationsChanged();
-    void userChanged();
-    void bioChanged();
-    void quotesChanged();
-private:
-    void createText();
-    QFB::User *m_user;
-    bool m_valid;
-    QString m_formattedInformations;
-    QString m_bio;
-    QString m_quotes;
-};
-
-#endif // USERINFOHELPER_H
+    style: BusyIndicatorStyle {
+        inverted: container.inverted
+    }
+}

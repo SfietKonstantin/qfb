@@ -14,22 +14,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+
 import QtQuick 1.1
+import QtWebKit 1.0
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
-import org.SfietKonstantin.qfb.dialogs 4.0
-import "UiConstants.js" as Ui
-import QtWebKit 1.0
+import "../UiConstants.js" as Ui
 
 Sheet {
     id: sheet
-    property alias to: feedDialogManager.to
-    function showDialog() {
-        webView.url = ""
-        feedDialogManager.displayDialog()
-        sheet.open()
-    }
-    rejectButtonText: qsTr("Close dialog")
+    signal failed()
+    onRejected: failed()
+    rejectButtonText: qsTr("Cancel")
     onStatusChanged: {
         if (status == DialogStatus.Open) {
             infoBanner.show()
@@ -57,13 +53,17 @@ Sheet {
             }
         }
 
-
-        WebView {
-            id: webView
-            visible: webView.status == WebView.Ready
+        Flickable {
             anchors.fill: parent
-            preferredWidth: parent.width
-            onUrlChanged: feedDialogManager.checkUrl(url)
+            contentHeight: webView.height
+
+            WebView {
+                id: webView
+                visible: webView.status == WebView.Ready
+                width: parent.width
+                preferredWidth: parent.width
+                onUrlChanged: LOGIN_MANAGER.checkUrl(url)
+            }
         }
 
         InfoBanner {
@@ -72,11 +72,8 @@ Sheet {
         }
     }
 
-    QFBFeedDialogManager {
-        id: feedDialogManager
-        clientId: CLIENT_ID
+    Connections {
+        target: LOGIN_MANAGER
         onUrlRequested: webView.url = url
-        onPostFailed: reject()
-        onPostSucceeded: accept()
     }
 }

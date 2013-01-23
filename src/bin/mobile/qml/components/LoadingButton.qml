@@ -16,62 +16,31 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
 Item {
     id: container
+    property QtObject model
+    property string text
+    property bool haveMore: true
+    signal clicked()
+    visible: haveMore
     width: parent.width
-    height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
-                                                                : 0)
-    property bool loading: model.loading
-    property string graph
-    property int count: model.count
-    signal showAlbum(string facebookId)
-    function load() {
-        model.request(container.graph)
-    }
-
-    Column {
-        id: column
-        width: parent.width
-        spacing: Ui.MARGIN_DEFAULT
-
-        Repeater {
-            model: QFBAlbumListModel {
-                id: model
-                queryManager: QUERY_MANAGER
-            }
-
-            delegate: Item {
-                width: container.width
-                height: content.height
-
-                AlbumEntry {
-                    id: content
-                    facebookId: model.data.facebookId
-                    name: model.data.name
-                    onClicked: container.showAlbum(model.data.facebookId)
-                }
-            }
-        }
-    }
+    height: haveMore ? button.height : 0
 
     BusyIndicator {
         anchors.verticalCenter: button.verticalCenter
         anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        visible: model.loading
+        visible: container.model.loading
         running: visible
     }
 
     Button {
         id: button
-        visible: (model.haveNext && model.count > 0) || model.loading
-        anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        visible: (container.model.haveNext && container.model.count > 0) || container.model.loading
         anchors.horizontalCenter: parent.horizontalCenter
-        text: !model.loading ? qsTr("Load more") : qsTr("Loading")
-        enabled: !model.loading
-        onClicked: model.loadNext()
+        text: !container.model.loading ? container.text : qsTr("Loading")
+        enabled: !container.model.loading
+        onClicked: container.clicked()
     }
 }

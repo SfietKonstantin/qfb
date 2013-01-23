@@ -18,12 +18,14 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../components"
 
 Page {
     id: container
     property QtObject model
-    function position(index) {
+    function setPosition(index) {
         view.positionViewAtIndex(index, ListView.Contain)
     }
 
@@ -49,6 +51,7 @@ Page {
                 id: image
                 anchors.fill: parent
                 anchors.margins: Ui.MARGIN_XSMALL
+                queryManager: QUERY_MANAGER
                 source: model.data.source
                 fillMode: Image.PreserveAspectFit
                 onScaleChanged: {
@@ -56,13 +59,9 @@ Page {
                 }
             }
 
-            BusyIndicator {
-                style: BusyIndicatorStyle {
-                    inverted: true
-                }
-                anchors.centerIn: parent
-                visible: image.status != Image.Ready
-                running: visible
+            LoadingIndicator {
+                loading: image.status != Image.Ready
+                inverted: true
             }
         }
     }
@@ -78,7 +77,7 @@ Page {
         ToolIcon {
             iconId: "toolbar-back"
             anchors.verticalCenter: parent.verticalCenter
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
 
         Behavior on opacity {

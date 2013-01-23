@@ -14,43 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef USERINFOHELPER_H
-#define USERINFOHELPER_H
+function pop() {
+    _window_.pageStack.pop()
+}
 
-#include <QtCore/QObject>
-#include "objects/user.h"
+function addPage(name, properties) {
+    var newPage = _window_.pageStack.push(Qt.resolvedUrl(name + ".qml"), properties)
+    newPage.load()
+}
 
-class UserInfoHelper : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QFB::User * user READ user WRITE setUser NOTIFY userChanged)
-    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
-    Q_PROPERTY(QString formattedInformations READ formattedInformations
-               NOTIFY formattedInformationsChanged)
-    Q_PROPERTY(QString bio READ bio NOTIFY bioChanged)
-    Q_PROPERTY(QString quotes READ quotes NOTIFY quotesChanged)
-public:
-    explicit UserInfoHelper(QObject *parent = 0);
-    QFB::User * user() const;
-    bool isValid() const;
-    QString formattedInformations() const;
-    QString bio() const;
-    QString quotes() const;
-public slots:
-    void setUser(QFB::User *user);
-signals:
-    void validChanged();
-    void formattedInformationsChanged();
-    void userChanged();
-    void bioChanged();
-    void quotesChanged();
-private:
-    void createText();
-    QFB::User *m_user;
-    bool m_valid;
-    QString m_formattedInformations;
-    QString m_bio;
-    QString m_quotes;
-};
+function showPhotoViewer(model, index) {
+    var newPage = _window_.pageStack.push(Qt.resolvedUrl("PhotoViewerPage.qml"), {model: model})
+    newPage.setPosition(index)
+}
 
-#endif // USERINFOHELPER_H
+function showFeedDialog(facebookId) {
+    _feed_dialog_.to = facebookId
+    _feed_dialog_.showDialog()
+}

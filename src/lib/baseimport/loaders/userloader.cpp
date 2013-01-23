@@ -73,6 +73,7 @@ void UserLoader::handleReply(AbstractProcessor *processor)
 
     d->user = qobject_cast<User*>(objectProcessor->object());
     d->user->setParent(this);
+
     emit userChanged();
 }
 

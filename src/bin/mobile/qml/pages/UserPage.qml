@@ -18,7 +18,10 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../composite"
+import "../components"
 
 Page {
     id: container
@@ -27,18 +30,18 @@ Page {
     function load() {
         portraitLoader.request(facebookId + "/picture")
         userLoader.request(facebookId, "fields=cover")
-        feed.load()
+        postList.load()
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
 
         ToolButton {
             text: qsTr("Post something")
-            onClicked: PAGE_MANAGEMENT_BRIDGE.showFeedDialog(container.facebookId)
+            onClicked: PageManagement.showFeedDialog(container.facebookId)
         }
 
         ToolIcon {
@@ -51,19 +54,25 @@ Page {
         id: menu
         MenuLayout {
             MenuItem {
-                text: facebookId == "me" ? qsTr("Personnal informations")
-                                         : qsTr("User informations")
-                onClicked: PAGE_MANAGEMENT_BRIDGE.addUserInfoPage(facebookId, name, banner.coverUrl)
+                text: container.facebookId == ME.facebookId ? qsTr("Personnal informations")
+                                                            : qsTr("User informations")
+                onClicked: PageManagement.addPage("UserInfoPage", {facebookId: container.facebookId,
+                                                                   name: container.name,
+                                                                   coverUrl: cover.coverUrl})
             }
             MenuItem {
                 text: qsTr("Albums")
-                onClicked: PAGE_MANAGEMENT_BRIDGE.addAlbumListPage(facebookId, name,
-                                                                   banner.coverUrl)
+                onClicked: PageManagement.addPage("AlbumListPage",
+                                                  {facebookId: container.facebookId,
+                                                   name: container.name,
+                                                   coverUrl: cover.coverUrl})
             }
             MenuItem {
                 text: qsTr("Photos")
-                onClicked: PAGE_MANAGEMENT_BRIDGE.addPhotoListPage(facebookId, name,
-                                                                   banner.coverUrl)
+                onClicked: PageManagement.addPage("PhotoListPage",
+                                                  {facebookId: container.facebookId,
+                                                   name: container.name,
+                                                   coverUrl: cover.coverUrl})
             }
         }
     }
@@ -72,7 +81,7 @@ Page {
         id: userLoader
         queryManager: QUERY_MANAGER
         onLoaded: {
-            banner.coverUrl = user.cover.source
+            cover.coverUrl = user.cover.source
         }
     }
 
@@ -81,11 +90,12 @@ Page {
         id: flickable
         anchors.fill: parent
         contentWidth: width
-        contentHeight: banner.height + feed.height + Ui.MARGIN_DEFAULT
+        contentHeight: cover.height + postList.height + Ui.MARGIN_DEFAULT
 
 
-        Banner {
-            id: banner
+        Cover {
+            id: cover
+            queryManager: QUERY_MANAGER
             name: container.name
             large: true
         }
@@ -94,10 +104,10 @@ Page {
             id: portraitContainer
             opacity: 0
             anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            anchors.top: banner.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+            anchors.top: cover.top; anchors.topMargin: Ui.MARGIN_DEFAULT
             width: portrait.width + 2 * Ui.MARGIN_XSMALL
             height: Math.min(portrait.height + 2 * Ui.MARGIN_XSMALL,
-                             banner.height - 2 * Ui.MARGIN_DEFAULT)
+                             cover.height - 2 * Ui.MARGIN_DEFAULT)
             color: "white"
 
             Item {
@@ -133,13 +143,15 @@ Page {
             }
         }
 
-        Feed {
-            id: feed
-            anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        PostList {
+            id: postList
+            anchors.top: cover.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             facebookId: container.facebookId
             stream: "feed"
-            onShowPost: PAGE_MANAGEMENT_BRIDGE.addPostPage(container.facebookId, container.name,
-                                                           banner.coverUrl, post)
+            onShowPost: PageManagement.addPage("PostPage", {facebookId: container.facebookId,
+                                                            name: container.name,
+                                                            coverUrl: cover.coverUrl,
+                                                            post: post})
         }
     }
 }

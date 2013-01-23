@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,56 +14,46 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import org.SfietKonstantin.qfb.dialogs 4.0
-import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
-import QtWebKit 1.0
+import "../UiConstants.js" as Ui
 
-Page {
-    id: container
+Image {
+    id: picture
     property string facebookId
-    property string name
-    property string coverUrl
-    function load() {
-        userLoader.request(facebookId)
-    }
-
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+    property alias pictureType: pictureLoader.type
+    property bool loading: state != "visible"
+    property QtObject queryManager
+    onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
+    width: Ui.ICON_SIZE_DEFAULT
+    height: Ui.ICON_SIZE_DEFAULT
+    smooth: true
+    source: pictureLoader.picturePath
+    asynchronous: true
+    opacity: 0
+    states: State {
+        name: "visible"; when: picture.status == Image.Ready
+        PropertyChanges {
+            target: picture
+            opacity: 1
         }
     }
-
-    QFBUserLoader {
-        id: userLoader
-        queryManager: QUERY_MANAGER
-    }
-
-    Banner {
-        id: banner
-        name: container.name
-        category: qsTr("Informations")
-        coverUrl: container.coverUrl
-    }
-
-    ScrollDecorator { flickableItem: flickable }
-    Flickable {
-        id: flickable
-        clip: true
-        anchors.top: banner.bottom; anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        contentWidth: width
-        contentHeight: userInfo.height + Ui.MARGIN_DEFAULT
-
-
-        UserInfo {
-            id: userInfo
-            user: userLoader.user
-            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+    transitions: [
+        Transition {
+            from: ""
+            to: "visible"
+            NumberAnimation {
+                target: picture
+                property: "opacity"
+                duration: Ui.ANIMATION_DURATION_FAST
+            }
         }
+    ]
+
+    QFBPictureLoader {
+        id: pictureLoader
+        queryManager: picture.queryManager
+        Component.onCompleted: request(picture.facebookId + "/picture")
     }
 }

@@ -16,57 +16,31 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
 Rectangle {
-    id: container
-    signal clicked
-    property string facebookId
-    property alias name: text.text
-
-    height: Ui.LIST_ITEM_HEIGHT_XXLARGE
+    property alias title: title.text
+    property alias content: content.children
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+    height: visible ? Ui.MARGIN_DEFAULT + title.height + Ui.MARGIN_DEFAULT + content.height
+                      + Ui.MARGIN_DEFAULT
+                    : 0
     color: !theme.inverted ? "white" : "black"
 
-    BorderImage {
-        id: background
-        anchors.fill: parent
-        visible: mouseArea.pressed
-        source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
-                "-background-pressed-center"
-    }
-
-    FacebookPicture {
-        id: picture
-        anchors.top: parent.top; anchors.bottom: text.top; anchors.bottomMargin: Ui.MARGIN_DEFAULT
-        anchors.left: parent.left; anchors.right: parent.right
-        clip: true
-        pictureType: QFBPictureLoader.Album
-        fillMode: Image.PreserveAspectCrop
-        facebookId: container.facebookId
-    }
-
-    BusyIndicator {
-        anchors.centerIn: picture
-        visible: picture.loading
-        running: visible
-    }
-
     Label {
-        id: text
+        id: title
+        anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
-        elide: Text.ElideRight
+        font.pixelSize: Ui.FONT_SIZE_LARGE
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: container
-        onPressed: picture.opacity = 0.6
-        onReleased: picture.opacity = 1
-        onClicked: container.clicked()
+    Item {
+        id: content
+        anchors.top: title.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        height: childrenRect.height
     }
 }

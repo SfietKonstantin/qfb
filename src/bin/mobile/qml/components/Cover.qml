@@ -17,7 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
 Item {
     id: container
@@ -25,6 +25,7 @@ Item {
     property string category
     property string coverUrl
     property bool large: false
+    property QtObject queryManager
     anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
     height: !large ? (coverBackground.portrait ? Ui.BANNER_HEIGHT_PORTRAIT
                                                : Ui.BANNER_HEIGHT_LANDSCAPE)
@@ -38,6 +39,8 @@ Item {
         clip: true
 
         FacebookImage {
+            id: image
+            queryManager: container.queryManager
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
             url: coverUrl

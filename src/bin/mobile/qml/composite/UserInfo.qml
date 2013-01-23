@@ -17,11 +17,13 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../components"
 
 Item {
     id: container
     property QtObject user
+    property alias valid: userInfoHelper.valid
     width: parent.width
     height: Ui.MARGIN_DEFAULT + informationsContainer.height
             + Ui.MARGIN_DEFAULT + bioContainer.height + Ui.MARGIN_DEFAULT

@@ -17,23 +17,26 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
+import "../components"
+import "../pagemanagement.js" as PageManagement
 
 Page {
     id: container
 
     Item {
         anchors.fill: parent
-        Banner {
-            id: banner
+        Cover {
+            id: cover
+            queryManager: QUERY_MANAGER
             large: screen.currentOrientation == Screen.Portrait
-            name: me.name
-            coverUrl: me.coverUrl
+            name: ME.name
+            coverUrl: ME.coverUrl
 
         }
 
         ListView {
             clip: true
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
+            anchors.top: cover.bottom; anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
             model: ListModel {
                 ListElement {
@@ -53,18 +56,18 @@ Page {
                 text: model.text
                 onClicked: {
                     if (model.action == "showNews") {
-                        if (me.name != "") {
+                        if (ME.name != "") {
                             newsPage.load()
-                            window.pageStack.push(newsPage)
+                            _window_.pageStack.push(newsPage)
                         }
                     } else if (model.action == "showMe") {
-                        if (me.name != "") {
-                            PAGE_MANAGEMENT_BRIDGE.addUserPage("me", me.name)
+                        if (ME.name != "") {
+                            PageManagement.addPage("UserPage", {name: ME.name,
+                                                                facebookId: ME.facebookId})
                         }
 
                     } else if (model.action == "showFriends") {
-                        var newPage = window.pageStack.push(Qt.resolvedUrl("FriendListPage.qml"))
-                        newPage.load()
+                        PageManagement.addPage("FriendListPage", {})
                     }
                 }
             }
@@ -74,6 +77,7 @@ Page {
 
     NewsPage {
         id: newsPage
-        name: me.name
+        name: ME.name
+        coverUrl: ME.coverUrl
     }
 }

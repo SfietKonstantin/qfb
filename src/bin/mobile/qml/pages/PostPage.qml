@@ -17,7 +17,9 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../components"
 
 Page {
     id: container
@@ -41,7 +43,7 @@ Page {
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
     }
 
@@ -50,8 +52,8 @@ Page {
         onPostChanged: container.post = post
     }
 
-    Banner {
-        id: banner
+    Cover {
+        id: cover
         name: container.name
         category: qsTr("Post")
         coverUrl: container.coverUrl
@@ -61,7 +63,7 @@ Page {
     Flickable {
         id: flickable
         clip: true
-        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.top: cover.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right
         contentWidth: flickable.width
         contentHeight: column.height
@@ -73,28 +75,22 @@ Page {
 
             Post {
                 id: post
+                queryManager: QUERY_MANAGER
                 post: container.post
             }
 
             Item {
                 width: column.width
-                height: loadPreviousCommentButton.height + 2 * Ui.MARGIN_DEFAULT
-                visible: model.havePrevious
+                height: button.height + Ui.MARGIN_DEFAULT
+                        + (button.visible ? Ui.MARGIN_DEFAULT : 0)
 
-                BusyIndicator {
-                    anchors.verticalCenter: loadPreviousCommentButton.verticalCenter
-                    anchors.right: loadPreviousCommentButton.left
-                    anchors.rightMargin: Ui.MARGIN_DEFAULT
-                    visible: model.loading
-                    running: visible
-                }
-
-                Button {
-                    id: loadPreviousCommentButton
-                    enabled: !model.loading
+                LoadingButton {
+                    id: button
                     anchors.centerIn: parent
-                    text: !model.loading ? qsTr("Load previous comments") : qsTr("Loading")
+                    model: model
+                    text: qsTr("Load previous comments")
                     onClicked: model.loadPrevious()
+                    haveMore: model.havePrevious
                 }
             }
 
@@ -110,6 +106,7 @@ Page {
                     CommentEntry {
                         id: comment
                         comment: model.data
+                        queryManager: QUERY_MANAGER
                     }
                 }
             }

@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,33 +14,48 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#include "me.h"
 
-import QtQuick 1.1
-import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+Me::Me(QObject *parent) :
+    QObject(parent)
+{
+}
 
-Image {
-    id: image
-    property string url
-    onUrlChanged: imageLoader.request(url)
-    smooth: true
-    source: imageLoader.imagePath
-    asynchronous: true
-    opacity: 0
-    states: State {
-        name: "visible"; when: image.status == Image.Ready
-        PropertyChanges {
-            target: image
-            opacity: 1
-        }
+QString Me::facebookId() const
+{
+    return m_facebookId;
+}
+
+QString Me::name() const
+{
+    return m_name;
+}
+
+QUrl Me::coverUrl() const
+{
+    return m_coverUrl;
+}
+
+void Me::setFacebookId(const QString &facebookId)
+{
+    if (m_facebookId != facebookId) {
+        m_facebookId = facebookId;
+        emit facebookIdChanged();
     }
-    Behavior on opacity {
-        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
-    }
+}
 
-    QFBImageLoader {
-        id: imageLoader
-        queryManager: QUERY_MANAGER
-        Component.onCompleted: request(image.url)
+void Me::setName(const QString &name)
+{
+    if (m_name != name) {
+        m_name = name;
+        emit nameChanged();
+    }
+}
+
+void Me::setCoverUrl(const QUrl &coverUrl)
+{
+    if (m_coverUrl != coverUrl) {
+        m_coverUrl = coverUrl;
+        emit coverUrlChanged();
     }
 }

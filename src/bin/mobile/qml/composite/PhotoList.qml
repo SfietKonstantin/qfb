@@ -18,7 +18,8 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../components"
 
 Item {
     id: container
@@ -28,6 +29,7 @@ Item {
     property string graph
     property int columns
     property int count: model.count
+    signal showPhoto(variant model, int index)
     function load() {
         model.request(container.graph)
     }
@@ -55,22 +57,21 @@ Item {
 
                 FacebookPicture {
                     id: picture
+                    anchors.fill: parent
                     clip: true
                     pictureType: QFBPictureLoader.Normal
                     fillMode: Image.PreserveAspectCrop
-                    anchors.fill: parent
                     facebookId: model.data.facebookId
+                    queryManager: QUERY_MANAGER
                 }
 
-                BusyIndicator {
-                    anchors.centerIn: picture
-                    visible: picture.loading
-                    running: visible
+                LoadingIndicator {
+                    loading: picture.loading
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: PAGE_MANAGEMENT_BRIDGE.showPhoto(repeater.model, model.index)
+                    onClicked: container.showPhoto(repeater.model, model.index)
                 }
             }
         }

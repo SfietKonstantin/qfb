@@ -18,7 +18,8 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../components"
 
 Item {
     id: container
@@ -26,6 +27,7 @@ Item {
     height: column.height + Ui.MARGIN_DEFAULT + (model.haveNext ? button.height + Ui.MARGIN_DEFAULT
                                                                 : 0)
     property bool loading: model.loading
+    property int count: model.count
     property string facebookId
     property string stream
     signal showPost(variant post)
@@ -52,6 +54,7 @@ Item {
                 Post {
                     id: content
                     post: model.data
+                    queryManager: QUERY_MANAGER
                     interactive: true
                     opacity: 0
                     Component.onCompleted: opacity = 1
@@ -65,20 +68,12 @@ Item {
         }
     }
 
-    BusyIndicator {
-        anchors.verticalCenter: button.verticalCenter
-        anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        visible: model.loading
-        running: visible
-    }
-
-    Button {
+    LoadingButton {
         id: button
-        visible: (model.haveNext && model.count > 0) || model.loading
         anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: !model.loading ? qsTr("Load more") : qsTr("Loading")
-        enabled: !model.loading
+        model: model
         onClicked: model.loadNext()
+        text: qsTr("Load more")
+        haveMore: model.haveNext
     }
 }

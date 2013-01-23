@@ -17,17 +17,19 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
-Item
-{
+Rectangle {
     id: container
     signal clicked
     property string facebookId
     property alias name: text.text
+    property QtObject queryManager
 
-    height: Ui.LIST_ITEM_HEIGHT_DEFAULT
-    width: parent.width
+    height: Ui.LIST_ITEM_HEIGHT_XXLARGE
+    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+    anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+    color: !theme.inverted ? "white" : "black"
 
     BorderImage {
         id: background
@@ -37,22 +39,36 @@ Item
                 "-background-pressed-center"
     }
 
-    FacebookPicture {
-        id: picture
-        facebookId: container.facebookId
-        anchors.left: parent.left;
-        anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.verticalCenter: parent.verticalCenter
-        pictureType: QFBPictureLoader.Square
+    Item {
+        id: pictureContainer
+        anchors.top: parent.top; anchors.bottom: text.top; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.right: parent.right
+        opacity: !mouseArea.pressed ? 1 : 0.6
+
+        FacebookPicture {
+            id: picture
+            anchors.fill: parent
+            queryManager: container.queryManager
+            clip: true
+            pictureType: QFBPictureLoader.Album
+            fillMode: Image.PreserveAspectCrop
+            facebookId: container.facebookId
+        }
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            visible: picture.loading
+            running: visible
+        }
     }
+
 
     Label {
         id: text
-        anchors.left: picture.right; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: Ui.FONT_SIZE_MLARGE
-        horizontalAlignment: Text.AlignHCenter
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+        elide: Text.ElideRight
     }
 
     MouseArea {

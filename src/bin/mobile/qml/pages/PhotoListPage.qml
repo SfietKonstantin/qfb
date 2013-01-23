@@ -18,7 +18,10 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../composite"
+import "../components"
 
 Page {
     id: container
@@ -26,49 +29,49 @@ Page {
     property string name
     property string coverUrl
     function load() {
-        albumList.load()
+        photoList.load()
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
     }
 
-
-    Banner {
-        id: banner
+    Cover {
+        id: cover
         name: container.name
-        category: qsTr("Albums")
+        category: qsTr("Photos")
         coverUrl: container.coverUrl
     }
 
-    ScrollDecorator { flickableItem: flickable }
-    Flickable {
-        id: flickable
-        clip: true
-        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+
+    Item {
+        id: content
+        anchors.top: cover.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.bottom: parent.bottom
         anchors.left: parent.left; anchors.right: parent.right
-        contentWidth: container.width
-        contentHeight: albumList.height
 
-        AlbumList {
-            id: albumList
-            graph: facebookId + "/albums"
-            onShowAlbum: PAGE_MANAGEMENT_BRIDGE.addPhotoListPage(facebookId, container.name,
-                                                                 container.coverUrl)
+        ScrollDecorator { flickableItem: flickable }
+        Flickable {
+            id: flickable
+            anchors.fill: parent
+            clip: true
+            contentWidth: container.width
+            contentHeight: photoList.height
+
+            PhotoList {
+                id: photoList
+                columns: 3
+                graph: facebookId + "/photos"
+                onShowPhoto: PageManagement.showPhotoViewer(model, index)
+            }
         }
-    }
-
-    Label {
-        anchors.fill: flickable
-        visible: !albumList.loading && albumList.count == 0
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.pixelSize: Ui.FONT_SIZE_XXLARGE
-        color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
-        text: qsTr("No albums")
+        LoadingMessage {loading: photoList.loading}
+        EmptyStateLabel {
+            visible: !photoList.loading && photoList.count == 0
+            text: qsTr("No photos")
+        }
     }
 }

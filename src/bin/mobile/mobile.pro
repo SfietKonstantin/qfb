@@ -28,7 +28,7 @@ HEADERS +=      tokenmanager.h \
     userinfohelper.h \
     posthelper.h \
     mobilepostvalidator.h \
-    pagemanagementbridge.h
+    me.h
 
 SOURCES +=      main.cpp \
                 tokenmanager.cpp \
@@ -37,37 +37,45 @@ SOURCES +=      main.cpp \
     userinfohelper.cpp \
     posthelper.cpp \
     mobilepostvalidator.cpp \
-    pagemanagementbridge.cpp
+    me.cpp
 
+QML_ROOT +=         qml/main.qml \
+                    qml/UiConstants.js \
+                    qml/pagemanagement.js
 
-OTHER_FILES +=  qml/main.qml \
-                qml/UiConstants.js \
-                qml/ClickableEntry.qml \
-                qml/FacebookImage.qml \
-                qml/FacebookPicture.qml \
-                qml/Banner.qml \
-                qml/Container.qml \
-                qml/Post.qml \
-                qml/Feed.qml \
-                qml/LoginSheet.qml \
-                qml/NewsPage.qml \
-                qml/MainPage.qml \
-                qml/UserInfo.qml \
-                qml/UserPage.qml \
-                qml/FriendEntry.qml \
-                qml/FriendListPage.qml \
-    qml/TypePage.qml \
-    qml/UserInfoPage.qml \
-    qml/AlbumListPage.qml \
-    qml/AlbumList.qml \
-    qml/AlbumEntry.qml \
-    qml/PhotoListPage.qml \
-    qml/PhotoList.qml \
-    qml/PhotoBrowserPage.qml \
-    qml/PostPage.qml \
-    qml/CommentEntry.qml \
-    qml/FeedDialogSheet.qml \
-    qml/PhotoViewerPage.qml
+QML_COMPONENTS +=   qml/components/FacebookImage.qml \
+                    qml/components/FacebookPicture.qml \
+                    qml/components/LoadingIndicator.qml \
+                    qml/components/LoadingMessage.qml \
+                    qml/components/LoadingButton.qml \
+                    qml/components/EmptyStateLabel.qml \
+                    qml/components/ClickableEntry.qml \
+                    qml/components/FriendEntry.qml \
+                    qml/components/CommentEntry.qml \
+                    qml/components/Cover.qml \
+                    qml/components/Container.qml \
+                    qml/components/Post.qml \
+                    qml/components/AlbumEntry.qml
+
+QML_COMPOSITE +=    qml/composite/UserInfo.qml \
+                    qml/composite/PostList.qml \
+                    qml/composite/AlbumList.qml \
+                    qml/composite/PhotoList.qml
+
+QML_PAGES +=        qml/pages/MainPage.qml \
+                    qml/pages/NewsPage.qml \
+                    qml/pages/FriendListPage.qml \
+                    qml/pages/AlbumListPage.qml \
+                    qml/pages/PhotoListPage.qml \
+                    qml/pages/PhotoViewerPage.qml \
+                    qml/pages/PostPage.qml \
+                    qml/pages/UserPage.qml \
+                    qml/pages/UserInfoPage.qml
+
+QML_DIALOGS +=      qml/dialogs/LoginSheet.qml \
+                    qml/dialogs/FeedDialogSheet.qml
+
+OTHER_FILES +=  $${QML_ROOT} $${QML_COMPONENTS} $${QML_COMPOSITE} $${QML_PAGES} $${QML_DIALOGS}
 
 # Deployment
 contains(CONFIG, optify) {
@@ -76,10 +84,22 @@ target.path = $${OPTDIR}/bin
 target.path = $${BINDIR}
 }
 
-qmlFiles.path = $${QML_FOLDER}
-qmlFiles.files = $${OTHER_FILES}
+qmlRootFiles.path = $${QML_FOLDER}
+qmlRootFiles.files = $${QML_ROOT}
 
-INSTALLS += target qmlFiles
+qmlComponentsFiles.path = $${QML_FOLDER}/components
+qmlComponentsFiles.files = $${QML_COMPONENTS}
+
+qmlCompositeFiles.path = $${QML_FOLDER}/composite
+qmlCompositeFiles.files = $${QML_COMPOSITE}
+
+qmlPagesFiles.path = $${QML_FOLDER}/pages
+qmlPagesFiles.files = $${QML_PAGES}
+
+qmlDialogsFiles.path = $${QML_FOLDER}/dialogs
+qmlDialogsFiles.files = $${QML_DIALOGS}
+
+INSTALLS += target qmlRootFiles qmlComponentsFiles qmlCompositeFiles qmlPagesFiles qmlDialogsFiles
 
 contains(MEEGO_EDITION, harmattan) {
     desktopFile.files = qfb.desktop

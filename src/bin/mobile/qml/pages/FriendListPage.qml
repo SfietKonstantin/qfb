@@ -17,14 +17,16 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../components"
 
 Page {
     id: container
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
     }
 
@@ -35,11 +37,12 @@ Page {
     Item {
         anchors.fill: parent
 
-        Banner {
-            id: banner
-            name: me.name
+        Cover {
+            id: cover
+            name: ME.name
             category: qsTr("Friends")
-            coverUrl: me.coverUrl
+            coverUrl: ME.coverUrl
+            queryManager: QUERY_MANAGER
         }
 
         QFBFriendListModel {
@@ -51,16 +54,17 @@ Page {
         ListView {
             id: listView
             property double opacityValue: 0
-            anchors.top: banner.bottom; anchors.bottom: parent.bottom
+            anchors.top: cover.bottom; anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
             clip: true
             model: friendListModel
             delegate: FriendEntry {
                 facebookId: model.data.facebookId
                 name: model.data.name
+                queryManager: QUERY_MANAGER
                 opacity: listView.opacityValue
-                onClicked: PAGE_MANAGEMENT_BRIDGE.addUserPage(model.data.facebookId,
-                                                              model.data.name)
+                onClicked: PageManagement.addPage("UserPage", {facebookId: model.data.facebookId,
+                                                               name: model.data.name})
             }
             ScrollDecorator {flickableItem: parent}
             cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
@@ -78,19 +82,11 @@ Page {
                 NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
             }
 
-            Row {
-                id: loadingIndicator
-                anchors.centerIn: parent
-                visible: friendListModel.loading
-                spacing: Ui.MARGIN_DEFAULT
+            LoadingMessage {loading: friendListModel.loading}
 
-                BusyIndicator {
-                    running: loadingIndicator.visible
-                }
-
-                Label {
-                    text: qsTr("Loading")
-                }
+            EmptyStateLabel {
+                visible: !friendListModel.loading && friendListModel.count == 0
+                text: qsTr("No friends")
             }
         }
     }

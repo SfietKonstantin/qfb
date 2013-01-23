@@ -16,28 +16,11 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
-// This item is an entry of a list that
-// has some features.
-//
-// Since it is an entry of a list, it has
-// a text. An icon can also be add, as
-// well as a subtext, that appears under
-// the text, and an indicator, that can
-// indicates a drill down or a combo-box
-// for example.
-//
-// This is done by setting icon, text,
-// subText and indicatorIcon.
-//
-// Width and height do not need to be set for
-// this item.
-Item
-{
+Item {
     id: container
     signal clicked
-    signal pressAndHold
     property string icon: ""
     property alias text: mainText.text
     property alias subText: subText.text
@@ -47,8 +30,7 @@ Item
     height: Ui.LIST_ITEM_HEIGHT_DEFAULT
     width: parent.width
 
-    BorderImage
-    {
+    BorderImage {
         id: background
         anchors.fill: parent
         visible: mouseArea.pressed
@@ -108,8 +90,6 @@ Item
             }
         }
     }
-
-
 
     Image {
         id: indicator

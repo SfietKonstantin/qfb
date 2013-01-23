@@ -22,6 +22,12 @@ UserInfoHelper::UserInfoHelper(QObject *parent) :
     QObject(parent)
 {
     m_user = 0;
+    m_valid = false;
+}
+
+bool UserInfoHelper::isValid() const
+{
+    return m_valid;
 }
 
 QFB::User * UserInfoHelper::user() const
@@ -59,10 +65,14 @@ void UserInfoHelper::createText()
         return;
     }
 
+    bool valid = false;
     QString formattedInformations;
 
     // Add gender (and interested in)
     QString gender = m_user->gender();
+    if (!gender.isEmpty()) {
+        valid = true;
+    }
 //    if (!m_user->gender() == QFB::User::Unknown) {
 //        QString gender;
 //        switch(m_user->gender()) {
@@ -97,6 +107,7 @@ void UserInfoHelper::createText()
 
     // Add languages
     if (!m_user->languages().isEmpty()) {
+        valid = true;
         QStringList languagesList;
         foreach (QFB::NamedObject * language, m_user->languages()) {
             languagesList.append(language->name());
@@ -109,9 +120,11 @@ void UserInfoHelper::createText()
 
     // Religion and political view
     if (!m_user->religion().isEmpty()) {
+        valid = true;
         formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Religion"), m_user->religion());
     }
     if (!m_user->political().isEmpty()) {
+        valid = true;
         formattedInformations += QString("<b>%1</b>: %2\n").arg(tr("Political view"),
                                                                 m_user->political());
     }
@@ -127,14 +140,25 @@ void UserInfoHelper::createText()
     }
 
     QString bio = m_user->bio();
+    if (!bio.isEmpty()) {
+        valid = true;
+    }
     if (m_bio != bio) {
         m_bio = bio;
         emit bioChanged();
     }
 
     QString quotes = m_user->quotes();
+    if (!quotes.isEmpty()) {
+        valid = true;
+    }
     if (m_quotes != quotes) {
         m_quotes = quotes;
         emit quotesChanged();
+    }
+
+    if (m_valid != valid) {
+        m_valid = valid;
+        emit validChanged();
     }
 }

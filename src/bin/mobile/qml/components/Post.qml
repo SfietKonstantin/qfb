@@ -18,11 +18,12 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
 
 Rectangle {
     id: container
     property QtObject post
+    property QtObject queryManager
     property bool interactive: false
     signal clicked()
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
@@ -55,6 +56,7 @@ Rectangle {
             id: picture
             anchors.verticalCenter: parent.verticalCenter
             facebookId: container.post.from.facebookId
+            queryManager: container.queryManager
             pictureType: QFBPictureLoader.Square
         }
 
@@ -122,6 +124,7 @@ Rectangle {
                 FacebookImage {
                     id: postImage
                     anchors.horizontalCenter: parent.horizontalCenter
+                    queryManager: container.queryManager
                     url: container.post.picture
                 }
             }

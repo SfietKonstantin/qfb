@@ -14,45 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-
 import QtQuick 1.1
-import org.SfietKonstantin.qfb 4.0
-import "UiConstants.js" as Ui
+import com.nokia.meego 1.0
+import "../UiConstants.js" as Ui
 
-Image {
-    id: picture
-    property string facebookId
-    property alias pictureType: pictureLoader.type
-    property bool loading: state != "visible"
-    onFacebookIdChanged: pictureLoader.request(facebookId + "/picture")
-    width: Ui.ICON_SIZE_DEFAULT
-    height: Ui.ICON_SIZE_DEFAULT
-    smooth: true
-    source: pictureLoader.picturePath
-    asynchronous: true
-    opacity: 0
-    states: State {
-        name: "visible"; when: picture.status == Image.Ready
-        PropertyChanges {
-            target: picture
-            opacity: 1
-        }
+Row {
+    id: container
+    property bool loading: false
+    anchors.centerIn: parent
+    visible: loading
+    spacing: Ui.MARGIN_DEFAULT
+
+    BusyIndicator {
+        running: container.visible
     }
-    transitions: [
-        Transition {
-            from: ""
-            to: "visible"
-            NumberAnimation {
-                target: picture
-                property: "opacity"
-                duration: Ui.ANIMATION_DURATION_FAST
-            }
-        }
-    ]
 
-    QFBPictureLoader {
-        id: pictureLoader
-        queryManager: QUERY_MANAGER
-        Component.onCompleted: request(picture.facebookId + "/picture")
+    Label {
+        text: qsTr("Loading")
     }
 }

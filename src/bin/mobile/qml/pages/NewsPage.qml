@@ -18,47 +18,43 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
-import "UiConstants.js" as Ui
+import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
+import "../components"
+import "../composite"
 
 Page {
     id: container
     property string name
+    property string coverUrl
     function load() {
-        banner.loaded = false
-        userLoader.request("me", "fields=cover")
-        feed.load()
+        postList.load()
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: PAGE_MANAGEMENT_BRIDGE.pop()
+            onClicked: PageManagement.pop()
         }
 
         ToolButton {
             text: qsTr("Post something")
-            onClicked: PAGE_MANAGEMENT_BRIDGE.showFeedDialog("me")
+            onClicked: PageManagement.showFeedDialog(ME.facebookId)
         }
 
         Item {width: 80}
     }
 
-    QFBUserLoader {
-        id: userLoader
+    Cover {
+        id: cover
+        name: container.name
+        coverUrl: container.coverUrl
+        category: qsTr("News")
         queryManager: QUERY_MANAGER
-        onLoadingChanged: {
-            if (!loading) {
-                if (!banner.loaded) {
-                    banner.loaded = true
-                    banner.coverUrl = user.cover.source
-                }
-            }
-        }
     }
 
-
     Item {
-        anchors.top: banner.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.top: cover.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.bottom: parent.bottom
         anchors.left: parent.left; anchors.right: parent.right
 
@@ -66,24 +62,24 @@ Page {
         Flickable {
             id: flickable
             anchors.fill: parent
+            clip: true
             contentWidth: width
-            contentHeight: feed.height
+            contentHeight: postList.height
 
-            Feed {
-                id: feed
+            PostList {
+                id: postList
                 facebookId: "me"
                 stream: "home"
-                onShowPost: PAGE_MANAGEMENT_BRIDGE.addPostPage(container.facebookId, container.name,
-                                                               banner.coverUrl, post)
+                onShowPost: PageManagement.addPage("PostPage", {facebookId: container.facebookId,
+                                                                name: container.name,
+                                                                coverUrl: coverUrl,
+                                                                post: post})
             }
         }
-    }
 
-
-    Banner {
-        id: banner
-        property bool loaded: false
-        name: container.name
-        category: qsTr("News")
+        EmptyStateLabel {
+            visible: postList.count == 0 && !postList.loading
+            text: qsTr("No news")
+        }
     }
 }

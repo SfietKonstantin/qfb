@@ -20,9 +20,11 @@ import com.nokia.meego 1.0
 import com.nokia.extras 1.1
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.login 4.0
+import "pages"
+import "dialogs"
 
 PageStackWindow {
-    id: window
+    id: _window_
     initialPage: mainPage
 
     Component.onCompleted: {
@@ -112,81 +114,75 @@ PageStackWindow {
         }
     }
 
-    Connections {
-        target: PAGE_MANAGEMENT_BRIDGE
-        onPopRequested: window.pageStack.pop()
-        onAddUserPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
-                                                {"facebookId": facebookId, "name": name})
-            newPage.load()
-        }
-        onAddUserInfoPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"),
-                                                {"facebookId": facebookId, "name": name,
-                                                 "coverUrl": coverUrl})
-            newPage.load()
-        }
-        onAddAlbumListPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("AlbumListPage.qml"),
-                                                {"facebookId": facebookId, "name": name,
-                                                 "coverUrl": coverUrl})
-            newPage.load()
-        }
-        onAddPhotoListPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoListPage.qml"),
-                                                {"facebookId": facebookId, "name": name,
-                                                 "coverUrl": coverUrl})
-            newPage.load()
-        }
-        onAddPostPageRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("PostPage.qml"),
-                                                {"facebookId": facebookId, "name": name,
-                                                 "coverUrl": coverUrl, "post": post})
-            newPage.load()
-        }
-        onShowPhotoRequested: {
-            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoViewerPage.qml"),
-                                                {"model": model})
-            newPage.position(index)
-        }
+//    Connections {
+//        target: PAGE_MANAGEMENT_BRIDGE
+//        onPopRequested: window.pageStack.pop()
+//        onAddUserPageRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+//                                                {"facebookId": facebookId, "name": name})
+//            newPage.load()
+//        }
+//        onAddUserInfoPageRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"),
+//                                                {"facebookId": facebookId, "name": name,
+//                                                 "coverUrl": coverUrl})
+//            newPage.load()
+//        }
+//        onAddAlbumListPageRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("AlbumListPage.qml"),
+//                                                {"facebookId": facebookId, "name": name,
+//                                                 "coverUrl": coverUrl})
+//            newPage.load()
+//        }
+//        onAddPhotoListPageRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoListPage.qml"),
+//                                                {"facebookId": facebookId, "name": name,
+//                                                 "coverUrl": coverUrl})
+//            newPage.load()
+//        }
+//        onAddPostPageRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("PostPage.qml"),
+//                                                {"facebookId": facebookId, "name": name,
+//                                                 "coverUrl": coverUrl, "post": post})
+//            newPage.load()
+//        }
+//        onShowPhotoRequested: {
+//            var newPage = window.pageStack.push(Qt.resolvedUrl("PhotoViewerPage.qml"),
+//                                                {"model": model})
+//            newPage.position(index)
+//        }
 
-        onShowFeedDialogRequested: {
-            feedDialogSheet.to = to
-            feedDialogSheet.showDialog()
-        }
+//        onShowFeedDialogRequested: {
+//            feedDialogSheet.to = to
+//            feedDialogSheet.showDialog()
+//        }
 
-        onResolveTypeRequested: {
-            currentResolvingTypeObject.name = name
-            typeResolver.request(facebookId)
-        }
-    }
+//        onResolveTypeRequested: {
+//            currentResolvingTypeObject.name = name
+//            typeResolver.request(facebookId)
+//        }
+//    }
 
 
-    QtObject {
-        id: me
-        property string name
-        property string coverUrl
-    }
-
-    QtObject {
-        id: currentResolvingTypeObject
-        property string name
-    }
+//    QtObject {
+//        id: me
+//        property string name
+//        property string coverUrl
+//    }
 
     QFBUserLoader {
         id: meLoader
         function load() {
-            request("me", "fields=name")
+            request("me", "fields=id,name")
         }
         queryManager: QUERY_MANAGER
-        onLoadingChanged: {
-            if (!loading) {
-                if (me.name == "") {
-                    me.name = user.name
-                    request("me", "fields=cover")
-                } else if (me.coverUrl == "") {
-                    me.coverUrl = user.cover.source
-                }
+        onLoaded: {
+            if (ME.name == "") {
+                ME.facebookId = user.facebookId
+                ME.name = user.name
+                request("me", "fields=cover")
+            } else if (ME.coverUrl == "") {
+                ME.coverUrl = user.cover.source
             }
         }
     }
@@ -194,20 +190,18 @@ PageStackWindow {
     QFBTypeLoader {
         id: typeResolver
         queryManager: QUERY_MANAGER
-        onLoadingChanged: {
-            if (!loading) {
-                var facebookId = typeResolver.object.facebookId
-                var type = typeResolver.object.objectType
-                if (type == QFBObject.UserType) {
-                    PAGE_MANAGEMENT_BRIDGE.addUserPage(facebookId, currentResolvingTypeObject.name)
-                } else {
-                    unsupportedInfoBanner.parent = window.pageStack.currentPage
-                    unsupportedInfoBanner.show()
-                }
-                currentResolvingTypeObject.name = ""
+        property string resolvedName
+        onLoaded: {
+            var facebookId = typeResolver.object.facebookId
+            var type = typeResolver.object.objectType
+            if (type == QFBObject.UserType) {
+                PAGE_MANAGEMENT_BRIDGE.addUserPage(facebookId, resolvedName)
+            } else {
+                unsupportedInfoBanner.parent = window.pageStack.currentPage
+                unsupportedInfoBanner.show()
             }
+            resolvedName = ""
         }
-
     }
 
     LoginSheet {
@@ -215,13 +209,12 @@ PageStackWindow {
     }
 
     FeedDialogSheet {
-        id: feedDialogSheet
+        id: _feed_dialog_
         onAccepted: window.pageStack.currentPage.load()
     }
 
     MainPage {
         id: mainPage
-
     }
 
     InfoBanner {
