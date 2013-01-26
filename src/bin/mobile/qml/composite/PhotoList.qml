@@ -41,11 +41,13 @@ Item {
         anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
         anchors.right: parent.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
         spacing: Ui.MARGIN_DEFAULT
+        visible: !model.loading
 
         Repeater {
             id: repeater
             model: QFBPhotoListModel {
                 id: model
+                autoLoadNext: true
                 queryManager: QUERY_MANAGER
             }
 

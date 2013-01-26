@@ -33,6 +33,10 @@ Sheet {
     onStatusChanged: {
         if (status == DialogStatus.Open) {
             infoBanner.show()
+        } else if (status == DialogStatus.Opening) {
+            sheet.visible = true
+        } else if (status == DialogStatus.Closed) {
+            sheet.visible = false
         }
     }
 
