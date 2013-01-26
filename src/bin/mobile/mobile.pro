@@ -7,12 +7,17 @@ QT = core gui network webkit declarative
 
 contains(CONFIG, optify) {
 QML_FOLDER = $${OPTDIR}/qml
+DATA_FOLDER = $${OPTDIR}/data
 } else {
 QML_FOLDER = $${SHAREDIR}/qml
+DATA_FOLDER = $${SHAREDIR}/data
 }
 
 DEFINES += 'MAIN_QML_FILE=\'\"$${QML_FOLDER}/main.qml\"\''
+!contains(MEEGO_EDITION, harmattan) {
 DEFINES += 'IMPORT_PATH=\'\"$${IMPORTDIR}\"\''
+}
+DEFINES += 'DATA_PATH=\'\"$${DATA_FOLDER}/\"\''
 
 INCLUDEPATH += ../../lib/login
 INCLUDEPATH += ../../lib/base
@@ -75,7 +80,17 @@ QML_PAGES +=        qml/pages/MainPage.qml \
 QML_DIALOGS +=      qml/dialogs/LoginSheet.qml \
                     qml/dialogs/FeedDialogSheet.qml
 
-OTHER_FILES +=  $${QML_ROOT} $${QML_COMPONENTS} $${QML_COMPOSITE} $${QML_PAGES} $${QML_DIALOGS}
+DATA_FILES +=       data/comment-black.png \
+                    data/comment-white.png \
+                    data/like-black.png \
+                    data/like-white.png
+
+OTHER_FILES +=      $${QML_ROOT} \
+                    $${QML_COMPONENTS} \
+                    $${QML_COMPOSITE} \
+                    $${QML_PAGES} \
+                    $${QML_DIALOGS} \
+                    $${DATA_FILES}
 
 # Deployment
 contains(CONFIG, optify) {
@@ -99,7 +114,16 @@ qmlPagesFiles.files = $${QML_PAGES}
 qmlDialogsFiles.path = $${QML_FOLDER}/dialogs
 qmlDialogsFiles.files = $${QML_DIALOGS}
 
-INSTALLS += target qmlRootFiles qmlComponentsFiles qmlCompositeFiles qmlPagesFiles qmlDialogsFiles
+dataFiles.path = $${DATA_FOLDER}
+dataFiles.files = $${DATA_FILES}
+
+INSTALLS +=     target \
+                qmlRootFiles \
+                qmlComponentsFiles \
+                qmlCompositeFiles \
+                qmlPagesFiles \
+                qmlDialogsFiles \
+                dataFiles
 
 contains(MEEGO_EDITION, harmattan) {
     desktopFile.files = qfb.desktop

@@ -223,7 +223,7 @@ void """ + className + """::clear()
 }
 
 void """ + className
-source += """::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation)
+    source += """::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation operation)
 {
     Q_D(""" + className + """);
     ObjectListProcessor *objectListProcessor = qobject_cast<ObjectListProcessor *>(processor);
@@ -235,7 +235,7 @@ source += """::handleReply(AbstractPagingProcessor *processor, LoadMoreOperation
     QList<Object *> objectList = objectListProcessor->objectList();
 
     if (objectList.isEmpty()) {
-        setDoNotHaveNext();
+        setDoNotHaveMore();
         return;
     }
 

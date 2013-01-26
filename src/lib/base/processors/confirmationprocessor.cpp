@@ -15,7 +15,6 @@
  ****************************************************************************************/
 
 #include "confirmationprocessor.h"
-#include <QtCore/QDebug>
 #include "private/abstractgraphprocessor_p.h"
 
 namespace QFB
@@ -54,7 +53,6 @@ bool ConfirmationProcessor::processDataSource(QIODevice *dataSource)
     /// @todo catch error
     Q_D(ConfirmationProcessor);
     QByteArray data = dataSource->readAll().trimmed();
-    qDebug() << data;
     d->ok = (data == TRUE_STRING);
     return true;
 }

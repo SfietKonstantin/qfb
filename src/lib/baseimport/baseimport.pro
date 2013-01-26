@@ -36,7 +36,9 @@ PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/albumlistmodel.h \
                     models/commentlistmodel.h \
                     models/feedmodel.h \
+                    models/likelistmodel.h \
                     models/photolistmodel.h
+
 HEADERS +=  $${PRIVATE_HEADERS} \
             $${PUBLIC_HEADERS}
 
@@ -60,6 +62,7 @@ SOURCES +=  models/abstractloadablemodel.cpp \
             models/albumlistmodel.cpp \
             models/commentlistmodel.cpp \
             models/feedmodel.cpp \
+            models/likelistmodel.cpp \
             models/photolistmodel.cpp
 
 # Deployment

@@ -53,6 +53,7 @@
 #include "models/commentlistmodel.h"
 #include "models/feedmodel.h"
 #include "models/friendlistmodel.h"
+#include "models/likelistmodel.h"
 #include "models/photolistmodel.h"
 
 namespace QFB
@@ -116,6 +117,7 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::CommentListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCommentListModel");
     qmlRegisterType<QFB::FeedModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFeedModel");
     qmlRegisterType<QFB::FriendListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBFriendListModel");
+    qmlRegisterType<QFB::LikeListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBLikeListModel");
     qmlRegisterType<QFB::PhotoListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoListModel");
 }
 

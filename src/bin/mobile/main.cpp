@@ -14,6 +14,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#include "qplatformdefs.h"
 #include <QtGui/QApplication>
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeContext>
@@ -28,6 +29,8 @@
 #include "tokenmanager.h"
 #include "networkaccessmanagerfactory.h"
 #include "me.h"
+
+//static const char *DATA_PATH =
 
 int main(int argc, char **argv)
 {
@@ -46,13 +49,16 @@ int main(int argc, char **argv)
                                          "QFBMobilePostValidator");
 
     QDeclarativeView view;
+#ifndef MEEGO_EDITION_HARMATTAN
     view.engine()->addImportPath(IMPORT_PATH);
     view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
+#endif
     view.rootContext()->setContextProperty("QUERY_MANAGER", &queryManager);
     view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
     view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
     view.rootContext()->setContextProperty("ME", &me);
     view.rootContext()->setContextProperty("CLIENT_ID", "390204064393625");
+    view.rootContext()->setContextProperty("DATA_PATH", DATA_PATH);
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();
     QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));

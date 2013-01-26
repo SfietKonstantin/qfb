@@ -36,7 +36,8 @@ Page {
             container.offset = Math.floor(commentCount / 20) * 20
             arguments = "offset=" + container.offset
         }
-        model.request(container.post.facebookId + "/comments", arguments)
+        commentsModel.request(container.post.facebookId + "/comments", arguments)
+        likeListModel.request(container.post.facebookId + "/likes")
         postLoader.request(container.post.facebookId)
     }
 
@@ -45,11 +46,48 @@ Page {
             iconId: "toolbar-back"
             onClicked: PageManagement.pop()
         }
+
+        ToolIcon {
+            id: likeButton
+            visible: !likeListModel.loading && !likeLoader.loading
+            property bool checked: false
+            iconSource: DATA_PATH + "like-" + (!theme.inverted ? "black" : "white") + ".png"
+            onClicked: {
+                if (checked) {
+                    likeLoader.likeOperation = QFBLikeLoader.Unlike
+                } else {
+                    likeLoader.likeOperation = QFBLikeLoader.Like
+                }
+                likeLoader.request(container.post.facebookId + "/likes")
+                likeListModel.request(container.post.facebookId + "/likes")
+            }
+
+            Connections {
+                target: likeListModel
+                onLoaded: likeButton.checked = likeListModel.contains(ME.facebookId)
+            }
+        }
+
+        LoadingIndicator {
+            anchors.centerIn: likeButton
+            visible: likeListModel.loading || likeLoader.loading
+        }
     }
 
     QFBPostLoader {
         id: postLoader
-        onPostChanged: container.post = post
+        queryManager: QUERY_MANAGER
+        onPostChanged: container.post = postLoader.post
+    }
+
+    QFBLikeListModel {
+        id: likeListModel
+        queryManager: QUERY_MANAGER
+    }
+
+    QFBLikeLoader {
+        id: likeLoader
+        queryManager: QUERY_MANAGER
     }
 
     Cover {
@@ -87,16 +125,16 @@ Page {
                 LoadingButton {
                     id: button
                     anchors.centerIn: parent
-                    model: model
+                    model: commentsModel
                     text: qsTr("Load previous comments")
-                    onClicked: model.loadPrevious()
-                    haveMore: model.havePrevious
+                    onClicked: commentsModel.loadPrevious()
+                    haveMore: commentsModel.havePrevious
                 }
             }
 
             Repeater {
                 model: QFBCommentListModel {
-                    id: model
+                    id: commentsModel
                     queryManager: QUERY_MANAGER
                 }
                 delegate: Item {
