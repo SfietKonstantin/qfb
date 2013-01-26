@@ -30,7 +30,9 @@
 #include "networkaccessmanagerfactory.h"
 #include "me.h"
 
-//static const char *DATA_PATH =
+static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsforn9";
+static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&\
+hosted_button_id=RZ2A2ZB93827Y";
 
 int main(int argc, char **argv)
 {
@@ -59,6 +61,11 @@ int main(int argc, char **argv)
     view.rootContext()->setContextProperty("ME", &me);
     view.rootContext()->setContextProperty("CLIENT_ID", "390204064393625");
     view.rootContext()->setContextProperty("DATA_PATH", DATA_PATH);
+    view.rootContext()->setContextProperty("FACEBOOK_PAGE", FACEBOOK_PAGE);
+    view.rootContext()->setContextProperty("PAYPAL_DONATE", PAYPAL_DONATE);
+    view.rootContext()->setContextProperty("VERSION_MAJOR", QString::number(VERSION_MAJOR));
+    view.rootContext()->setContextProperty("VERSION_MINOR", QString::number(VERSION_MINOR));
+    view.rootContext()->setContextProperty("VERSION_PATCH", QString::number(VERSION_PATCH));
     view.setSource(QUrl(MAIN_QML_FILE));
     view.showFullScreen();
     QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));

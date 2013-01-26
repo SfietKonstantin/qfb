@@ -23,6 +23,15 @@ import "../pagemanagement.js" as PageManagement
 Page {
     id: container
 
+    tools: ToolBarLayout {
+        Item {}
+
+        ToolIcon {
+            iconId: "toolbar-view-menu"
+            onClicked: menu.open()
+        }
+    }
+
     Item {
         anchors.fill: parent
         Cover {
@@ -79,5 +88,15 @@ Page {
         id: newsPage
         name: ME.name
         coverUrl: ME.coverUrl
+    }
+
+    Menu {
+        id: menu
+        MenuLayout {
+            MenuItem {
+                text: qsTr("About Friends")
+                onClicked: PageManagement.addPage("AboutPage", {})
+            }
+        }
     }
 }

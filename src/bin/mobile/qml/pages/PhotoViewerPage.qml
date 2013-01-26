@@ -42,20 +42,60 @@ Page {
         model: container.model
         snapMode: ListView.SnapOneItem
         highlightRangeMode: ListView.StrictlyEnforceRange
-        cacheBuffer: view.width * 3
-        delegate: Item {
+        delegate: Flickable {
+            id: flickable
+            interactive: image.scale != 1
             width: view.width
             height: view.height
+            contentWidth: view.width
+            contentHeight: view.height
+            clip: true
 
-            FacebookImage {
-                id: image
-                anchors.fill: parent
-                anchors.margins: Ui.MARGIN_XSMALL
-                queryManager: QUERY_MANAGER
-                source: model.data.source
-                fillMode: Image.PreserveAspectFit
-                onScaleChanged: {
-                    view.interactive = (scale == 1)
+            PinchArea {
+                id: pinchArea
+                width: Math.max(flickable.contentWidth, flickable.width)
+                height: Math.max(flickable.contentHeight, flickable.height)
+                pinch.minimumScale: 1
+                pinch.maximumScale: 5
+                pinch.target: image
+
+                onPinchUpdated: {
+                    var scaledWidth = view.width * image.scale
+                    var scaledHeight = view.height * image.scale
+                    var scaledPaintedWidth = image.paintedWidth * image.scale
+                    var scaledPaintedHeight = image.paintedHeight * image.scale
+                    flickable.contentX += pinch.previousCenter.x - pinch.center.x
+                    flickable.contentY += pinch.previousCenter.y - pinch.center.y
+                    if (scaledPaintedWidth < view.height || scaledPaintedHeight < view.height) {
+                        flickable.resizeContent(scaledWidth, scaledHeight, pinch.center)
+                    } else {
+                        flickable.resizeContent(scaledPaintedWidth, scaledPaintedHeight,
+                                                pinch.center)
+                    }
+                }
+
+                onPinchFinished: {
+                    flickable.returnToBounds()
+                }
+
+            }
+
+            Item {
+                width: flickable.contentWidth
+                height: flickable.contentHeight
+
+                FacebookImage {
+                    id: image
+                    anchors.centerIn: parent
+                    width: view.width - 2 * Ui.MARGIN_XSMALL
+                    height: view.height - 2 * Ui.MARGIN_XSMALL
+                    queryManager: QUERY_MANAGER
+                    source: model.data.source
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    onScaleChanged: {
+                        view.interactive = (scale == 1)
+                    }
                 }
             }
 

@@ -68,6 +68,7 @@ QML_COMPOSITE +=    qml/composite/UserInfo.qml \
                     qml/composite/PhotoList.qml
 
 QML_PAGES +=        qml/pages/MainPage.qml \
+                    qml/pages/AboutPage.qml \
                     qml/pages/NewsPage.qml \
                     qml/pages/FriendListPage.qml \
                     qml/pages/AlbumListPage.qml \
@@ -80,7 +81,9 @@ QML_PAGES +=        qml/pages/MainPage.qml \
 QML_DIALOGS +=      qml/dialogs/LoginSheet.qml \
                     qml/dialogs/FeedDialogSheet.qml
 
-DATA_FILES +=       data/comment-black.png \
+DATA_FILES +=       data/friends.png \
+                    data/developers.png \
+                    data/comment-black.png \
                     data/comment-white.png \
                     data/like-black.png \
                     data/like-white.png
