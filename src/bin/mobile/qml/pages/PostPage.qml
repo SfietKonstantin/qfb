@@ -159,7 +159,7 @@ Page {
             Item {
                 id: commentFieldContainer
                 width: column.width
-                height: commentField.height
+                height: commentField.height + Ui.MARGIN_DEFAULT
 
                 TextArea {
                     id: commentField
