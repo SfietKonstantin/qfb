@@ -50,8 +50,10 @@ Page {
         ToolIcon {
             id: likeButton
             visible: !likeListModel.loading && !likeLoader.loading
+            property bool initialCheckDone: false
             property bool checked: false
-            iconSource: DATA_PATH + "like-" + (!theme.inverted ? "black" : "white") + ".png"
+            iconSource: DATA_PATH + (checked ? "un" : "") + "like-"
+                        + (!theme.inverted ? "black" : "white") + ".png"
             onClicked: {
                 if (checked) {
                     likeLoader.likeOperation = QFBLikeLoader.Unlike
@@ -59,12 +61,19 @@ Page {
                     likeLoader.likeOperation = QFBLikeLoader.Like
                 }
                 likeLoader.request(container.post.facebookId + "/likes")
-                likeListModel.request(container.post.facebookId + "/likes")
             }
 
             Connections {
                 target: likeListModel
                 onLoaded: likeButton.checked = likeListModel.contains(ME.facebookId)
+            }
+
+            Connections {
+                target: likeLoader
+                onLoaded: {
+                    postLoader.request(container.post.facebookId)
+                    likeListModel.request(container.post.facebookId + "/likes")
+                }
             }
         }
 

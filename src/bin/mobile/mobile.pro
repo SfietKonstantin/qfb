@@ -86,7 +86,9 @@ DATA_FILES +=       data/friends.png \
                     data/comment-black.png \
                     data/comment-white.png \
                     data/like-black.png \
-                    data/like-white.png
+                    data/like-white.png \
+                    data/unlike-black.png \
+                    data/unlike-white.png
 
 OTHER_FILES +=      $${QML_ROOT} \
                     $${QML_COMPONENTS} \
