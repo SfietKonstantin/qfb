@@ -48,6 +48,7 @@
 #include "loaders/photoloader.h"
 #include "loaders/postloader.h"
 #include "loaders/userloader.h"
+#include "loaders/createcommentloader.h"
 #include "postvalidator.h"
 #include "models/albumlistmodel.h"
 #include "models/commentlistmodel.h"
@@ -112,6 +113,8 @@ void BasePlugin5::registerTypes(const char *uri)
     qmlRegisterType<QFB::PhotoLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPhotoLoader");
     qmlRegisterType<QFB::PostLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBPostLoader");
     qmlRegisterType<QFB::UserLoader>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBUserLoader");
+    qmlRegisterType<QFB::CreateCommentLoader>(uri, PLUGIN_VERSION_MAJOR, 0,
+                                              "QFBCreateCommentLoader");
 
     qmlRegisterType<QFB::AlbumListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBAlbumListModel");
     qmlRegisterType<QFB::CommentListModel>(uri, PLUGIN_VERSION_MAJOR, 0, "QFBCommentListModel");

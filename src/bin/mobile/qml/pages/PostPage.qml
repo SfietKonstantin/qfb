@@ -70,7 +70,7 @@ Page {
 
         LoadingIndicator {
             anchors.centerIn: likeButton
-            visible: likeListModel.loading || likeLoader.loading
+            loading: likeListModel.loading || likeLoader.loading
         }
     }
 
@@ -146,6 +146,41 @@ Page {
                         comment: model.data
                         queryManager: QUERY_MANAGER
                     }
+                }
+            }
+
+            QFBCreateCommentLoader {
+                id: createCommentLoader
+                queryManager: QUERY_MANAGER
+                comment: commentField.text
+                onLoaded: container.load()
+            }
+
+            Item {
+                id: commentFieldContainer
+                width: column.width
+                height: commentField.height
+
+                TextArea {
+                    id: commentField
+                    placeholderText: qsTr("Write a comment")
+                    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+                    anchors.right: commentIcon.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+                    enabled: !createCommentLoader.loading
+                }
+
+                ToolIcon {
+                    id: commentIcon
+                    visible: !createCommentLoader.loading
+                    iconId: "toolbar-new-message"
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    onClicked: createCommentLoader.request(container.post.facebookId + "/comments")
+                }
+
+                LoadingIndicator {
+                    anchors.centerIn: commentIcon
+                    loading: createCommentLoader.loading
                 }
             }
         }
