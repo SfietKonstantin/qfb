@@ -19,6 +19,7 @@ import com.nokia.meego 1.0
 import org.SfietKonstantin.qfb 4.0
 import org.SfietKonstantin.qfb.mobile 4.0
 import "../UiConstants.js" as Ui
+import "../pagemanagement.js" as PageManagement
 import "../components"
 
 Item {
@@ -59,6 +60,7 @@ Item {
                     opacity: 0
                     Component.onCompleted: opacity = 1
                     onClicked: container.showPost(model.data)
+                    onResolveType: PageManagement.resolveType(facebookId, name)
 
                     Behavior on opacity {
                         NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }

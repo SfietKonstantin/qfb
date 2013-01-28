@@ -24,7 +24,6 @@
 
 #include <QtCore/QUrl>
 #include "querymanager.h"
-#include "request.h"
 
 int main(int argc, char **argv)
 {

@@ -32,3 +32,8 @@ function showFeedDialog(facebookId) {
     _feed_dialog_.to = facebookId
     _feed_dialog_.showDialog()
 }
+
+function resolveType(facebookId, name) {
+    _type_resolver_.resolvedName = name
+    _type_resolver_.request(facebookId)
+}

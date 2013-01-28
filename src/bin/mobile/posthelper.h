@@ -42,6 +42,7 @@ signals:
     void messageChanged();
 private:
     void createPost();
+    static QString elideText(const QString &text, int count);
     QFB::Post *m_post;
     QString m_header;
     QFB::NamedObject *m_to;

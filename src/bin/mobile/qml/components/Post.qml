@@ -26,6 +26,7 @@ Rectangle {
     property QtObject queryManager
     property bool interactive: false
     signal clicked()
+    signal resolveType(string facebookId, string name)
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
     height: title.height + Ui.MARGIN_DEFAULT + messageContainer.height + content.height
@@ -72,7 +73,7 @@ Rectangle {
                 text: postHelper.header
                 onLinkActivated: {
                     var strings = link.split("-")
-                    PAGE_MANAGEMENT_BRIDGE.resolveType(strings[0], strings[1])
+                    container.resolveType(strings[0], strings[1])
                 }
             }
 
@@ -173,12 +174,12 @@ Rectangle {
                 }
             }
         }
-    }
 
-    MouseArea {
-        id: mouseArea
-        enabled: container.interactive
-        anchors.fill: parent
-        onClicked: container.clicked()
+        MouseArea {
+            id: mouseArea
+            enabled: container.interactive
+            anchors.fill: parent
+            onClicked: container.clicked()
+        }
     }
 }

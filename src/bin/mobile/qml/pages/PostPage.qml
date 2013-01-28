@@ -162,7 +162,10 @@ Page {
                 id: createCommentLoader
                 queryManager: QUERY_MANAGER
                 comment: commentField.text
-                onLoaded: container.load()
+                onLoaded: {
+                    container.load()
+                    commentField.text = ""
+                }
             }
 
             Item {

@@ -83,10 +83,17 @@ void PostHelper::createPost()
     }
     QString toHeader = RICH_TEXT_NAME;
     if (to) {
-        toHeader = toHeader.arg(to->facebookId(), to->name(), to->name());
+        QString elidedTo = elideText(to->name(), 20);
+        toHeader = toHeader.arg(to->facebookId(), elidedTo, elidedTo);
+    }
+    QString elidedFrom;
+    if (to) {
+        elidedFrom = elideText(from->name(), 20);
+    } else {
+        elidedFrom = elideText(from->name(), 40);
     }
     QString header = RICH_TEXT_NAME;
-    header = header.arg(from->facebookId(), from->name(), from->name());
+    header = header.arg(from->facebookId(), elidedFrom, elidedFrom);
 
     if (to) {
         header.append(" &gt; ");
@@ -101,4 +108,14 @@ void PostHelper::createPost()
         m_header = header;
         emit headerChanged();
     }
+}
+
+QString PostHelper::elideText(const QString &text, int count)
+{
+    if (text.size() <= count) {
+        return text;
+    }
+    QString elidedText = text.left(count - 2);
+    elidedText.append(QString::fromUtf8(" …"));
+    return elidedText;
 }
