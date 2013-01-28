@@ -77,9 +77,18 @@ void PostHelper::createPost()
     }
 
     QFB::NamedObject *from = m_post->from();
+    QList<QFB::NamedObject *> toList = m_post->to();
+    foreach (QFB::PostTag *messageTag, m_post->messageTags()) {
+        foreach (QFB::NamedObject *to, toList) {
+            if (messageTag->facebookId() == to->facebookId()) {
+                toList.removeAll(to);
+            }
+        }
+    }
+
     QFB::NamedObject *to = 0;
-    if (m_post->to().count() == 1) {
-        to = m_post->to().first();
+    if (toList.count() == 1) {
+        to = toList.first();
     }
     QString toHeader = RICH_TEXT_NAME;
     if (to) {

@@ -52,6 +52,7 @@ PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/photo.h \
                     objects/photoinformations.h \
                     objects/post.h \
+                    objects/posttag.h \
                     objects/user.h
 # Processors
 PUBLIC_HEADERS +=   processors/abstractprocessor.h \
@@ -86,6 +87,7 @@ SOURCES +=  objects/objectbase.cpp \
             objects/photo.cpp \
             objects/photoinformations.cpp \
             objects/post.cpp \
+            objects/posttag.cpp \
             objects/user.cpp
 # Processors
 SOURCES +=  processors/abstractprocessor.cpp \

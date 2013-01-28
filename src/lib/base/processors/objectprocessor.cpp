@@ -37,10 +37,81 @@
 namespace QFB
 {
 
+static const char *DATA_KEY = "data";
+static const char *TAGS_SUFFIX = "_tags";
+
 ObjectProcessorPrivate::ObjectProcessorPrivate():
     AbstractGraphProcessorPrivate()
 {
     object = 0;
+}
+
+QVariantList ObjectProcessorPrivate::createArray(const JsonValue &value, const QString &key)
+{
+    JsonArray array = QFB_JSON_GET_ARRAY(value);
+    if (array.isEmpty()) {
+        return QVariantList();
+    } else {
+        JsonValue first = array.first();
+        QVariantList variantArray;
+        if (QFB_JSON_IS_OBJECT(first)) {
+            foreach (JsonValue arrayValue, array) {
+                variantArray.append(createObjectProperties(QFB_JSON_GET_OBJECT(arrayValue)));
+            }
+        } else if (QFB_JSON_IS_STRING(first)) {
+            foreach (JsonValue arrayValue, array) {
+                variantArray.append(QFB_JSON_GET_STRING(arrayValue));
+            }
+        } else {
+            qWarning() << "Value stored in" << key << "is an array of unknown type.";
+        }
+        return variantArray;
+    }
+}
+
+QVariant ObjectProcessorPrivate::createObjectPropertiesWrapper(const QString &key,
+                                                               const JsonObject &object)
+{
+    // Specific case of a list encapsulated in data
+    if (object.count() == 1) {
+        if (object.contains(DATA_KEY)) {
+            if (QFB_JSON_IS_ARRAY(object.value(DATA_KEY))) {
+                return createArray(object.value(DATA_KEY), key);
+            }
+        }
+    }
+    // Specific case for "*_tags" fields
+    if (key.endsWith(TAGS_SUFFIX)) {
+        bool allInts = true;
+        QStringList tagKeys = object.keys();
+        if (tagKeys.isEmpty()) {
+            return QVariantList();
+        }
+        QListIterator<QString> tagKeysIterator = QListIterator<QString>(tagKeys);
+        while (tagKeysIterator.hasNext() && allInts) {
+            QString tagKey = tagKeysIterator.next();
+            tagKey.toInt(&allInts);
+        }
+
+        if (allInts) {
+            // Create a list will all the tag lists
+            JsonArray array;
+            foreach (QString tagKey, tagKeys) {
+                JsonValue tagValue = object.value(tagKey);
+                if (QFB_JSON_IS_ARRAY(tagValue)) {
+                    JsonArray tagArray = QFB_JSON_GET_ARRAY(tagValue);
+                    foreach (JsonValue tagArrayValue, tagArray) {
+                        array.append(tagArrayValue);
+                    }
+                }
+            }
+
+            return createArray(array, key);
+        }
+
+    }
+
+    return createObjectProperties(object);
 }
 
 QVariantMap ObjectProcessorPrivate::createObjectProperties(const JsonObject &object)
@@ -53,7 +124,7 @@ QVariantMap ObjectProcessorPrivate::createObjectProperties(const JsonObject &obj
         } else if (QFB_JSON_IS_DOUBLE(value)) {
             data.insert(key, QFB_JSON_GET_DOUBLE(value));
         } else if (QFB_JSON_IS_OBJECT(value)) {
-            data.insert(key, createObjectProperties(QFB_JSON_GET_OBJECT(value)));
+            data.insert(key, createObjectPropertiesWrapper(key, QFB_JSON_GET_OBJECT(value)));
         } else if (QFB_JSON_IS_STRING(value)) {
             QString valueString = QFB_JSON_GET_STRING(value);
             if (key.contains("time")) {
@@ -63,25 +134,7 @@ QVariantMap ObjectProcessorPrivate::createObjectProperties(const JsonObject &obj
                 data.insert(key, valueString);
             }
         } else if (QFB_JSON_IS_ARRAY(value)) {
-            JsonArray array = QFB_JSON_GET_ARRAY(value);
-            if (array.isEmpty()) {
-                data.insert(key, QList<QVariant>());
-            } else {
-                JsonValue first = array.first();
-                QVariantList variantArray;
-                if (QFB_JSON_IS_OBJECT(first)) {
-                    foreach (JsonValue arrayValue, array) {
-                        variantArray.append(createObjectProperties(QFB_JSON_GET_OBJECT(arrayValue)));
-                    }
-                } else if (QFB_JSON_IS_STRING(first)) {
-                    foreach (JsonValue arrayValue, array) {
-                        variantArray.append(QFB_JSON_GET_STRING(arrayValue));
-                    }
-                } else {
-                    qWarning() << "Value stored in" << key << "is an array of unknown type.";
-                }
-                data.insert(key, variantArray);
-            }
+            data.insert(key, createArray(value, key));
         }
     }
     return data;

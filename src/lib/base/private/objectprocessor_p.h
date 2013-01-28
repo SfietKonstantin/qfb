@@ -29,6 +29,8 @@ class ObjectProcessorPrivate: public AbstractGraphProcessorPrivate
 {
 public:
     explicit ObjectProcessorPrivate();
+    static QVariantList createArray(const JsonValue &value, const QString &key);
+    static QVariant createObjectPropertiesWrapper(const QString &key, const JsonObject &object);
     static QVariantMap createObjectProperties(const JsonObject &object);
     static Object * guessType(const QVariantMap &propertiesMap, QObject *parent = 0);
     static Object * createObject(const JsonObject &jsonObject, const Query &query,

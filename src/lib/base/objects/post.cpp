@@ -44,6 +44,11 @@ static const char *POST_TO_KEY = "to";
 static const char *POST_MESSAGE_KEY = "message";
 /**
  * @internal
+ * @brief POST_MESSAGE_TAGS_KEY
+ */
+static const char *POST_MESSAGE_TAGS_KEY = "message_tags";
+/**
+ * @internal
  * @brief POST_PICTURE_KEY
  */
 static const char *POST_PICTURE_KEY = "picture";
@@ -87,6 +92,11 @@ static const char *POST_LIKES_KEY = "likes";
  * @brief POST_STORY_KEY
  */
 static const char *POST_STORY_KEY = "story";
+/**
+ * @internal
+ * @brief POST_WITH_TAGS_KEY
+ */
+static const char *POST_WITH_TAGS_KEY = "with_tags";
 /**
  * @internal
  * @brief POST_COMMENTS_KEY
@@ -138,9 +148,19 @@ public:
     QList<QFB::NamedObject *> to;
     /**
      * @internal
+     * @short List of message tags
+     */
+    QList<QFB::PostTag *> messageTags;
+    /**
+     * @internal
      * @short Likes
      */
     QFB::LikesContainer * likes;
+    /**
+     * @internal
+     * @short List of with tags
+     */
+    QList<QFB::NamedObject *> withTags;
     /**
      * @internal
      * @short Comments
@@ -179,9 +199,15 @@ Post::Post(const QVariantMap propertiesMap, QObject *parent):
     // Create to
     QVariantList toData = d->propertiesMap.take(POST_TO_KEY).toList();
     d->to = createList<QFB::NamedObject>(toData, this);
+    // Create messageTags
+    QVariantList messageTagsData = d->propertiesMap.take(POST_MESSAGE_TAGS_KEY).toList();
+    d->messageTags = createList<QFB::PostTag>(messageTagsData, this);
     // Create likes
     QVariantMap likesData = d->propertiesMap.take(POST_LIKES_KEY).toMap();
     d->likes = createObject<QFB::LikesContainer>(likesData, this);
+    // Create withTags
+    QVariantList withTagsData = d->propertiesMap.take(POST_WITH_TAGS_KEY).toList();
+    d->withTags = createList<QFB::NamedObject>(withTagsData, this);
     // Create comments
     QVariantMap commentsData = d->propertiesMap.take(POST_COMMENTS_KEY).toMap();
     d->comments = createObject<QFB::CommentsContainer>(commentsData, this);
@@ -213,6 +239,14 @@ QString Post::message() const
     // >>>>> property message
     return d->propertiesMap.value(POST_MESSAGE_KEY).toString();
     // <<<<< property message
+}
+
+QList<QFB::PostTag *> Post::messageTags() const
+{
+    Q_D(const Post);
+    // >>>>> property message_tags
+    return d->messageTags;
+    // <<<<< property message_tags
 }
 
 QUrl Post::picture() const
@@ -285,6 +319,14 @@ QString Post::story() const
     // >>>>> property story
     return d->propertiesMap.value(POST_STORY_KEY).toString();
     // <<<<< property story
+}
+
+QList<QFB::NamedObject *> Post::withTags() const
+{
+    Q_D(const Post);
+    // >>>>> property with_tags
+    return d->withTags;
+    // <<<<< property with_tags
 }
 
 QFB::CommentsContainer * Post::comments() const

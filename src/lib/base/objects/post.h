@@ -28,6 +28,7 @@
 #include <QtCore/QUrl>
 #include "commentscontainer.h"
 #include "likescontainer.h"
+#include "posttag.h"
 // <<<<< includes
 
 namespace QFB {
@@ -71,7 +72,7 @@ class PostPrivate;
  *
  * @section missing Missing properties
  *
- * Some fields such as messageTags, properties, actions, privacy, place, storyTags, withTags
+ * Some fields such as properties, actions, privacy, place
  * are not yet implemented.
  *
  * @section notImplemented Not implemented
@@ -94,7 +95,6 @@ class QFBBASE_EXPORT Post: public NamedObject
      * Requires an access token.
      */
     Q_PROPERTY(QString message READ message CONSTANT)
-    /// @todo message_tags
     /**
      * @short If available, a link to the picture included with this post
      * 
@@ -159,8 +159,6 @@ class QFBBASE_EXPORT Post: public NamedObject
      * Requires \e read_stream.
      */
     Q_PROPERTY(QString story READ story CONSTANT)
-    /// @todo story_tags
-    /// @todo with_tags
     /**
      * @short Comments for this post
      * 
@@ -222,6 +220,11 @@ public:
      */
     QString message() const;
     /**
+     * @brief Message tags
+     * @return message tags.
+     */
+    QList<QFB::PostTag *> messageTags() const;
+    /**
      * @brief Picture
      * @return picture.
      */
@@ -266,6 +269,11 @@ public:
      * @return story.
      */
     QString story() const;
+    /**
+     * @brief With tags
+     * @return with tags.
+     */
+    QList<QFB::NamedObject *> withTags() const;
     /**
      * @brief Comments
      * @return comments.

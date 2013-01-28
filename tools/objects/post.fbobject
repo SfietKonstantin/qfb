@@ -4,6 +4,7 @@ Post
 "namedobject.h"
 "commentscontainer.h"
 "likescontainer.h"
+"posttag.h"
 ---
 The post ID
 
@@ -25,7 +26,10 @@ The message
 Requires an access token.
 QString message
 ---
-message_tags
+Objects tagged in the message (Users, Pages, etc)
+
+Requires an access token.
+<list> QFB::PostTag * message_tags
 ---
 If available, a link to the picture included with this post
 
@@ -91,9 +95,21 @@ in your app to retrieve these stories.
 Requires \e read_stream.
 QString story
 ---
+Objects (Users, Pages, etc) tagged in a non-intentional story
+
+You must have the "Include recent activity stories" migration
+enabled in your app to retrieve these tags.
+
+Requires \e read_stream.
 story_tags
 ---
-with_tags
+Objects tagged as being with the publisher of the post
+
+These tags can be any object, and are created with the
+"Who are you with ?" dialog.
+
+Requires \e read_stream.
+<list> QFB::NamedObject * with_tags
 ---
 Comments for this post
 

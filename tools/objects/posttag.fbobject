@@ -1,0 +1,13 @@
+PostTag
+---
+Id of the tagged object
+QString id
+---
+Name of the tagged object
+QString name
+---
+Offset of the tag in the message
+int offset
+---
+Length of the object mentioned within the message field
+int length
