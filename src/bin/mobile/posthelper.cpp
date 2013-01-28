@@ -92,14 +92,14 @@ void PostHelper::createPost()
     }
     QString toHeader = RICH_TEXT_NAME;
     if (to) {
-        QString elidedTo = elideText(to->name(), 20);
+        QString elidedTo = elideText(to->name(), 30);
         toHeader = toHeader.arg(to->facebookId(), elidedTo, elidedTo);
     }
     QString elidedFrom;
     if (to) {
-        elidedFrom = elideText(from->name(), 20);
+        elidedFrom = elideText(from->name(), 30);
     } else {
-        elidedFrom = elideText(from->name(), 40);
+        elidedFrom = elideText(from->name(), 60);
     }
     QString header = RICH_TEXT_NAME;
     header = header.arg(from->facebookId(), elidedFrom, elidedFrom);

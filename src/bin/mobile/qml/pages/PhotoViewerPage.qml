@@ -42,6 +42,7 @@ Page {
         model: container.model
         snapMode: ListView.SnapOneItem
         highlightRangeMode: ListView.StrictlyEnforceRange
+
         delegate: Flickable {
             id: flickable
             interactive: image.scale != 1
@@ -50,6 +51,7 @@ Page {
             contentWidth: view.width
             contentHeight: view.height
             clip: true
+            onMovingChanged: pinchArea.enabled = !moving
 
             PinchArea {
                 id: pinchArea
@@ -58,6 +60,15 @@ Page {
                 pinch.minimumScale: 1
                 pinch.maximumScale: 5
                 pinch.target: image
+
+                Connections {
+                    target: view
+                    onMovingChanged: pinchArea.enabled = !view.moving
+                }
+
+                onPinchStarted: {
+                    view.positionViewAtIndex(view.currentIndex, ListView.Contain)
+                }
 
                 onPinchUpdated: {
                     var scaledWidth = view.width * image.scale
