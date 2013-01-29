@@ -18,20 +18,36 @@
 #include "objects/namedobject.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QRegExp>
 
 static const char *RICH_TEXT_NAME
-    = "<a style=\"text-decoration:none; color:#0057AE\" href=\"%1-%2\">%3</a>";
+    = "<a style=\"text-decoration:none; color:#0057AE\" href=\"user----%1----%2\">%3</a>";
+
+static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%]*)";
+static const char *RICH_TEXT_URL
+    = "<a style=\"text-decoration:none; color:#0057AE\" href=\"url----%1\">%2</a>";
+
+bool tagLesser(QFB::PostTag *tag1, QFB::PostTag *tag2)
+{
+    return tag1->offset() < tag2->offset();
+}
 
 PostHelper::PostHelper(QObject *parent) :
     QObject(parent)
 {
     m_post = 0;
+    m_fancy = true;
     m_to = 0;
 }
 
 QFB::Post * PostHelper::post() const
 {
     return m_post;
+}
+
+bool PostHelper::fancy() const
+{
+    return m_fancy;
 }
 
 QFB::NamedObject * PostHelper::to() const
@@ -49,6 +65,11 @@ QString PostHelper::message() const
     return m_message;
 }
 
+QString PostHelper::via() const
+{
+    return m_via;
+}
+
 void PostHelper::setPost(QFB::Post *post)
 {
     if (m_post != post) {
@@ -58,24 +79,67 @@ void PostHelper::setPost(QFB::Post *post)
     }
 }
 
+void PostHelper::setFancy(bool fancy)
+{
+    if (m_fancy != fancy) {
+        m_fancy = fancy;
+        createPost();
+        emit fancyChanged();
+    }
+}
+
 void PostHelper::createPost()
 {
-    // Extract the to
+    if (!m_post) {
+        return;
+    }
 
+    // Process message
     QString message;
-    if (!m_post->message().isEmpty()) {
+    if (m_fancy) {
+        QString endMessage = m_post->message();
+        QList<QFB::PostTag *> messageTags = m_post->messageTags();
+        qSort(messageTags.begin(), messageTags.end(), tagLesser);
+
+        int previousOffset = 0;
+        foreach (QFB::PostTag *tag, messageTags) {
+            message.append(endMessage.left(tag->offset() - previousOffset));
+            endMessage = endMessage.remove(0, tag->offset() + tag->length() - previousOffset);
+            previousOffset = tag->offset() + tag->length();
+            message.append(QString(RICH_TEXT_NAME).arg(tag->facebookId(), tag->name(),
+                                                       tag->name()));
+        }
+        message.append(endMessage);
+
+        // Parse links
+        endMessage = message;
+        message.clear();
+
+        QRegExp urlRegExp(URL_REGEXP);
+        int nextUrlIndex = endMessage.indexOf(urlRegExp);
+        while (nextUrlIndex != -1) {
+            QString captured = urlRegExp.cap(1);
+            QString url = captured;
+            if (!url.startsWith("http://")) {
+                url.prepend("http://");
+            }
+            message.append(endMessage.left(nextUrlIndex));
+            endMessage = endMessage.remove(0, nextUrlIndex + captured.size());
+            message.append(QString(RICH_TEXT_URL).arg(url, captured));
+            nextUrlIndex = endMessage.indexOf(urlRegExp);
+        }
+        message.append(endMessage);
+    } else {
         message = m_post->message();
     }
-
-    if (m_post->message().isEmpty() && !m_post->story().isEmpty()) {
-        message = m_post->story();
-    }
+    message.replace("\n", "<br/>");
 
     if (m_message != message) {
         m_message = message;
         emit messageChanged();
     }
 
+    // Process from and to
     QFB::NamedObject *from = m_post->from();
     QList<QFB::NamedObject *> toList = m_post->to();
     foreach (QFB::PostTag *messageTag, m_post->messageTags()) {
@@ -93,7 +157,7 @@ void PostHelper::createPost()
     QString toHeader = RICH_TEXT_NAME;
     if (to) {
         QString elidedTo = elideText(to->name(), 30);
-        toHeader = toHeader.arg(to->facebookId(), elidedTo, elidedTo);
+        toHeader = toHeader.arg(to->facebookId(), to->name(), elidedTo);
     }
     QString elidedFrom;
     if (to) {
@@ -102,7 +166,7 @@ void PostHelper::createPost()
         elidedFrom = elideText(from->name(), 60);
     }
     QString header = RICH_TEXT_NAME;
-    header = header.arg(from->facebookId(), elidedFrom, elidedFrom);
+    header = header.arg(from->facebookId(), from->name(), elidedFrom);
 
     if (to) {
         header.append(" &gt; ");
@@ -113,9 +177,20 @@ void PostHelper::createPost()
         m_to = to;
         emit toChanged();
     }
+
     if (m_header != header) {
         m_header = header;
         emit headerChanged();
+    }
+
+    // Via
+    QString via;
+    if (!m_post->application()->name().isEmpty()) {
+        via = tr("Via %1").arg(m_post->application()->name());
+    }
+    if (m_via != via) {
+        m_via = via;
+        emit viaChanged();
     }
 }
 

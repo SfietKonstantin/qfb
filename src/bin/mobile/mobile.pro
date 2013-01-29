@@ -48,7 +48,8 @@ QML_ROOT +=         qml/main.qml \
                     qml/UiConstants.js \
                     qml/pagemanagement.js
 
-QML_COMPONENTS +=   qml/components/GroupIndicator.qml \
+QML_COMPONENTS +=   qml/components/Separator.qml \
+                    qml/components/GroupIndicator.qml \
                     qml/components/FacebookImage.qml \
                     qml/components/FacebookPicture.qml \
                     qml/components/LoadingIndicator.qml \
@@ -99,8 +100,7 @@ OTHER_FILES +=      $${QML_ROOT} \
                     $${QML_COMPOSITE} \
                     $${QML_PAGES} \
                     $${QML_DIALOGS} \
-                    $${DATA_FILES} \
-    qml/pages/DevelopersPage.qml
+                    $${DATA_FILES}
 
 # Deployment
 contains(CONFIG, optify) {

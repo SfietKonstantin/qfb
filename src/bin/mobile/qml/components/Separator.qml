@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -18,29 +18,15 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import "../UiConstants.js" as Ui
 
-Item {
-    id: container
-    property QtObject model
-    property string text
-    property bool haveMore: true
-    signal clicked()
-    visible: (haveMore && container.model.count > 0) || model.loading
-    width: parent.width
-    height: (haveMore && container.model.count > 0) || model.loading ? button.height : 0
 
-    BusyIndicator {
-        anchors.verticalCenter: button.verticalCenter
-        anchors.right: button.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        visible: container.model.loading
-        running: visible
-    }
+BorderImage {
+    id: separator
+    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+    anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+    height: 2
 
-    Button {
-        id: button
-        visible: (container.model.haveNext && container.model.count > 0) || container.model.loading
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: !container.model.loading ? container.text : qsTr("Loading")
-        enabled: !container.model.loading
-        onClicked: container.clicked()
-    }
+    source: "image://theme/meegotouch-separator" + (theme.inverted ? "-inverted" : "") +
+            "-background-horizontal"
+    border {left: 0; top: 2; right: 0; bottom: 0}
 }
+

@@ -37,3 +37,9 @@ function resolveType(facebookId, name) {
     _type_resolver_.resolvedName = name
     _type_resolver_.request(facebookId)
 }
+
+function openWebBrowser(url) {
+    Qt.openUrlExternally(url)
+    _launching_web_browser_info_banner_.parent = _window_.pageStack.currentPage
+    _launching_web_browser_info_banner_.show()
+}

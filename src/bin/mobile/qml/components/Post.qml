@@ -24,26 +24,28 @@ Rectangle {
     id: container
     property QtObject post
     property QtObject queryManager
+    property bool extendedView: false
     property bool interactive: false
     signal clicked()
+    signal callWebBrowser(string url)
     signal resolveType(string facebookId, string name)
+    function reactToLink(link) {
+        var strings = link.split("----")
+        if (strings[0] == "user") {
+            container.resolveType(strings[1], strings[2])
+        } else if (strings[0] == "url") {
+            callWebBrowser(strings[1])
+        }
+    }
     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
     anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-    height: title.height + Ui.MARGIN_DEFAULT + messageContainer.height + content.height
-            + Ui.MARGIN_DEFAULT
+    height: childrenRect.height + Ui.MARGIN_DEFAULT
     color: !theme.inverted ? "white" : "black"
 
     QFBPostHelper {
         id: postHelper
         post: container.post
-    }
-
-    BorderImage {
-        id: background
-        anchors.fill: parent
-        visible: mouseArea.pressed
-        source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
-                "-background-pressed-center"
+        fancy: !container.extendedView
     }
 
     Item {
@@ -71,10 +73,7 @@ Rectangle {
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
                 text: postHelper.header
-                onLinkActivated: {
-                    var strings = link.split("-")
-                    container.resolveType(strings[0], strings[1])
-                }
+                onLinkActivated: reactToLink(link)
             }
 
             Label {
@@ -99,87 +98,142 @@ Rectangle {
             text: postHelper.message
             anchors.top: parent.top;  anchors.topMargin: Ui.MARGIN_DEFAULT
             anchors.left: parent.left; anchors.right: parent.right
+            textFormat: Text.RichText
+            onLinkActivated: reactToLink(link)
         }
     }
 
     Item {
         id: content
         anchors.top: messageContainer.bottom
-        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-        height: contentColumn.height + Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.right: parent.right
+        height: childrenRect.height + Ui.MARGIN_DEFAULT
 
-        Column {
-            id: contentColumn
+        Separator {
+            id: separator
             anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: Ui.MARGIN_DEFAULT
+            anchors.leftMargin: 0; anchors.rightMargin: 0
+        }
 
-            Item {
-                // There is a binding loop here (need to fix it)
-                id: imageContainer
-                width: contentColumn.width
-                height: postImage.status != Image.Ready ? 0 : postImage.height
 
-                FacebookImage {
-                    id: postImage
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    queryManager: container.queryManager
-                    url: container.post.picture
-                }
+        Item {
+            anchors.top: separator.bottom; anchors.left: parent.left; anchors.right: parent.right
+            height: Ui.LIST_ITEM_HEIGHT_SMALL
+
+            BorderImage {
+                id: background
+                anchors.fill: parent
+                visible: mouseArea.pressed
+                source: "image://theme/meegotouch-list" + (theme.inverted ? "-inverted" : "") +
+                        "-background-pressed-center"
             }
 
             Label {
-                text: container.post.name
-                width: parent.width
-                visible: text != ""
+                anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("%n likes", "", container.post.likes.count)
+                      + (!container.extendedView ?  ", " + qsTr("%n comments", "",
+                                                                container.post.comments.count)
+                                                 : "")
             }
 
-            Label {
-                text: container.post.caption
-                width: parent.width
-                visible: text != ""
-                font.pixelSize: Ui.FONT_SIZE_SMALL
-                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+            Image {
+                id: indicator
+                visible: !container.extendedView || container.post.likes.count != 0
+                source: "image://theme/icon-m-common-drilldown-arrow" +
+                        (theme.inverted ? "-inverse" : "")
+                anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+                anchors.verticalCenter: parent.verticalCenter
             }
 
-            Label {
-                text: container.post.description
-                width: parent.width
-                visible: text != ""
-                font.pixelSize: Ui.FONT_SIZE_SMALL
-                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
-            }
-
-            Row {
-                anchors.right: parent.right
-                spacing: Ui.MARGIN_DEFAULT
-                height: Math.max(commentsLabel.height, likesLabel.height)
-
-                Label {
-                    id: commentsLabel
-                    text: qsTr("%n comments", "", container.post.comments.count)
-                    font.pixelSize: Ui.FONT_SIZE_SMALL
-                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
-                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
-                }
-
-                Label {
-                    id: likesLabel
-                    text: qsTr("%n likes", "", container.post.likes.count)
-                    font.pixelSize: Ui.FONT_SIZE_SMALL
-                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
-                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
-                }
+            MouseArea {
+                id: mouseArea
+                onClicked: container.clicked()
+                anchors.fill: parent
+                enabled: !container.extendedView || container.post.likes.count != 0
             }
         }
 
-        MouseArea {
-            id: mouseArea
-            enabled: container.interactive
-            anchors.fill: parent
-            onClicked: container.clicked()
-        }
     }
+
+//    Item {
+//        id: content
+//        anchors.top: messageContainer.bottom
+//        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+//        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+//        height: contentColumn.height + Ui.MARGIN_DEFAULT
+
+//        Column {
+//            id: contentColumn
+//            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            spacing: Ui.MARGIN_DEFAULT
+
+//            Item {
+//                // There is a binding loop here (need to fix it)
+//                id: imageContainer
+//                width: contentColumn.width
+//                height: postImage.status != Image.Ready ? 0 : postImage.height
+
+//                FacebookImage {
+//                    id: postImage
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    queryManager: container.queryManager
+//                    url: container.post.picture
+//                }
+//            }
+
+//            Label {
+//                text: container.post.name
+//                width: parent.width
+//                visible: text != ""
+//            }
+
+//            Label {
+//                text: container.post.caption
+//                width: parent.width
+//                visible: text != ""
+//                font.pixelSize: Ui.FONT_SIZE_SMALL
+//                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+//            }
+
+//            Label {
+//                text: container.post.description
+//                width: parent.width
+//                visible: text != ""
+//                font.pixelSize: Ui.FONT_SIZE_SMALL
+//                color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY : Ui.FONT_COLOR_INVERTED_SECONDARY
+//            }
+
+//            Row {
+//                anchors.right: parent.right
+//                spacing: Ui.MARGIN_DEFAULT
+//                height: Math.max(commentsLabel.height, likesLabel.height)
+
+//                Label {
+//                    id: commentsLabel
+//                    text: qsTr("%n comments", "", container.post.comments.count)
+//                    font.pixelSize: Ui.FONT_SIZE_SMALL
+//                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
+//                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
+//                }
+
+//                Label {
+//                    id: likesLabel
+//                    text: qsTr("%n likes", "", container.post.likes.count)
+//                    font.pixelSize: Ui.FONT_SIZE_SMALL
+//                    color: !theme.inverted ? Ui.FONT_COLOR_SECONDARY
+//                                           : Ui.FONT_COLOR_INVERTED_SECONDARY
+//                }
+//            }
+//        }
+
+//        MouseArea {
+//            id: mouseArea
+//            enabled: container.interactive
+//            anchors.fill: parent
+//            onClicked: container.clicked()
+//        }
+//    }
 }

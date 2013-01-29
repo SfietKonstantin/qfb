@@ -124,12 +124,12 @@ Page {
                 id: post
                 queryManager: QUERY_MANAGER
                 post: container.post
+                extendedView: true
             }
 
             Item {
                 width: column.width
-                height: button.height + Ui.MARGIN_DEFAULT
-                        + (button.visible ? Ui.MARGIN_DEFAULT : 0)
+                height: button.visible ? button.height + 2 * Ui.MARGIN_DEFAULT : 0
 
                 LoadingButton {
                     id: button
@@ -171,13 +171,14 @@ Page {
             Item {
                 id: commentFieldContainer
                 width: column.width
-                height: commentField.height + Ui.MARGIN_DEFAULT
+                height: commentField.height + 2 * Ui.MARGIN_DEFAULT
 
                 TextArea {
                     id: commentField
-                    placeholderText: qsTr("Write a comment")
+                    anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
                     anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
                     anchors.right: commentIcon.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
+                    placeholderText: qsTr("Write a comment")
                     enabled: !createCommentLoader.loading
                 }
 

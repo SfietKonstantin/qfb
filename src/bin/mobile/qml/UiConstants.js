@@ -40,6 +40,7 @@ var ICON_SIZE_SMALL             = 26
 // List
 var LIST_ITEM_HEIGHT_XXLARGE    = 250
 var LIST_ITEM_HEIGHT_DEFAULT    = 80
+var LIST_ITEM_HEIGHT_SMALL      = 60
 
 //Font size
 var FONT_SIZE_XXLARGE           = 48;
@@ -66,4 +67,4 @@ var ANIMATION_DURATION_XFAST    = 100
 
 // QFB theme
 var THEME_COLOR_PRIMARY         = "#0057AE"
-var THEME_COLOR_SECONDARY       = "#6193CF"
+var THEME_COLOR_SECONDARY       = "#A4C0E4"

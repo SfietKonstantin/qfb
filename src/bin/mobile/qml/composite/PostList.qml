@@ -61,6 +61,7 @@ Item {
                     Component.onCompleted: opacity = 1
                     onClicked: container.showPost(model.data)
                     onResolveType: PageManagement.resolveType(facebookId, name)
+                    onCallWebBrowser: PageManagement.openWebBrowser(url)
 
                     Behavior on opacity {
                         NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }

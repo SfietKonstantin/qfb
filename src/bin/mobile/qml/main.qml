@@ -167,4 +167,9 @@ PageStackWindow {
         id: unsupportedInfoBanner
         text: qsTr("Loading this page is not supported yet")
     }
+
+    InfoBanner {
+        id: _launching_web_browser_info_banner_
+        text: qsTr("Launching web browser")
+    }
 }
