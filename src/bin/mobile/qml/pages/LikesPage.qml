@@ -51,6 +51,9 @@ Page {
         Flickable {
             anchors.top: cover.bottom; anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
+            contentWidth: width
+            contentHeight: column.height + loadingButton.height + 2 * Ui.MARGIN_DEFAULT
+            clip: true
 
             Column {
                 id: column
@@ -70,6 +73,7 @@ Page {
             }
 
             LoadingButton {
+                id: loadingButton
                 anchors.top: column.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
                 model: likeListModel
                 text: qsTr("Load more")
@@ -77,51 +81,6 @@ Page {
                 onClicked: model.loadNext()
             }
         }
-
-//        ListView {
-//            id: listView
-//            property double opacityValue: 0
-//            anchors.top: cover.bottom; anchors.bottom: parent.bottom
-//            anchors.left: parent.left; anchors.right: parent.right
-//            clip: true
-//            model: friendListModel
-//            delegate: FriendEntry {
-//                facebookId: model.data.facebookId
-//                name: model.data.name
-//                queryManager: QUERY_MANAGER
-//                opacity: listView.opacityValue
-//                onClicked: PageManagement.addPage("UserPage", {facebookId: model.data.facebookId,
-//                                                               name: model.data.name})
-//            }
-//            section.property: "name"
-//            section.criteria : ViewSection.FirstCharacter
-//            section.delegate: GroupIndicator {
-//                text: section
-//            }
-
-//            ScrollDecorator {flickableItem: parent}
-//            cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
-//            states: [
-//                State {
-//                    name: "loaded"; when: !friendListModel.loading
-//                    PropertyChanges {
-//                        target: listView
-//                        opacityValue: 1
-//                    }
-//                }
-//            ]
-
-//            Behavior on opacityValue {
-//                NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
-//            }
-
-//            LoadingMessage {loading: friendListModel.loading}
-
-//            EmptyStateLabel {
-//                visible: !friendListModel.loading && friendListModel.count == 0
-//                text: qsTr("No friends")
-//            }
-//        }
     }
 
 }
