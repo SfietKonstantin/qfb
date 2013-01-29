@@ -38,6 +38,8 @@
 #endif
 #include "argumentpair.h"
 
+#include <QtCore/QDebug>
+
 namespace QFB
 {
 
@@ -95,7 +97,7 @@ inline QUrl graphUrl(const QString &graph, const QString &token,
  */
 inline QUrl parseUrl(const QString &urlString)
 {
-    return QUrl::fromPercentEncoding(urlString.toLocal8Bit());
+    return QUrl::fromEncoded(urlString.toLocal8Bit());
 }
 
 }

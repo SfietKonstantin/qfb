@@ -86,18 +86,19 @@ bool ImageProcessor::processDataSource(QIODevice *dataSource)
     QDir dir = QDir(path);
     QString fileName = d->imageName(d->query.preprocessorData().url());
 
+    QByteArray data = dataSource->readAll();
     QImage image;
     bool ok = false;
-    if (image.load(dataSource, "JPG")) {
+    if (image.loadFromData(data, "JPG")) {
         ok = true;
     }
     if (!ok) {
-        if (image.load(dataSource, "GIF")) {
+        if (image.loadFromData(data, "PNG")) {
             ok = true;
         }
     }
     if (!ok) {
-        if (image.load(dataSource, "PNG")) {
+        if (image.loadFromData(data, "GIF")) {
             ok = true;
         }
     }
@@ -107,7 +108,8 @@ bool ImageProcessor::processDataSource(QIODevice *dataSource)
     }
 
     d->imagePath = dir.absoluteFilePath(fileName);
-    image.save(d->imagePath);
+    image.save(d->imagePath, "JPG");
+
 
     return true;
 }
