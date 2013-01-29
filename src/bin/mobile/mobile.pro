@@ -78,6 +78,7 @@ QML_PAGES +=        qml/pages/MainPage.qml \
                     qml/pages/PhotoListPage.qml \
                     qml/pages/PhotoViewerPage.qml \
                     qml/pages/PostPage.qml \
+                    qml/pages/LikesPage.qml \
                     qml/pages/UserPage.qml \
                     qml/pages/UserInfoPage.qml
 

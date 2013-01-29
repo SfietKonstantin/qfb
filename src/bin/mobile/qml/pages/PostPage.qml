@@ -27,14 +27,13 @@ Page {
     property string name
     property string coverUrl
     property QtObject post
-    property int offset: 0
     function load() {
-        container.offset = 0
+        var offset = 0
         var commentCount = container.post.comments.count
         var arguments = ""
         if (commentCount > 20) {
-            container.offset = Math.floor(commentCount / 20) * 20
-            arguments = "offset=" + container.offset
+            offset = Math.floor(commentCount / 20) * 20
+            arguments = "offset=" + offset
         }
         commentsModel.request(container.post.facebookId + "/comments", arguments)
         likeListModel.request(container.post.facebookId + "/likes")
@@ -104,6 +103,7 @@ Page {
         name: container.name
         category: qsTr("Post")
         coverUrl: container.coverUrl
+        queryManager: QUERY_MANAGER
     }
 
     ScrollDecorator { flickableItem: flickable }
@@ -125,6 +125,10 @@ Page {
                 queryManager: QUERY_MANAGER
                 post: container.post
                 extendedView: true
+                onClicked: PageManagement.addPage("LikesPage", {"facebookId": container.facebookId,
+                                                                "name": container.name,
+                                                                "coverUrl": container.coverUrl,
+                                                                "likeListModel": likeListModel})
             }
 
             Item {
