@@ -1,0 +1,53 @@
+Group
+<QtCore/QDateTime>
+<QtCore/QUrl>
+"cover.h"
+"namedobject.h"
+---
+The group ID
+
+Requires an access token and \e user_groups or \e friend_groups.
+QString id
+---
+A flag for the version
+
+This flag indicates if the group was created prior to
+launch of the current groups product in October 2010.
+
+0 indicates an old group, 1 a newer group and 3 a top-level
+school group.
+
+Requires an access token and \e user_groups or \e friend_groups.
+int version
+---
+The URL for the group's icon
+
+Requires an access token and \e user_groups or \e friend_groups.
+QUrl icon
+---
+The profile that created this group
+
+Requires an access token and \e user_groups or \e friend_groups.
+QFB::NamedObject * owner
+---
+The name of the group
+
+Requires an access token and \e user_groups or \e friend_groups.
+QString name
+---
+A brief description of the group
+
+Requires an access token and \e user_groups or \e friend_groups.
+QString description
+---
+The URL for the group's website
+
+Requires an access token and \e user_groups or \e friend_groups.
+QUrl link
+---
+privacy
+---
+The last time the group was updated
+
+Requires an access token and \e user_groups or \e friend_groups.
+QDateTime updated_time

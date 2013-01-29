@@ -23,7 +23,7 @@
 static const char *RICH_TEXT_NAME
     = "<a style=\"text-decoration:none; color:#0057AE\" href=\"user----%1----%2\">%3</a>";
 
-static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#]*)";
+static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?]*)";
 static const char *RICH_TEXT_URL
     = "<a style=\"text-decoration:none; color:#0057AE\" href=\"url----%1\">%2</a>";
 
@@ -156,14 +156,14 @@ void PostHelper::createPost()
     }
     QString toHeader = RICH_TEXT_NAME;
     if (to) {
-        QString elidedTo = elideText(to->name(), 30);
+        QString elidedTo = elideText(to->name(), 25);
         toHeader = toHeader.arg(to->facebookId(), to->name(), elidedTo);
     }
     QString elidedFrom;
     if (to) {
-        elidedFrom = elideText(from->name(), 30);
+        elidedFrom = elideText(from->name(), 25);
     } else {
-        elidedFrom = elideText(from->name(), 60);
+        elidedFrom = elideText(from->name(), 50);
     }
     QString header = RICH_TEXT_NAME;
     header = header.arg(from->facebookId(), from->name(), elidedFrom);
