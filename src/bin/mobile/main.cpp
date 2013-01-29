@@ -53,8 +53,8 @@ int main(int argc, char **argv)
     QDeclarativeView view;
 #ifndef MEEGO_EDITION_HARMATTAN
     view.engine()->addImportPath(IMPORT_PATH);
-    view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
 #endif
+    view.engine()->setNetworkAccessManagerFactory(new NetworkAccessManagerFactory());
     view.rootContext()->setContextProperty("QUERY_MANAGER", &queryManager);
     view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
     view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);

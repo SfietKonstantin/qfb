@@ -152,6 +152,7 @@ PageStackWindow {
 
     LoginSheet {
         id: loginSheet
+        onRejected: Qt.quit()
     }
 
     FeedDialogSheet {
