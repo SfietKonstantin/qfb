@@ -43,44 +43,49 @@ Page {
 
         }
 
-        ListView {
-            clip: true
+        Item {
             anchors.top: cover.bottom; anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
-            model: ListModel {
-                ListElement {
-                    text: "News feed"
-                    action: "showNews"
-                }
-                ListElement {
-                    text: "Me"
-                    action: "showMe"
-                }
-                ListElement {
-                    text: "Friends"
-                    action: "showFriends"
-                }
-            }
-            delegate: ClickableEntry {
-                text: model.text
-                onClicked: {
-                    if (model.action == "showNews") {
-                        if (ME.name != "") {
-                            newsPage.load()
-                            _window_.pageStack.push(newsPage)
-                        }
-                    } else if (model.action == "showMe") {
-                        if (ME.name != "") {
-                            PageManagement.addPage("UserPage", {name: ME.name,
-                                                                facebookId: ME.facebookId})
-                        }
 
-                    } else if (model.action == "showFriends") {
-                        PageManagement.addPage("FriendListPage", {})
+            LoadingMessage {
+                loading: ME.name == ""
+            }
+
+            ListView {
+                anchors.fill: parent
+                visible: ME.name != ""
+                clip: true
+                model: ListModel {
+                    ListElement {
+                        text: "News feed"
+                        action: "showNews"
+                    }
+                    ListElement {
+                        text: "Me"
+                        action: "showMe"
+                    }
+                    ListElement {
+                        text: "Friends"
+                        action: "showFriends"
                     }
                 }
+                delegate: ClickableEntry {
+                    text: model.text
+                    onClicked: {
+                        if (model.action == "showNews") {
+                            newsPage.load()
+                            _window_.pageStack.push(newsPage)
+                        } else if (model.action == "showMe") {
+                            PageManagement.addPage("UserPage", {name: ME.name,
+                                                                facebookId: ME.facebookId})
+
+                        } else if (model.action == "showFriends") {
+                            PageManagement.addPage("FriendListPage", {})
+                        }
+                    }
+                }
+                ScrollDecorator {flickableItem: parent}
             }
-            ScrollDecorator {flickableItem: parent}
         }
     }
 

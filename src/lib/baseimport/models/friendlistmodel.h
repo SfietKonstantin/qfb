@@ -51,7 +51,8 @@ public:
         /**
          * @short Data role
          */
-        DataRole = Qt::UserRole + 1
+        DataRole = Qt::UserRole + 1,
+        NameRole
     };
     /**
      * @brief Default constructor

@@ -66,6 +66,12 @@ Page {
                 onClicked: PageManagement.addPage("UserPage", {facebookId: model.data.facebookId,
                                                                name: model.data.name})
             }
+            section.property: "name"
+            section.criteria : ViewSection.FirstCharacter
+            section.delegate: GroupIndicator {
+                text: section
+            }
+
             ScrollDecorator {flickableItem: parent}
             cacheBuffer: Ui.LIST_ITEM_HEIGHT_DEFAULT * 5
             states: [

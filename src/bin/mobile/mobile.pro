@@ -48,7 +48,8 @@ QML_ROOT +=         qml/main.qml \
                     qml/UiConstants.js \
                     qml/pagemanagement.js
 
-QML_COMPONENTS +=   qml/components/FacebookImage.qml \
+QML_COMPONENTS +=   qml/components/GroupIndicator.qml \
+                    qml/components/FacebookImage.qml \
                     qml/components/FacebookPicture.qml \
                     qml/components/LoadingIndicator.qml \
                     qml/components/LoadingMessage.qml \
@@ -69,6 +70,7 @@ QML_COMPOSITE +=    qml/composite/UserInfo.qml \
 
 QML_PAGES +=        qml/pages/MainPage.qml \
                     qml/pages/AboutPage.qml \
+                    qml/pages/DevelopersPage.qml \
                     qml/pages/NewsPage.qml \
                     qml/pages/FriendListPage.qml \
                     qml/pages/AlbumListPage.qml \
@@ -88,14 +90,17 @@ DATA_FILES +=       data/friends.png \
                     data/like-black.png \
                     data/like-white.png \
                     data/unlike-black.png \
-                    data/unlike-white.png
+                    data/unlike-white.png \
+                    data/sfiet_konstantin.jpg \
+                    data/aniket.jpg
 
 OTHER_FILES +=      $${QML_ROOT} \
                     $${QML_COMPONENTS} \
                     $${QML_COMPOSITE} \
                     $${QML_PAGES} \
                     $${QML_DIALOGS} \
-                    $${DATA_FILES}
+                    $${DATA_FILES} \
+    qml/pages/DevelopersPage.qml
 
 # Deployment
 contains(CONFIG, optify) {

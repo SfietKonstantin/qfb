@@ -98,6 +98,8 @@ QVariant FriendListModel::data(const QModelIndex &index, int role) const
     case DataRole:
         return QVariant::fromValue(item);
         break;
+    case NameRole:
+        return item->name();
     default:
         return QVariant();
         break;
@@ -158,6 +160,7 @@ QHash<int, QByteArray> FriendListModel::roleNames() const
 {
     QHash <int, QByteArray> roles;
     roles.insert(DataRole, "data");
+    roles.insert(NameRole, "name");
     return roles;
 }
 

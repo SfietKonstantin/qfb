@@ -60,6 +60,17 @@ Page {
               + ", powered by QFB."
     }
 
+    Label {
+        id: info
+        anchors.top: version.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+        anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+        anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+        text: qsTr("Friends is a Facebook client that tries to provide the best experience for \
+the user. It is an Open Source software, meaning that it can me modified and enhanced by \
+anybody. If you like Friends, please consider a donation for supporting the developers. \
+This donation will help maintaining the software, and keeping it status of Open Source software.")
+    }
+
 
     ButtonColumn {
         anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
@@ -81,8 +92,7 @@ Page {
         Button {
             iconSource: DATA_PATH + "developers.png"
             text: qsTr("Developers")
-            enabled: false
+            onClicked: PageManagement.addPage("DevelopersPage", {})
         }
     }
-
 }
