@@ -31,6 +31,8 @@
 #include "objects/album.h"
 #include "objects/photo.h"
 #include "objects/comment.h"
+#include "objects/group.h"
+#include "objects/groupbookmark.h"
 #include "objects/post.h"
 #include "objects/user.h"
 
@@ -142,11 +144,14 @@ QVariantMap ObjectProcessorPrivate::createObjectProperties(const JsonObject &obj
 
 Object * ObjectProcessorPrivate::guessType(const QVariantMap &propertiesMap, QObject *parent)
 {
-    if (propertiesMap.keys().size() == 2 && propertiesMap.keys().contains("id")
-        && propertiesMap.keys().contains("name")) {
+    QStringList keys = propertiesMap.keys();
+    if (keys.size() == 2 && keys.contains("id") && keys.contains("name")) {
         return new NamedObject(propertiesMap, parent);
-    } else if (propertiesMap.keys().size() == 1 && propertiesMap.keys().contains("id")) {
+    } else if (keys.size() == 1 && keys.contains("id")) {
         return new Object(propertiesMap, parent);
+    } else if (keys.contains("id") && keys.contains("version") && keys.contains("name")
+               && keys.contains("bookmark_order")){
+        return new GroupBookmark(propertiesMap, parent);
     } else {
         return 0;
     }
@@ -162,14 +167,17 @@ Object * ObjectProcessorPrivate::createObject(const JsonObject &jsonObject, cons
     case Object::AlbumType:
         object = new Album(propertiesMap, parent);
         break;
+    case Object::CommentType:
+        object = new Comment(propertiesMap, parent);
+        break;
+    case Object::GroupType:
+        object = new Group(propertiesMap, parent);
+        break;
     case Object::PhotoType:
         object = new Photo(propertiesMap, parent);
         break;
     case Object::PostType:
         object = new Post(propertiesMap, parent);
-        break;
-    case Object::CommentType:
-        object = new Comment(propertiesMap, parent);
         break;
     case Object::UserType:
         object = new User(propertiesMap, parent);

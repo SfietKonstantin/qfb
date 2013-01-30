@@ -58,6 +58,7 @@ QML_COMPONENTS +=   qml/components/Separator.qml \
                     qml/components/EmptyStateLabel.qml \
                     qml/components/ClickableEntry.qml \
                     qml/components/FriendEntry.qml \
+                    qml/components/GroupBookmarkEntry.qml \
                     qml/components/CommentEntry.qml \
                     qml/components/Cover.qml \
                     qml/components/Container.qml \
@@ -73,8 +74,9 @@ QML_PAGES +=        qml/pages/MainPage.qml \
                     qml/pages/AboutPage.qml \
                     qml/pages/DevelopersPage.qml \
                     qml/pages/NewsPage.qml \
-                    qml/pages/FriendListPage.qml \
                     qml/pages/AlbumListPage.qml \
+                    qml/pages/FriendListPage.qml \
+                    qml/pages/GroupListPage.qml \
                     qml/pages/PhotoListPage.qml \
                     qml/pages/PhotoViewerPage.qml \
                     qml/pages/PostPage.qml \

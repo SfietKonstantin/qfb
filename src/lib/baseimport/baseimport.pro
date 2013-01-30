@@ -37,6 +37,7 @@ PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
                     models/albumlistmodel.h \
                     models/commentlistmodel.h \
                     models/feedmodel.h \
+                    models/groupbookmarklistmodel.h \
                     models/likelistmodel.h \
                     models/photolistmodel.h
 
@@ -64,6 +65,7 @@ SOURCES +=  models/abstractloadablemodel.cpp \
             models/albumlistmodel.cpp \
             models/commentlistmodel.cpp \
             models/feedmodel.cpp \
+            models/groupbookmarklistmodel.cpp \
             models/likelistmodel.cpp \
             models/photolistmodel.cpp
 

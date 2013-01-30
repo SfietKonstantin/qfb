@@ -1,7 +1,6 @@
 Group
 <QtCore/QDateTime>
 <QtCore/QUrl>
-"cover.h"
 "namedobject.h"
 ---
 The group ID

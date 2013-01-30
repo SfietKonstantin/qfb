@@ -48,6 +48,8 @@ PUBLIC_HEADERS +=   objects/objectbase.h \
                     objects/comment.h \
                     objects/commentscontainer.h \
                     objects/cover.h \
+                    objects/group.h \
+                    objects/groupbookmark.h \
                     objects/likescontainer.h \
                     objects/photo.h \
                     objects/photoinformations.h \
@@ -83,6 +85,8 @@ SOURCES +=  objects/objectbase.cpp \
             objects/comment.cpp \
             objects/commentscontainer.cpp \
             objects/cover.cpp \
+            objects/group.cpp \
+            objects/groupbookmark.cpp \
             objects/likescontainer.cpp \
             objects/photo.cpp \
             objects/photoinformations.cpp \

@@ -68,6 +68,10 @@ Page {
                         text: "Friends"
                         action: "showFriends"
                     }
+                    ListElement {
+                        text: "Groups"
+                        action: "showGroups"
+                    }
                 }
                 delegate: ClickableEntry {
                     text: model.text
@@ -81,6 +85,8 @@ Page {
 
                         } else if (model.action == "showFriends") {
                             PageManagement.addPage("FriendListPage", {})
+                        } else if (model.action == "showGroups") {
+                            PageManagement.addPage("GroupListPage", {})
                         }
                     }
                 }

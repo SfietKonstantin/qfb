@@ -1,0 +1,24 @@
+GroupBookmark
+---
+The group ID
+QString id
+---
+A flag for the version
+
+This flag indicates if the group was created prior to
+launch of the current groups product in October 2010.
+
+0 indicates an old group, 1 a newer group and 3 a top-level
+school group.
+int version
+---
+The name of the group
+QString name
+---
+Bookmark order
+int bookmark_order
+---
+Number of unread entries
+int unread
+---
+administrator
