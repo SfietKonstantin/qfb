@@ -68,7 +68,7 @@ protected:
      * @param arguments Arguments.
      * @return Created request.
      */
-     Request createRequest(const QString &graph, const QVariantMap &data);
+     Query createRequest(const QString &graph, const QVariantMap &data);
     /**
      * @brief Implementation of AbstractLoader::handleReply()
      * @param processor Processor to handle.

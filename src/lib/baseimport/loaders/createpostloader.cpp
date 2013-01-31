@@ -78,12 +78,12 @@ QVariantMap CreatePostLoader::data() const
     return returnedData;
 }
 
-Request CreatePostLoader::createRequest(const QString &graph, const QVariantMap &data)
+Query CreatePostLoader::createRequest(const QString &graph, const QVariantMap &data)
 {
     if (queryManager()) {
         return queryManager()->querySimpleCreate(graph, data);
     }
-    return Request();
+    return Query();
 }
 
 void CreatePostLoader::handleReply(AbstractProcessor *processor)

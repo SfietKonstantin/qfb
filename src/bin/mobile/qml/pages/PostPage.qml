@@ -165,39 +165,25 @@ Page {
             QFBCreateCommentLoader {
                 id: createCommentLoader
                 queryManager: QUERY_MANAGER
-                comment: commentField.text
+                comment: postTextArea.text
                 onLoaded: {
                     container.load()
-                    commentField.text = ""
+                    postTextArea.text = ""
                 }
             }
 
             Item {
                 id: commentFieldContainer
                 width: column.width
-                height: commentField.height + 2 * Ui.MARGIN_DEFAULT
+                height: postTextArea.height + 2 * Ui.MARGIN_DEFAULT
 
-                TextArea {
-                    id: commentField
-                    anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
-                    anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-                    anchors.right: commentIcon.left; anchors.rightMargin: Ui.MARGIN_DEFAULT
-                    placeholderText: qsTr("Write a comment")
-                    enabled: !createCommentLoader.loading
-                }
-
-                ToolIcon {
-                    id: commentIcon
-                    visible: !createCommentLoader.loading
-                    iconId: "toolbar-new-message"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    onClicked: createCommentLoader.request(container.post.facebookId + "/comments")
-                }
-
-                LoadingIndicator {
-                    anchors.centerIn: commentIcon
+                PostTextArea {
+                    id: postTextArea
+                    width: commentFieldContainer.width - 2 * Ui.MARGIN_DEFAULT
+                    anchors.centerIn: parent
                     loading: createCommentLoader.loading
+                    placeholderText: qsTr("Write a comment")
+                    onClicked: createCommentLoader.request(container.post.facebookId + "/comments")
                 }
             }
         }

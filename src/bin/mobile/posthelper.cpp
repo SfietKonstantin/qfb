@@ -50,6 +50,11 @@ bool PostHelper::fancy() const
     return m_fancy;
 }
 
+QString PostHelper::toFacebookId() const
+{
+    return m_toFacebookId;
+}
+
 QFB::NamedObject * PostHelper::to() const
 {
     return m_to;
@@ -85,6 +90,15 @@ void PostHelper::setFancy(bool fancy)
         m_fancy = fancy;
         createPost();
         emit fancyChanged();
+    }
+}
+
+void PostHelper::setToFacebookId(const QString &toFacebookId)
+{
+    if (m_toFacebookId != toFacebookId) {
+        m_toFacebookId = toFacebookId;
+        createPost();
+        emit toFacebookIdChanged();
     }
 }
 
@@ -152,7 +166,9 @@ void PostHelper::createPost()
 
     QFB::NamedObject *to = 0;
     if (toList.count() == 1) {
-        to = toList.first();
+        if (toList.first()->facebookId() != m_toFacebookId) {
+            to = toList.first();
+        }
     }
     QString toHeader = RICH_TEXT_NAME;
     if (to) {

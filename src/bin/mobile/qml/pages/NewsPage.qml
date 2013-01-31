@@ -68,7 +68,7 @@ Page {
 
             PostList {
                 id: postList
-                facebookId: "me"
+                facebookId: ME.facebookId
                 stream: "home"
                 onShowPost: PageManagement.addPage("PostPage", {facebookId: container.facebookId,
                                                                 name: container.name,

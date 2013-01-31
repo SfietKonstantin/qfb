@@ -24,6 +24,7 @@ Rectangle {
     id: container
     property QtObject post
     property QtObject queryManager
+    property string toFacebookId
     property bool extendedView: false
     property bool interactive: false
     signal clicked()
@@ -46,6 +47,7 @@ Rectangle {
         id: postHelper
         post: container.post
         fancy: !container.extendedView
+        toFacebookId: container.toFacebookId
     }
 
     Item {

@@ -62,8 +62,8 @@ Page {
             delegate: GroupBookmarkEntry {
                 name: model.data.name
                 opacity: listView.opacityValue
-//                onClicked: PageManagement.addPage("UserPage", {facebookId: model.data.facebookId,
-//                                                               name: model.data.name})
+                onClicked: PageManagement.addPage("GroupPage", {facebookId: model.data.facebookId,
+                                                                name: model.data.name})
             }
 
             ScrollDecorator {flickableItem: parent}

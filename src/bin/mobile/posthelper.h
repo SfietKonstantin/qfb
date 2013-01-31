@@ -25,6 +25,8 @@ class PostHelper : public QObject
     Q_OBJECT
     Q_PROPERTY(QFB::Post * post READ post WRITE setPost NOTIFY postChanged)
     Q_PROPERTY(bool fancy READ fancy WRITE setFancy NOTIFY fancyChanged)
+    Q_PROPERTY(QString toFacebookId READ toFacebookId WRITE setToFacebookId
+               NOTIFY toFacebookIdChanged)
     Q_PROPERTY(QString header READ header NOTIFY headerChanged)
     Q_PROPERTY(QFB::NamedObject * to READ to NOTIFY toChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
@@ -33,6 +35,7 @@ public:
     explicit PostHelper(QObject *parent = 0);
     QFB::Post * post() const;
     bool fancy() const;
+    QString toFacebookId() const;
     QString header() const;
     QFB::NamedObject * to() const;
     QString message() const;
@@ -40,9 +43,11 @@ public:
 public slots:
     void setPost(QFB::Post *post);
     void setFancy(bool fancy);
+    void setToFacebookId(const QString &toFacebookId);
 signals:
     void postChanged();
     void fancyChanged();
+    void toFacebookIdChanged();
     void headerChanged();
     void toChanged();
     void messageChanged();
@@ -52,6 +57,7 @@ private:
     static QString elideText(const QString &text, int count);
     QFB::Post *m_post;
     bool m_fancy;
+    QString m_toFacebookId;
     QString m_header;
     QFB::NamedObject *m_to;
     QString m_message;

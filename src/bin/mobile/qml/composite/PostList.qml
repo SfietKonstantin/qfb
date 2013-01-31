@@ -55,6 +55,7 @@ Item {
                 Post {
                     id: content
                     post: model.data
+                    toFacebookId: container.facebookId
                     queryManager: QUERY_MANAGER
                     interactive: true
                     opacity: 0

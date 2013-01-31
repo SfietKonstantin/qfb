@@ -63,7 +63,8 @@ QML_COMPONENTS +=   qml/components/Separator.qml \
                     qml/components/Cover.qml \
                     qml/components/Container.qml \
                     qml/components/Post.qml \
-                    qml/components/AlbumEntry.qml
+                    qml/components/AlbumEntry.qml \
+                    qml/components/PostTextArea.qml
 
 QML_COMPOSITE +=    qml/composite/UserInfo.qml \
                     qml/composite/PostList.qml \
@@ -76,11 +77,12 @@ QML_PAGES +=        qml/pages/MainPage.qml \
                     qml/pages/NewsPage.qml \
                     qml/pages/AlbumListPage.qml \
                     qml/pages/FriendListPage.qml \
+                    qml/pages/GroupPage.qml \
                     qml/pages/GroupListPage.qml \
+                    qml/pages/LikesPage.qml \
                     qml/pages/PhotoListPage.qml \
                     qml/pages/PhotoViewerPage.qml \
                     qml/pages/PostPage.qml \
-                    qml/pages/LikesPage.qml \
                     qml/pages/UserPage.qml \
                     qml/pages/UserInfoPage.qml
 

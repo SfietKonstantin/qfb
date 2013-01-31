@@ -30,6 +30,7 @@ PUBLIC_HEADERS +=   loaders/abstractloader.h \
                     loaders/photoloader.h \
                     loaders/postloader.h \
                     loaders/userloader.h \
+                    loaders/createpostloader.h \
                     loaders/createcommentloader.h
 # Models
 PUBLIC_HEADERS +=   models/abstractloadablemodel.h \
@@ -58,6 +59,7 @@ SOURCES +=  loaders/abstractloader.cpp \
             loaders/photoloader.cpp \
             loaders/postloader.cpp \
             loaders/userloader.cpp \
+            loaders/createpostloader.cpp \
             loaders/createcommentloader.cpp
 # Models
 SOURCES +=  models/abstractloadablemodel.cpp \
