@@ -3,7 +3,7 @@ include(../../../globals.pri)
 TEMPLATE = app
 TARGET = $${NAME}-mobile
 
-QT = core gui network webkit declarative
+QT = core gui network declarative
 
 contains(CONFIG, optify) {
 QML_FOLDER = $${OPTDIR}/qml

@@ -3,7 +3,7 @@ include(../../../globals.pri)
 TEMPLATE = app
 TARGET = $${NAME}-demo
 
-QT = core gui webkit declarative
+QT = core gui declarative
 
 QML_FOLDER = $${SHAREDIR}/qml
 
