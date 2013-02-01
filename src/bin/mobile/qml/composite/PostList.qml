@@ -52,6 +52,16 @@ Item {
                 width: container.width
                 height: content.height
 
+                Connections {
+                    target: POST_UPDATE_RELAY
+                    onUpdatePostLikesAndComments: {
+                        if (postId == model.data.facebookId) {
+                            content.likes = likes
+                            content.comments = comments
+                        }
+                    }
+                }
+
                 Post {
                     id: content
                     post: model.data

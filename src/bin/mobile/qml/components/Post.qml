@@ -27,6 +27,8 @@ Rectangle {
     property string toFacebookId
     property bool extendedView: false
     property bool interactive: false
+    property int likes: post.likes.count
+    property int comments: post.comments.count
     signal clicked()
     signal callWebBrowser(string url)
     signal resolveType(string facebookId, string name)
@@ -211,15 +213,15 @@ Rectangle {
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("%n likes", "", container.post.likes.count)
+                text: qsTr("%n likes", "", container.likes)
                       + (!container.extendedView ?  ", " + qsTr("%n comments", "",
-                                                                container.post.comments.count)
+                                                                container.comments)
                                                  : "")
             }
 
             Image {
                 id: indicator
-                visible: !container.extendedView || container.post.likes.count != 0
+                visible: !container.extendedView || container.likes != 0
                 source: "image://theme/icon-m-common-drilldown-arrow" +
                         (theme.inverted ? "-inverse" : "")
                 anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
@@ -230,7 +232,7 @@ Rectangle {
                 id: mouseArea
                 onClicked: container.clicked()
                 anchors.fill: parent
-                enabled: !container.extendedView || container.post.likes.count != 0
+                enabled: !container.extendedView || container.likes != 0
             }
         }
 

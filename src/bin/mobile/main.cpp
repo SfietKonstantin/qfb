@@ -29,6 +29,7 @@
 #include "tokenmanager.h"
 #include "networkaccessmanagerfactory.h"
 #include "me.h"
+#include "postupdaterelay.h"
 
 static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsforn9";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&\
@@ -44,6 +45,7 @@ int main(int argc, char **argv)
     QFB::LoginManager loginManager;
     TokenManager tokenManager;
     Me me;
+    PostUpdateRelay postUpdateRelay;
 
     qmlRegisterType<UserInfoHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBUserInfoHelper");
     qmlRegisterType<PostHelper>("org.SfietKonstantin.qfb.mobile", 4, 0, "QFBPostHelper");
@@ -58,6 +60,7 @@ int main(int argc, char **argv)
     view.rootContext()->setContextProperty("QUERY_MANAGER", &queryManager);
     view.rootContext()->setContextProperty("LOGIN_MANAGER", &loginManager);
     view.rootContext()->setContextProperty("TOKEN_MANAGER", &tokenManager);
+    view.rootContext()->setContextProperty("POST_UPDATE_RELAY", &postUpdateRelay);
     view.rootContext()->setContextProperty("ME", &me);
     view.rootContext()->setContextProperty("CLIENT_ID", "390204064393625");
     view.rootContext()->setContextProperty("DATA_PATH", DATA_PATH);

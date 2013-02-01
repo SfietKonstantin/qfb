@@ -85,7 +85,12 @@ Page {
     QFBPostLoader {
         id: postLoader
         queryManager: QUERY_MANAGER
-        onPostChanged: container.post = postLoader.post
+        onPostChanged: {
+            container.post = postLoader.post
+            POST_UPDATE_RELAY.requestUpdatePostLikesAndComments(container.post.facebookId,
+                                                                container.post.likes.count,
+                                                                container.post.comments.count)
+        }
     }
 
     QFBLikeListModel {

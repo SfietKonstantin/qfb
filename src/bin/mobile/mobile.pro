@@ -33,7 +33,8 @@ HEADERS +=      tokenmanager.h \
     userinfohelper.h \
     posthelper.h \
     mobilepostvalidator.h \
-    me.h
+    me.h \
+    postupdaterelay.h
 
 SOURCES +=      main.cpp \
                 tokenmanager.cpp \
@@ -42,7 +43,8 @@ SOURCES +=      main.cpp \
     userinfohelper.cpp \
     posthelper.cpp \
     mobilepostvalidator.cpp \
-    me.cpp
+    me.cpp \
+    postupdaterelay.cpp
 
 QML_ROOT +=         qml/main.qml \
                     qml/UiConstants.js \
