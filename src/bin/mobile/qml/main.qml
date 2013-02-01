@@ -139,12 +139,19 @@ PageStackWindow {
         onLoaded: {
             var facebookId = _type_resolver_.object.facebookId
             var type = _type_resolver_.object.objectType
-            if (type == QFBObject.UserType) {
+            switch (type) {
+            case QFBObject.UserType:
                 PageManagement.addPage("pages/UserPage", {"facebookId": facebookId,
                                                           "name": resolvedName})
-            } else {
+                break
+            case QFBObject.GroupType:
+                PageManagement.addPage("pages/GroupPage", {"facebookId": facebookId,
+                                                          "name": resolvedName})
+                break
+            default:
                 unsupportedInfoBanner.parent = _window_.pageStack.currentPage
                 unsupportedInfoBanner.show()
+                break
             }
             resolvedName = ""
         }
